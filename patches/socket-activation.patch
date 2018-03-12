@@ -1,0 +1,33 @@
+diff --git a/package.json b/package.json
+index 4aceab418..5de9cc49a 100644
+--- a/package.json
++++ b/package.json
+@@ -81,6 +81,7 @@
+     "svg-url-loader": "^2.0.2",
+     "svgo": "^1.0.4",
+     "svgo-loader": "^2.1.0",
++    "systemd-socket": "^0.0.0",
+     "url-loader": "^0.6.2",
+     "useragent": "^2.1.9",
+     "uuid": "^3.0.1",
+diff --git a/website/server/server.js b/website/server/server.js
+index 473cc4a28..8a281205f 100644
+--- a/website/server/server.js
++++ b/website/server/server.js
+@@ -3,6 +3,7 @@ import logger from './libs/logger';
+ import express from 'express';
+ import http from 'http';
+ import Bluebird from 'bluebird';
++import systemdSocket from 'systemd-socket';
+ 
+ global.Promise = Bluebird;
+ 
+@@ -29,7 +30,7 @@ import './models/user';
+ attachMiddlewares(app, server);
+ 
+ server.on('request', app);
+-server.listen(app.get('port'), () => {
++server.listen(systemdSocket() || app.get('port'), () => {
+   logger.info(`Express server listening on port ${app.get('port')}`);
+ });
+ 

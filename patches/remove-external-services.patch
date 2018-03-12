@@ -1,0 +1,4825 @@
+diff --git a/config.json.example b/config.json.example
+index efaa9298f..3181d70c5 100644
+--- a/config.json.example
++++ b/config.json.example
+@@ -4,16 +4,6 @@
+     "IP":"0.0.0.0",
+     "WEB_CONCURRENCY":1,
+     "BASE_URL":"http://localhost:3000",
+-    "FACEBOOK_KEY":"123456789012345",
+-    "FACEBOOK_SECRET":"aaaabbbbccccddddeeeeffff00001111",
+-    "GOOGLE_CLIENT_ID":"123456789012345",
+-    "GOOGLE_CLIENT_SECRET":"aaaabbbbccccddddeeeeffff00001111",
+-    "PLAY_API": {
+-      "CLIENT_ID": "aaaabbbbccccddddeeeeffff00001111",
+-      "CLIENT_SECRET": "aaaabbbbccccddddeeeeffff00001111",
+-      "ACCESS_TOKEN":"aaaabbbbccccddddeeeeffff00001111",
+-      "REFRESH_TOKEN":"aaaabbbbccccddddeeeeffff00001111"
+-    },
+     "NODE_DB_URI":"mongodb://localhost/habitrpg",
+     "TEST_DB_URI":"mongodb://localhost/habitrpg_test",
+     "NODE_ENV":"development",
+@@ -31,86 +21,20 @@
+     "SMTP_HOST":"example.com",
+     "SMTP_PORT": 587,
+     "SMTP_TLS": true,
+-    "STRIPE_API_KEY":"aaaabbbbccccddddeeeeffff00001111",
+-    "STRIPE_PUB_KEY":"22223333444455556666777788889999",
+-    "NEW_RELIC_LICENSE_KEY":"NEW_RELIC_LICENSE_KEY",
+-    "NEW_RELIC_NO_CONFIG_FILE":"true",
+-    "NEW_RELIC_APPLICATION_ID":"NEW_RELIC_APPLICATION_ID",
+-    "NEW_RELIC_API_KEY":"NEW_RELIC_API_KEY",
+-    "GA_ID": "GA_ID",
+-    "AMPLITUDE_KEY": "AMPLITUDE_KEY",
+-    "AMAZON_PAYMENTS": {
+-        "SELLER_ID": "SELLER_ID",
+-        "CLIENT_ID": "CLIENT_ID",
+-        "MWS_KEY": "",
+-        "MWS_SECRET": ""
+-    },
+     "FLAG_REPORT_EMAIL": "email@mod.com,email2@mod.com",
+     "EMAIL_SERVER": {
+         "url": "http://example.com",
+         "authUser": "user",
+         "authPassword": "password"
+     },
+-    "S3":{
+-        "bucket":"bucket",
+-        "accessKeyId":"accessKeyId",
+-        "secretAccessKey":"secretAccessKey"
+-    },
+-    "SLACK_URL": "https://hooks.slack.com/services/some-url",
+-    "TRANSIFEX_SLACK_CHANNEL": "transifex",
+-    "PAYPAL":{
+-        "billing_plans": {
+-            "basic_earned":"basic_earned",
+-            "basic_3mo":"basic_3mo",
+-            "basic_6mo":"basic_6mo",
+-            "google_6mo":"google_6mo",
+-            "basic_12mo":"basic_12mo"
+-        },
+-        "mode":"sandbox",
+-        "client_id":"client_id",
+-        "client_secret":"client_secret",
+-        "experience_profile_id": ""
+-    },
+-    "IAP_GOOGLE_KEYDIR": "/path/to/google/public/key/dir/",
+-    "LOGGLY_TOKEN": "token",
+-    "LOGGLY_CLIENT_TOKEN": "token",
+-    "LOGGLY_ACCOUNT": "account",
+-    "PUSH_CONFIGS": {
+-        "GCM_SERVER_API_KEY": "",
+-        "APN_ENABLED": "false",
+-        "FCM_SERVER_API_KEY": ""
+-    },
+     "SITE_HTTP_AUTH": {
+         "ENABLED": "false",
+         "USERNAME": "admin",
+         "PASSWORD": "password"
+     },
+-    "PUSHER": {
+-        "ENABLED": "false",
+-        "APP_ID": "appId",
+-        "KEY": "key",
+-        "SECRET": "secret"
+-    },
+-    "SLACK": {
+-        "FLAGGING_URL": "https://hooks.slack.com/services/id/id/id",
+-        "FLAGGING_FOOTER_LINK": "https://habitrpg.github.io/flag-o-rama/",
+-        "SUBSCRIPTIONS_URL": "https://hooks.slack.com/services/id/id/id"
+-    },
+-    "ITUNES_SHARED_SECRET": "aaaabbbbccccddddeeeeffff00001111",
+     "EMAILS" : {
+         "COMMUNITY_MANAGER_EMAIL" : "leslie@habitica.com",
+         "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
+         "PRESS_ENQUIRY_EMAIL" : "leslie@habitica.com"
+-    },
+-    "LOGGLY" : {
+-        "TOKEN" : "example-token",
+-        "SUBDOMAIN" : "exmaple-subdomain"
+-    },
+-    "KAFKA": {
+-      "GROUP_ID": "",
+-      "CLOUDKARAFKA_BROKERS": "",
+-      "CLOUDKARAFKA_USERNAME": "",
+-      "CLOUDKARAFKA_PASSWORD": "",
+-      "CLOUDKARAFKA_TOPIC_PREFIX": ""
+     }
+ }
+diff --git a/webpack/config/index.js b/webpack/config/index.js
+index ff54852be..c57519537 100644
+--- a/webpack/config/index.js
++++ b/webpack/config/index.js
+@@ -46,18 +46,6 @@ module.exports = {
+         target: DEV_BASE_URL,
+         changeOrigin: true,
+       },
+-      '/stripe': {
+-        target: DEV_BASE_URL,
+-        changeOrigin: true,
+-      },
+-      '/amazon': {
+-        target: DEV_BASE_URL,
+-        changeOrigin: true,
+-      },
+-      '/paypal': {
+-        target: DEV_BASE_URL,
+-        changeOrigin: true,
+-      },
+       '/logout': {
+         target: DEV_BASE_URL,
+         changeOrigin: true,
+diff --git a/webpack/config/prod.env.js b/webpack/config/prod.env.js
+index ca5c502e1..cf04a520a 100644
+--- a/webpack/config/prod.env.js
++++ b/webpack/config/prod.env.js
+@@ -12,21 +12,10 @@ setupNconf(configFile);
+ 
+ // To avoid stringifying more data then we need,
+ // items from `env` used on the client will have to be specified in this array
+-// @TODO: Do we need? const CLIENT_VARS = ['language', 'isStaticPage', 'availableLanguages', 'translations',
+-//                      'FACEBOOK_KEY', 'GOOGLE_CLIENT_ID', 'NODE_ENV', 'BASE_URL', 'GA_ID',
+-//                      'AMAZON_PAYMENTS', 'STRIPE_PUB_KEY', 'AMPLITUDE_KEY',
+-//                      'worldDmg', 'mods', 'IS_MOBILE', 'PUSHER:KEY', 'PUSHER:ENABLED'];
+-
+-const AMAZON_SELLER_ID = nconf.get('AMAZON_PAYMENTS:SELLER_ID') || nconf.get('AMAZON_PAYMENTS_SELLER_ID');
+-const AMAZON_CLIENT_ID = nconf.get('AMAZON_PAYMENTS:CLIENT_ID') || nconf.get('AMAZON_PAYMENTS_CLIENT_ID');
+ 
+ let env = {
+   NODE_ENV: '"production"',
+   // clientVars: CLIENT_VARS,
+-  AMAZON_PAYMENTS: {
+-    SELLER_ID: `"${AMAZON_SELLER_ID}"`,
+-    CLIENT_ID: `"${AMAZON_CLIENT_ID}"`,
+-  },
+   EMAILS: {
+     COMMUNITY_MANAGER_EMAIL: `"${nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL')}"`,
+     TECH_ASSISTANCE_EMAIL: `"${nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL')}"`,
+@@ -34,7 +23,7 @@ let env = {
+   },
+ };
+ 
+-'NODE_ENV BASE_URL GA_ID STRIPE_PUB_KEY FACEBOOK_KEY GOOGLE_CLIENT_ID AMPLITUDE_KEY PUSHER:KEY PUSHER:ENABLED LOGGLY_CLIENT_TOKEN'
++'NODE_ENV BASE_URL'
+   .split(' ')
+   .forEach(key => {
+     env[key] = `"${nconf.get(key)}"`;
+diff --git a/website/client/app.vue b/website/client/app.vue
+index c1c877dfa..9b42c35f8 100644
+--- a/website/client/app.vue
++++ b/website/client/app.vue
+@@ -9,7 +9,6 @@ div
+         h2 {{$t('tipTitle', {tipNumber: currentTipNumber})}}
+         p {{currentTip}}
+   #app(:class='{"casting-spell": castingSpell}')
+-    amazon-payments-modal
+     snackbars
+     router-view(v-if="!isUserLoggedIn || isStaticPage")
+     template(v-else)
+@@ -120,12 +119,9 @@ import AppFooter from './components/appFooter';
+ import notificationsDisplay from './components/notifications';
+ import snackbars from './components/snackbars/notifications';
+ import { mapState } from 'client/libs/store';
+-import * as Analytics from 'client/libs/analytics';
+ import BuyModal from './components/shops/buyModal.vue';
+ import SelectMembersModal from 'client/components/selectMembersModal.vue';
+ import notifications from 'client/mixins/notifications';
+-import { setup as setupPayments } from 'client/libs/payments';
+-import amazonPaymentsModal from 'client/components/payments/amazonModal';
+ import spellsMixin from 'client/mixins/spells';
+ 
+ export default {
+@@ -139,7 +135,6 @@ export default {
+     snackbars,
+     BuyModal,
+     SelectMembersModal,
+-    amazonPaymentsModal,
+   },
+   data () {
+     return {
+@@ -299,8 +294,6 @@ export default {
+         this.$store.dispatch('tasks:fetchUserTasks'),
+       ]).then(() => {
+         this.$store.state.isUserLoaded = true;
+-        Analytics.setUser();
+-        Analytics.updateUser();
+ 
+         this.hideLoadingScreen();
+ 
+@@ -312,9 +305,6 @@ export default {
+         }
+ 
+         this.$nextTick(() => {
+-          // Load external scripts after the app has been rendered
+-          setupPayments();
+-          Analytics.load();
+         });
+       }).catch((err) => {
+         console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
+@@ -327,17 +317,6 @@ export default {
+     this.$root.$on('bv::show::modal', (modalId, data = {}) => {
+       if (data.fromRoot) return;
+ 
+-      // Track opening of gems modal unless it's been already tracked
+-      // For example the gems button in the menu already tracks the event by itself
+-      if (modalId === 'buy-gems' && data.alreadyTracked !== true) {
+-        Analytics.track({
+-          hitType: 'event',
+-          eventCategory: 'button',
+-          eventAction: 'click',
+-          eventLabel: 'Gems > Wallet',
+-        });
+-      }
+-
+       // Get last modal on stack and hide
+       let modalStackLength = this.$store.state.modalStack.length;
+       let modalOnTop = this.$store.state.modalStack[modalStackLength - 1];
+diff --git a/website/client/components/achievements/achievementFooter.vue b/website/client/components/achievements/achievementFooter.vue
+index 862c19099..9b5328c7c 100644
+--- a/website/client/components/achievements/achievementFooter.vue
++++ b/website/client/components/achievements/achievementFooter.vue
+@@ -1,16 +1,5 @@
+ <template lang="pug">
+ .modal-footer(style='margin-top:0', ng-init='loadWidgets()')
+-  .container-fluid.share-buttons
+-    .row
+-      .col-12.text-center
+-        a.twitter-share-button.share-button(:href='twitterLink', target='_blank')
+-          .social-icon.twitter.svg-icon(v-html='icons.twitter')
+-          | {{ $t('tweet') }}
+-        a.fb-share-button.share-button(:href='facebookLink', target='_blank')
+-          .social-icon.facebook.svg-icon(v-html='icons.facebook')
+-          | {{ $t('share') }}
+-        // @TODO: Still want this? .col-4
+-          a.tumblr-share-button(:data-href='socialLevelLink', data-notes='none')
+ </template>
+ 
+ <style scoped>
+@@ -27,53 +16,4 @@
+     text-align: center;
+     color: #fff;
+   }
+-
+-  .fb-share-button {
+-    background-color: #2995cd;
+-  }
+-
+-  .twitter-share-button {
+-    margin-right: .5em;
+-    background-color: #3bcad7;
+-  }
+-
+-  .social-icon {
+-    width: 16px;
+-    display: inline-block;
+-    vertical-align: bottom;
+-    margin-right: .5em;
+-  }
+-
+-  .social-icon.facebook svg {
+-    width: 7.5px;
+-    margin-bottom: .2em;
+-  }
+-
+-  .social-icon.twitter {
+-    margin-bottom: .2em;
+-  }
+ </style>
+-
+-<script>
+-// @TODO:
+-let BASE_URL = 'https://habitica.com';
+-import twitter from 'assets/svg/twitter.svg';
+-import facebook from 'assets/svg/facebook.svg';
+-
+-export default {
+-  data () {
+-    let tweet = this.$t('achievementShare');
+-
+-    return {
+-      icons: Object.freeze({
+-        twitter,
+-        facebook,
+-      }),
+-      tweet,
+-      achievementLink: `${BASE_URL}/social/achievement`,
+-      twitterLink: `https://twitter.com/intent/tweet?text=${tweet}&via=habitica&url=${BASE_URL}/social/achievement&count=none`,
+-      facebookLink: `https://www.facebook.com/sharer/sharer.php?text=${tweet}&u=${BASE_URL}/social/achievement`,
+-    };
+-  },
+-};
+-</script>
+diff --git a/website/client/components/achievements/levelUp.vue b/website/client/components/achievements/levelUp.vue
+index 7df5bbf51..29daad4ed 100644
+--- a/website/client/components/achievements/levelUp.vue
++++ b/website/client/components/achievements/levelUp.vue
+@@ -12,18 +12,6 @@
+       // @TODO: Keep this? .checkbox
+         input(type='checkbox', v-model='user.preferences.suppressModals.levelUp', @change='changeLevelupSuppress()')
+         label(style='display:inline-block') {{ $t('dontShowAgain') }}
+-
+-    .container-fluid.share-buttons
+-      .row
+-        .col-12.text-center
+-          a.twitter-share-button.share-button(:href='twitterLink', target='_blank')
+-            .social-icon.twitter.svg-icon(v-html='icons.twitter')
+-            | {{ $t('tweet') }}
+-          a.fb-share-button.share-button(:href='facebookLink', target='_blank')
+-            .social-icon.facebook.svg-icon(v-html='icons.facebook')
+-            | {{ $t('share') }}
+-        // @TODO: Still want this? .col-4
+-          a.tumblr-share-button(:data-href='socialLevelLink', data-notes='none')
+ </template>
+ 
+ <style lang="scss">
+@@ -79,31 +67,6 @@
+       text-align: center;
+       color: #fff;
+     }
+-
+-    .fb-share-button {
+-      background-color: #2995cd;
+-    }
+-
+-    .twitter-share-button {
+-      margin-right: .5em;
+-      background-color: #3bcad7;
+-    }
+-
+-    .social-icon {
+-      width: 16px;
+-      display: inline-block;
+-      vertical-align: bottom;
+-      margin-right: .5em;
+-    }
+-
+-    .social-icon.facebook svg {
+-      width: 7.5px;
+-      margin-bottom: .2em;
+-    }
+-
+-    .social-icon.twitter {
+-      margin-bottom: .2em;
+-    }
+   }
+ </style>
+ 
+@@ -118,8 +81,6 @@ import Avatar from '../avatar';
+ import { mapState } from 'client/libs/store';
+ import {maxHealth} from '../../../common/script/index';
+ import styleHelper from 'client/mixins/styleHelper';
+-import twitter from 'assets/svg/twitter.svg';
+-import facebook from 'assets/svg/facebook.svg';
+ 
+ let BASE_URL = 'https://habitica.com';
+ 
+@@ -129,18 +90,9 @@ export default {
+     Avatar,
+   },
+   data () {
+-    let tweet = this.$t('levelUpShare');
+     return {
+-      icons: Object.freeze({
+-        twitter,
+-        facebook,
+-      }),
+       statsAllocationBoxIsOpen: true,
+       maxHealth,
+-      tweet,
+-      socialLevelLink: `${BASE_URL}/social/level-up`,
+-      twitterLink: `https://twitter.com/intent/tweet?text=${tweet}&via=habitica&url=${BASE_URL}/social/level-up&count=none`,
+-      facebookLink: `https://www.facebook.com/sharer/sharer.php?text=${tweet}&u=${BASE_URL}/social/level-up`,
+     };
+   },
+   mounted () {
+diff --git a/website/client/components/achievements/lowHealth.vue b/website/client/components/achievements/lowHealth.vue
+index 7e9798ecd..e5b0dd25f 100644
+--- a/website/client/components/achievements/lowHealth.vue
++++ b/website/client/components/achievements/lowHealth.vue
+@@ -58,7 +58,6 @@
+ <script>
+ import Avatar from '../avatar';
+ import { mapState } from 'client/libs/store';
+-import * as Analytics from 'client/libs/analytics';
+ import percent from '../../../common/script/libs/percent';
+ import {maxHealth} from '../../../common/script/index';
+ 
+@@ -83,12 +82,6 @@ export default {
+     },
+   },
+   mounted () {
+-    Analytics.track({
+-      hitType: 'event',
+-      eventCategory: 'button',
+-      eventAction: 'click',
+-      eventLabel: 'Health Warning',
+-    });
+   },
+   methods: {
+     close () {
+diff --git a/website/client/components/achievements/wonChallenge.vue b/website/client/components/achievements/wonChallenge.vue
+index de65914ea..7ab75f4fe 100644
+--- a/website/client/components/achievements/wonChallenge.vue
++++ b/website/client/components/achievements/wonChallenge.vue
+@@ -13,13 +13,6 @@
+       p {{ $t('congratulations') }}
+       br
+       button.btn.btn-primary(@click='close()') {{ $t('hurray') }}
+-    .modal-footer
+-      .col-3
+-        a.twitter-share-button(href='https://twitter.com/intent/tweet?text=#{tweet}&via=habitica&url=#{env.BASE_URL}/social/won-challenge&count=none') {{ $t('tweet') }}
+-      .col-4(style='margin-left:.8em')
+-        .fb-share-button(data-href='#{env.BASE_URL}/social/won-challenge', data-layout='button')
+-      .col-4(style='margin-left:.8em')
+-        a.tumblr-share-button(data-href='#{env.BASE_URL}/social/won-challenge', data-notes='none')
+ </template>
+ 
+ <style scoped>
+@@ -52,10 +45,7 @@ export default {
+     ...mapState({user: 'user.data'}),
+   },
+   data () {
+-    let tweet = this.$t('wonChallengeShare');
+-    return {
+-      tweet,
+-    };
++    return {};
+   },
+   methods: {
+     close () {
+diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
+index cdb8233d1..3c559ee1e 100644
+--- a/website/client/components/appFooter.vue
++++ b/website/client/components/appFooter.vue
+@@ -4,11 +4,6 @@
+   //modify-inventory(v-if="isUserLoaded")
+   footer.col-12(:class="{expanded: isExpandedFooter}")
+     .row(v-if="isExpandedFooter")
+-      .col-12.col-md-2
+-        h3
+-          a(href='https://itunes.apple.com/us/app/habitica/id994882113?ls=1&mt=8', target='_blank') {{ $t('mobileIOS') }}
+-        h3
+-          a(href='https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica', target='_blank') {{ $t('mobileAndroid') }}
+       .col-12.col-md-2
+         h3 {{ $t('footerCompany') }}
+         ul
+@@ -43,8 +38,6 @@
+             a(v-html='$t("communityExtensions")')
+           li
+             a(v-html='$t("communityForum")')
+-          li
+-            a(href='https://www.facebook.com/Habitica', target='_blank') {{ $t('communityFacebook') }}
+           li
+             a(href='https://www.reddit.com/r/habitrpg/', target='_blank') {{ $t('communityReddit') }}
+       .col-12.col-md-6
+@@ -60,14 +53,6 @@
+                 a(href='http://habitica.wikia.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
+               li
+                 a(href='http://devs.habitica.com/', target='_blank') {{ $t('devBlog') }}
+-          .col-6.social
+-            h3 {{ $t('footerSocial') }}
+-            a.social-circle(href='https://twitter.com/habitica', target='_blank')
+-              .social-icon.svg-icon(v-html='icons.twitter')
+-            // TODO: Not ready yet. a.social-circle(href='https://www.instagram.com/habitica/', target='_blank')
+-              .social-icon.svg-icon.instagram(v-html='icons.instagram')
+-            a.social-circle(href='https://www.facebook.com/Habitica', target='_blank')
+-              .social-icon.facebook.svg-icon(v-html='icons.facebook')
+         .row
+           .col-12.col-md-10 {{ $t('donateText3') }}
+           .col-12.col-md-2
+@@ -169,37 +154,6 @@
+     margin-bottom: .5em;
+   }
+ 
+-  .social {
+-    h3 {
+-      text-align: right;
+-    }
+-  }
+-
+-  .social-circle {
+-    width: 40px;
+-    height: 40px;
+-    border-radius: 50%;
+-    background-color: #c3c0c7;
+-    display: inline-block;
+-    margin-left: 1em;
+-    float: right;
+-
+-    .social-icon {
+-      color: #e1e0e3;
+-      width: 16px;
+-      margin: 0 auto;
+-      margin-top: 1em;
+-    }
+-
+-    .facebook {
+-      margin-top: .7em;
+-    }
+-
+-    .instagram {
+-      margin-top: .85em;
+-    }
+-  }
+-
+   .logo {
+     width: 24px;
+     height: 24px;
+@@ -233,42 +187,26 @@
+   }
+ </style>
+ 
+-<style>
+-  .facebook svg {
+-    width: 10px;
+-    margin: 0 auto;
+-  }
+-</style>
+-
+ <script>
+ import axios from 'axios';
+ import moment from 'moment';
+ import { mapState } from 'client/libs/store';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ import gryphon from 'assets/svg/gryphon.svg';
+-import twitter from 'assets/svg/twitter.svg';
+-import facebook from 'assets/svg/facebook.svg';
+-import instagram from 'assets/svg/instagram.svg';
+ import heart from 'assets/svg/heart.svg';
+ 
+ import modifyInventory from './modifyInventory';
+-import buyGemsModal from './payments/buyGemsModal';
+ 
+ const IS_PRODUCTION = process.env.NODE_ENV === 'production'; // eslint-disable-line no-process-env
+ 
+ export default {
+   components: {
+     modifyInventory,
+-    buyGemsModal,
+   },
+   data () {
+     return {
+       icons: Object.freeze({
+         gryphon,
+-        twitter,
+-        facebook,
+-        instagram,
+         heart,
+       }),
+       debugMenuShown: false,
+@@ -367,12 +305,6 @@ export default {
+       this.$root.$emit('bv::show::modal', 'modify-inventory');
+     },
+     donate () {
+-      Analytics.track({
+-        hitType: 'event',
+-        eventCategory: 'button',
+-        eventAction: 'click',
+-        eventLabel: 'Gems > Donate',
+-      });
+       this.$root.$emit('bv::show::modal', 'buy-gems', {alreadyTracked: true});
+     },
+   },
+diff --git a/website/client/components/auth/registerLoginReset.vue b/website/client/components/auth/registerLoginReset.vue
+index dba5c28c6..f68a8354b 100644
+--- a/website/client/components/auth/registerLoginReset.vue
++++ b/website/client/components/auth/registerLoginReset.vue
+@@ -13,15 +13,6 @@
+         .svg-icon.gryphon
+       div
+         .svg-icon.habitica-logo(v-html="icons.habiticaIcon")
+-    .form-group.row.text-center
+-      .col-12.col-md-6
+-        .btn.btn-secondary.social-button(@click='socialAuth("facebook")')
+-          .svg-icon.social-icon(v-html="icons.facebookIcon")
+-          .text {{registering ? $t('signUpWithSocial', {social: 'Facebook'}) : $t('loginWithSocial', {social: 'Facebook'})}}
+-      .col-12.col-md-6
+-        .btn.btn-secondary.social-button(@click='socialAuth("google")')
+-          .svg-icon.social-icon(v-html="icons.googleIcon")
+-          span {{registering ? $t('signUpWithSocial', {social: 'Google'}) : $t('loginWithSocial', {social: 'Google'})}}
+     .form-group(v-if='registering')
+       label(for='usernameInput', v-once) {{$t('username')}}
+       input#usernameInput.form-control(type='text', :placeholder='$t("usernamePlaceholder")', v-model='username')
+@@ -204,24 +195,6 @@
+       font-size: 14px;
+       color: $white;
+     }
+-
+-    .social-button {
+-      width: 100%;
+-      text-align: center;
+-
+-      .text {
+-        display: inline-block;
+-      }
+-    }
+-
+-    .social-icon {
+-      margin-right: 1em;
+-      width: 18px;
+-      height: 18px;
+-      display: inline-block;
+-      vertical-align: top;
+-      margin-top: .2em;
+-    }
+   }
+ 
+   #top-background {
+@@ -279,12 +252,9 @@
+ 
+ <script>
+ import axios from 'axios';
+-import hello from 'hellojs';
+ 
+ import gryphon from 'assets/svg/gryphon.svg';
+ import habiticaIcon from 'assets/svg/habitica-logo.svg';
+-import facebookSquareIcon from 'assets/svg/facebook-square.svg';
+-import googleIcon from 'assets/svg/google.svg';
+ 
+ export default {
+   data () {
+@@ -303,8 +273,6 @@ export default {
+     data.icons = Object.freeze({
+       gryphon,
+       habiticaIcon,
+-      facebookIcon: facebookSquareIcon,
+-      googleIcon,
+     });
+ 
+     return data;
+@@ -324,11 +292,6 @@ export default {
+     },
+   },
+   mounted () {
+-    hello.init({
+-      facebook: process.env.FACEBOOK_KEY, // eslint-disable-line
+-      // windows: WINDOWS_CLIENT_ID,
+-      google: process.env.GOOGLE_CLIENT_ID, // eslint-disable-line
+-    });
+   },
+   watch: {
+     $route: {
+@@ -427,33 +390,6 @@ export default {
+       // ALSO it's the only way to make sure language data is reloaded and correct for the logged in user
+       window.location.href = redirectTo;
+     },
+-    async socialAuth (network) {
+-      const url = window.location.href;
+-
+-      let auth = await hello(network).login({
+-        scope: 'email',
+-        // explicitly pass the redirect url or it might redirect to /home
+-        redirect_uri: url, // eslint-disable-line camelcase
+-      });
+-
+-      await this.$store.dispatch('auth:socialAuth', {
+-        auth,
+-      });
+-
+-      let redirectTo;
+-
+-      if (this.$route.query.redirectTo) {
+-        redirectTo = this.$route.query.redirectTo;
+-      } else {
+-        redirectTo = '/';
+-      }
+-
+-      // @TODO do not reload entire page
+-      // problem is that app.vue created hook should be called again
+-      // after user is logged in / just signed up
+-      // ALSO it's the only way to make sure language data is reloaded and correct for the logged in user
+-      window.location.href = redirectTo;
+-    },
+     handleSubmit () {
+       if (this.registering) {
+         this.register();
+diff --git a/website/client/components/challenges/challengeModal.vue b/website/client/components/challenges/challengeModal.vue
+index bcfc54d95..96f4fa9e3 100644
+--- a/website/client/components/challenges/challengeModal.vue
++++ b/website/client/components/challenges/challengeModal.vue
+@@ -54,8 +54,6 @@
+       .row.footer-wrap
+         .col-12.text-center.submit-button-wrapper
+           .alert.alert-warning(v-if='insufficientGemsForTavernChallenge') You do not have enough gems to create a Tavern challenge
+-          // @TODO if buy gems button is added, add analytics tracking to it
+-          // see https://github.com/HabitRPG/habitica/blob/develop/website/views/options/social/challenges.jade#L134
+           button.btn.btn-primary(v-if='creating && !cloning', @click='createChallenge()', :disabled='loading') {{$t('createChallengeAddTasks')}}
+           button.btn.btn-primary(v-once, v-if='cloning', @click='createChallenge()', :disabled='loading') {{$t('createChallengeCloneTasks')}}
+           button.btn.btn-primary(v-once, v-if='!creating && !cloning', @click='updateChallenge()') {{$t('updateChallenge')}}
+diff --git a/website/client/components/group-plans/billing.vue b/website/client/components/group-plans/billing.vue
+index f9b886d54..7c5b935b7 100644
+--- a/website/client/components/group-plans/billing.vue
++++ b/website/client/components/group-plans/billing.vue
+@@ -26,8 +26,6 @@
+   .col-12.col-md-6.offset-md-3
+     button.btn.btn-success(class='btn-success', v-if='group.purchased.plan.dateTerminated', @click='upgradeGroup()')
+       | {{ $t('upgrade') }}
+-    .btn.btn-primary(v-if='!group.purchased.plan.dateTerminated && group.purchased.plan.paymentMethod === "Stripe"',
+-      @click='showStripeEdit({groupId: group.id})') {{ $t('subUpdateCard') }}
+     .btn.btn-sm.btn-danger(v-if='!group.purchased.plan.dateTerminated',
+       @click='cancelSubscription({group: group})') {{ $t('cancelGroupSub') }}
+ </template>
+@@ -35,10 +33,9 @@
+ <script>
+ import moment from 'moment';
+ import { mapState } from 'client/libs/store';
+-import paymentsMixin from 'client/mixins/payments';
+ 
+ export default {
+-  mixins: [paymentsMixin],
++  mixins: [],
+   props: ['groupId'],
+   data () {
+     return {
+diff --git a/website/client/components/groups/createPartyModal.vue b/website/client/components/groups/createPartyModal.vue
+index 74beb78f0..e81c274b2 100644
+--- a/website/client/components/groups/createPartyModal.vue
++++ b/website/client/components/groups/createPartyModal.vue
+@@ -28,12 +28,6 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
+         .option-item(v-once)
+           .svg-icon(v-html="icons.qrCode")
+           | {{$t('qrCode')}}
+-        .option-item(v-once)
+-          .svg-icon.facebook(v-html="icons.facebook")
+-          | Facebook
+-        .option-item(v-once)
+-          .svg-icon(v-html="icons.twitter")
+-          | Twitter
+ </template>
+ 
+ <style>
+@@ -121,11 +115,6 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
+         display: inline-block;
+         vertical-align: bottom;
+       }
+-
+-      .facebook svg {
+-        width: 15px;
+-        height: 15px;
+-      }
+     }
+ 
+     .option-item:hover {
+@@ -138,13 +127,10 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
+ 
+ <script>
+ import { mapState } from 'client/libs/store';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ import copyIcon from 'assets/svg/copy.svg';
+ import greyBadgeIcon from 'assets/svg/grey-badge.svg';
+ import qrCodeIcon from 'assets/svg/qrCode.svg';
+-import facebookIcon from 'assets/svg/facebook.svg';
+-import twitterIcon from 'assets/svg/twitter.svg';
+ 
+ export default {
+   data () {
+@@ -153,8 +139,6 @@ export default {
+         copy: copyIcon,
+         greyBadge: greyBadgeIcon,
+         qrCode: qrCodeIcon,
+-        facebook: facebookIcon,
+-        twitter: twitterIcon,
+       }),
+       shareUserIdShown: false,
+     };
+@@ -164,12 +148,6 @@ export default {
+   },
+   methods: {
+     shareUserId () {
+-      Analytics.track({
+-        hitType: 'event',
+-        eventCategory: 'button',
+-        eventAction: 'click',
+-        eventLabel: 'Health Warning',
+-      });
+       this.shareUserIdShown = !this.shareUserIdShown;
+     },
+     async createParty () {
+@@ -181,11 +159,6 @@ export default {
+       this.$store.state.party.data = party;
+       this.user.party._id = party._id;
+ 
+-      Analytics.updateUser({
+-        partyID: party._id,
+-        partySize: 1,
+-      });
+-
+       this.$root.$emit('bv::hide::modal', 'create-party-modal');
+       this.$router.push('/party');
+     },
+diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
+index ff5372f73..647d4ad5b 100644
+--- a/website/client/components/groups/group.vue
++++ b/website/client/components/groups/group.vue
+@@ -321,7 +321,6 @@ import extend from 'lodash/extend';
+ import groupUtilities from 'client/mixins/groupsUtilities';
+ import styleHelper from 'client/mixins/styleHelper';
+ import { mapState } from 'client/libs/store';
+-import * as Analytics from 'client/libs/analytics';
+ import membersModal from './membersModal';
+ import startQuestModal from './startQuestModal';
+ import questDetailsModal from './questDetailsModal';
+@@ -633,13 +632,6 @@ export default {
+       await this.$store.dispatch('guilds:join', {groupId: this.group._id, type: 'guild'});
+     },
+     clickLeave () {
+-      Analytics.track({
+-        hitType: 'event',
+-        eventCategory: 'button',
+-        eventAction: 'click',
+-        eventLabel: 'Leave Party',
+-      });
+-
+       // @TODO: Get challenges and ask to keep or remove
+       if (!confirm('Are you sure you want to leave?')) return;
+       let keep = true;
+@@ -656,7 +648,6 @@ export default {
+ 
+       if (this.isParty) {
+         data.type = 'party';
+-        Analytics.updateUser({partySize: null, partyID: null});
+         this.$store.state.partyMembers = [];
+       }
+ 
+@@ -671,13 +662,6 @@ export default {
+       this.$router.push('/group-plans');
+     },
+     clickStartQuest () {
+-      Analytics.track({
+-        hitType: 'event',
+-        eventCategory: 'button',
+-        eventAction: 'click',
+-        eventLabel: 'Start a Quest',
+-      });
+-
+       let hasQuests = find(this.user.items.quests, (quest) => {
+         return quest > 0;
+       });
+diff --git a/website/client/components/groups/groupFormModal.vue b/website/client/components/groups/groupFormModal.vue
+index 730a9e712..5b3480251 100644
+--- a/website/client/components/groups/groupFormModal.vue
++++ b/website/client/components/groups/groupFormModal.vue
+@@ -382,13 +382,6 @@ export default {
+         alert(this.$t('notEnoughGems'));
+         return;
+         // @TODO return $rootScope.openModal('buyGems', {track:"Gems > Gems > Create Group"});
+-        // @TODO when modal is implemented, enable analytics
+-        /* Analytics.track({
+-          hitType: 'event',
+-          eventCategory: 'button',
+-          eventAction: 'click',
+-          eventLabel: 'Health Warning',
+-        }); */
+       }
+ 
+       let errors = [];
+diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
+index 45c5fb470..07c7f6b17 100644
+--- a/website/client/components/groups/groupPlan.vue
++++ b/website/client/components/groups/groupPlan.vue
+@@ -45,16 +45,6 @@ div
+               .number 3
+               .name Each Individual Group Member
+ 
+-          .box.payment-providers
+-            h3 Choose your payment method
+-            .box.payment-button(@click='pay(PAYMENTS.STRIPE)')
+-              div
+-                .svg-icon.credit-card-icon(v-html="icons.group")
+-                p.credit-card Credit Card
+-              p Powered by Stripe
+-            .box.payment-button(@click='pay(PAYMENTS.AMAZON)')
+-              .svg-icon.amazon-pay-icon(v-html="icons.amazonpay")
+-
+     .container.col-6.offset-3.create-option(v-if='!upgradingGroup._id')
+       .row
+         h1.col-12.text-center.purple-header Create your Group today!
+@@ -97,14 +87,6 @@ div
+         button.btn.btn-secondary.form-control(@click='createGroup()', :value="$t('createGroupPlan')")
+       .form-group
+         button.btn.btn-primary.btn-lg.btn-block(@click="createGroup()", :disabled="!newGroupIsReady") {{ $t('createGroupPlan') }}
+-    .col-12(v-if='activePage === PAGES.PAY')
+-      .payment-providers
+-        h3 Choose your payment method
+-        .box.payment-button(@click='pay(PAYMENTS.STRIPE)')
+-          p Credit Card
+-          p Powered by Stripe
+-        .box.payment-button(@click='pay(PAYMENTS.AMAZON)')
+-          | Amazon Pay
+ </template>
+ 
+ <style lang="scss" scoped>
+@@ -142,26 +124,6 @@ div
+     .payment-providers {
+       width: 350px;
+     }
+-
+-    .credit-card {
+-      font-size: 20px;
+-      font-weight: bold;
+-      margin-bottom: 0;
+-      margin-top: .5em;
+-      display: inline-block;
+-    }
+-
+-    .credit-card-icon {
+-      width: 25px;
+-      display: inline-block;
+-      margin-right: .5em;
+-    }
+-
+-    .amazon-pay-icon {
+-      width: 150px;
+-      margin: 0 auto;
+-      margin-top: .5em;
+-    }
+   }
+ 
+   .header {
+@@ -319,20 +281,16 @@ div
+ </style>
+ 
+ <script>
+-import paymentsMixin from '../../mixins/payments';
+ import { mapState } from 'client/libs/store';
+ import group from 'assets/svg/group.svg';
+-import amazonpay from 'assets/svg/amazonpay.svg';
+ import positiveIcon from 'assets/svg/positive.svg';
+ 
+ export default {
+-  mixins: [paymentsMixin],
++  mixins: [],
+   data () {
+     return {
+-      amazonPayments: {},
+       icons: Object.freeze({
+         group,
+-        amazonpay,
+         positiveIcon,
+       }),
+       PAGES: {
+@@ -340,11 +298,6 @@ export default {
+         UPGRADE_GROUP: 'upgrade-group',
+         PAY: 'pay',
+       },
+-      // @TODO: Import from payment library?
+-      PAYMENTS: {
+-        AMAZON: 'amazon',
+-        STRIPE: 'stripe',
+-      },
+       paymentMethod: '',
+       newGroup: {
+         type: 'guild',
+@@ -395,14 +348,6 @@ export default {
+       } else {
+         paymentData.groupToCreate = this.newGroup;
+       }
+-
+-      this.paymentMethod = paymentMethod;
+-      if (this.paymentMethod === this.PAYMENTS.STRIPE) {
+-        this.showStripe(paymentData);
+-      } else if (this.paymentMethod === this.PAYMENTS.AMAZON) {
+-        paymentData.type = 'subscription';
+-        this.amazonPaymentsInit(paymentData);
+-      }
+     },
+   },
+ };
+diff --git a/website/client/components/groups/inviteModal.vue b/website/client/components/groups/inviteModal.vue
+index 8638ebf1b..4c2508632 100644
+--- a/website/client/components/groups/inviteModal.vue
++++ b/website/client/components/groups/inviteModal.vue
+@@ -54,7 +54,6 @@ import { mapState } from 'client/libs/store';
+ import filter from 'lodash/filter';
+ import map from 'lodash/map';
+ import notifications from 'client/mixins/notifications';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ export default {
+   mixins: [notifications],
+@@ -66,12 +65,6 @@ export default {
+     };
+   },
+   mounted () {
+-    Analytics.track({
+-      hitType: 'event',
+-      eventCategory: 'button',
+-      eventAction: 'click',
+-      eventLabel: 'Invite Friends',
+-    });
+   },
+   computed: {
+     ...mapState({user: 'user.data'}),
+diff --git a/website/client/components/groups/questDetailsModal.vue b/website/client/components/groups/questDetailsModal.vue
+index e02522102..4173eeda7 100644
+--- a/website/client/components/groups/questDetailsModal.vue
++++ b/website/client/components/groups/questDetailsModal.vue
+@@ -140,8 +140,6 @@ import quests from 'common/script/content/quests';
+ import copyIcon from 'assets/svg/copy.svg';
+ import greyBadgeIcon from 'assets/svg/grey-badge.svg';
+ import qrCodeIcon from 'assets/svg/qrCode.svg';
+-import facebookIcon from 'assets/svg/facebook.svg';
+-import twitterIcon from 'assets/svg/twitter.svg';
+ import starIcon from 'assets/svg/star.svg';
+ import goldIcon from 'assets/svg/gold.svg';
+ import difficultyStarIcon from 'assets/svg/difficulty-star.svg';
+@@ -162,8 +160,6 @@ export default {
+         copy: copyIcon,
+         greyBadge: greyBadgeIcon,
+         qrCode: qrCodeIcon,
+-        facebook: facebookIcon,
+-        twitter: twitterIcon,
+         starIcon,
+         goldIcon,
+         difficultyStarIcon,
+diff --git a/website/client/components/groups/startQuestModal.vue b/website/client/components/groups/startQuestModal.vue
+index 66bee4afe..456a968d1 100644
+--- a/website/client/components/groups/startQuestModal.vue
++++ b/website/client/components/groups/startQuestModal.vue
+@@ -106,15 +106,12 @@
+ 
+ <script>
+ import { mapState } from 'client/libs/store';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ import quests from 'common/script/content/quests';
+ 
+ import copyIcon from 'assets/svg/copy.svg';
+ import greyBadgeIcon from 'assets/svg/grey-badge.svg';
+ import qrCodeIcon from 'assets/svg/qrCode.svg';
+-import facebookIcon from 'assets/svg/facebook.svg';
+-import twitterIcon from 'assets/svg/twitter.svg';
+ import starIcon from 'assets/svg/star.svg';
+ import goldIcon from 'assets/svg/gold.svg';
+ import difficultyStarIcon from 'assets/svg/difficulty-star.svg';
+@@ -137,8 +134,6 @@ export default {
+         copy: copyIcon,
+         greyBadge: greyBadgeIcon,
+         qrCode: qrCodeIcon,
+-        facebook: facebookIcon,
+-        twitter: twitterIcon,
+         starIcon,
+         goldIcon,
+         difficultyStarIcon,
+@@ -169,11 +164,6 @@ export default {
+     async questInit () {
+       this.loading = true;
+ 
+-      Analytics.updateUser({
+-        partyID: this.group._id,
+-        partySize: this.group.memberCount,
+-      });
+-
+       let groupId = this.group._id || this.user.party._id;
+ 
+       const key = this.selectedQuest;
+diff --git a/website/client/components/header/index.vue b/website/client/components/header/index.vue
+index e679b2c5c..42a054a41 100644
+--- a/website/client/components/header/index.vue
++++ b/website/client/components/header/index.vue
+@@ -34,26 +34,11 @@ div
+         span.small-text(v-html="$t('inviteFriendsParty')")
+         br
+         button.btn.btn-primary(@click='openPartyModal()') {{ partyMembers && partyMembers.length > 1 ? $t('startAParty') : $t('inviteFriends') }}
+-  a.useMobileApp(v-if="isAndroidMobile()", v-once, href="https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica") {{ $t('useMobileApps') }}
+-  a.useMobileApp(v-if="isIOSMobile()", v-once, href="https://itunes.apple.com/us/app/habitica-gamified-task-manager/id994882113?mt=8") {{ $t('useMobileApps') }}
+ </template>
+ 
+ <style lang="scss" scoped>
+   @import '~client/assets/scss/colors.scss';
+ 
+-  .useMobileApp {
+-    background: red;
+-    color: white;
+-    z-index: 10;
+-    width: 100%;
+-    margin: 10px 5px 0 0;
+-    height: 64px;
+-    text-align: center;
+-
+-    display: flex;
+-    align-items: center;
+-  }
+-
+   #app-header {
+     margin-top: 56px;
+     padding-left: 24px;
+@@ -145,12 +130,6 @@ export default {
+     ...mapActions({
+       getPartyMembers: 'party:getMembers',
+     }),
+-    isAndroidMobile () {
+-      return navigator.userAgent.match(/Android/i);
+-    },
+-    isIOSMobile () {
+-      return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+-    },
+     expandMember (memberId) {
+       if (this.expandedMember === memberId) {
+         this.expandedMember = null;
+diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
+index 3d22506fb..6adc5d1b5 100644
+--- a/website/client/components/header/menu.vue
++++ b/website/client/components/header/menu.vue
+@@ -282,7 +282,6 @@ div
+ 
+ <script>
+ import { mapState, mapGetters } from 'client/libs/store';
+-import * as Analytics from 'client/libs/analytics';
+ import gemIcon from 'assets/svg/gem.svg';
+ import goldIcon from 'assets/svg/gold.svg';
+ import syncIcon from 'assets/svg/sync.svg';
+@@ -346,14 +345,6 @@ export default {
+     },
+     showBuyGemsModal (startingPage) {
+       this.$store.state.gemModalOptions.startingPage = startingPage;
+-
+-      Analytics.track({
+-        hitType: 'event',
+-        eventCategory: 'button',
+-        eventAction: 'click',
+-        eventLabel: 'Gems > Toolbar',
+-      });
+-
+       this.$root.$emit('bv::show::modal', 'buy-gems', {alreadyTracked: true});
+     },
+   },
+diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
+index 747c48a4b..21b6693c1 100644
+--- a/website/client/components/header/userDropdown.vue
++++ b/website/client/components/header/userDropdown.vue
+@@ -63,7 +63,6 @@ menu-dropdown.item-user(:right="true")
+ 
+ <script>
+ import { mapState } from 'client/libs/store';
+-import * as Analytics from 'client/libs/analytics';
+ import userIcon from 'assets/svg/user.svg';
+ import MenuDropdown from '../ui/customMenuDropdown';
+ import axios from 'axios';
+@@ -105,14 +104,6 @@ export default {
+     },
+     showBuyGemsModal (startingPage) {
+       this.$store.state.gemModalOptions.startingPage = startingPage;
+-
+-      Analytics.track({
+-        hitType: 'event',
+-        eventCategory: 'button',
+-        eventAction: 'click',
+-        eventLabel: 'Gems > User Dropdown',
+-      });
+-
+       this.$root.$emit('bv::show::modal', 'buy-gems', {alreadyTracked: true});
+     },
+     logout () {
+diff --git a/website/client/components/settings/deleteModal.vue b/website/client/components/settings/deleteModal.vue
+index 24a9d6fac..248ebadc9 100644
+--- a/website/client/components/settings/deleteModal.vue
++++ b/website/client/components/settings/deleteModal.vue
+@@ -15,17 +15,6 @@
+         button.btn.btn-primary(@click='close()') {{ $t('neverMind') }}
+         button.btn.btn-danger(@click='deleteAccount()', :disabled='!password') {{ $t('deleteDo') }}
+         .modal-header
+-    .social-delete(v-if='!user.auth.local.email')
+-      h4 {{ $t('deleteAccount') }}
+-      .modal-body
+-        p {{ $t('deleteSocialAccountText', {magicWord: 'DELETE'}) }}
+-        br
+-        .row
+-          .col-md-6
+-            input.form-control(type='text', v-model='password')
+-      .modal-footer
+-        button.btn.btn-secondary(@click='close()') {{ $t('neverMind') }}
+-        button.btn.btn-danger(:disabled='!password', @click='deleteAccount()') {{ $t('deleteDo') }}
+ </template>
+ 
+ <script>
+diff --git a/website/client/components/settings/notifications.vue b/website/client/components/settings/notifications.vue
+index b92f6de0e..fc0b22c24 100644
+--- a/website/client/components/settings/notifications.vue
++++ b/website/client/components/settings/notifications.vue
+@@ -3,14 +3,6 @@
+   .col-12
+     h1 {{ $t('notifications') }}
+   .col-12
+-    .checkbox
+-      label
+-        input(type='checkbox', v-model='user.preferences.pushNotifications.unsubscribeFromAll',
+-        @change='set("pushNotifications", "unsubscribeFromAll")')
+-        span {{ $t('unsubscribeAllPush') }}
+-
+-    br
+-
+     .checkbox
+       label
+         input(type='checkbox', v-model='user.preferences.emailNotifications.unsubscribeFromAll',
+@@ -24,17 +16,12 @@
+       td
+       th
+         span {{ $t('email') }}
+-      th
+-        span {{ $t('push') }}
+     tr(v-for='notification in notificationsIds')
+       td
+         span {{ $t(notification) }}
+       td
+         input(type='checkbox', v-model='user.preferences.emailNotifications[notification]',
+           @change='set("emailNotifications", notification)')
+-      td
+-        input(type='checkbox', v-model='user.preferences.pushNotifications[notification]',
+-          @change='set("pushNotifications", notification)')
+         hr
+ </template>
+ 
+diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
+index 946356ade..4964c18cd 100644
+--- a/website/client/components/settings/site.vue
++++ b/website/client/components/settings/site.vue
+@@ -109,12 +109,6 @@
+       h2 {{ $t('registration') }}
+       .panel-body
+         div
+-          ul.list-inline
+-            li(v-for='network in SOCIAL_AUTH_NETWORKS')
+-              button.btn.btn-primary(v-if='!user.auth[network.key].id', @click='socialAuth(network.key, user)') {{ $t('registerWithSocial', {network: network.name}) }}
+-              button.btn.btn-primary(disabled='disabled', v-if='!hasBackupAuthOption(network.key) && user.auth[network.key].id') {{ $t('registeredWithSocial', {network: network.name}) }}
+-              button.btn.btn-danger(@click='deleteSocialAuth(network.key)', v-if='hasBackupAuthOption(network.key) && user.auth[network.key].id') {{ $t('detachSocial', {network: network.name}) }}
+-          hr
+           div(v-if='!user.auth.local.username')
+             p {{ $t('addLocalAuth') }}
+             p {{ $t('usernameLimitations') }}
+@@ -184,7 +178,6 @@
+ </style>
+ 
+ <script>
+-import hello from 'hellojs';
+ import moment from 'moment';
+ import axios from 'axios';
+ import { mapState } from 'client/libs/store';
+@@ -192,7 +185,6 @@ import { mapState } from 'client/libs/store';
+ import restoreModal from './restoreModal';
+ import resetModal from './resetModal';
+ import deleteModal from './deleteModal';
+-import { SUPPORTED_SOCIAL_NETWORKS } from '../../../common/script/constants';
+ import changeClass from  '../../../common/script/ops/changeClass';
+ // @TODO: this needs our window.env fix
+ // import { availableLanguages } from '../../../server/libs/i18n';
+@@ -216,7 +208,6 @@ export default {
+     }
+ 
+     return {
+-      SOCIAL_AUTH_NETWORKS: [],
+       party: {},
+       // Made available by the server as a script
+       availableFormats: ['MM/dd/yyyy', 'dd/MM/yyyy', 'yyyy/MM/dd'],
+@@ -234,14 +225,9 @@ export default {
+     };
+   },
+   mounted () {
+-    this.SOCIAL_AUTH_NETWORKS = SUPPORTED_SOCIAL_NETWORKS;
+     // @TODO: We may need to request the party here
+     this.party = this.$store.state.party;
+     this.newDayStart = this.user.preferences.dayStart;
+-    hello.init({
+-      facebook: process.env.FACEBOOK_KEY, // eslint-disable-line no-process-env
+-      google: process.env.GOOGLE_CLIENT_ID, // eslint-disable-line no-process-env
+-    });
+   },
+   computed: {
+     ...mapState({
+@@ -300,14 +286,6 @@ export default {
+       if (this.user.auth.local.username) {
+         return true;
+       }
+-
+-      return find(this.SOCIAL_AUTH_NETWORKS, (network) => {
+-        if (network.key !== networkKeyToCheck) {
+-          if (this.user.auth.hasOwnProperty(network.key)) {
+-            return this.user.auth[network.key].id;
+-          }
+-        }
+-      });
+     },
+     calculateNextCron () {
+       let nextCron = moment().hours(this.newDayStart).minutes(0).seconds(0).milliseconds(0);
+@@ -354,26 +332,6 @@ export default {
+     openDeleteModal () {
+       this.$root.$emit('bv::show::modal', 'delete');
+     },
+-    async deleteSocialAuth (networkKey) {
+-      // @TODO: What do we use this for?
+-      // let networktoRemove = find(SOCIAL_AUTH_NETWORKS, function (network) {
+-      //   return network.key === networkKey;
+-      // });
+-
+-      await axios.get(`/api/v3/user/auth/social/${networkKey}`);
+-      // @TODO:
+-      // Notification.text(env.t("detachedSocial", {network: network.name}));
+-      // User.sync();
+-    },
+-    async socialAuth (network) {
+-      let auth = await hello(network).login({scope: 'email'});
+-
+-      await this.$store.dispatch('auth:socialAuth', {
+-        auth,
+-      });
+-
+-      window.location.href = '/';
+-    },
+     async changeClassForUser (confirmationNeeded) {
+       if (confirmationNeeded && !confirm(this.$t('changeClassConfirmCost'))) return;
+       try {
+diff --git a/website/client/components/settings/subscription.vue b/website/client/components/settings/subscription.vue
+index e086f99f5..96481edfd 100644
+--- a/website/client/components/settings/subscription.vue
++++ b/website/client/components/settings/subscription.vue
+@@ -67,21 +67,9 @@
+               button.btn.btn-primary(type='button', @click='applyCoupon(subscription.coupon)') {{ $t("apply") }}
+ 
+         div(v-if='hasSubscription')
+-          .btn.btn-primary(v-if='canEditCardDetails', @click='showStripeEdit()') {{ $t('subUpdateCard') }}
+           .btn.btn-sm.btn-danger(v-if='canCancelSubscription && !loading', @click='cancelSubscription()') {{ $t('cancelSub') }}
+           small(v-if='!canCancelSubscription && !hasCanceledSubscription', v-html='getCancelSubInfo()')
+ 
+-        .subscribe-pay(v-if='!hasSubscription || hasCanceledSubscription')
+-          h3 {{ $t('subscribeUsing') }}
+-          .row.text-center
+-            .col-md-4
+-              button.purchase.btn.btn-primary(@click='showStripe({subscription:subscription.key, coupon:subscription.coupon})', :disabled='!subscription.key') {{ $t('card') }}
+-            .col-md-4
+-              a.purchase(:href='paypalPurchaseLink', :disabled='!subscription.key', target='_blank')
+-                img(src='https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-small.png', :alt="$t('paypal')")
+-            .col-md-4
+-              a.btn.btn-secondary.purchase(@click="payWithAmazon()")
+-                img(src='https://payments.amazon.com/gp/cba/button', :alt="$t('amazonPayments')")
+     .row
+       .col-6
+         h2 {{ $t('giftSubscription') }}
+@@ -112,11 +100,10 @@ import { mapState } from 'client/libs/store';
+ 
+ import subscriptionBlocks from '../../../common/script/content/subscriptionBlocks';
+ import planGemLimits from '../../../common/script/libs/planGemLimits';
+-import paymentsMixin from '../../mixins/payments';
+ import notificationsMixin from '../../mixins/notifications';
+ 
+ export default {
+-  mixins: [paymentsMixin, notificationsMixin],
++  mixins: [notificationsMixin],
+   data () {
+     return {
+       loading: false,
+@@ -127,14 +114,7 @@ export default {
+       subscription: {
+         key: 'basic_earned',
+       },
+-      // @TODO: Remove the need for this or move it to mixin
+-      amazonPayments: {},
+       paymentMethods: {
+-        AMAZON_PAYMENTS: 'Amazon Payments',
+-        STRIPE: 'Stripe',
+-        GOOGLE: 'Google',
+-        APPLE: 'Apple',
+-        PAYPAL: 'Paypal',
+         GIFT: 'Gift',
+       },
+     };
+@@ -171,10 +151,7 @@ export default {
+       return subscriptionBlocks;
+     },
+     canEditCardDetails () {
+-      return Boolean(
+-        !this.hasCanceledSubscription &&
+-        this.user.purchased.plan.paymentMethod === this.paymentMethods.STRIPE
+-      );
++      return Boolean(!this.hasCanceledSubscription);
+     },
+     hasSubscription () {
+       return Boolean(this.user.purchased.plan.customerId);
+@@ -232,28 +209,14 @@ export default {
+     },
+     canCancelSubscription () {
+       return (
+-        this.user.purchased.plan.paymentMethod !== this.paymentMethods.GOOGLE &&
+-        this.user.purchased.plan.paymentMethod !== this.paymentMethods.APPLE &&
+         !this.hasCanceledSubscription &&
+         !this.hasGroupPlan
+       );
+     },
+   },
+   methods: {
+-    payWithAmazon () {
+-      this.amazonPaymentsInit({
+-        type: 'subscription',
+-        subscription: this.subscription.key,
+-        coupon: this.subscription.coupon,
+-      });
+-    },
+     async applyCoupon (coupon) {
+       const response = await axios.post(`/api/v3/coupons/validate/${coupon}`);
+-
+-      if (!response.data.data.valid) return;
+-
+-      this.text('Coupon applied!');
+-      this.subscription.key = 'google_6mo';
+     },
+     getCancelSubInfo () {
+       let payMethod = this.user.purchased.plan.paymentMethod || '';
+diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
+index bc2a9978c..a2bfba580 100644
+--- a/website/client/components/shops/buyModal.vue
++++ b/website/client/components/shops/buyModal.vue
+@@ -253,7 +253,6 @@
+ </style>
+ 
+ <script>
+-  import * as Analytics from 'client/libs/analytics';
+   import spellsMixin from 'client/mixins/spells';
+   import planGemLimits from 'common/script/libs/planGemLimits';
+ 
+@@ -393,14 +392,6 @@
+         this.hideDialog();
+       },
+       purchaseGems () {
+-        if (this.item.key === 'rebirth_orb') {
+-          Analytics.track({
+-            hitType: 'event',
+-            eventCategory: 'button',
+-            eventAction: 'click',
+-            eventLabel: 'Gems > Rebirth',
+-          });
+-        }
+         this.$root.$emit('bv::show::modal', 'buy-gems');
+       },
+       togglePinned () {
+diff --git a/website/client/components/static/app.vue b/website/client/components/static/app.vue
+index cfcf1fa02..4dd4105b5 100644
+--- a/website/client/components/static/app.vue
++++ b/website/client/components/static/app.vue
+@@ -1,11 +1,3 @@
+ <template lang="pug">
+   .container-fluid.text-center
+-    .row
+-      .col-md-6.offset-3
+-        h1 {{ $t('checkOutMobileApps') }}
+-        .promo_habitica(style='border-radius:25px;margin:auto;margin-bottom:30px')
+-
+-        a(href='https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-AC-global-none-all-co-pr-py-PartBadges-Oct1515-1&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-AC-global-none-all-co-pr-py-PartBadges-Oct1515-1')
+-          img(alt='Get it on Google Play', src='https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png', style='width:139px;height:45px;image-rendering:auto;vertical-align:top')
+-        a(href='https://geo.itunes.apple.com/us/app/habitica/id994882113?mt=8', style='display:inline-block;overflow:hidden;background:url(http://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg#svgView) no-repeat;background-size:100%;width:152px;height:45px;margin-left:20px;image-rendering:auto')
+ </template>
+diff --git a/website/client/components/static/groupPlans.vue b/website/client/components/static/groupPlans.vue
+index 5d1d51050..252751aa2 100644
+--- a/website/client/components/static/groupPlans.vue
++++ b/website/client/components/static/groupPlans.vue
+@@ -10,21 +10,6 @@
+           br
+           .text-center {{ $t('groupSubscriptionPrice') }}
+ 
+-      hr
+-
+-      .col-6.offset-3.text-center
+-        .row.row-margin(style="font-size: 2rem;")
+-          span {{ $t('enterprisePlansDescription') }}
+-        .row.row-margin
+-          // TODO
+-          a.btn.btn-primary.btn-lg.btn-block(:href="'mailto:vicky@habitica.com?subject=' + enterprisePlansEmailSubject") {{ $t('enterprisePlansButton') }}
+-
+-        br
+-
+-        .row.row-margin(style="font-size: 2rem;")
+-          span {{ $t('familyPlansDescription') }}
+-        .row.row-margin
+-          a.btn.btn-primary.btn-lg.btn-block(href="https://docs.google.com/forms/d/e/1FAIpQLSerMKkaCg3UcgpcMvBJtlNgnF9DNY8sxCebpAT-GHeDAQASPQ/viewform?usp=sf_link") {{ $t('familyPlansButton') }}
+ </template>
+ 
+ <style lang='scss' scoped>
+@@ -35,7 +20,6 @@
+ 
+ <script>
+   import StaticHeader from './header.vue';
+-  import * as Analytics from 'client/libs/analytics';
+   
+   export default {
+     components: {
+@@ -61,13 +45,6 @@
+         this.$router.push('/group-plans');
+       },
+       contactUs () {
+-        Analytics.track({
+-          hitType: 'event',
+-          eventCategory: 'button',
+-          eventAction: 'click',
+-          eventLabel: 'Contact Us (Plans)',
+-        });
+-
+         window.location.href = `mailto:vicky@habitica.com?subject=${ this.enterprisePlansEmailSubject }`;
+       },
+     },
+diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
+index 6ec9434f5..1cb966bbe 100644
+--- a/website/client/components/static/header.vue
++++ b/website/client/components/static/header.vue
+@@ -20,8 +20,6 @@
+       ul.navbar-nav.mr-auto(v-else)
+         router-link.nav-item(tag='li', to='/register')
+           a.nav-link(v-once) {{ $t('getStarted') }}
+-        li.nav-item
+-          a.nav-link(@click='scrollToMobileApp') {{ $t('mobileApps') }}
+         li.nav-item.dropdown
+           a.nav-link.dropdown-toggle(v-once) {{ $t('learnMore') }}
+           .dropdown-menu
+@@ -152,7 +150,6 @@
+ 
+ <script>
+ import logo from 'assets/svg/logo.svg';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ export default {
+   data () {
+@@ -174,21 +171,8 @@ export default {
+         return;
+       }
+ 
+-      // @TODO duplicate of code in home.vue
+-      Analytics.track({
+-        hitType: 'event',
+-        eventCategory: 'button',
+-        eventAction: 'click',
+-        eventLabel: 'Play',
+-      });
+-
+       this.$router.push('/register');
+     },
+-    scrollToMobileApp () {
+-      document.querySelector('#level-up-anywhere').scrollIntoView({
+-        behavior: 'smooth',
+-      });
+-    },
+   },
+ };
+ </script>
+diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
+index 1e95ea76f..75849de2c 100644
+--- a/website/client/components/static/home.vue
++++ b/website/client/components/static/home.vue
+@@ -13,15 +13,6 @@
+             p.section-main {{$t('timeToGetThingsDone')}}
+           .col-12.col-sm-6.col-md-6.col-lg-6
+             h3.text-center {{$t('singUpForFree')}}
+-            div.text-center
+-              button.social-button(@click='socialAuth("facebook")')
+-                .svg-icon.social-icon(v-html="icons.facebookIcon")
+-                span {{$t('signUpWithSocial', {social: 'Facebook'})}}
+-              button.social-button(@click='socialAuth("google")')
+-                .svg-icon.social-icon(v-html="icons.googleIcon")
+-                span {{$t('signUpWithSocial', {social: 'Google'})}}
+-            .strike
+-              span {{$t('or')}}
+             .form(@keyup.enter="register()")
+               p.form-text {{$t('usernameLimitations')}}
+               input.form-control(type='text', placeholder='Login Name', v-model='username', :class='{"input-valid": username.length > 3}')
+@@ -80,19 +71,6 @@
+       .container-fluid
+         .pixel-horizontal-2.svg-icon(v-html='icons.pixelHorizontal2')
+ 
+-    #level-up-anywhere.purple-3
+-      .container
+-        .row
+-          .col-12.col-sm-6.col-md-6.col-lg-6
+-            .iphones
+-          .col-12.col-sm-6.col-md-6.col-lg-6.text-column
+-            h2 {{ $t('levelUpAnywhere') }}
+-            p {{ $t('levelUpAnywhereDesc') }}
+-            a.app.svg-icon(v-html='icons.googlePlay', href='https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica', target='_blank')
+-            a.app.svg-icon(v-html='icons.iosAppStore', href='https://itunes.apple.com/us/app/habitica-gamified-task-manager/id994882113?mt=8', target='_blank')
+-      .container-fluid
+-        .pixel-horizontal-3.svg-icon(v-html='icons.pixelHorizontal3')
+-
+     #call-to-action.purple-4
+       .container.featured
+         .row.text-center
+@@ -212,37 +190,6 @@
+       font-size: 24px;
+     }
+ 
+-    .social-button {
+-      border-radius: 2px;
+-      border: solid 2px #bda8ff;
+-      width: 48%;
+-      min-height: 40px;
+-      padding: .5em;
+-      background: transparent;
+-      margin-right: .5em;
+-      color: #bda8ff;
+-      transition: .5s;
+-
+-      span {
+-        transition: none;
+-      }
+-    }
+-
+-    .social-button:hover {
+-      cursor: pointer;
+-      border-color: #fff;
+-      color: #fff;
+-    }
+-
+-    .social-icon {
+-      margin-right: 1em;
+-      width: 18px;
+-      height: 18px;
+-      display: inline-block;
+-      vertical-align: top;
+-      margin-top: .2em;
+-    }
+-
+     .strike {
+       display: block;
+       text-align: center;
+@@ -373,29 +320,6 @@
+     }
+   }
+ 
+-  #level-up-anywhere {
+-    .app {
+-      display: inline-block;
+-      width: 135px;
+-      margin-right: .5em;
+-    }
+-
+-    .app {
+-      cursor: pointer;
+-    }
+-
+-    .iphones {
+-      width: 436px;
+-      height: 520px;
+-      background-size: 100%;
+-      background-image: url('~assets/images/home/mobile-preview@3x.png');
+-    }
+-
+-    .text-column {
+-      padding-top: 9em;
+-    }
+-  }
+-
+   #call-to-action {
+     .row {
+       margin-top: 1em;
+@@ -523,16 +447,9 @@
+ </style>
+ 
+ <script>
+-  import hello from 'hellojs';
+-  import googlePlay from 'assets/images/home/google-play-badge.svg';
+-  import iosAppStore from 'assets/images/home/ios-app-store.svg';
+-  import iphones from 'assets/images/home/iphones.svg';
+   import spacer from 'assets/images/home/spacer.svg';
+   import pixelHorizontal from 'assets/images/home/pixel-horizontal.svg';
+   import pixelHorizontal2 from 'assets/images/home/pixel-horizontal-2.svg';
+-  import pixelHorizontal3 from 'assets/images/home/pixel-horizontal-3.svg';
+-  import facebookSquareIcon from 'assets/svg/facebook-square.svg';
+-  import googleIcon from 'assets/svg/google.svg';
+   import cnet from 'assets/svg/cnet.svg';
+   import fastCompany from 'assets/svg/fast-company.svg';
+   import discover from 'assets/images/home/discover.svg';
+@@ -541,21 +458,14 @@
+   import lifehacker from 'assets/images/home/lifehacker.svg';
+   import makeuseof from 'assets/images/home/make-use-of.svg';
+   import thenewyorktimes from 'assets/images/home/the-new-york-times.svg';
+-  import * as Analytics from 'client/libs/analytics';
+ 
+   export default {
+     data () {
+       return {
+         icons: Object.freeze({
+-          googlePlay,
+-          iosAppStore,
+-          iphones,
+           spacer,
+           pixelHorizontal,
+           pixelHorizontal2,
+-          pixelHorizontal3,
+-          facebookIcon: facebookSquareIcon,
+-          googleIcon,
+           cnet,
+           fastCompany,
+           discover,
+@@ -573,18 +483,6 @@
+       };
+     },
+     mounted () {
+-      Analytics.track({
+-        hitType: 'pageview',
+-        eventCategory: 'page',
+-        eventAction: 'landing page',
+-        page: '/static/home',
+-      });
+-
+-      hello.init({
+-        facebook: process.env.FACEBOOK_KEY, // eslint-disable-line
+-        // windows: WINDOWS_CLIENT_ID,
+-        google: process.env.GOOGLE_CLIENT_ID, // eslint-disable-line
+-      });
+     },
+     computed: {
+       emailValid () {
+@@ -644,29 +542,8 @@
+         window.location.href = redirectTo;
+       },
+       playButtonClick () {
+-        Analytics.track({
+-          hitType: 'event',
+-          eventCategory: 'button',
+-          eventAction: 'click',
+-          eventLabel: 'Play',
+-        });
+         this.$router.push('/register');
+       },
+-      async socialAuth (network) {
+-        const url = window.location.href;
+-
+-        let auth = await hello(network).login({
+-          scope: 'email',
+-          // explicitly pass the redirect url or it might redirect to /home
+-          redirect_uri: url, // eslint-disable-line camelcase
+-        });
+-
+-        await this.$store.dispatch('auth:socialAuth', {
+-          auth,
+-        });
+-
+-        window.location.href = '/';
+-      },
+     },
+   };
+ </script>
+diff --git a/website/client/components/static/staticWrapper.vue b/website/client/components/static/staticWrapper.vue
+index 799c822e1..f2019c66a 100644
+--- a/website/client/components/static/staticWrapper.vue
++++ b/website/client/components/static/staticWrapper.vue
+@@ -77,7 +77,7 @@ div
+       color: #bda8ff;
+     }
+ 
+-    .social-circle, .btn-contribute {
++    .btn-contribute {
+       background: #36205d;
+       color: #bda8ff;
+ 
+diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
+index a49a47896..2ef93f2bc 100644
+--- a/website/client/components/tasks/task.vue
++++ b/website/client/components/tasks/task.vue
+@@ -491,7 +491,6 @@ import moment from 'moment';
+ import axios from 'axios';
+ import scoreTask from 'common/script/ops/scoreTask';
+ import Vue from 'vue';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ import positiveIcon from 'assets/svg/positive.svg';
+ import negativeIcon from 'assets/svg/negative.svg';
+@@ -702,7 +701,6 @@ export default {
+ 
+       if (task.group.approval.required) task.group.approval.requested = true;
+ 
+-      Analytics.updateUser();
+       const response = await axios.post(`/api/v3/tasks/${task._id}/score/${direction}`);
+       const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
+       const crit = tmp.crit;
+diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
+index ee89f5045..2827c3cf9 100644
+--- a/website/client/components/userMenu/profile.vue
++++ b/website/client/components/userMenu/profile.vue
+@@ -59,14 +59,12 @@ div
+               .progress
+                 .progress-bar(role='progressbar', :aria-valuenow='incentivesProgress', aria-valuemin='0', aria-valuemax='100', :style='{width: incentivesProgress + "%"}')
+                   span.sr-only {{ incentivesProgress }}% {{$t('complete')}}
+-          // @TODO: Implement in V2 .social
+ 
+       .row(v-if='editing')
+         h1 {{$t('editProfile')}}
+         .col-12
+           .alert.alert-info.alert-sm(v-html='$t("communityGuidelinesWarning", managerEmail)')
+ 
+-          // TODO use photo-upload instead: https://groups.google.com/forum/?fromgroups=#!topic/derbyjs/xMmADvxBOak
+           .form-group
+             label {{ $t('displayName') }}
+             input.form-control(type='text', :placeholder="$t('fullName')", v-model='editingProfile.name')
+@@ -77,15 +75,6 @@ div
+             label {{ $t('about') }}
+             textarea.form-control(rows=5, :placeholder="$t('displayBlurbPlaceholder')", v-model='editingProfile.blurb')
+             // include ../../shared/formatting-help
+-          //- .form-group
+-          //-   label Facebook
+-          //-   input.form-control(type='text', placeholder="Paste your link here", v-model='editingProfile.facebook')
+-          //- .form-group
+-          //-   label Instagram
+-          //-   input.form-control(type='text', placeholder="Paste your link here", v-model='editingProfile.instagram')
+-          //- .form-group
+-          //-   label Twitter
+-          //-   input.form-control(type='text', placeholder="Paste your link here", v-model='editingProfile.twitter')
+ 
+         .col-12.text-center
+           button.btn.btn-primary(@click='save()') {{ $t("save") }}
+@@ -580,7 +569,6 @@ import autoAllocate from '../../../common/script/fns/autoAllocate';
+ import allocate from  '../../../common/script/ops/stats/allocate';
+ 
+ import MemberDetails from '../memberDetails';
+-import sendGemsModal from 'client/components/payments/sendGemsModal';
+ import markdown from 'client/directives/markdown';
+ import toggleSwitch from 'client/components/ui/toggleSwitch';
+ import achievementsLib from '../../../common/script/libs/achievements';
+@@ -602,7 +590,6 @@ export default {
+     markdown,
+   },
+   components: {
+-    sendGemsModal,
+     MemberDetails,
+     toggleSwitch,
+     attributesGrid,
+diff --git a/website/client/index.html b/website/client/index.html
+index 50a5cda11..2e01bb631 100644
+--- a/website/client/index.html
++++ b/website/client/index.html
+@@ -6,7 +6,7 @@
+     <title>Habitica - Gamify Your Life</title>
+     <meta name="description" content="Habitica is a free habit and productivity app that treats your real life like a game. Habitica can help you achieve your goals to become healthy and happy.">
+     <meta name="keywords" content="Habits,Goals,Todo,Gamification,Health,Fitness,School,Work">
+-    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,400i,700,700i|Roboto:400,400i,700,700i" rel="stylesheet">
++    <link href="/static/fonts/fonts.css" rel="stylesheet">
+     <link rel="shortcut icon" sizes="48x48" href="/static/icons/favicon.ico">
+     <link rel="shortcut icon" sizes="192x192" href="/static/icons/favicon_192x192.png">
+     <link rel="mask-icon" href="/static/icons/favicon.ico">
+@@ -21,7 +21,6 @@
+     <div id="app"></div>
+     <!-- built files will be auto injected -->
+ 
+-    <script type="text/javascript" src="//cloudfront.loggly.com/js/loggly.tracker-latest.min.js" async></script>
+     <!-- Translations -->
+     <script type='text/javascript' src='/api/v3/i18n/browser-script'></script>
+   </body>
+diff --git a/website/client/main.js b/website/client/main.js
+index 7e86bb5d3..5180aded1 100644
+--- a/website/client/main.js
++++ b/website/client/main.js
+@@ -1,9 +1,5 @@
+ import Vue from 'vue';
+ import AppComponent from './app';
+-import {
+-  setup as setupAnalytics,
+-} from 'client/libs/analytics';
+-import { setUpLogging } from 'client/libs/logging';
+ import router from './router';
+ import getStore from './store';
+ import StoreModule from './libs/store';
+@@ -29,8 +25,6 @@ Vue.use(i18n, {i18nData: window && window['habitica-i18n']});
+ Vue.use(StoreModule);
+ Vue.use(BootstrapVue);
+ 
+-setUpLogging();
+-setupAnalytics(); // just create queues for analytics, no scripts loaded at this time
+ const store = getStore();
+ 
+ export default new Vue({
+diff --git a/website/client/mixins/guide.js b/website/client/mixins/guide.js
+index 0d5029fb7..0ccbdbf6c 100644
+--- a/website/client/mixins/guide.js
++++ b/website/client/mixins/guide.js
+@@ -1,6 +1,5 @@
+ import times from 'lodash/times';
+ import Intro from 'intro.js/';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ export default {
+   data () {
+@@ -137,10 +136,6 @@ export default {
+       }
+     },
+     hoyo (user) {
+-      // @TODO: What is was the timeout for?
+-      // @TODO move to analytics
+-      window.amplitude.setUserId(user._id);
+-      window.ga('set', {userId: user._id});
+     },
+     goto (chapter, page, force) {
+       if (chapter === 'intro' && this.user.flags.welcomed !== true)  {
+@@ -158,15 +153,6 @@ export default {
+         opts.steps  = opts.steps.concat(this.chapters[chapter][p]);
+       });
+ 
+-      Analytics.track({
+-        hitType: 'event',
+-        eventCategory: 'behavior',
+-        eventAction: 'tutorial',
+-        eventLabel: `${chapter}-web`,
+-        eventValue: page + 1,
+-        complete: true,
+-      });
+-
+       // @TODO: Do we always need to initialize here?
+       let intro = Intro.introJs();
+       intro.setOptions({
+@@ -197,22 +183,11 @@ export default {
+       //     //   message: this.$t('checkinEarned'),
+       //     //   nextRewardAt: 1,
+       //     // };
+-      //     // @TODO: Notification.showLoginIncentive(this.user, rewardData, Social.loadWidgets);
+       //   }
+ 
+       // Mark tour complete
+       ups[`flags.tour.${chapter}`] = -2; // @TODO: Move magic numbers to enum
+ 
+-      Analytics.track({
+-        hitType: 'event',
+-        eventCategory: 'behavior',
+-        eventAction: 'tutorial',
+-        eventLabel: `${chapter}-web`,
+-        eventValue: lastKnownStep,
+-        complete: true,
+-      });
+-      // }
+-
+       this.$store.dispatch('user:set', ups);
+     },
+   },
+diff --git a/website/client/router.js b/website/client/router.js
+index 8c55f3ae4..b06fe97a4 100644
+--- a/website/client/router.js
++++ b/website/client/router.js
+@@ -1,7 +1,6 @@
+ import Vue from 'vue';
+ import VueRouter from 'vue-router';
+ import getStore from 'client/store';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ // import EmptyView from './components/emptyView';
+ 
+@@ -342,13 +341,6 @@ router.beforeEach(function routerGuard (to, from, next) {
+     });
+   }
+ 
+-  Analytics.track({
+-    hitType: 'pageview',
+-    eventCategory: 'navigation',
+-    eventAction: 'navigate',
+-    page: to.name || to.path,
+-  });
+-
+   next();
+ });
+ 
+diff --git a/website/client/store/actions/auth.js b/website/client/store/actions/auth.js
+index 5bbc2c9f5..176e9b934 100644
+--- a/website/client/store/actions/auth.js
++++ b/website/client/store/actions/auth.js
+@@ -1,7 +1,6 @@
+ import axios from 'axios';
+ 
+ const LOCALSTORAGE_AUTH_KEY = 'habit-mobile-settings';
+-const LOCALSTORAGE_SOCIAL_AUTH_KEY = 'hello'; // Used by hello.js for social auth
+ 
+ export async function register (store, params) {
+   let url = '/api/v3/user/auth/local/register';
+@@ -46,27 +45,7 @@ export async function login (store, params) {
+   localStorage.setItem(LOCALSTORAGE_AUTH_KEY, userLocalData);
+ }
+ 
+-export async function socialAuth (store, params) {
+-  let url = '/api/v3/user/auth/social';
+-  let result = await axios.post(url, {
+-    network: params.auth.network,
+-    authResponse: params.auth.authResponse,
+-  });
+-
+-  let user = result.data.data;
+-
+-  let userLocalData = JSON.stringify({
+-    auth: {
+-      apiId: user.id,
+-      apiToken: user.apiToken,
+-    },
+-  });
+-
+-  localStorage.setItem(LOCALSTORAGE_AUTH_KEY, userLocalData);
+-}
+-
+ export function logout () {
+   localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
+-  localStorage.removeItem(LOCALSTORAGE_SOCIAL_AUTH_KEY);
+   window.location.href = '/logout';
+ }
+diff --git a/website/client/store/actions/chat.js b/website/client/store/actions/chat.js
+index 7c9adc1eb..dc74c545a 100644
+--- a/website/client/store/actions/chat.js
++++ b/website/client/store/actions/chat.js
+@@ -1,5 +1,4 @@
+ import axios from 'axios';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ export async function getChat (store, payload) {
+   let response = await axios.get(`/api/v3/groups/${payload.groupId}/chat`);
+@@ -16,32 +15,6 @@ export async function postChat (store, payload) {
+     url += `?previousMsg=${payload.previousMsg}`;
+   }
+ 
+-  if (group.type === 'party') {
+-    Analytics.updateUser({
+-      partyID: group.id,
+-      partySize: group.memberCount,
+-    });
+-  }
+-
+-  if (group.privacy === 'public') {
+-    Analytics.track({
+-      hitType: 'event',
+-      eventCategory: 'behavior',
+-      eventAction: 'group chat',
+-      groupType: group.type,
+-      privacy: group.privacy,
+-      groupName: group.name,
+-    });
+-  } else {
+-    Analytics.track({
+-      hitType: 'event',
+-      eventCategory: 'behavior',
+-      eventAction: 'group chat',
+-      groupType: group.type,
+-      privacy: group.privacy,
+-    });
+-  }
+-
+   let response = await axios.post(url, {
+     message: payload.message,
+   });
+diff --git a/website/client/store/actions/guilds.js b/website/client/store/actions/guilds.js
+index 9805da9fa..649e24a1f 100644
+--- a/website/client/store/actions/guilds.js
++++ b/website/client/store/actions/guilds.js
+@@ -1,7 +1,6 @@
+ import axios from 'axios';
+ import omit from 'lodash/omit';
+ import findIndex from 'lodash/findIndex';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ export async function getPublicGuilds (store, payload) {
+   let params = {
+@@ -68,8 +67,6 @@ export async function join (store, payload) {
+     if (invitationI !== -1) invitations.parties.splice(invitationI, 1);
+ 
+     user.party._id = groupId;
+-
+-    Analytics.updateUser({partyID: groupId});
+   }
+ 
+   return response.data.data;
+diff --git a/website/client/store/actions/quests.js b/website/client/store/actions/quests.js
+index ff13c36ab..26d727490 100644
+--- a/website/client/store/actions/quests.js
++++ b/website/client/store/actions/quests.js
+@@ -1,5 +1,4 @@
+ import axios from 'axios';
+-import * as Analytics from 'client/libs/analytics';
+ 
+ // export async function initQuest (store) {
+ // }
+@@ -18,8 +17,6 @@ export async function sendAction (store, payload) {
+     };
+   }
+ 
+-  Analytics.updateUser(partyData);
+-
+   let response = await axios.post(`/api/v3/groups/${payload.groupId}/${payload.action}`);
+ 
+   // @TODO: Update user?
+diff --git a/website/client/store/index.js b/website/client/store/index.js
+index f46fbc36c..9b4b13d74 100644
+--- a/website/client/store/index.js
++++ b/website/client/store/index.js
+@@ -59,7 +59,6 @@ export default function () {
+       title: 'Habitica',
+       isUserLoggedIn,
+       isUserLoaded: false, // Means the user and the user's tasks are ready
+-      isAmazonReady: false, // Whether the Amazon Payments lib can be used
+       user: asyncResourceFactory(),
+       credentials: isUserLoggedIn ? {
+         API_ID: AUTH_SETTINGS.auth.apiId,
+diff --git a/website/common/script/constants.js b/website/common/script/constants.js
+index 1bc330846..ff0e5f1d6 100644
+--- a/website/common/script/constants.js
++++ b/website/common/script/constants.js
+@@ -10,11 +10,6 @@ export const MAX_SUMMARY_SIZE_FOR_GUILDS = 250;
+ export const MAX_SUMMARY_SIZE_FOR_CHALLENGES = 250;
+ export const MIN_SHORTNAME_SIZE_FOR_CHALLENGES = 3;
+ 
+-export const SUPPORTED_SOCIAL_NETWORKS = [
+-  {key: 'facebook', name: 'Facebook'},
+-  {key: 'google', name: 'Google'},
+-];
+-
+ export const GUILDS_PER_PAGE = 30; // number of guilds to return per page when using pagination
+ 
+ export const PARTY_LIMIT_MEMBERS = 30;
+diff --git a/website/common/script/content/subscriptionBlocks.js b/website/common/script/content/subscriptionBlocks.js
+index f3131cb5a..719a69382 100644
+--- a/website/common/script/content/subscriptionBlocks.js
++++ b/website/common/script/content/subscriptionBlocks.js
+@@ -20,14 +20,6 @@ let subscriptionBlocks = {
+     months: 6,
+     price: 30,
+   },
+-  google_6mo: {
+-    target: 'user',
+-    canSubscribe: true,
+-    months: 6,
+-    price: 24,
+-    discount: true,
+-    original: 30,
+-  },
+   basic_12mo: {
+     target: 'user',
+     canSubscribe: true,
+@@ -39,7 +31,7 @@ let subscriptionBlocks = {
+     canSubscribe: true,
+     months: 1,
+     price: 9,
+-    quantity: 3, // Default quantity for Stripe - The same as having 3 user subscriptions
++    quantity: 3,
+   },
+   group_plan_auto: {
+     target: 'user',
+diff --git a/website/common/script/fns/randomDrop.js b/website/common/script/fns/randomDrop.js
+index 3156c8259..5b4885918 100644
+--- a/website/common/script/fns/randomDrop.js
++++ b/website/common/script/fns/randomDrop.js
+@@ -25,7 +25,7 @@ function trueRandom () {
+   return Math.random();
+ }
+ 
+-module.exports = function randomDrop (user, options, req = {}, analytics) {
++module.exports = function randomDrop (user, options, req = {}) {
+   let acceptableDrops;
+   let drop;
+   let dropMultiplier;
+@@ -111,16 +111,6 @@ module.exports = function randomDrop (user, options, req = {}, analytics) {
+       }, req.language);
+     }
+ 
+-    if (analytics) {
+-      analytics.track('dropped item', {
+-        uuid: user._id,
+-        itemKey: drop.key,
+-        acquireMethod: 'Drop',
+-        category: 'behavior',
+-        headers: req.headers,
+-      });
+-    }
+-
+     user._tmp.drop = drop;
+     user.items.lastDrop.date = Number(new Date());
+     user.items.lastDrop.count++;
+diff --git a/website/common/script/fns/updateStats.js b/website/common/script/fns/updateStats.js
+index 77d547341..397d024fa 100644
+--- a/website/common/script/fns/updateStats.js
++++ b/website/common/script/fns/updateStats.js
+@@ -6,7 +6,7 @@ import {
+ import { toNextLevel } from '../statHelpers';
+ import autoAllocate from './autoAllocate';
+ 
+-module.exports = function updateStats (user, stats, req = {}, analytics) {
++module.exports = function updateStats (user, stats, req = {}) {
+   let allocatedStatPoints;
+   let totalStatPoints;
+   let experienceToNextLevel;
+@@ -79,15 +79,6 @@ module.exports = function updateStats (user, stats, req = {}, analytics) {
+         user.items.quests[k] = 0;
+       user.items.quests[k]++;
+       if (user.markModified) user.markModified('flags.levelDrops');
+-      if (analytics) {
+-        analytics.track('acquire item', {
+-          uuid: user._id,
+-          itemKey: k,
+-          acquireMethod: 'Level Drop',
+-          category: 'behavior',
+-          headers: req.headers,
+-        });
+-      }
+       user._tmp.drop = {
+         type: 'Quest',
+         key: k,
+diff --git a/website/common/script/index.js b/website/common/script/index.js
+index 57eaa890c..5a9e61a0a 100644
+--- a/website/common/script/index.js
++++ b/website/common/script/index.js
+@@ -26,7 +26,6 @@ import {
+   MAX_SUMMARY_SIZE_FOR_GUILDS,
+   MAX_SUMMARY_SIZE_FOR_CHALLENGES,
+   MIN_SHORTNAME_SIZE_FOR_CHALLENGES,
+-  SUPPORTED_SOCIAL_NETWORKS,
+   GUILDS_PER_PAGE,
+   PARTY_LIMIT_MEMBERS,
+ } from './constants';
+@@ -37,7 +36,6 @@ api.constants = {
+   MAX_SUMMARY_SIZE_FOR_GUILDS,
+   MAX_SUMMARY_SIZE_FOR_CHALLENGES,
+   MIN_SHORTNAME_SIZE_FOR_CHALLENGES,
+-  SUPPORTED_SOCIAL_NETWORKS,
+   GUILDS_PER_PAGE,
+   PARTY_LIMIT_MEMBERS,
+ };
+diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
+index 1ecb149c9..dcd270e7d 100644
+--- a/website/common/script/ops/buy/buy.js
++++ b/website/common/script/ops/buy/buy.js
+@@ -17,7 +17,7 @@ import hourglassPurchase from './hourglassPurchase';
+ 
+ // @TODO: when we are sure buy is the only function used, let's move the buy files to a folder
+ 
+-module.exports = function buy (user, req = {}, analytics) {
++module.exports = function buy (user, req = {}) {
+   let key = get(req, 'params.key');
+   if (!key) throw new BadRequest(i18n.t('missingKeyParam', req.language));
+ 
+@@ -31,13 +31,13 @@ module.exports = function buy (user, req = {}, analytics) {
+ 
+   switch (type) {
+     case 'armoire':
+-      buyRes = buyArmoire(user, req, analytics);
++      buyRes = buyArmoire(user, req);
+       break;
+     case 'mystery':
+-      buyRes = buyMysterySet(user, req, analytics);
++      buyRes = buyMysterySet(user, req);
+       break;
+     case 'potion':
+-      buyRes = buyHealthPotion(user, req, analytics);
++      buyRes = buyHealthPotion(user, req);
+       break;
+     case 'eggs':
+     case 'hatchingPotions':
+@@ -46,20 +46,20 @@ module.exports = function buy (user, req = {}, analytics) {
+     case 'gear':
+     case 'bundles':
+     case 'gems':
+-      buyRes = purchaseOp(user, req, analytics);
++      buyRes = purchaseOp(user, req);
+       break;
+     case 'pets':
+     case 'mounts':
+-      buyRes = hourglassPurchase(user, req, analytics);
++      buyRes = hourglassPurchase(user, req);
+       break;
+     case 'quest':
+-      buyRes = buyQuest(user, req, analytics);
++      buyRes = buyQuest(user, req);
+       break;
+     case 'special':
+-      buyRes = buySpecialSpell(user, req, analytics);
++      buyRes = buySpecialSpell(user, req);
+       break;
+     default:
+-      buyRes = buyGear(user, req, analytics);
++      buyRes = buyGear(user, req);
+       break;
+   }
+ 
+diff --git a/website/common/script/ops/buy/buyArmoire.js b/website/common/script/ops/buy/buyArmoire.js
+index 886db0d39..aab7013bd 100644
+--- a/website/common/script/ops/buy/buyArmoire.js
++++ b/website/common/script/ops/buy/buyArmoire.js
+@@ -17,7 +17,7 @@ import { removeItemByPath } from '../pinnedGearUtils';
+ const YIELD_EQUIPMENT_THRESHOLD = 0.6;
+ const YIELD_FOOD_THRESHOLD = 0.8;
+ 
+-module.exports = function buyArmoire (user, req = {}, analytics) {
++module.exports = function buyArmoire (user, req = {}) {
+   let item = content.armoire;
+ 
+   if (user.stats.gp < item.value) {
+@@ -99,17 +99,6 @@ module.exports = function buyArmoire (user, req = {}, analytics) {
+     }, req.language);
+   }
+ 
+-  if (analytics) {
+-    analytics.track('acquire item', {
+-      uuid: user._id,
+-      itemKey: 'Armoire',
+-      acquireMethod: 'Gold',
+-      goldCost: item.value,
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   let resData = pick(user, splitWhitespace('items flags'));
+   if (armoireResp) resData.armoire = armoireResp;
+ 
+diff --git a/website/common/script/ops/buy/buyGear.js b/website/common/script/ops/buy/buyGear.js
+index 7250f74e3..c9b72ab46 100644
+--- a/website/common/script/ops/buy/buyGear.js
++++ b/website/common/script/ops/buy/buyGear.js
+@@ -13,7 +13,7 @@ import ultimateGear from '../../fns/ultimateGear';
+ 
+ import { removePinnedGearAddPossibleNewOnes } from '../pinnedGearUtils';
+ 
+-module.exports = function buyGear (user, req = {}, analytics) {
++module.exports = function buyGear (user, req = {}) {
+   let key = get(req, 'params.key');
+   if (!key) throw new BadRequest(i18n.t('missingKeyParam', req.language));
+ 
+@@ -64,17 +64,6 @@ module.exports = function buyGear (user, req = {}, analytics) {
+     }, req.language);
+   }
+ 
+-  if (analytics) {
+-    analytics.track('acquire item', {
+-      uuid: user._id,
+-      itemKey: key,
+-      acquireMethod: 'Gold',
+-      goldCost: item.value,
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     pick(user, splitWhitespace('items achievements stats flags')),
+     message,
+diff --git a/website/common/script/ops/buy/buyHealthPotion.js b/website/common/script/ops/buy/buyHealthPotion.js
+index 81ce8bc18..f493b9940 100644
+--- a/website/common/script/ops/buy/buyHealthPotion.js
++++ b/website/common/script/ops/buy/buyHealthPotion.js
+@@ -4,7 +4,7 @@ import {
+   NotAuthorized,
+ } from '../../libs/errors';
+ 
+-module.exports = function buyHealthPotion (user, req = {}, analytics) {
++module.exports = function buyHealthPotion (user, req = {}) {
+   let item = content.potion;
+   let quantity = req.quantity || 1;
+ 
+@@ -35,19 +35,6 @@ module.exports = function buyHealthPotion (user, req = {}, analytics) {
+     itemText: item.text(req.language),
+   }, req.language);
+ 
+-
+-  if (analytics) {
+-    analytics.track('acquire item', {
+-      uuid: user._id,
+-      itemKey: 'Potion',
+-      acquireMethod: 'Gold',
+-      goldCost: item.value,
+-      category: 'behavior',
+-      headers: req.headers,
+-      quantityPurchased: quantity,
+-    });
+-  }
+-
+   return [
+     user.stats,
+     message,
+diff --git a/website/common/script/ops/buy/buyMysterySet.js b/website/common/script/ops/buy/buyMysterySet.js
+index 3a8b17a01..a6030275f 100644
+--- a/website/common/script/ops/buy/buyMysterySet.js
++++ b/website/common/script/ops/buy/buyMysterySet.js
+@@ -8,7 +8,7 @@ import {
+   NotFound,
+ } from '../../libs/errors';
+ 
+-module.exports = function buyMysterySet (user, req = {}, analytics) {
++module.exports = function buyMysterySet (user, req = {}) {
+   let key = get(req, 'params.key');
+   if (!key) throw new BadRequest(i18n.t('missingKeyParam', req.language));
+ 
+@@ -25,16 +25,6 @@ module.exports = function buyMysterySet (user, req = {}, analytics) {
+ 
+   each(mysterySet.items, item => {
+     user.items.gear.owned[item.key] = true;
+-    if (analytics) {
+-      analytics.track('acquire item', {
+-        uuid: user._id,
+-        itemKey: item.key,
+-        itemType: 'Subscriber Gear',
+-        acquireMethod: 'Hourglass',
+-        category: 'behavior',
+-        headers: req.headers,
+-      });
+-    }
+   });
+ 
+   user.purchased.plan.consecutive.trinkets--;
+diff --git a/website/common/script/ops/buy/buyQuest.js b/website/common/script/ops/buy/buyQuest.js
+index f04504fdd..c94807ed3 100644
+--- a/website/common/script/ops/buy/buyQuest.js
++++ b/website/common/script/ops/buy/buyQuest.js
+@@ -8,7 +8,7 @@ import {
+ import get from 'lodash/get';
+ 
+ // buy a quest with gold
+-module.exports = function buyQuest (user, req = {}, analytics) {
++module.exports = function buyQuest (user, req = {}) {
+   let key = get(req, 'params.key');
+   let quantity = req.quantity || 1;
+ 
+@@ -32,19 +32,6 @@ module.exports = function buyQuest (user, req = {}, analytics) {
+   user.items.quests[item.key] += quantity;
+   user.stats.gp -= item.goldValue * quantity;
+ 
+-  if (analytics) {
+-    analytics.track('acquire item', {
+-      uuid: user._id,
+-      itemKey: item.key,
+-      itemType: 'Market',
+-      goldCost: item.goldValue,
+-      quantityPurchased: quantity,
+-      acquireMethod: 'Gold',
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     user.items.quests,
+     i18n.t('messageBought', {
+diff --git a/website/common/script/ops/buy/buySpecialSpell.js b/website/common/script/ops/buy/buySpecialSpell.js
+index d6a8492c8..9dd6e7130 100644
+--- a/website/common/script/ops/buy/buySpecialSpell.js
++++ b/website/common/script/ops/buy/buySpecialSpell.js
+@@ -9,7 +9,7 @@ import {
+   NotFound,
+ } from '../../libs/errors';
+ 
+-module.exports = function buySpecialSpell (user, req = {}, analytics) {
++module.exports = function buySpecialSpell (user, req = {}) {
+   let key = get(req, 'params.key');
+   let quantity = req.quantity || 1;
+ 
+@@ -25,19 +25,6 @@ module.exports = function buySpecialSpell (user, req = {}, analytics) {
+ 
+   user.items.special[key] += quantity;
+ 
+-  if (analytics) {
+-    analytics.track('acquire item', {
+-      uuid: user._id,
+-      itemKey: item.key,
+-      itemType: 'Market',
+-      goldCost: item.goldValue,
+-      quantityPurchased: quantity,
+-      acquireMethod: 'Gold',
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     pick(user, splitWhitespace('items stats')),
+     i18n.t('messageBought', {
+diff --git a/website/common/script/ops/buy/hourglassPurchase.js b/website/common/script/ops/buy/hourglassPurchase.js
+index d9afc4b44..4f712db74 100644
+--- a/website/common/script/ops/buy/hourglassPurchase.js
++++ b/website/common/script/ops/buy/hourglassPurchase.js
+@@ -8,7 +8,7 @@ import {
+   NotAuthorized,
+ } from '../../libs/errors';
+ 
+-module.exports = function purchaseHourglass (user, req = {}, analytics) {
++module.exports = function purchaseHourglass (user, req = {}) {
+   let key = get(req, 'params.key');
+   if (!key) throw new BadRequest(i18n.t('missingKeyParam', req.language));
+ 
+@@ -41,17 +41,6 @@ module.exports = function purchaseHourglass (user, req = {}, analytics) {
+     user.items.mounts[key] = true;
+   }
+ 
+-  if (analytics) {
+-    analytics.track('acquire item', {
+-      uuid: user._id,
+-      itemKey: key,
+-      itemType: type,
+-      acquireMethod: 'Hourglass',
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     { items: user.items, purchasedPlanConsecutive: user.purchased.plan.consecutive },
+     i18n.t('hourglassPurchase', req.language),
+diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
+index 093fdfb59..e46d7e4f1 100644
+--- a/website/common/script/ops/buy/purchase.js
++++ b/website/common/script/ops/buy/purchase.js
+@@ -14,7 +14,7 @@ import {
+ import { removeItemByPath } from '../pinnedGearUtils';
+ import getItemInfo from '../../libs/getItemInfo';
+ 
+-function buyGems (user, analytics, req, key) {
++function buyGems (user, req, key) {
+   let convRate = planGemLimits.convRate;
+   let convCap = planGemLimits.convCap;
+   convCap += user.purchased.plan.consecutive.gemCapExtra;
+@@ -39,17 +39,6 @@ function buyGems (user, analytics, req, key) {
+   user.purchased.plan.gemsBought++;
+   user.stats.gp -= convRate;
+ 
+-  if (analytics) {
+-    analytics.track('purchase gems', {
+-      uuid: user._id,
+-      itemKey: key,
+-      acquireMethod: 'Gold',
+-      goldCost: convRate,
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     pick(user, splitWhitespace('stats balance')),
+     i18n.t('plusOneGem', req.language),
+@@ -106,7 +95,7 @@ function purchaseItem (user, item, price, type, key) {
+   }
+ }
+ 
+-module.exports = function purchase (user, req = {}, analytics) {
++module.exports = function purchase (user, req = {}) {
+   let type = get(req.params, 'type');
+   let key = get(req.params, 'key');
+   let quantity = req.quantity || 1;
+@@ -122,7 +111,7 @@ module.exports = function purchase (user, req = {}, analytics) {
+   if (type === 'gems' && key === 'gem') {
+     let gemResponse;
+     for (let i = 0; i < quantity; i += 1) {
+-      gemResponse = buyGems(user, analytics, req, key);
++      gemResponse = buyGems(user, req, key);
+     }
+     return gemResponse;
+   }
+@@ -149,19 +138,6 @@ module.exports = function purchase (user, req = {}, analytics) {
+     purchaseItem(user, item, price, type, key);
+   }
+ 
+-  if (analytics) {
+-    analytics.track('acquire item', {
+-      uuid: user._id,
+-      itemKey: key,
+-      itemType: 'Market',
+-      acquireMethod: 'Gems',
+-      gemCost: price * 4,
+-      quantityPurchased: quantity,
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     pick(user, splitWhitespace('items balance')),
+   ];
+diff --git a/website/common/script/ops/buy/purchaseWithSpell.js b/website/common/script/ops/buy/purchaseWithSpell.js
+index 7f0a08719..b2c5aa189 100644
+--- a/website/common/script/ops/buy/purchaseWithSpell.js
++++ b/website/common/script/ops/buy/purchaseWithSpell.js
+@@ -1,12 +1,12 @@
+ import buy from './buy';
+ import get from 'lodash/get';
+ 
+-module.exports = function purchaseWithSpell (user, req = {}, analytics) {
++module.exports = function purchaseWithSpell (user, req = {}) {
+   const type = get(req.params, 'type');
+ 
+   if (type === 'spells') {
+     req.type = 'special';
+   }
+ 
+-  return buy(user, req, analytics);
++  return buy(user, req);
+ };
+diff --git a/website/common/script/ops/changeClass.js b/website/common/script/ops/changeClass.js
+index c1ce86c7b..7c82345fa 100644
+--- a/website/common/script/ops/changeClass.js
++++ b/website/common/script/ops/changeClass.js
+@@ -28,7 +28,7 @@ function resetClass (user, req = {}) {
+   user.flags.classSelected = false;
+ }
+ 
+-module.exports = function changeClass (user, req = {}, analytics) {
++module.exports = function changeClass (user, req = {}) {
+   let klass = get(req, 'query.class');
+   // user.flags.classSelected is set to false after the user paid the 3 gems
+   if (user.stats.lvl < 10) {
+@@ -50,17 +50,6 @@ module.exports = function changeClass (user, req = {}, analytics) {
+     if (klass === 'rogue')  user.items.gear.owned[`shield_${klass}_0`] = true;
+ 
+     removePinnedItemsByOwnedGear(user);
+-
+-    if (analytics) {
+-      analytics.track('change class', {
+-        uuid: user._id,
+-        class: klass,
+-        acquireMethod: 'Gems',
+-        gemCost: 3,
+-        category: 'behavior',
+-        headers: req.headers,
+-      });
+-    }
+   } else {
+     // if invalid class is specified, throw an error.
+     throw new BadRequest(i18n.t('invalidClass', req.language));
+diff --git a/website/common/script/ops/openMysteryItem.js b/website/common/script/ops/openMysteryItem.js
+index 4773565b8..33411f549 100644
+--- a/website/common/script/ops/openMysteryItem.js
++++ b/website/common/script/ops/openMysteryItem.js
+@@ -13,7 +13,7 @@ function markNotificationAsRead (user) {
+   if (index !== -1) user.notifications.splice(index, 1);
+ }
+ 
+-module.exports = function openMysteryItem (user, req = {}, analytics) {
++module.exports = function openMysteryItem (user, req = {}) {
+   const mysteryItems = user.purchased.plan.mysteryItems;
+   let item = mysteryItems.shift();
+ 
+@@ -28,17 +28,6 @@ module.exports = function openMysteryItem (user, req = {}, analytics) {
+ 
+   if (user.markModified) user.markModified('purchased.plan.mysteryItems');
+ 
+-  if (analytics) {
+-    analytics.track('open mystery item', {
+-      uuid: user._id,
+-      itemKey: item,
+-      itemType: 'Subscriber Gear',
+-      acquireMethod: 'Subscriber',
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     item,
+     i18n.t('mysteryItemOpened', req.language),
+diff --git a/website/common/script/ops/rebirth.js b/website/common/script/ops/rebirth.js
+index 7531de25a..79ddbdbab 100644
+--- a/website/common/script/ops/rebirth.js
++++ b/website/common/script/ops/rebirth.js
+@@ -11,28 +11,13 @@ import { removePinnedGearByClass } from './pinnedGearUtils';
+ 
+ const USERSTATSLIST = ['per', 'int', 'con', 'str', 'points', 'gp', 'exp', 'mp'];
+ 
+-module.exports = function rebirth (user, tasks = [], req = {}, analytics) {
++module.exports = function rebirth (user, tasks = [], req = {}) {
+   if (user.balance < 1.5 && user.stats.lvl < MAX_LEVEL) {
+     throw new NotAuthorized(i18n.t('notEnoughGems', req.language));
+   }
+ 
+-  let analyticsData = {
+-    uuid: user._id,
+-    category: 'behavior',
+-  };
+-
+   if (user.stats.lvl < MAX_LEVEL) {
+     user.balance -= 1.5;
+-    analyticsData.acquireMethod = 'Gems';
+-    analyticsData.gemCost = 6;
+-  } else {
+-    analyticsData.gemCost = 0;
+-    analyticsData.acquireMethod = '> 100';
+-  }
+-
+-  if (analytics) {
+-    analyticsData.headers = req.headers;
+-    analytics.track('Rebirth', analyticsData);
+   }
+ 
+   let lvl = capByLevel(user.stats.lvl);
+diff --git a/website/common/script/ops/releaseBoth.js b/website/common/script/ops/releaseBoth.js
+index 39b27e892..fc6ca5d5a 100644
+--- a/website/common/script/ops/releaseBoth.js
++++ b/website/common/script/ops/releaseBoth.js
+@@ -6,7 +6,7 @@ import {
+ import splitWhitespace from '../libs/splitWhitespace';
+ import pick from 'lodash/pick';
+ 
+-module.exports = function releaseBoth (user, req = {}, analytics) {
++module.exports = function releaseBoth (user, req = {}) {
+   let animal;
+ 
+   if (user.balance < 1.5 && !user.achievements.triadBingo) {
+@@ -18,16 +18,6 @@ module.exports = function releaseBoth (user, req = {}, analytics) {
+   let giveMountMasterAchievement = true;
+ 
+   if (!user.achievements.triadBingo) {
+-    if (analytics) {
+-      analytics.track('release pets & mounts', {
+-        uuid: user._id,
+-        acquireMethod: 'Gems',
+-        gemCost: 6,
+-        category: 'behavior',
+-        headers: req.headers,
+-      });
+-    }
+-
+     user.balance -= 1.5;
+   }
+ 
+diff --git a/website/common/script/ops/releaseMounts.js b/website/common/script/ops/releaseMounts.js
+index 0f7159502..2a45c3a2a 100644
+--- a/website/common/script/ops/releaseMounts.js
++++ b/website/common/script/ops/releaseMounts.js
+@@ -4,7 +4,7 @@ import {
+   NotAuthorized,
+ } from '../libs/errors';
+ 
+-module.exports = function releaseMounts (user, req = {}, analytics) {
++module.exports = function releaseMounts (user, req = {}) {
+   if (user.balance < 1) {
+     throw new NotAuthorized(i18n.t('notEnoughGems', req.language));
+   }
+@@ -33,16 +33,6 @@ module.exports = function releaseMounts (user, req = {}, analytics) {
+     user.achievements.mountMasterCount++;
+   }
+ 
+-  if (analytics) {
+-    analytics.track('release mounts', {
+-      uuid: user._id,
+-      acquireMethod: 'Gems',
+-      gemCost: 4,
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     user.items.mounts,
+     i18n.t('mountsReleased'),
+diff --git a/website/common/script/ops/releasePets.js b/website/common/script/ops/releasePets.js
+index 6a356b862..3ae1e90d9 100644
+--- a/website/common/script/ops/releasePets.js
++++ b/website/common/script/ops/releasePets.js
+@@ -4,7 +4,7 @@ import {
+   NotAuthorized,
+ } from '../libs/errors';
+ 
+-module.exports = function releasePets (user, req = {}, analytics) {
++module.exports = function releasePets (user, req = {}) {
+   if (user.balance < 1) {
+     throw new NotAuthorized(i18n.t('notEnoughGems', req.language));
+   }
+@@ -33,16 +33,6 @@ module.exports = function releasePets (user, req = {}, analytics) {
+     user.achievements.beastMasterCount++;
+   }
+ 
+-  if (analytics) {
+-    analytics.track('release pets', {
+-      uuid: user._id,
+-      acquireMethod: 'Gems',
+-      gemCost: 4,
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     user.items.pets,
+     i18n.t('petsReleased'),
+diff --git a/website/common/script/ops/reroll.js b/website/common/script/ops/reroll.js
+index 9f8da0c83..ffe9e2c5c 100644
+--- a/website/common/script/ops/reroll.js
++++ b/website/common/script/ops/reroll.js
+@@ -4,7 +4,7 @@ import {
+   NotAuthorized,
+ } from '../libs/errors';
+ 
+-module.exports = function reroll (user, tasks = [], req = {}, analytics) {
++module.exports = function reroll (user, tasks = [], req = {}) {
+   if (user.balance < 1) {
+     throw new NotAuthorized(i18n.t('notEnoughGems', req.language));
+   }
+@@ -20,16 +20,6 @@ module.exports = function reroll (user, tasks = [], req = {}, analytics) {
+     }
+   });
+ 
+-  if (analytics) {
+-    analytics.track('Fortify Potion', {
+-      uuid: user._id,
+-      acquireMethod: 'Gems',
+-      gemCost: 4,
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     {user, tasks},
+     i18n.t('fortifyComplete'),
+diff --git a/website/common/script/ops/revive.js b/website/common/script/ops/revive.js
+index b8ddb0b63..67eb51776 100644
+--- a/website/common/script/ops/revive.js
++++ b/website/common/script/ops/revive.js
+@@ -12,7 +12,7 @@ import predictableRandom from '../fns/predictableRandom';
+ import { removePinnedGearByClass, addPinnedGearByClass, addPinnedGear } from './pinnedGearUtils';
+ import getItemInfo from '../libs/getItemInfo';
+ 
+-module.exports = function revive (user, req = {}, analytics) {
++module.exports = function revive (user, req = {}) {
+   if (user.stats.hp > 0) {
+     throw new NotAuthorized(i18n.t('cannotRevive', req.language));
+   }
+@@ -104,16 +104,6 @@ module.exports = function revive (user, req = {}, analytics) {
+     message = i18n.t('messageLostItem', { itemText: item.text(req.language)}, req.language);
+   }
+ 
+-  if (analytics) {
+-    analytics.track('Death', {
+-      uuid: user._id,
+-      lostItem,
+-      gaLabel: lostItem,
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [
+     user.items,
+     message,
+diff --git a/website/common/script/ops/sleep.js b/website/common/script/ops/sleep.js
+index e80f766b0..58b2cf813 100644
+--- a/website/common/script/ops/sleep.js
++++ b/website/common/script/ops/sleep.js
+@@ -1,14 +1,4 @@
+-module.exports = function sleep (user, req = {}, analytics) {
++module.exports = function sleep (user, req = {}) {
+   user.preferences.sleep = !user.preferences.sleep;
+-
+-  if (analytics) {
+-    analytics.track('sleep', {
+-      uuid: user._id,
+-      status: user.preferences.sleep,
+-      category: 'behavior',
+-      headers: req.headers,
+-    });
+-  }
+-
+   return [user.preferences.sleep];
+ };
+diff --git a/website/common/script/ops/unlock.js b/website/common/script/ops/unlock.js
+index bbe4a7910..d89c3e920 100644
+--- a/website/common/script/ops/unlock.js
++++ b/website/common/script/ops/unlock.js
+@@ -15,7 +15,7 @@ import content from '../content/index';
+ 
+ // If item is already purchased -> equip it
+ // Otherwise unlock it
+-module.exports = function unlock (user, req = {}, analytics) {
++module.exports = function unlock (user, req = {}) {
+   let path = get(req.query, 'path');
+ 
+   if (!path) {
+@@ -113,18 +113,6 @@ module.exports = function unlock (user, req = {}, analytics) {
+     }
+ 
+     user.balance -= cost;
+-
+-    if (analytics) {
+-      analytics.track('acquire item', {
+-        uuid: user._id,
+-        itemKey: path,
+-        itemType: 'customization',
+-        acquireMethod: 'Gems',
+-        gemCost: cost / 0.25,
+-        category: 'behavior',
+-        headers: req.headers,
+-      });
+-    }
+   }
+ 
+   let response = [
+diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
+index 542e77b08..d57ef6e1e 100644
+--- a/website/server/controllers/api-v3/auth.js
++++ b/website/server/controllers/api-v3/auth.js
+@@ -18,7 +18,6 @@ import { model as EmailUnsubscription } from '../../models/emailUnsubscription';
+ import { sendTxn as sendTxnEmail } from '../../libs/email';
+ import { decrypt, encrypt } from '../../libs/encryption';
+ import { send as sendEmail } from '../../libs/email';
+-import pusher from '../../libs/pusher';
+ import common from '../../../common';
+ import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs/password';
+ 
+@@ -67,20 +66,12 @@ async function _handleGroupInvitation (user, invite) {
+ }
+ 
+ function hasBackupAuth (user, networkToRemove) {
+-  if (user.auth.local.username) {
+-    return true;
+-  }
+-
+-  let hasAlternateNetwork = common.constants.SUPPORTED_SOCIAL_NETWORKS.find((network) => {
+-    return network.key !== networkToRemove && user.auth[network.key].id;
+-  });
+-
+-  return hasAlternateNetwork;
++  return Boolean(user.auth.local.username);
+ }
+ 
+ /**
+  * @api {post} /api/v3/user/auth/local/register Register
+- * @apiDescription Register a new user with email, login name, and password or attach local auth to a social user
++ * @apiDescription Register a new user with email, login name, and password
+  * @apiName UserRegisterLocal
+  * @apiGroup User
+  *
+@@ -89,14 +80,14 @@ function hasBackupAuth (user, networkToRemove) {
+  * @apiParam (Body) {String} password Password for the new user
+  * @apiParam (Body) {String} confirmPassword Password confirmation
+  *
+- * @apiSuccess {Object} data The user object, if local auth was just attached to a social user then only user.auth.local
++ * @apiSuccess {Object} data The user object
+  */
+ api.registerLocal = {
+   method: 'POST',
+   middlewares: [authWithHeaders(true)],
+   url: '/user/auth/local/register',
+   async handler (req, res) {
+-    let existingUser = res.locals.user; // If adding local auth to social user
++    let existingUser = res.locals.user;
+ 
+     req.checkBody({
+       email: {
+@@ -153,19 +144,8 @@ api.registerLocal = {
+       },
+     };
+ 
+-    if (existingUser) {
+-      let hasSocialAuth = common.constants.SUPPORTED_SOCIAL_NETWORKS.find(network => {
+-        if (existingUser.auth.hasOwnProperty(network.key)) {
+-          return existingUser.auth[network.key].id;
+-        }
+-      });
+-      if (!hasSocialAuth) throw new NotAuthorized(res.t('onlySocialAttachLocal'));
+-      existingUser.auth.local = newUser.auth.local;
+-      newUser = existingUser;
+-    } else {
+-      newUser = new User(newUser);
+-      newUser.registeredThrough = req.headers['x-client']; // Not saved, used to create the correct tasks based on the device used
+-    }
++    newUser = new User(newUser);
++    newUser.registeredThrough = req.headers['x-client']; // Not saved, used to create the correct tasks based on the device used
+ 
+     // we check for partyInvite for backward compatibility
+     if (req.query.groupInvite || req.query.partyInvite) {
+@@ -189,17 +169,6 @@ api.registerLocal = {
+         if (!existingUser) sendTxnEmail(savedUser, 'welcome');
+       });
+ 
+-    if (!existingUser) {
+-      res.analytics.track('register', {
+-        category: 'acquisition',
+-        type: 'local',
+-        gaLabel: 'local',
+-        uuid: savedUser._id,
+-        headers: req.headers,
+-        user: savedUser,
+-      });
+-    }
+-
+     return null;
+   },
+ };
+@@ -272,14 +241,6 @@ api.loginLocal = {
+       await user.save();
+     }
+ 
+-    res.analytics.track('login', {
+-      category: 'behaviour',
+-      type: 'local',
+-      gaLabel: 'local',
+-      uuid: user._id,
+-      headers: req.headers,
+-    });
+-
+     return _loginRes(user, ...arguments);
+   },
+ };
+@@ -296,149 +257,6 @@ function _passportProfile (network, accessToken) {
+   });
+ }
+ 
+-// Called as a callback by Facebook (or other social providers). Internal route
+-api.loginSocial = {
+-  method: 'POST',
+-  middlewares: [authWithHeaders(true)],
+-  url: '/user/auth/social', // this isn't the most appropriate url but must be the same as v2
+-  async handler (req, res) {
+-    let existingUser = res.locals.user;
+-    let accessToken = req.body.authResponse.access_token;
+-    let network = req.body.network;
+-
+-    let isSupportedNetwork = common.constants.SUPPORTED_SOCIAL_NETWORKS.find(supportedNetwork => {
+-      return supportedNetwork.key === network;
+-    });
+-    if (!isSupportedNetwork) throw new BadRequest(res.t('unsupportedNetwork'));
+-
+-    let profile = await _passportProfile(network, accessToken);
+-
+-    let user = await User.findOne({
+-      [`auth.${network}.id`]: profile.id,
+-    }, {_id: 1, apiToken: 1, auth: 1}).exec();
+-
+-    // User already signed up
+-    if (user) {
+-      _loginRes(user, ...arguments);
+-    } else { // Create new user
+-      user = {
+-        auth: {
+-          [network]: profile,
+-        },
+-        preferences: {
+-          language: req.language,
+-        },
+-      };
+-      if (existingUser) {
+-        existingUser.auth[network] = user.auth[network];
+-        user = existingUser;
+-      } else {
+-        user = new User(user);
+-        user.registeredThrough = req.headers['x-client']; // Not saved, used to create the correct tasks based on the device used
+-      }
+-
+-      let savedUser = await user.save();
+-
+-      if (!existingUser) {
+-        user.newUser = true;
+-      }
+-      _loginRes(user, ...arguments);
+-
+-      // Clean previous email preferences
+-      if (savedUser.auth[network].emails && savedUser.auth[network].emails[0] && savedUser.auth[network].emails[0].value) {
+-        EmailUnsubscription
+-          .remove({email: savedUser.auth[network].emails[0].value.toLowerCase()})
+-          .exec()
+-          .then(() => {
+-            if (!existingUser) sendTxnEmail(savedUser, 'welcome');
+-          }); // eslint-disable-line max-nested-callbacks
+-      }
+-
+-      if (!existingUser) {
+-        res.analytics.track('register', {
+-          category: 'acquisition',
+-          type: network,
+-          gaLabel: network,
+-          uuid: savedUser._id,
+-          headers: req.headers,
+-          user: savedUser,
+-        });
+-      }
+-
+-      return null;
+-    }
+-  },
+-};
+-
+-/*
+- * @apiIgnore Private route
+- * @api {post} /api/v3/user/auth/pusher Pusher.com authentication
+- * @apiDescription Authentication for Pusher.com private and presence channels
+- * @apiName UserAuthPusher
+- * @apiGroup User
+- *
+- * @apiParam (Body) {String} socket_id A unique identifier for the specific client connection to Pusher
+- * @apiParam (Body) {String} channel_name The name of the channel being subscribed to
+- *
+- * @apiSuccess {String} auth The authentication token
+- */
+-api.pusherAuth = {
+-  method: 'POST',
+-  middlewares: [authWithHeaders()],
+-  url: '/user/auth/pusher',
+-  async handler (req, res) {
+-    let user = res.locals.user;
+-
+-    req.checkBody('socket_id').notEmpty();
+-    req.checkBody('channel_name').notEmpty();
+-
+-    let validationErrors = req.validationErrors();
+-    if (validationErrors) throw validationErrors;
+-
+-    let socketId = req.body.socket_id;
+-    let channelName = req.body.channel_name;
+-
+-    // Channel names are in the form of {presence|private}-{group|...}-{resourceId}
+-    let [channelType, resourceType, ...resourceId] = channelName.split('-');
+-
+-    if (['presence'].indexOf(channelType) === -1) { // presence is used only for parties, private for guilds
+-      throw new BadRequest('Invalid Pusher channel type.');
+-    }
+-
+-    if (resourceType !== 'group') { // only groups are supported
+-      throw new BadRequest('Invalid Pusher resource type.');
+-    }
+-
+-    resourceId = resourceId.join('-'); // the split at the beginning had split resourceId too
+-    if (!validator.isUUID(String(resourceId))) {
+-      throw new BadRequest('Invalid Pusher resource id, must be a UUID.');
+-    }
+-
+-    // Only the user's party is supported for now
+-    if (user.party._id !== resourceId) {
+-      throw new NotFound('Resource id must be the user\'s party.');
+-    }
+-
+-    let authResult;
+-
+-    // Max 100 members for presence channel - parties only
+-    if (channelType === 'presence') {
+-      let presenceData = {
+-        user_id: user._id, // eslint-disable-line camelcase
+-        // Max 1KB
+-        user_info: {}, // eslint-disable-line camelcase
+-      };
+-
+-      authResult = pusher.authenticate(socketId, channelName, presenceData);
+-    } else {
+-      authResult = pusher.authenticate(socketId, channelName);
+-    }
+-
+-    // Not using res.respond because Pusher requires a different response format
+-    res.status(200).json(authResult);
+-  },
+-};
+-
+ /**
+  * @api {put} /api/v3/user/auth/update-username Update username
+  * @apiDescription Update the username of a local user
+@@ -692,33 +510,4 @@ api.resetPasswordSetNewOne = {
+   },
+ };
+ 
+-/**
+- * @api {delete} /api/v3/user/auth/social/:network Delete social authentication method
+- * @apiDescription Remove a social authentication method (only facebook supported) from a user profile. The user must have local authentication enabled
+- * @apiName UserDeleteSocial
+- * @apiGroup User
+- *
+- * @apiSuccess {Object} data Empty object
+- */
+-api.deleteSocial = {
+-  method: 'DELETE',
+-  url: '/user/auth/social/:network',
+-  middlewares: [authWithHeaders()],
+-  async handler (req, res) {
+-    let user = res.locals.user;
+-    let network = req.params.network;
+-    let isSupportedNetwork = common.constants.SUPPORTED_SOCIAL_NETWORKS.find(supportedNetwork => {
+-      return supportedNetwork.key === network;
+-    });
+-    if (!isSupportedNetwork) throw new BadRequest(res.t('unsupportedNetwork'));
+-    if (!hasBackupAuth(user, network)) throw new NotAuthorized(res.t('cantDetachSocial'));
+-    let unset = {
+-      [`auth.${network}`]: 1,
+-    };
+-    await User.update({_id: user._id}, {$unset: unset}).exec();
+-
+-    res.respond(200, {});
+-  },
+-};
+-
+ module.exports = api;
+diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
+index 326a66d5e..8c8a1a53d 100644
+--- a/website/server/controllers/api-v3/challenges.js
++++ b/website/server/controllers/api-v3/challenges.js
+@@ -202,16 +202,6 @@ api.createChallenge = {
+     };
+     response.group = getChallengeGroupResponse(group);
+ 
+-    res.analytics.track('challenge create', {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-      challengeID: response._id,
+-      groupID: group._id,
+-      groupName: group.privacy === 'private' ? null : group.name,
+-      groupType: group._id === TAVERN_ID ? 'tavern' : group.type,
+-    });
+-
+     res.respond(201, response);
+   },
+ };
+@@ -261,16 +251,6 @@ api.joinChallenge = {
+     let chalLeader = await User.findById(response.leader).select(nameFields).exec();
+     response.leader = chalLeader ? chalLeader.toJSON({minimize: true}) : null;
+ 
+-    res.analytics.track('challenge join', {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-      challengeID: challenge._id,
+-      groupID: group._id,
+-      groupName: group.privacy === 'private' ? null : group.name,
+-      groupType: group._id === TAVERN_ID ? 'tavern' : group.type,
+-    });
+-
+     res.respond(200, response);
+   },
+ };
+@@ -308,16 +288,6 @@ api.leaveChallenge = {
+     // Unlink challenge's tasks from user's tasks and save the challenge
+     await Bluebird.all([challenge.unlinkTasks(user, keep), challenge.save()]);
+ 
+-    res.analytics.track('challenge leave', {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-      challengeID: challenge._id,
+-      groupID: challenge.group._id,
+-      groupName: challenge.group.privacy === 'private' ? null : challenge.group.name,
+-      groupType: challenge.group._id === TAVERN_ID ? 'tavern' : challenge.group.type,
+-    });
+-
+     res.respond(200, {});
+   },
+ };
+@@ -651,16 +621,6 @@ api.deleteChallenge = {
+     // Close channel in background, some ops are run in the background without `await`ing
+     await challenge.closeChal({broken: 'CHALLENGE_DELETED'});
+ 
+-    res.analytics.track('challenge delete', {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-      challengeID: challenge._id,
+-      groupID: challenge.group._id,
+-      groupName: challenge.group.privacy === 'private' ? null : challenge.group.name,
+-      groupType: challenge.group._id === TAVERN_ID ? 'tavern' : challenge.group.type,
+-    });
+-
+     res.respond(200, {});
+   },
+ };
+@@ -700,17 +660,6 @@ api.selectChallengeWinner = {
+     // Close channel in background, some ops are run in the background without `await`ing
+     await challenge.closeChal({broken: 'CHALLENGE_CLOSED', winner});
+ 
+-    res.analytics.track('challenge close', {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-      challengeID: challenge._id,
+-      challengeWinnerID: winner._id,
+-      groupID: challenge.group._id,
+-      groupName: challenge.group.privacy === 'private' ? null : challenge.group.name,
+-      groupType: challenge.group._id === TAVERN_ID ? 'tavern' : challenge.group.type,
+-    });
+-
+     res.respond(200, {});
+   },
+ };
+diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
+index fba5277d4..97cc16e57 100644
+--- a/website/server/controllers/api-v3/chat.js
++++ b/website/server/controllers/api-v3/chat.js
+@@ -9,8 +9,6 @@ import {
+ import _ from 'lodash';
+ import { removeFromArray } from '../../libs/collectionManipulators';
+ import { getUserInfo, getGroupUrl, sendTxn } from '../../libs/email';
+-import slack from '../../libs/slack';
+-import pusher from '../../libs/pusher';
+ import { getAuthorEmailFromMessage } from '../../libs/chat';
+ import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
+ import nconf from 'nconf';
+@@ -141,14 +139,6 @@ api.postChat = {
+ 
+       sendTxn(FLAG_REPORT_EMAILS, 'slur-report-to-mods', report);
+ 
+-      // Slack the mods
+-      slack.sendSlurNotification({
+-        authorEmail,
+-        author: user,
+-        group,
+-        message,
+-      });
+-
+       throw new BadRequest(res.t('bannedSlurUsed'));
+     }
+ 
+@@ -186,13 +176,6 @@ api.postChat = {
+ 
+     let [savedGroup] = await Bluebird.all(toSave);
+ 
+-    // realtime chat is only enabled for private groups (for now only for parties)
+-    if (savedGroup.privacy === 'private' && savedGroup.type === 'party') {
+-      // req.body.pusherSocketId is sent from official clients to identify the sender user's real time socket
+-      // see https://pusher.com/docs/server_api_guide/server_excluding_recipients
+-      pusher.trigger(`presencegroup${savedGroup._id}`, 'newchat', newChatMessage, req.body.pusherSocketId);
+-    }
+-
+     if (chatUpdated) {
+       res.respond(200, {chat: Group.toJSONCleanChat(savedGroup, user).chat});
+     } else {
+diff --git a/website/server/controllers/api-v3/coupon.js b/website/server/controllers/api-v3/coupon.js
+index 5fc0f4cbf..f92f7f279 100644
+--- a/website/server/controllers/api-v3/coupon.js
++++ b/website/server/controllers/api-v3/coupon.js
+@@ -56,7 +56,7 @@ api.getCoupons = {
+  * @apiGroup Coupon
+  * @apiPermission sudo
+  *
+- * @apiParam (Path) {String=wondercon,google_6mo} event The event for which the coupon should be generated
++ * @apiParam (Path) {String=wondercon} event The event for which the coupon should be generated
+  * @apiParam (Query) {Number} count The number of coupon codes to generate
+  *
+  * @apiSuccess {Array} data Generated coupons
+diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
+index 67512a51b..ccf377491 100644
+--- a/website/server/controllers/api-v3/groups.js
++++ b/website/server/controllers/api-v3/groups.js
+@@ -19,12 +19,7 @@ import {
+ import { removeFromArray } from '../../libs/collectionManipulators';
+ import { sendTxn as sendTxnEmail } from '../../libs/email';
+ import { encrypt } from '../../libs/encryption';
+-import { sendNotification as sendPushNotification } from '../../libs/pushNotifications';
+-import pusher from '../../libs/pusher';
+ import common from '../../../common';
+-import payments from '../../libs/payments';
+-import stripePayments from '../../libs/stripePayments';
+-import amzLib from '../../libs/amazonPayments';
+ import shared from '../../../common';
+ import apiMessages from '../../libs/apiMessages';
+ 
+@@ -149,22 +144,6 @@ api.createGroup = {
+       profile: {name: user.profile.name},
+     };
+ 
+-    let analyticsObject = {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-      owner: true,
+-      groupType: savedGroup.type,
+-      privacy: savedGroup.privacy,
+-      headers: req.headers,
+-    };
+-
+-    if (savedGroup.privacy === 'public') {
+-      analyticsObject.groupName = savedGroup.name;
+-    }
+-
+-    res.analytics.track('join group', analyticsObject);
+-
+     res.respond(201, response); // do not remove chat flags data as we've just created the group
+   },
+ };
+@@ -197,54 +176,6 @@ api.createGroupPlan = {
+     let results = await Bluebird.all([user.save(), group.save()]);
+     let savedGroup = results[1];
+ 
+-    // Analytics
+-    let analyticsObject = {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-      owner: true,
+-      groupType: savedGroup.type,
+-      privacy: savedGroup.privacy,
+-      headers: req.headers,
+-    };
+-    res.analytics.track('join group', analyticsObject);
+-
+-    if (req.body.paymentType === 'Stripe') {
+-      let token = req.body.id;
+-      let gift = req.query.gift ? JSON.parse(req.query.gift) : undefined;
+-      let sub = req.query.sub ? shared.content.subscriptionBlocks[req.query.sub] : false;
+-      let groupId = savedGroup._id;
+-      let email = req.body.email;
+-      let headers = req.headers;
+-      let coupon = req.query.coupon;
+-
+-      await stripePayments.checkout({
+-        token,
+-        user,
+-        gift,
+-        sub,
+-        groupId,
+-        email,
+-        headers,
+-        coupon,
+-      });
+-    } else if (req.body.paymentType === 'Amazon') {
+-      let billingAgreementId = req.body.billingAgreementId;
+-      let sub = req.body.subscription ? shared.content.subscriptionBlocks[req.body.subscription] : false;
+-      let coupon = req.body.coupon;
+-      let groupId = savedGroup._id;
+-      let headers = req.headers;
+-
+-      await amzLib.subscribe({
+-        billingAgreementId,
+-        sub,
+-        coupon,
+-        user,
+-        groupId,
+-        headers,
+-      });
+-    }
+-
+     // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
+     // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
+     let response = savedGroup.toJSON();
+@@ -572,7 +503,6 @@ api.joinGroup = {
+     if (group.memberCount === 0) group.leader = user._id; // If new user is only member -> set as leader
+ 
+     if (group.hasNotCancelled())  {
+-      await payments.addSubToGroupUser(user, group);
+       await group.updateGroupPlan();
+     }
+ 
+@@ -625,22 +555,6 @@ api.joinGroup = {
+       response.leader = leader.toJSON({minimize: true});
+     }
+ 
+-    let analyticsObject = {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-      owner: false,
+-      groupType: group.type,
+-      privacy: group.privacy,
+-      headers: req.headers,
+-    };
+-
+-    if (group.privacy === 'public') {
+-      analyticsObject.groupName = group.name;
+-    }
+-
+-    res.analytics.track('join group', analyticsObject);
+-
+     res.respond(200, response);
+   },
+ };
+@@ -777,9 +691,6 @@ api.leaveGroup = {
+     }
+ 
+     let isMemberOfGroupPlan = await user.isMemberOfGroupPlan();
+-    if (!isMemberOfGroupPlan) {
+-      await payments.cancelGroupSubscriptionForUser(user, group);
+-    }
+ 
+     res.respond(200, {});
+   },
+@@ -869,7 +780,6 @@ api.removeGroupMember = {
+       group.memberCount -= 1;
+       if (group.hasNotCancelled())  {
+         await group.updateGroupPlan(true);
+-        await payments.cancelGroupSubscriptionForUser(member, group, true);
+       }
+ 
+       if (group.quest && group.quest.leader === member._id) {
+@@ -885,12 +795,6 @@ api.removeGroupMember = {
+         removeFromArray(member.guilds, group._id);
+       }
+       if (isInGroup === 'party') {
+-        // Tell the realtime clients that a user is being removed
+-        // If the user that is being removed is still connected, they'll get disconnected automatically
+-        pusher.trigger(`presence-group-${group._id}`, 'user-removed', {
+-          userId: user._id,
+-        });
+-
+         member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
+       }
+ 
+@@ -991,19 +895,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+     sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
+   }
+ 
+-  if (userToInvite.preferences.pushNotifications[`invited${groupLabel}`] !== false) {
+-    let identifier = group.type === 'guild' ? 'invitedGuild' : 'invitedParty';
+-    sendPushNotification(
+-      userToInvite,
+-      {
+-        title: group.name,
+-        message: res.t(identifier),
+-        identifier,
+-        payload: {groupID: group._id, publicGuild},
+-      }
+-    );
+-  }
+-
+   let userInvited = await userToInvite.save();
+   if (group.type === 'guild') {
+     return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
+@@ -1019,8 +910,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+ 
+   let userToContact = await User.findOne({$or: [
+     {'auth.local.email': invite.email},
+-    {'auth.facebook.emails.value': invite.email},
+-    {'auth.google.emails.value': invite.email},
+   ]})
+     .select({_id: true, 'preferences.emailNotifications': true})
+     .exec();
+diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
+index 279f759ee..ea5b2d262 100644
+--- a/website/server/controllers/api-v3/members.js
++++ b/website/server/controllers/api-v3/members.js
+@@ -19,7 +19,6 @@ import {
+   sendTxn as sendTxnEmail,
+ } from '../../libs/email';
+ import Bluebird from 'bluebird';
+-import { sendNotification as sendPushNotification } from '../../libs/pushNotifications';
+ import { achievements } from '../../../../website/common/';
+ 
+ let api = {};
+@@ -494,18 +493,6 @@ api.sendPrivateMessage = {
+         {name: 'SENDER', content: getUserInfo(sender, ['name']).name},
+       ]);
+     }
+-    if (receiver.preferences.pushNotifications.newPM !== false) {
+-      sendPushNotification(
+-        receiver,
+-        {
+-          title: res.t('newPM'),
+-          message: res.t('newPMInfo', {name: getUserInfo(sender, ['name']).name, message}),
+-          identifier: 'newPM',
+-          category: 'newPM',
+-          payload: {replyTo: sender._id},
+-        }
+-      );
+-    }
+ 
+     res.respond(200, {});
+   },
+@@ -584,15 +571,6 @@ api.transferGems = {
+         {name: 'X_GEMS_GIFTED', content: gemAmount},
+       ]);
+     }
+-    if (receiver.preferences.pushNotifications.giftedGems !== false) {
+-      sendPushNotification(receiver,
+-        {
+-          title: res.t('giftedGems', receiverLang),
+-          message: res.t('giftedGemsInfo', {amount: gemAmount, name: byUsername}, receiverLang),
+-          identifier: 'giftedGems',
+-          payload: {replyTo: sender._id},
+-        });
+-    }
+ 
+     res.respond(200, {});
+   },
+diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
+index 792c37e12..c5acd25af 100644
+--- a/website/server/controllers/api-v3/quests.js
++++ b/website/server/controllers/api-v3/quests.js
+@@ -1,7 +1,6 @@
+ import _ from 'lodash';
+ import Bluebird from 'bluebird';
+ import { authWithHeaders } from '../../middlewares/auth';
+-import analytics from '../../libs/analyticsService';
+ import {
+   model as Group,
+   basicFields as basicGroupFields,
+@@ -17,7 +16,6 @@ import {
+   sendTxn as sendTxnEmail,
+ } from '../../libs/email';
+ import common from '../../../common';
+-import { sendNotification as sendPushNotification } from '../../libs/pushNotifications';
+ 
+ const questScrolls = common.content.quests;
+ 
+@@ -79,7 +77,7 @@ api.inviteToQuest = {
+       'party._id': group._id,
+       _id: {$ne: user._id},
+     })
+-      .select('auth.facebook auth.local preferences.emailNotifications profile.name pushDevices')
++      .select('auth.local preferences.emailNotifications profile.name pushDevices')
+       .exec();
+ 
+     group.markModified('quest');
+@@ -119,20 +117,6 @@ api.inviteToQuest = {
+     // send out invites
+     let inviterVars = getUserInfo(user, ['name', 'email']);
+     let membersToEmail = members.filter(member => {
+-      // send push notifications while filtering members before sending emails
+-      if (member.preferences.pushNotifications.invitedQuest !== false) {
+-        sendPushNotification(
+-          member,
+-          {
+-            title: res.t('questInvitationTitle'),
+-            message: res.t('questInvitationInfo', {quest: quest.text(req.language)}),
+-            identifier: 'questInvitation',
+-            category: 'questInvitation',
+-          }
+-
+-        );
+-      }
+-
+       return member.preferences.emailNotifications.invitedQuest !== false;
+     });
+     sendTxnEmail(membersToEmail, `invite-${quest.boss ? 'boss' : 'collection'}-quest`, [
+@@ -140,17 +124,6 @@ api.inviteToQuest = {
+       {name: 'INVITER', content: inviterVars.name},
+       {name: 'PARTY_URL', content: '/party'},
+     ]);
+-
+-    // track that the inviting user has accepted the quest
+-    analytics.track('quest', {
+-      category: 'behavior',
+-      owner: true,
+-      response: 'accept',
+-      gaLabel: 'accept',
+-      questName: questKey,
+-      uuid: user._id,
+-      headers: req.headers,
+-    });
+   },
+ };
+ 
+@@ -199,17 +172,6 @@ api.acceptQuest = {
+     let savedGroup = await group.save();
+ 
+     res.respond(200, savedGroup.quest);
+-
+-    // track that a user has accepted the quest
+-    analytics.track('quest', {
+-      category: 'behavior',
+-      owner: false,
+-      response: 'accept',
+-      gaLabel: 'accept',
+-      questName: group.quest.key,
+-      uuid: user._id,
+-      headers: req.headers,
+-    });
+   },
+ };
+ 
+@@ -259,16 +221,6 @@ api.rejectQuest = {
+     let savedGroup = await group.save();
+ 
+     res.respond(200, savedGroup.quest);
+-
+-    analytics.track('quest', {
+-      category: 'behavior',
+-      owner: false,
+-      response: 'reject',
+-      gaLabel: 'reject',
+-      questName: group.quest.key,
+-      uuid: user._id,
+-      headers: req.headers,
+-    });
+   },
+ };
+ 
+@@ -318,16 +270,6 @@ api.forceStart = {
+     ]);
+ 
+     res.respond(200, savedGroup.quest);
+-
+-    analytics.track('quest', {
+-      category: 'behavior',
+-      owner: user._id === group.quest.leader,
+-      response: 'force-start',
+-      gaLabel: 'force-start',
+-      questName: group.quest.key,
+-      uuid: user._id,
+-      headers: req.headers,
+-    });
+   },
+ };
+ 
+diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
+index 8b9672afd..bc1977f83 100644
+--- a/website/server/controllers/api-v3/tasks.js
++++ b/website/server/controllers/api-v3/tasks.js
+@@ -167,16 +167,6 @@ api.createUserTasks = {
+     res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
+ 
+     tasks.forEach((task) => {
+-      // Track when new users (first 7 days) create tasks
+-      if (moment().diff(user.auth.timestamps.created, 'days') < 7) {
+-        res.analytics.track('task create', {
+-          uuid: user._id,
+-          hitType: 'event',
+-          category: 'behavior',
+-          taskType: task.type,
+-        });
+-      }
+-
+       taskActivityWebhook.send(user.webhooks, {
+         type: 'created',
+         task,
+@@ -252,16 +242,6 @@ api.createChallengeTasks = {
+ 
+     // If adding tasks to a challenge -> sync users
+     if (challenge) challenge.addTasks(tasks);
+-
+-    tasks.forEach((task) => {
+-      res.analytics.track('task create', {
+-        uuid: user._id,
+-        hitType: 'event',
+-        category: 'behavior',
+-        taskType: task.type,
+-        challengeID: challenge._id,
+-      });
+-    });
+   },
+ };
+ 
+@@ -607,7 +587,7 @@ api.scoreTask = {
+ 
+     let [delta] = common.ops.scoreTask({task, user, direction}, req);
+     // Drop system (don't run on the client, as it would only be discarded since ops are sent to the API, not the results)
+-    if (direction === 'up') common.fns.randomDrop(user, {task, delta}, req, res.analytics);
++    if (direction === 'up') common.fns.randomDrop(user, {task, delta}, req);
+ 
+     // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
+     // TODO move to common code?
+@@ -676,17 +656,6 @@ api.scoreTask = {
+         logger.error(e);
+       }
+     }
+-
+-    // Track when new users (first 7 days) score tasks
+-    if (moment().diff(user.auth.timestamps.created, 'days') < 7) {
+-      res.analytics.track('task score', {
+-        uuid: user._id,
+-        hitType: 'event',
+-        category: 'behavior',
+-        taskType: task.type,
+-        direction,
+-      });
+-    }
+   },
+ };
+ 
+diff --git a/website/server/controllers/api-v3/tasks/groups.js b/website/server/controllers/api-v3/tasks/groups.js
+index 449a0e39b..5b77c9dec 100644
+--- a/website/server/controllers/api-v3/tasks/groups.js
++++ b/website/server/controllers/api-v3/tasks/groups.js
+@@ -57,16 +57,6 @@ api.createGroupTasks = {
+     let tasks = await createTasks(req, res, {user, group});
+ 
+     res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
+-
+-    tasks.forEach((task) => {
+-      res.analytics.track('task create', {
+-        uuid: user._id,
+-        hitType: 'event',
+-        category: 'behavior',
+-        taskType: task.type,
+-        groupID: group._id,
+-      });
+-    });
+   },
+ };
+ 
+diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
+index ac2e82722..fa955944a 100644
+--- a/website/server/controllers/api-v3/user.js
++++ b/website/server/controllers/api-v3/user.js
+@@ -16,7 +16,6 @@ import {
+   getUserInfo,
+   sendTxn as txnEmail,
+ } from '../../libs/email';
+-import Queue from '../../libs/queue';
+ import nconf from 'nconf';
+ import get from 'lodash/get';
+ 
+@@ -395,8 +394,6 @@ api.deleteUser = {
+     if (user.auth.local.hashed_password && user.auth.local.email) {
+       let isValidPassword = await passwordUtils.compare(user, password);
+       if (!isValidPassword) throw new NotAuthorized(res.t('wrongPassword'));
+-    } else if ((user.auth.facebook.id || user.auth.google.id) && password !== DELETE_CONFIRMATION) {
+-      throw new NotAuthorized(res.t('incorrectDeletePhrase', {magicWord: 'DELETE'}));
+     }
+ 
+     let feedback = req.body.feedback;
+@@ -433,14 +430,6 @@ api.deleteUser = {
+       ]);
+     }
+ 
+-    if (feedback) Queue.sendMessage({feedback, username: user.profile.name}, user._id);
+-
+-    res.analytics.track('account delete', {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-    });
+-
+     res.respond(200, {});
+   },
+ };
+@@ -482,8 +471,6 @@ api.getUserAnonymized = {
+     delete user.apiToken;
+     if (user.auth) {
+       delete user.auth.local;
+-      delete user.auth.facebook;
+-      delete user.auth.google;
+     }
+     delete user.newMessages;
+     delete user.profile;
+@@ -546,7 +533,7 @@ api.sleep = {
+   url: '/user/sleep',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let sleepRes = common.ops.sleep(user, req, res.analytics);
++    let sleepRes = common.ops.sleep(user, req);
+     await user.save();
+     res.respond(200, ...sleepRes);
+   },
+@@ -606,7 +593,7 @@ api.buy = {
+     let quantity = 1;
+     if (req.body.quantity) quantity = req.body.quantity;
+     req.quantity = quantity;
+-    buyRes = common.ops.buy(user, req, res.analytics);
++    buyRes = common.ops.buy(user, req);
+ 
+     await user.save();
+     res.respond(200, ...buyRes);
+@@ -654,7 +641,7 @@ api.buyGear = {
+   url: '/user/buy-gear/:key',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let buyGearRes = common.ops.buy(user, req, res.analytics);
++    let buyGearRes = common.ops.buy(user, req);
+     await user.save();
+     res.respond(200, ...buyGearRes);
+   },
+@@ -696,7 +683,7 @@ api.buyArmoire = {
+     let user = res.locals.user;
+     req.type = 'armoire';
+     req.params.key = 'armoire';
+-    let buyArmoireResponse = common.ops.buy(user, req, res.analytics);
++    let buyArmoireResponse = common.ops.buy(user, req);
+     await user.save();
+     res.respond(200, ...buyArmoireResponse);
+   },
+@@ -736,7 +723,7 @@ api.buyHealthPotion = {
+     let user = res.locals.user;
+     req.type = 'potion';
+     req.params.key = 'potion';
+-    let buyHealthPotionResponse = common.ops.buy(user, req, res.analytics);
++    let buyHealthPotionResponse = common.ops.buy(user, req);
+     await user.save();
+     res.respond(200, ...buyHealthPotionResponse);
+   },
+@@ -777,7 +764,7 @@ api.buyMysterySet = {
+   async handler (req, res) {
+     let user = res.locals.user;
+     req.type = 'mystery';
+-    let buyMysterySetRes = common.ops.buy(user, req, res.analytics);
++    let buyMysterySetRes = common.ops.buy(user, req);
+     await user.save();
+     res.respond(200, ...buyMysterySetRes);
+   },
+@@ -818,7 +805,7 @@ api.buyQuest = {
+   async handler (req, res) {
+     let user = res.locals.user;
+     req.type = 'quest';
+-    let buyQuestRes = common.ops.buy(user, req, res.analytics);
++    let buyQuestRes = common.ops.buy(user, req);
+     await user.save();
+     res.respond(200, ...buyQuestRes);
+   },
+@@ -1008,7 +995,7 @@ api.changeClass = {
+   url: '/user/change-class',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let changeClassRes = common.ops.changeClass(user, req, res.analytics);
++    let changeClassRes = common.ops.changeClass(user, req);
+     await user.save();
+     res.respond(200, ...changeClassRes);
+   },
+@@ -1077,7 +1064,7 @@ api.purchase = {
+     if (req.body.quantity) quantity = req.body.quantity;
+     req.quantity = quantity;
+ 
+-    let purchaseRes = common.ops.buy(user, req, res.analytics);
++    let purchaseRes = common.ops.buy(user, req);
+     await user.save();
+     res.respond(200, ...purchaseRes);
+   },
+@@ -1108,7 +1095,7 @@ api.userPurchaseHourglass = {
+   url: '/user/purchase-hourglass/:type/:key',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let purchaseHourglassRes = common.ops.buy(user, req, res.analytics);
++    let purchaseHourglassRes = common.ops.buy(user, req);
+     await user.save();
+     res.respond(200, ...purchaseHourglassRes);
+   },
+@@ -1202,7 +1189,7 @@ api.userOpenMysteryItem = {
+   url: '/user/open-mystery-item',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let openMysteryItemRes = common.ops.openMysteryItem(user, req, res.analytics);
++    let openMysteryItemRes = common.ops.openMysteryItem(user, req);
+     await user.save();
+     res.respond(200, ...openMysteryItemRes);
+   },
+@@ -1234,7 +1221,7 @@ api.userReleasePets = {
+   url: '/user/release-pets',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let releasePetsRes = common.ops.releasePets(user, req, res.analytics);
++    let releasePetsRes = common.ops.releasePets(user, req);
+     await user.save();
+     res.respond(200, ...releasePetsRes);
+   },
+@@ -1283,7 +1270,7 @@ api.userReleaseBoth = {
+   url: '/user/release-both',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let releaseBothRes = common.ops.releaseBoth(user, req, res.analytics);
++    let releaseBothRes = common.ops.releaseBoth(user, req);
+     await user.save();
+     res.respond(200, ...releaseBothRes);
+   },
+@@ -1319,7 +1306,7 @@ api.userReleaseMounts = {
+   url: '/user/release-mounts',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let releaseMountsRes = common.ops.releaseMounts(user, req, res.analytics);
++    let releaseMountsRes = common.ops.releaseMounts(user, req);
+     await user.save();
+     res.respond(200, ...releaseMountsRes);
+   },
+@@ -1392,7 +1379,7 @@ api.userUnlock = {
+   url: '/user/unlock',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let unlockRes = common.ops.unlock(user, req, res.analytics);
++    let unlockRes = common.ops.unlock(user, req);
+     await user.save();
+     res.respond(200, ...unlockRes);
+   },
+@@ -1418,7 +1405,7 @@ api.userRevive = {
+   url: '/user/revive',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let reviveRes = common.ops.revive(user, req, res.analytics);
++    let reviveRes = common.ops.revive(user, req);
+     await user.save();
+     res.respond(200, ...reviveRes);
+   },
+@@ -1464,7 +1451,7 @@ api.userRebirth = {
+       ...Tasks.taskIsGroupOrChallengeQuery,
+     }).exec();
+ 
+-    let rebirthRes = common.ops.rebirth(user, tasks, req, res.analytics);
++    let rebirthRes = common.ops.rebirth(user, tasks, req);
+ 
+     let toSave = tasks.map(task => task.save());
+ 
+@@ -1622,7 +1609,7 @@ api.userReroll = {
+       ...Tasks.taskIsGroupOrChallengeQuery,
+     };
+     let tasks = await Tasks.Task.find(query).exec();
+-    let rerollRes = common.ops.reroll(user, tasks, req, res.analytics);
++    let rerollRes = common.ops.reroll(user, tasks, req);
+ 
+     let promises = tasks.map(task => task.save());
+     promises.push(user.save());
+@@ -1673,12 +1660,6 @@ api.userReset = {
+       user.save(),
+     ]);
+ 
+-    res.analytics.track('account reset', {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-    });
+-
+     res.respond(200, ...resetRes);
+   },
+ };
+diff --git a/website/server/controllers/top-level/dataexport.js b/website/server/controllers/top-level/dataexport.js
+index 9f075b27a..69136c9e6 100644
+--- a/website/server/controllers/top-level/dataexport.js
++++ b/website/server/controllers/top-level/dataexport.js
+@@ -13,11 +13,6 @@ import nconf from 'nconf';
+ import got from 'got';
+ import Bluebird from 'bluebird';
+ import md from 'habitica-markdown';
+-import {
+-  S3,
+-} from '../../libs/aws';
+-
+-const S3_BUCKET = nconf.get('S3:bucket');
+ 
+ const BASE_URL = nconf.get('BASE_URL');
+ 
+@@ -189,75 +184,6 @@ api.exportUserAvatarHtml = {
+   },
+ };
+ 
+-/**
+- * @api {get} /export/avatar-:uuid.png Render a user avatar as a PNG file
+- * @apiName ExportUserAvatarPng
+- * @apiGroup DataExport
+- *
+- * @apiParam (Path) {String} uuid The User ID of the user
+- *
+- * @apiSuccess {PNG} File A png file of the user's avatar.
+- */
+-api.exportUserAvatarPng = {
+-  method: 'GET',
+-  url: '/export/avatar-:memberId.png',
+-  async handler (req, res) {
+-    req.checkParams('memberId', res.t('memberIdRequired')).notEmpty().isUUID();
+-
+-    let validationErrors = req.validationErrors();
+-    if (validationErrors) throw validationErrors;
+-
+-    let memberId = req.params.memberId;
+-
+-    let filename = `avatars/${memberId}.png`;
+-    let s3url = `https://${S3_BUCKET}.s3.amazonaws.com/${filename}`;
+-
+-    let response;
+-    try {
+-      response = await got.head(s3url);
+-    } catch (gotError) {
+-      // If the file does not exist AWS S3 can return a 403 error
+-      if (gotError.code !== 'ENOTFOUND' && gotError.statusCode !== 404 && gotError.statusCode !== 403) {
+-        throw gotError;
+-      }
+-    }
+-
+-    // cache images for 30 minutes on aws, else upload a new one
+-    if (response && response.statusCode === 200 && moment().diff(response.headers['last-modified'], 'minutes') < 30) {
+-      return res.redirect(s3url);
+-    }
+-
+-    let [stream] = await new Pageres()
+-      .src(`${BASE_URL}/export/avatar-${memberId}.html`, ['140x147'], {
+-        crop: true,
+-        filename: filename.replace('.png', ''),
+-      })
+-      .run();
+-
+-    let s3upload = S3.upload({
+-      Bucket: S3_BUCKET,
+-      Key: filename,
+-      ACL: 'public-read',
+-      StorageClass: 'REDUCED_REDUNDANCY',
+-      ContentType: 'image/png',
+-      Expires: moment().add({minutes: 5}).toDate(),
+-      Body: stream,
+-    });
+-
+-    let s3res = await new Bluebird((resolve, reject) => {
+-      s3upload.send((err, s3uploadRes) => {
+-        if (err) {
+-          reject(err);
+-        } else {
+-          resolve(s3uploadRes);
+-        }
+-      });
+-    });
+-
+-    res.redirect(s3res.Location);
+-  },
+-};
+-
+ /**
+  * @api {get} /export/inbox.html Export user private messages as HTML document
+  * @apiName ExportUserPrivateMessages
+diff --git a/website/server/index.js b/website/server/index.js
+index becea804a..3577e0d56 100644
+--- a/website/server/index.js
++++ b/website/server/index.js
+@@ -18,12 +18,6 @@ const setupNconf = require('./libs/setupNconf');
+ setupNconf();
+ 
+ const nconf = require('nconf');
+-const stackimpact = require('stackimpact');
+-
+-stackimpact.start({
+-  agentKey: nconf.get('STACK_IMPACT_KEY'),
+-  appName: 'Habitica',
+-});
+ 
+ const cluster = require('cluster');
+ const logger = require('./libs/logger');
+diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
+index 58dee49e6..ee87fb76e 100644
+--- a/website/server/libs/chatReporting/groupChatReporter.js
++++ b/website/server/libs/chatReporting/groupChatReporter.js
+@@ -7,7 +7,6 @@ import {
+   NotFound,
+ } from '../errors';
+ import { getGroupUrl, sendTxn } from '../email';
+-import slack from '../slack';
+ import { model as Group } from '../../models/group';
+ 
+ const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
+@@ -54,13 +53,6 @@ export default class GroupChatReporter extends ChatReporter {
+       {name: 'GROUP_ID', content: group._id},
+       {name: 'GROUP_URL', content: groupUrl},
+     ]));
+-
+-    slack.sendFlagNotification({
+-      authorEmail: this.authorEmail,
+-      flagger: this.user,
+-      group,
+-      message,
+-    });
+   }
+ 
+   async flagGroupMessage (group, message) {
+diff --git a/website/server/libs/cron.js b/website/server/libs/cron.js
+index 1e27c9ddb..9b323ce11 100644
+--- a/website/server/libs/cron.js
++++ b/website/server/libs/cron.js
+@@ -159,22 +159,6 @@ function performSleepTasks (user, tasksByType, now, daysMissed) {
+   resetHabitCounters(user, tasksByType, now, daysMissed);
+ }
+ 
+-function trackCronAnalytics (analytics, user, _progress, options) {
+-  analytics.track('Cron', {
+-    category: 'behavior',
+-    gaLabel: 'Cron Count',
+-    gaValue: user.flags.cronCount,
+-    uuid: user._id,
+-    user,
+-    resting: user.preferences.sleep,
+-    cronCount: user.flags.cronCount,
+-    progressUp: _.min([_progress.up, 900]),
+-    progressDown: _progress.down,
+-    headers: options.headers,
+-    loginIncentives: user.loginIncentives,
+-  });
+-}
+-
+ function awardLoginIncentives (user) {
+   if (user.loginIncentives > MAX_INCENTIVES) return;
+   // A/B test 2016-12-21: Should we deliver notifications for upcoming incentives on days when users don't receive rewards?
+@@ -227,7 +211,7 @@ function awardLoginIncentives (user) {
+ 
+ // Perform various beginning-of-day reset actions.
+ export function cron (options = {}) {
+-  let {user, tasksByType, analytics, now = new Date(), daysMissed, timezoneOffsetFromUserPrefs} = options;
++  let {user, tasksByType, now = new Date(), daysMissed, timezoneOffsetFromUserPrefs} = options;
+   let _progress = {down: 0, up: 0, collectedItems: 0};
+ 
+   // Record pre-cron values of HP and MP to show notifications later
+@@ -264,7 +248,6 @@ export function cron (options = {}) {
+   // On cron, buffs are cleared and all dailies are reset without performing damage
+   if (user.preferences.sleep === true) {
+     performSleepTasks(user, tasksByType, now, daysMissed);
+-    trackCronAnalytics(analytics, user, _progress, options);
+     return;
+   }
+ 
+@@ -468,9 +451,7 @@ export function cron (options = {}) {
+   //   user.markModified('inbox.messages');
+   // }
+ 
+-  // Analytics
+   user.flags.cronCount++;
+-  trackCronAnalytics(analytics, user, _progress, options);
+ 
+   return _progress;
+ }
+diff --git a/website/server/libs/email.js b/website/server/libs/email.js
+index 330f2d2ac..9d94b3fda 100644
+--- a/website/server/libs/email.js
++++ b/website/server/libs/email.js
+@@ -39,8 +39,6 @@ export function getUserInfo (user, fields = []) {
+     if (!info.name) {
+       if (user.auth.local && user.auth.local.username) {
+         info.name = user.auth.local.username;
+-      } else if (user.auth.facebook) {
+-        info.name = user.auth.facebook.displayName || user.auth.facebook.username;
+       }
+     }
+   }
+@@ -48,12 +46,6 @@ export function getUserInfo (user, fields = []) {
+   if (fields.indexOf('email') !== -1) {
+     if (user.auth.local && user.auth.local.email) {
+       info.email = user.auth.local.email;
+-    } else {
+-      common.constants.SUPPORTED_SOCIAL_NETWORKS.forEach(network => {
+-        if (user.auth[network.key] && user.auth[network.key].emails && user.auth[network.key].emails[0] && user.auth[network.key].emails[0].value) {
+-          info.email = user.auth[network.key].emails[0].value;
+-        }
+-      });
+     }
+   }
+ 
+diff --git a/website/server/libs/logger.js b/website/server/libs/logger.js
+index 67bc4df2a..21622d863 100644
+--- a/website/server/libs/logger.js
++++ b/website/server/libs/logger.js
+@@ -1,6 +1,5 @@
+ // Logger utility
+ import winston from 'winston';
+-import 'winston-loggly-bulk';
+ import nconf from 'nconf';
+ import _ from 'lodash';
+ import {
+@@ -21,12 +20,6 @@ if (IS_PROD) {
+       colorize: false,
+       prettyPrint: false,
+     });
+-    logger.add(winston.transports.Loggly, {
+-      inputToken: nconf.get('LOGGLY:TOKEN'),
+-      subdomain: nconf.get('LOGGLY:SUBDOMAIN'),
+-      tags: ['Winston-NodeJS'],
+-      json: true,
+-    });
+   }
+ } else if (!IS_TEST || IS_TEST && ENABLE_LOGS_IN_TEST) { // Do not log anything when testing unless specified
+   logger
+diff --git a/website/server/libs/payments.js b/website/server/libs/payments.js
+index c041e3c47..0e1c9f319 100644
+--- a/website/server/libs/payments.js
++++ b/website/server/libs/payments.js
+@@ -1,12 +1,10 @@
+ import _ from 'lodash';
+ import nconf from 'nconf';
+-import analytics from './analyticsService';
+ import {
+   getUserInfo,
+   sendTxn as txnEmail,
+ } from './email';
+ import moment from 'moment';
+-import { sendNotification as sendPushNotification } from './pushNotifications';
+ import shared from '../../common';
+ import {
+   model as Group,
+@@ -17,7 +15,6 @@ import {
+   NotAuthorized,
+   NotFound,
+ } from './errors';
+-import slack from './slack';
+ 
+ const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
+ const JOINED_GROUP_PLAN = 'joined group plan';
+@@ -28,8 +25,6 @@ api.constants = {
+   UNLIMITED_CUSTOMER_ID: 'habitrpg', // Users with the customerId have an unlimted free subscription
+   GROUP_PLAN_CUSTOMER_ID: 'group-plan',
+   GROUP_PLAN_PAYMENT_METHOD: 'Group Plan',
+-  GOOGLE_PAYMENT_METHOD: 'Google',
+-  IOS_PAYMENT_METHOD: 'Apple',
+ };
+ 
+ function revealMysteryItems (user) {
+@@ -89,8 +84,6 @@ api.addSubscriptionToGroupUsers = async function addSubscriptionToGroupUsers (gr
+ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
+   // These EMAIL_TEMPLATE constants are used to pass strings into templates that are
+   // stored externally and so their values must not be changed.
+-  const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GOOGLE = 'Google_subscription';
+-  const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_IOS = 'iOS_subscription';
+   const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GROUP_PLAN = 'group_plan_free_subscription';
+   const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_LIFETIME_FREE = 'lifetime_free_subscription';
+   const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_NORMAL = 'normal_subscription';
+@@ -100,7 +93,6 @@ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
+   // When changing customerIdsToIgnore or paymentMethodsToIgnore, the code blocks below for
+   // the `group-member-join` email template will probably need to be changed.
+   let customerIdsToIgnore = [this.constants.GROUP_PLAN_CUSTOMER_ID, this.constants.UNLIMITED_CUSTOMER_ID];
+-  let paymentMethodsToIgnore = [this.constants.GOOGLE_PAYMENT_METHOD, this.constants.IOS_PAYMENT_METHOD];
+   let previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_NONE;
+   let leader = await User.findById(group.leader).exec();
+ 
+@@ -135,29 +127,12 @@ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
+   let memberPlan = member.purchased.plan;
+   if (member.isSubscribed()) {
+     let customerHasCancelledGroupPlan = memberPlan.customerId === this.constants.GROUP_PLAN_CUSTOMER_ID && !member.hasNotCancelled();
+-    let ignorePaymentPlan = paymentMethodsToIgnore.indexOf(memberPlan.paymentMethod) !== -1;
+     let ignoreCustomerId = customerIdsToIgnore.indexOf(memberPlan.customerId) !== -1;
+ 
+-    if (ignorePaymentPlan) {
+-      txnEmail({email: TECH_ASSISTANCE_EMAIL}, 'admin-user-subscription-details', [
+-        {name: 'PROFILE_NAME', content: member.profile.name},
+-        {name: 'UUID', content: member._id},
+-        {name: 'EMAIL', content: getUserInfo(member, ['email']).email},
+-        {name: 'PAYMENT_METHOD', content: memberPlan.paymentMethod},
+-        {name: 'PURCHASED_PLAN', content: JSON.stringify(memberPlan)},
+-        {name: 'ACTION_NEEDED', content: 'User has joined group plan and has been told to cancel their subscription then email us. Ensure they do that then give them free sub.'},
+-        // TODO User won't get email instructions if they've opted out of all emails. See if we can make this email an exception and if not, report here whether they've opted out.
+-      ]);
+-    }
+-
+-    if ((ignorePaymentPlan || ignoreCustomerId) && !customerHasCancelledGroupPlan) {
++    if (ignoreCustomerId && !customerHasCancelledGroupPlan) {
+       // member has been added to group plan but their subscription will not be changed
+       // automatically so they need a special message in the email
+-      if (memberPlan.paymentMethod === this.constants.GOOGLE_PAYMENT_METHOD) {
+-        previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GOOGLE;
+-      } else if (memberPlan.paymentMethod === this.constants.IOS_PAYMENT_METHOD) {
+-        previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_IOS;
+-      } else if (memberPlan.customerId === this.constants.UNLIMITED_CUSTOMER_ID) {
++      if (memberPlan.customerId === this.constants.UNLIMITED_CUSTOMER_ID) {
+         previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_LIFETIME_FREE;
+       } else if (memberPlan.customerId === this.constants.GROUP_PLAN_CUSTOMER_ID) {
+         previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GROUP_PLAN;
+@@ -332,9 +307,7 @@ api.createSubscription = async function createSubscription (data) {
+       paymentMethod: data.paymentMethod,
+       extraMonths: Number(plan.extraMonths) + _dateDiff(today, plan.dateTerminated),
+       dateTerminated: null,
+-      // Specify a lastBillingDate just for Amazon Payments
+-      // Resetted every time the subscription restarts
+-      lastBillingDate: data.paymentMethod === 'Amazon Payments' ? today : undefined,
++      lastBillingDate: undefined,
+       nextPaymentProcessing: data.nextPaymentProcessing,
+       nextBillingDate: data.nextBillingDate,
+       additionalData: data.additionalData,
+@@ -370,19 +343,6 @@ api.createSubscription = async function createSubscription (data) {
+     txnEmail(data.user, emailType);
+   }
+ 
+-  analytics.trackPurchase({
+-    uuid: data.user._id,
+-    groupId,
+-    itemPurchased,
+-    sku: `${data.paymentMethod.toLowerCase()}-subscription`,
+-    purchaseType,
+-    paymentMethod: data.paymentMethod,
+-    quantity: 1,
+-    gift: Boolean(data.gift),
+-    purchaseValue: block.price,
+-    headers: data.headers,
+-  });
+-
+   if (!group) data.user.purchased.txnCount++;
+ 
+   if (data.gift) {
+@@ -417,19 +377,6 @@ api.createSubscription = async function createSubscription (data) {
+         {name: 'X_MONTHS_SUBSCRIPTION', content: months},
+       ]);
+     }
+-
+-    if (data.gift.member._id !== data.user._id) { // Only send push notifications if sending to a user other than yourself
+-      if (data.gift.member.preferences.pushNotifications.giftedSubscription !== false) {
+-        sendPushNotification(data.gift.member,
+-          {
+-            title: shared.i18n.t('giftedSubscription', languages[1]),
+-            message: shared.i18n.t('giftedSubscriptionInfo', {months, name: byUserName}, languages[1]),
+-            identifier: 'giftedSubscription',
+-            payload: {replyTo: data.user._id},
+-          }
+-        );
+-      }
+-    }
+   }
+ 
+   if (group) {
+@@ -439,22 +386,6 @@ api.createSubscription = async function createSubscription (data) {
+   }
+ 
+   if (data.gift) await data.gift.member.save();
+-
+-  slack.sendSubscriptionNotification({
+-    buyer: {
+-      id: data.user._id,
+-      name: data.user.profile.name,
+-      email: getUserInfo(data.user, ['email']).email,
+-    },
+-    recipient: data.gift ? {
+-      id: data.gift.member._id,
+-      name: data.gift.member.profile.name,
+-      email: getUserInfo(data.gift.member, ['email']).email,
+-    } : {},
+-    paymentMethod: data.paymentMethod,
+-    months: group ? 1 : months,
+-    groupId,
+-  });
+ };
+ 
+ // Cancels a subscription or group plan, setting termination to happen later
+@@ -529,15 +460,6 @@ api.cancelSubscription = async function cancelSubscription (data) {
+     cancelType = 'group-unsubscribe';
+     groupId = group._id;
+   }
+-
+-  analytics.track(cancelType, {
+-    uuid: data.user._id,
+-    groupId,
+-    gaCategory: 'commerce',
+-    gaLabel: data.paymentMethod,
+-    paymentMethod: data.paymentMethod,
+-    headers: data.headers,
+-  });
+ };
+ 
+ api.buyGems = async function buyGems (data) {
+@@ -549,18 +471,6 @@ api.buyGems = async function buyGems (data) {
+ 
+   if (!data.gift) txnEmail(data.user, 'donation');
+ 
+-  analytics.trackPurchase({
+-    uuid: data.user._id,
+-    itemPurchased: 'Gems',
+-    sku: `${data.paymentMethod.toLowerCase()}-checkout`,
+-    purchaseType: 'checkout',
+-    paymentMethod: data.paymentMethod,
+-    quantity: 1,
+-    gift: Boolean(data.gift),
+-    purchaseValue: amt,
+-    headers: data.headers,
+-  });
+-
+   if (data.gift) {
+     let byUsername = getUserInfo(data.user, ['name']).name;
+     let gemAmount = data.gift.gems.amount || 20;
+@@ -595,19 +505,6 @@ api.buyGems = async function buyGems (data) {
+       ]);
+     }
+ 
+-    if (data.gift.member._id !== data.user._id) { // Only send push notifications if sending to a user other than yourself
+-      if (data.gift.member.preferences.pushNotifications.giftedGems !== false) {
+-        sendPushNotification(
+-          data.gift.member,
+-          {
+-            title: shared.i18n.t('giftedGems', languages[1]),
+-            message: shared.i18n.t('giftedGemsInfo', {amount: gemAmount, name: byUsername}, languages[1]),
+-            identifier: 'giftedGems',
+-          }
+-        );
+-      }
+-    }
+-
+     await data.gift.member.save();
+   }
+ 
+diff --git a/website/server/libs/queue/index.js b/website/server/libs/queue/index.js
+deleted file mode 100644
+index 90f7cfe1e..000000000
+--- a/website/server/libs/queue/index.js
++++ /dev/null
+@@ -1,43 +0,0 @@
+-import Kafka from 'node-rdkafka';
+-import nconf from 'nconf';
+-
+-const GROUP_ID = nconf.get('KAFKA:GROUP_ID');
+-const CLOUDKARAFKA_BROKERS = nconf.get('KAFKA:CLOUDKARAFKA_BROKERS');
+-const CLOUDKARAFKA_USERNAME = nconf.get('KAFKA:CLOUDKARAFKA_USERNAME');
+-const CLOUDKARAFKA_PASSWORD = nconf.get('KAFKA:CLOUDKARAFKA_PASSWORD');
+-const CLOUDKARAFKA_TOPIC_PREFIX = nconf.get('KAFKA:CLOUDKARAFKA_TOPIC_PREFIX');
+-
+-const kafkaConf = {
+-  'group.id': GROUP_ID,
+-  'metadata.broker.list': CLOUDKARAFKA_BROKERS ? CLOUDKARAFKA_BROKERS.split(',') : '',
+-  'socket.keepalive.enable': true,
+-  'security.protocol': 'SASL_SSL',
+-  'sasl.mechanisms': 'SCRAM-SHA-256',
+-  'sasl.username': CLOUDKARAFKA_USERNAME,
+-  'sasl.password': CLOUDKARAFKA_PASSWORD,
+-  debug: 'generic,broker,security',
+-};
+-
+-const prefix = CLOUDKARAFKA_TOPIC_PREFIX;
+-const topic = `${prefix}-default`;
+-const producer = new Kafka.Producer(kafkaConf);
+-
+-producer.connect();
+-
+-process.on('exit', () => {
+-  if (producer.isConnected()) producer.disconnect();
+-});
+-
+-const api = {};
+-
+-api.sendMessage = function sendMessage (message, key) {
+-  if (!producer.isConnected()) return;
+-
+-  try {
+-    producer.produce(topic, -1, new Buffer(JSON.stringify(message)), key);
+-  } catch (e) {
+-    // @TODO: Send the to loggly?
+-  }
+-};
+-
+-module.exports = api;
+diff --git a/website/server/libs/setupPassport.js b/website/server/libs/setupPassport.js
+index 4c0861a1f..32440e146 100644
+--- a/website/server/libs/setupPassport.js
++++ b/website/server/libs/setupPassport.js
+@@ -1,28 +1,10 @@
+ import passport from 'passport';
+ import nconf from 'nconf';
+-import { Strategy as FacebookStrategy } from 'passport-facebook';
+-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+ 
+ // Passport session setup.
+ //   To support persistent login sessions, Passport needs to be able to
+ //   serialize users into and deserialize users out of the session.  Typically,
+ //   this will be as simple as storing the user ID when serializing, and finding
+-//   the user by ID when deserializing.  However, since this example does not
+-//   have a database of user records, the complete Facebook profile is serialized
+-//   and deserialized.
++//   the user by ID when deserializing.
+ passport.serializeUser((user, done) => done(null, user));
+ passport.deserializeUser((obj, done) => done(null, obj));
+-
+-// TODO remove?
+-// This auth strategy is no longer used. It's just kept around for auth.js#loginFacebook() (passport._strategies.facebook.userProfile)
+-// The proper fix would be to move to a general OAuth module simply to verify accessTokens
+-passport.use(new FacebookStrategy({
+-  clientID: nconf.get('FACEBOOK_KEY'),
+-  clientSecret: nconf.get('FACEBOOK_SECRET'),
+-  // callbackURL: nconf.get("BASE_URL") + "/auth/facebook/callback"
+-}, (accessToken, refreshToken, profile, done) => done(null, profile)));
+-
+-passport.use(new GoogleStrategy({
+-  clientID: nconf.get('GOOGLE_CLIENT_ID'),
+-  clientSecret: nconf.get('GOOGLE_CLIENT_SECRET'),
+-}, (accessToken, refreshToken, profile, done) => done(null, profile)));
+diff --git a/website/server/middlewares/cron.js b/website/server/middlewares/cron.js
+index 0264c985d..d0173bcd5 100644
+--- a/website/server/middlewares/cron.js
++++ b/website/server/middlewares/cron.js
+@@ -48,7 +48,6 @@ async function cronAsync (req, res) {
+   let user = res.locals.user;
+   if (!user) return null; // User might not be available when authentication is not mandatory
+ 
+-  let analytics = res.analytics;
+   let now = new Date();
+ 
+   try {
+@@ -74,7 +73,7 @@ async function cronAsync (req, res) {
+     tasks.forEach(task => tasksByType[`${task.type}s`].push(task));
+ 
+     // Run cron
+-    let progress = cron({user, tasksByType, now, daysMissed, analytics, timezoneOffsetFromUserPrefs, headers: req.headers});
++    let progress = cron({user, tasksByType, now, daysMissed, timezoneOffsetFromUserPrefs, headers: req.headers});
+ 
+     // Clear old completed todos - 30 days for free users, 90 for subscribers
+     // Do not delete challenges completed todos TODO unless the task is broken?
+diff --git a/website/server/middlewares/errorHandler.js b/website/server/middlewares/errorHandler.js
+index cb12a714c..42d736acb 100644
+--- a/website/server/middlewares/errorHandler.js
++++ b/website/server/middlewares/errorHandler.js
+@@ -50,12 +50,6 @@ module.exports = function errorHandler (err, req, res, next) { // eslint-disable
+     });
+   }
+ 
+-  // Handle Stripe Card errors errors (can be safely shown to the users)
+-  // https://stripe.com/docs/api/node#errors
+-  if (err.type === 'StripeCardError') {
+-    responseErr = new BadRequest(err.message);
+-  }
+-
+   if (!responseErr || responseErr.httpCode >= 500) {
+     // Try to identify the error...
+     // ...
+diff --git a/website/server/middlewares/notFound.js b/website/server/middlewares/notFound.js
+index adf74bcbd..67f63b364 100644
+--- a/website/server/middlewares/notFound.js
++++ b/website/server/middlewares/notFound.js
+@@ -7,10 +7,6 @@ import { serveClient } from '../libs/client';
+ // in which case, respond with a 404 error.
+ const TOP_LEVEL_ROUTES = [
+   '/api',
+-  '/amazon',
+-  '/iap',
+-  '/paypal',
+-  '/stripe',
+   '/export',
+   '/email',
+   '/qr-code',
+diff --git a/website/server/middlewares/v3.js b/website/server/middlewares/v3.js
+index 1829c41af..132948e0b 100644
+--- a/website/server/middlewares/v3.js
++++ b/website/server/middlewares/v3.js
+@@ -1,6 +1,5 @@
+ import express from 'express';
+ import expressValidator from 'express-validator';
+-import analytics from './analytics';
+ import setupBody from './setupBody';
+ import routes from '../libs/routes';
+ import path from 'path';
+@@ -15,7 +14,6 @@ v3app.set('view engine', 'pug');
+ v3app.set('views', `${__dirname}/../../views`);
+ 
+ v3app.use(expressValidator());
+-v3app.use(analytics);
+ v3app.use(setupBody);
+ 
+ const topLevelRouter = express.Router(); // eslint-disable-line new-cap
+diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
+index 6d748c72c..2d50bec4b 100644
+--- a/website/server/models/challenge.js
++++ b/website/server/models/challenge.js
+@@ -11,7 +11,6 @@ import {
+ import { removeFromArray } from '../libs/collectionManipulators';
+ import shared from '../../common';
+ import { sendTxn as txnEmail } from '../libs/email';
+-import { sendNotification as sendPushNotification } from '../libs/pushNotifications';
+ import { TaskQueue } from 'cwait';
+ import { syncableAttrs, setNextDue } from '../libs/taskManager';
+ 
+@@ -326,14 +325,6 @@ schema.methods.closeChal = async function closeChal (broken = {}) {
+         {name: 'CHALLENGE_NAME', content: challenge.name},
+       ]);
+     }
+-    if (savedWinner.preferences.pushNotifications.wonChallenge !== false) {
+-      sendPushNotification(savedWinner,
+-        {
+-          title: challenge.name,
+-          message: shared.i18n.t('wonChallenge'),
+-          identifier: 'wonChallenge',
+-        });
+-    }
+   }
+ 
+   // Run some operations in the background withouth blocking the thread
+diff --git a/website/server/models/coupon.js b/website/server/models/coupon.js
+index c973ffb76..2d96d9217 100644
+--- a/website/server/models/coupon.js
++++ b/website/server/models/coupon.js
+@@ -12,7 +12,7 @@ import {
+ 
+ export let schema = new mongoose.Schema({
+   _id: {type: String, default: couponCode.generate, required: true},
+-  event: {type: String, enum: ['wondercon', 'google_6mo']},
++  event: {type: String, enum: ['wondercon']},
+   user: {type: String, ref: 'User'},
+ }, {
+   strict: true,
+diff --git a/website/server/models/group.js b/website/server/models/group.js
+index 67f3fe39a..85ac48f99 100644
+--- a/website/server/models/group.js
++++ b/website/server/models/group.js
+@@ -21,16 +21,12 @@ import baseModel from '../libs/baseModel';
+ import { sendTxn as sendTxnEmail } from '../libs/email';
+ import Bluebird from 'bluebird';
+ import nconf from 'nconf';
+-import { sendNotification as sendPushNotification } from '../libs/pushNotifications';
+-import pusher from '../libs/pusher';
+ import {
+   syncableAttrs,
+ } from '../libs/taskManager';
+ import {
+   schema as SubscriptionPlanSchema,
+ } from './subscriptionPlan';
+-import amazonPayments from '../libs/amazonPayments';
+-import stripePayments from '../libs/stripePayments';
+ import { model as UserNotification } from './userNotification';
+ 
+ const questScrolls = shared.content.quests;
+@@ -584,12 +580,6 @@ schema.methods.sendChat = function sendChat (message, user, metaData) {
+     User.update(query, lastSeenUpdateAddNew, {multi: true}).exec();
+   });
+ 
+-  // If the message being sent is a system message (not gone through the api.postChat controller)
+-  // then notify Pusher about it (only parties for now)
+-  if (newMessage.uuid === 'system' && this.privacy === 'private' && this.type === 'party') {
+-    pusher.trigger(`presence-group-${this._id}`, 'new-chat', newMessage);
+-  }
+-
+   return newMessage;
+ };
+ 
+@@ -680,7 +670,7 @@ schema.methods.startQuest = async function startQuest (user) {
+   // send notifications in the background without blocking
+   User.find(
+     { _id: { $in: nonUserQuestMembers } },
+-    'party.quest items.quests auth.facebook auth.local preferences.emailNotifications preferences.pushNotifications pushDevices profile.name'
++    'party.quest items.quests auth.local preferences.emailNotifications pushDevices profile.name'
+   ).exec().then((membersToNotify) => {
+     let membersToEmail = _.filter(membersToNotify, (member) => {
+       // send push notifications and filter users that disabled emails
+@@ -690,19 +680,6 @@ schema.methods.startQuest = async function startQuest (user) {
+     sendTxnEmail(membersToEmail, 'quest-started', [
+       { name: 'PARTY_URL', content: '/party' },
+     ]);
+-    let membersToPush = _.filter(membersToNotify, (member) => {
+-      // send push notifications and filter users that disabled emails
+-      return member.preferences.pushNotifications.questStarted !== false &&
+-        member._id !== user._id;
+-    });
+-    _.each(membersToPush, (member) => {
+-      sendPushNotification(member,
+-        {
+-          title: quest.text(),
+-          message: `${shared.i18n.t('questStarted')}: ${quest.text()}`,
+-          identifier: 'questStarted',
+-        });
+-    });
+   });
+   this.sendChat(`\`Your quest, ${quest.text('en')}, has started.\``, null, {
+     participatingMembers: this.getParticipatingQuestMembers().join(', '),
+@@ -1145,12 +1122,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+     promises.push(User.update({_id: user._id}, {$pull: {guilds: group._id}}).exec());
+   } else {
+     promises.push(User.update({_id: user._id}, {$set: {party: {}}}).exec());
+-    // Tell the realtime clients that a user has left
+-    // If the user that left is still connected, they'll get disconnected
+-    pusher.trigger(`presence-group-${group._id}`, 'user-left', {
+-      userId: user._id,
+-    });
+-
+     update.$unset = {[`quest.members.${user._id}`]: 1};
+   }
+ 
+@@ -1416,12 +1387,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+     members = await User.find({'party._id': this._id}).select('_id').exec();
+   }
+   this.memberCount = members.length;
+-
+-  if (this.purchased.plan.paymentMethod === stripePayments.constants.PAYMENT_METHOD) {
+-    await stripePayments.chargeForAdditionalGroupMember(this);
+-  } else if (this.purchased.plan.paymentMethod === amazonPayments.constants.PAYMENT_METHOD && !removingMember) {
+-    await amazonPayments.chargeForAdditionalGroupMember(this);
+-  }
+ };
+ 
+ export let model = mongoose.model('Group', schema);
+diff --git a/website/server/models/subscriptionPlan.js b/website/server/models/subscriptionPlan.js
+index e3994c8e0..c6f8a4a17 100644
+--- a/website/server/models/subscriptionPlan.js
++++ b/website/server/models/subscriptionPlan.js
+@@ -7,18 +7,18 @@ export let schema = new mongoose.Schema({
+   subscriptionId: String,
+   owner: {type: String, ref: 'User', validate: [validator.isUUID, 'Invalid uuid.']},
+   quantity: {type: Number, default: 1},
+-  paymentMethod: String, // enum: ['Paypal', 'Stripe', 'Gift', 'Amazon Payments', 'Google', '']}
+-  customerId: String, // Billing Agreement Id in case of Amazon Payments
++  paymentMethod: String, // enum: ['Gift', '']}
++  customerId: String,
+   dateCreated: Date,
+   dateTerminated: Date,
+   dateUpdated: Date,
+   extraMonths: {type: Number, default: 0},
+   gemsBought: {type: Number, default: 0},
+   mysteryItems: {type: Array, default: () => []},
+-  lastBillingDate: Date, // Used only for Amazon Payments to keep track of billing date
+-  additionalData: mongoose.Schema.Types.Mixed, // Example for Google: {'receipt': 'serialized receipt json', 'signature': 'signature string'}
++  lastBillingDate: Date,
++  additionalData: mongoose.Schema.Types.Mixed,
+   nextPaymentProcessing: Date, // indicates when the queue server should process this subscription again.
+-  nextBillingDate: Date, // Next time google will bill this user.
++  nextBillingDate: Date,
+   consecutive: {
+     count: {type: Number, default: 0},
+     offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
+diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
+index d77c45cb6..e4f0a4666 100644
+--- a/website/server/models/user/hooks.js
++++ b/website/server/models/user/hooks.js
+@@ -165,29 +165,11 @@ function _setUpNewUser (user) {
+   return _populateDefaultTasks(user, taskTypes);
+ }
+ 
+-function _getFacebookName (fb) {
+-  if (!fb) {
+-    return;
+-  }
+-  let possibleName = fb.displayName || fb.name || fb.username;
+-
+-  if (possibleName) {
+-    return possibleName;
+-  }
+-
+-  if (fb.first_name && fb.last_name) {
+-    return `${fb.first_name} ${fb.last_name}`;
+-  }
+-}
+-
+ function _setProfileName (user) {
+-  let google = user.auth.google;
+-
+   let localUsername = user.auth.local && user.auth.local.username;
+-  let googleUsername = google && google.displayName;
+   let anonymous = 'profile name not found';
+ 
+-  return localUsername || _getFacebookName(user.auth.facebook) || googleUsername || anonymous;
++  return localUsername || anonymous;
+ }
+ 
+ schema.pre('validate', function preValidateUser (next) {
+diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
+index fab636972..89b6da387 100644
+--- a/website/server/models/user/methods.js
++++ b/website/server/models/user/methods.js
+@@ -12,9 +12,6 @@ import { defaults, map, flatten, flow, compact, uniq, partialRight } from 'lodas
+ import { model as UserNotification } from '../userNotification';
+ import schema from './schema';
+ import payments from '../../libs/payments';
+-import amazonPayments from '../../libs/amazonPayments';
+-import stripePayments from '../../libs/stripePayments';
+-import paypalPayments from '../../libs/paypalPayments';
+ 
+ const daysSince = common.daysSince;
+ 
+@@ -191,7 +188,7 @@ schema.methods.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+  * @param  options
+  * @param  options.user  The user object who is purchasing
+  * @param  options.groupId  The id of the group purchasing a subscription
+- * @param  options.headers  The request headers (only for Amazon subscriptions)
++ * @param  options.headers  The request headers
+  * @param  options.cancellationReason  A text string to control sending an email
+  *
+  * @return a Promise from api.cancelSubscription()
+@@ -205,14 +202,6 @@ schema.methods.cancelSubscription = async function cancelSubscription (options =
+   let plan = this.purchased.plan;
+ 
+   options.user = this;
+-  if (plan.paymentMethod === amazonPayments.constants.PAYMENT_METHOD) {
+-    return await amazonPayments.cancelSubscription(options);
+-  } else if (plan.paymentMethod === stripePayments.constants.PAYMENT_METHOD) {
+-    return await stripePayments.cancelSubscription(options);
+-  } else if (plan.paymentMethod === paypalPayments.constants.PAYMENT_METHOD) {
+-    return await paypalPayments.subscribeCancel(options);
+-  }
+-  // Android and iOS subscriptions cannot be cancelled by Habitica.
+ 
+   return await payments.cancelSubscription(options);
+ };

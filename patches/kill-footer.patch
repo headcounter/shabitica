@@ -1,0 +1,108 @@
+diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
+index 3c559ee1e..5b35d07e3 100644
+--- a/website/client/components/appFooter.vue
++++ b/website/client/components/appFooter.vue
+@@ -2,103 +2,6 @@
+ .row.footer-row
+   buy-gems-modal(v-if='user')
+   //modify-inventory(v-if="isUserLoaded")
+-  footer.col-12(:class="{expanded: isExpandedFooter}")
+-    .row(v-if="isExpandedFooter")
+-      .col-12.col-md-2
+-        h3 {{ $t('footerCompany') }}
+-        ul
+-          li
+-           router-link(to='/static/features') {{ $t('companyAbout') }}
+-          li
+-            a(href='https://habitica.wordpress.com/', target='_blank') {{ $t('companyBlog') }}
+-          li
+-            a(href='http://blog.habitrpg.com/', target='_blank') {{ $t('tumblr') }}
+-          li
+-           router-link(to='/static/faq') {{ $t('FAQ') }}
+-          li
+-            a(href='http://habitica.wikia.com/wiki/Whats_New', target='_blank') {{ $t('oldNews') }}
+-          li
+-           router-link(to='/static/merch') {{ $t('merch') }}
+-          li
+-           router-link(to='/static/press-kit') {{ $t('presskit') }}
+-          li
+-           router-link(to='/static/contact') {{ $t('contactUs') }}
+-      .col-12.col-md-2
+-        h3 {{ $t('footerCommunity') }}
+-        ul
+-          li
+-            a(target="_blanck", href="/static/community-guidelines") {{ $t('communityGuidelines') }}
+-          li
+-            router-link(to='/hall/contributors') {{ $t('hall') }}
+-          li
+-            router-link(to='/groups/guild/a29da26b-37de-4a71-b0c6-48e72a900dac') {{ $t('reportBug') }}
+-          li
+-            a(href='https://trello.com/c/odmhIqyW/440-read-first-table-of-contents', target='_blank') {{ $t('requestFeature') }}
+-          li
+-            a(v-html='$t("communityExtensions")')
+-          li
+-            a(v-html='$t("communityForum")')
+-          li
+-            a(href='https://www.reddit.com/r/habitrpg/', target='_blank') {{ $t('communityReddit') }}
+-      .col-12.col-md-6
+-        .row
+-          .col-6
+-            h3 {{ $t('footerDevs') }}
+-            ul
+-              li
+-                a(href='/apidoc', target='_blank') {{ $t('APIv3') }}
+-              li
+-                a(:href="getDataDisplayToolUrl", target='_blank') {{ $t('dataDisplayTool') }}
+-              li
+-                a(href='http://habitica.wikia.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
+-              li
+-                a(href='http://devs.habitica.com/', target='_blank') {{ $t('devBlog') }}
+-        .row
+-          .col-12.col-md-10 {{ $t('donateText3') }}
+-          .col-12.col-md-2
+-            button.btn.btn-contribute(@click="donate()", v-if="user")
+-              .svg-icon.heart(v-html="icons.heart")
+-              .text {{ $t('companyDonate') }}
+-            .btn.btn-contribute(v-else)
+-              a(href='http://habitica.wikia.com/wiki/Contributing_to_Habitica', target='_blank')
+-                .svg-icon.heart(v-html="icons.heart")
+-                .text {{ $t('companyContribute') }}
+-    .row
+-      .col-12
+-        hr
+-    .row
+-      .col-12.col-md-5
+-        | © 2018 Habitica. All rights reserved.
+-        .debug.float-left(v-if="!IS_PRODUCTION && isUserLoaded")
+-          button.btn.btn-primary(@click="debugMenuShown = !debugMenuShown") Toggle Debug Menu
+-          .debug-group(v-if="debugMenuShown")
+-            a.btn.btn-secondary(@click="setHealthLow()") Health = 1
+-            a.btn.btn-secondary(@click="addMissedDay(1)") +1 Missed Day
+-            a.btn.btn-secondary(@click="addMissedDay(2)") +2 Missed Days
+-            a.btn.btn-secondary(@click="addMissedDay(8)") +8 Missed Days
+-            a.btn.btn-secondary(@click="addMissedDay(32)") +32 Missed Days
+-            a.btn.btn-secondary(@click="addTenGems()") +10 Gems
+-            a.btn.btn-secondary(@click="addHourglass()") +1 Mystic Hourglass
+-            a.btn.btn-secondary(@click="addGold()") +500GP
+-            a.btn.btn-secondary(@click="plusTenHealth()") + 10HP
+-            a.btn.btn-secondary(@click="addMana()") +MP
+-            a.btn.btn-secondary(@click="addLevelsAndGold()") +Exp +GP +MP
+-            a.btn.btn-secondary(@click="addOneLevel()") +1 Level
+-            a.btn.btn-secondary(@click="addQuestProgress()", tooltip="+1000 to boss quests. 300 items to collection quests") Quest Progress Up
+-            a.btn.btn-secondary(@click="makeAdmin()") Make Admin
+-            a.btn.btn-secondary(@click="openModifyInventoryModal()") Modify Inventory
+-      .col-12.col-md-2.text-center
+-        .logo.svg-icon(v-html='icons.gryphon')
+-      .col-12.col-md-5.text-right
+-        template(v-if="!isExpandedFooter")
+-          span
+-            a(:href="getDataDisplayToolUrl", target='_blank') {{ $t('dataDisplayTool') }}
+-          span.ml-4
+-            a(target="_blanck", href="/static/community-guidelines") {{ $t('communityGuidelines') }}
+-        span.ml-4
+-          a(target="_blanck", href="/static/privacy") {{ $t('privacy') }}
+-        span.ml-4
+-          a(target="_blanck", href="/static/terms") {{ $t('terms') }}
+ </template>
+ 
+ <style lang="scss" scoped>

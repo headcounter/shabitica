@@ -1,0 +1,18 @@
+diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
+index 29b0173f5..03988b7e8 100644
+--- a/website/server/controllers/api-v3/auth.js
++++ b/website/server/controllers/api-v3/auth.js
+@@ -139,6 +139,13 @@ api.registerLocal = {
+           passwordHashMethod: 'bcrypt',
+         },
+       },
++      'purchased.plan': {
++        planId: 'basic',
++        customerId: 'habitrpg',
++        dateCreated: new Date(),
++        dateUpdated: new Date(),
++        gemsBought: 0,
++      },
+       preferences: {
+         language: req.language,
+       },

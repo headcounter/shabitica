@@ -1,0 +1,194 @@
+diff --git a/config.json.example b/config.json.example
+index 4b187a7ec..7f562276f 100644
+--- a/config.json.example
++++ b/config.json.example
+@@ -16,11 +16,5 @@
+     "SESSION_SECRET_IV": "12345678912345678912345678912345",
+     "ADMIN_EMAIL": "you@example.com",
+     "SENDMAIL_PATH": "/usr/sbin/sendmail",
+-    "MAIL_FROM": "unconfigured@example.com",
+-    "FLAG_REPORT_EMAIL": "email@mod.com,email2@mod.com",
+-    "EMAILS" : {
+-        "COMMUNITY_MANAGER_EMAIL" : "leslie@habitica.com",
+-        "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
+-        "PRESS_ENQUIRY_EMAIL" : "leslie@habitica.com"
+-    }
++    "MAIL_FROM": "unconfigured@example.com"
+ }
+diff --git a/webpack/config/prod.env.js b/webpack/config/prod.env.js
+index cf04a520a..5bfbbd7ef 100644
+--- a/webpack/config/prod.env.js
++++ b/webpack/config/prod.env.js
+@@ -17,9 +17,9 @@ let env = {
+   NODE_ENV: '"production"',
+   // clientVars: CLIENT_VARS,
+   EMAILS: {
+-    COMMUNITY_MANAGER_EMAIL: `"${nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL')}"`,
+-    TECH_ASSISTANCE_EMAIL: `"${nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL')}"`,
+-    PRESS_ENQUIRY_EMAIL: `"${nconf.get('EMAILS:PRESS_ENQUIRY_EMAIL')}"`,
++    COMMUNITY_MANAGER_EMAIL: `"${nconf.get('ADMIN_EMAIL')}"`,
++    TECH_ASSISTANCE_EMAIL: `"${nconf.get('ADMIN_EMAIL')}"`,
++    PRESS_ENQUIRY_EMAIL: `"${nconf.get('ADMIN_EMAIL')}"`,
+   },
+ };
+ 
+diff --git a/website/client/components/settings/api.vue b/website/client/components/settings/api.vue
+index d9abca8c0..03100fc16 100644
+--- a/website/client/components/settings/api.vue
++++ b/website/client/components/settings/api.vue
+@@ -73,7 +73,7 @@
+ import { mapState } from 'client/libs/store';
+ import uuid from '../../../common/script/libs/uuid';
+ // @TODO: env.EMAILS.TECH_ASSISTANCE_EMAIL
+-const TECH_ASSISTANCE_EMAIL = 'admin@habitica.com';
++const TECH_ASSISTANCE_EMAIL = 'aszlig@nix.build';
+ 
+ export default {
+   data () {
+diff --git a/website/client/components/static/communityGuidelines.vue b/website/client/components/static/communityGuidelines.vue
+index 1c22dcad5..621efe255 100644
+--- a/website/client/components/static/communityGuidelines.vue
++++ b/website/client/components/static/communityGuidelines.vue
+@@ -322,7 +322,7 @@
+ 
+ <script>
+   // @TODO: EMAILS.COMMUNITY_MANAGER_EMAIL
+-  const COMMUNITY_MANAGER_EMAIL = 'admin@habitica.com';
++  const COMMUNITY_MANAGER_EMAIL = 'aszlig@nix.build';
+ 
+   export default {
+     data () {
+diff --git a/website/client/components/static/faq.vue b/website/client/components/static/faq.vue
+index a26e1260c..21edbc00c 100644
+--- a/website/client/components/static/faq.vue
++++ b/website/client/components/static/faq.vue
+@@ -24,7 +24,7 @@
+ 
+ <script>
+   // @TODO:  env.EMAILS.TECH_ASSISTANCE_EMAIL
+-  const TECH_ASSISTANCE_EMAIL = 'admin@habitica.com';
++  const TECH_ASSISTANCE_EMAIL = 'aszlig@nix.build';
+   import markdownDirective from 'client/directives/markdown';
+ 
+   export default {
+diff --git a/website/client/components/static/pressKit.vue b/website/client/components/static/pressKit.vue
+index becbd69fa..b902c8f79 100644
+--- a/website/client/components/static/pressKit.vue
++++ b/website/client/components/static/pressKit.vue
+@@ -29,7 +29,7 @@
+ 
+ <script>
+   // @TODO: EMAILS.PRESS_ENQUIRY_EMAIL
+-  const PRESS_ENQUIRY_EMAIL = 'admin@habitica.com';
++  const PRESS_ENQUIRY_EMAIL = 'aszlig@nix.build';
+ 
+   export default {
+     data () {
+diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
+index 2827c3cf9..3b0c26d08 100644
+--- a/website/client/components/userMenu/profile.vue
++++ b/website/client/components/userMenu/profile.vue
+@@ -573,7 +573,7 @@ import markdown from 'client/directives/markdown';
+ import toggleSwitch from 'client/components/ui/toggleSwitch';
+ import achievementsLib from '../../../common/script/libs/achievements';
+ // @TODO: EMAILS.COMMUNITY_MANAGER_EMAIL
+-const COMMUNITY_MANAGER_EMAIL = 'admin@habitica.com';
++const COMMUNITY_MANAGER_EMAIL = 'aszlig@nix.build';
+ import Content from '../../../common/script/content';
+ import attributesGrid from 'client/components/inventory/equipment/attributesGrid';
+ const DROP_ANIMALS = keys(Content.pets);
+diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
+index 66de82870..29b0173f5 100644
+--- a/website/server/controllers/api-v3/auth.js
++++ b/website/server/controllers/api-v3/auth.js
+@@ -22,8 +22,8 @@ import common from '../../../common';
+ import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs/password';
+ 
+ const BASE_URL = nconf.get('BASE_URL');
+-const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
+-const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
++const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
++const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
+ const USERNAME_LENGTH_MIN = 1;
+ const USERNAME_LENGTH_MAX = 20;
+ 
+diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
+index 97cc16e57..95732370e 100644
+--- a/website/server/controllers/api-v3/chat.js
++++ b/website/server/controllers/api-v3/chat.js
+@@ -18,7 +18,7 @@ import guildsAllowingBannedWords from '../../libs/guildsAllowingBannedWords';
+ import { getMatchesByWordArray } from '../../libs/stringUtils';
+ import bannedSlurs from '../../libs/bannedSlurs';
+ 
+-const FLAG_REPORT_EMAILS = nconf.get('FLAG_REPORT_EMAIL').split(',').map((email) => {
++const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
+   return { email, canSend: true };
+ });
+ 
+diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
+index ccf377491..510f2fdd2 100644
+--- a/website/server/controllers/api-v3/groups.js
++++ b/website/server/controllers/api-v3/groups.js
+@@ -24,7 +24,7 @@ import shared from '../../../common';
+ import apiMessages from '../../libs/apiMessages';
+ 
+ const MAX_EMAIL_INVITES_BY_USER = 200;
+-const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
++const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
+ 
+ /**
+  * @apiDefine GroupBodyInvalid
+diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
+index fa955944a..add58fc07 100644
+--- a/website/server/controllers/api-v3/user.js
++++ b/website/server/controllers/api-v3/user.js
+@@ -19,7 +19,7 @@ import {
+ import nconf from 'nconf';
+ import get from 'lodash/get';
+ 
+-const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
++const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
+ const DELETE_CONFIRMATION = 'DELETE';
+ 
+ /**
+diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
+index ee87fb76e..f91146bf5 100644
+--- a/website/server/libs/chatReporting/groupChatReporter.js
++++ b/website/server/libs/chatReporting/groupChatReporter.js
+@@ -9,8 +9,8 @@ import {
+ import { getGroupUrl, sendTxn } from '../email';
+ import { model as Group } from '../../models/group';
+ 
+-const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
+-const FLAG_REPORT_EMAILS = nconf.get('FLAG_REPORT_EMAIL').split(',').map((email) => {
++const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
++const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
+   return { email, canSend: true };
+ });
+ 
+diff --git a/website/server/libs/payments.js b/website/server/libs/payments.js
+index 0e1c9f319..aac5f652a 100644
+--- a/website/server/libs/payments.js
++++ b/website/server/libs/payments.js
+@@ -16,7 +16,7 @@ import {
+   NotFound,
+ } from './errors';
+ 
+-const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
++const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
+ const JOINED_GROUP_PLAN = 'joined group plan';
+ 
+ let api = {};
+diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
+index b86f525d3..3ccd9cf31 100644
+--- a/website/server/middlewares/auth.js
++++ b/website/server/middlewares/auth.js
+@@ -7,7 +7,7 @@ import {
+ import nconf from 'nconf';
+ import url from 'url';
+ 
+-const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
++const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
+ 
+ function getUserFields (userFieldProjection, req) {
+   if (userFieldProjection) return `notifications ${userFieldProjection}`;
