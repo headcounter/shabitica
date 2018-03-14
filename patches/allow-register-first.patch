@@ -1,0 +1,24 @@
+diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
+index 9ef90f8cd..8d1e41772 100644
+--- a/website/server/controllers/api-v3/auth.js
++++ b/website/server/controllers/api-v3/auth.js
+@@ -153,15 +153,17 @@ api.registerLocal = {
+       },
+     };
+ 
++    let hasUsers = Boolean(await User.findOne().exec());
++
+     newUser = new User(newUser);
+     newUser.registeredThrough = req.headers['x-client']; // Not saved, used to create the correct tasks based on the device used
+ 
+     // we check for partyInvite for backward compatibility
+     if (req.query.groupInvite || req.query.partyInvite) {
+       let success = await _handleGroupInvitation(newUser, req.query.groupInvite || req.query.partyInvite);
+-      if (!success)
++      if (hasUsers && !success)
+         throw new NotAuthorized(res.t('inviteOnly'));
+-    } else {
++    } else if (hasUsers) {
+       throw new NotAuthorized(res.t('inviteOnly'));
+     }
+ 

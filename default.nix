@@ -136,6 +136,9 @@ let
       # This thing takes way too much space, so let's remove it.
       patch -p1 < ${patches/kill-footer.patch}
 
+      # Registration is allowed for the first user of the instance.
+      patch -p1 < ${patches/allow-register-first.patch}
+
       echo "checking whether we have external services in the code..." >&2
       extServices="$(
         eval find . $excludedCanaryPaths -o -type f \
