@@ -139,6 +139,9 @@ let
       # Registration is allowed for the first user of the instance.
       patch -p1 < ${patches/allow-register-first.patch}
 
+      # Don't try to charge for group plans.
+      patch -p1 < ${patches/free-group-plans.patch}
+
       echo "checking whether we have external services in the code..." >&2
       extServices="$(
         eval find . $excludedCanaryPaths -o -type f \
@@ -154,6 +157,7 @@ let
         | grep -v 'api-v3/tasks\.js: *//.*pushNotif' \
         | grep -v 'user/schema\.js: *pushNotifications:' \
         | grep -v 'user/methods\.js:schema\.statics\.pushNotification' \
+        | grep -v 'api-v3/groups.js:.*payments' \
         || :)"
 
       if [ -n "$extServicesWithoutFalsePositives" ]; then

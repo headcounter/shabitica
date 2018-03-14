@@ -1,0 +1,329 @@
+diff --git a/website/client/components/group-plans/index.vue b/website/client/components/group-plans/index.vue
+index 7674d4b6f..82c2825f4 100644
+--- a/website/client/components/group-plans/index.vue
++++ b/website/client/components/group-plans/index.vue
+@@ -6,11 +6,6 @@
+       exact, :class="{'active': $route.name === 'groupPlanDetailTaskInformation'}") {{ $t('groupTaskBoard') }}
+     router-link.nav-link(:to="{name: 'groupPlanDetailInformation', params: {groupId}}",
+       exact, :class="{'active': $route.name === 'groupPlanDetailInformation'}") {{ $t('groupInformation') }}
+-    router-link.nav-link(
+-      v-if='isLeader',
+-      :to="{name: 'groupPlanBilling', params: {groupId}}",
+-      exact,
+-      :class="{'active': $route.name === 'groupPlanBilling'}") {{ $t('groupBilling') }}
+ 
+   .col-12
+     router-view
+diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
+index 07c7f6b17..d38ebc396 100644
+--- a/website/client/components/groups/groupPlan.vue
++++ b/website/client/components/groups/groupPlan.vue
+@@ -29,21 +29,8 @@ div
+             h2 In-Game Benefits
+             p Group members get an exclusive Jackalope Mount, as well as full subscription benefits, including special monthly equipment sets and the ability to buy gems with gold.
+ 
+-    #upgrading-group.container.payment-options(v-if='upgradingGroup._id')
++    .container.upgrade-group(v-if='upgradingGroup._id')
+       h1.text-center.purple-header Are you ready to upgrade?
+-      .row
+-        .col-12.text-center
+-          .purple-box
+-            .amount-section
+-              .dollar $
+-              .number 9
+-              .name Group Owner Subscription
+-            .plus
+-              .svg-icon(v-html="icons.positiveIcon")
+-            .amount-section
+-              .dollar $
+-              .number 3
+-              .name Each Individual Group Member
+ 
+     .container.col-6.offset-3.create-option(v-if='!upgradingGroup._id')
+       .row
+@@ -51,23 +38,8 @@ div
+       .row
+         .col-12.text-center
+           button.btn.btn-primary.create-group(@click='launchModal("create")') Create Your New Group
+-      .row.pricing
+-        .col-5
+-          .dollar $
+-          .number 9
+-          .name
+-            div Group Owner
+-            div Subscription
+-        .col-1
+-          .plus +
+-        .col-6
+-          .dollar $
+-          .number 3
+-          .name
+-            div Each Additional
+-            div Member
+ 
+-  b-modal#group-plan-modal(title="Select Payment", size='md', hide-footer=true)
++  b-modal#group-plan-modal(:title="$t('createAGroup')", size='md', hide-footer=true)
+     .col-12(v-if='activePage === PAGES.CREATE_GROUP')
+       .form-group
+         label.control-label(for='new-group-name') Name
+@@ -90,42 +62,6 @@ div
+ </template>
+ 
+ <style lang="scss" scoped>
+-  #upgrading-group {
+-    .amount-section {
+-      position: relative;
+-    }
+-
+-    .dollar {
+-      position: absolute;
+-      left: -1em;
+-      top: 1em;
+-    }
+-
+-    .purple-box {
+-      color: #bda8ff;
+-      margin-bottom: 2em;
+-    }
+-
+-    .number {
+-      font-weight: bold;
+-      color: #fff;
+-    }
+-
+-    .payment-button {
+-      display: block;
+-      margin: 0 auto;
+-      margin-bottom: 1em;
+-    }
+-
+-    .plus .svg-icon{
+-      width: 24px;
+-    }
+-
+-    .payment-providers {
+-      width: 350px;
+-    }
+-  }
+-
+   .header {
+     margin-bottom: 3em;
+     margin-top: 4em;
+@@ -189,101 +125,22 @@ div
+     height: 96px;
+   }
+ 
++  .upgrade-group {
++    margin-bottom: 4em;
++  }
++
+   .purple-header {
+     color: #6133b4;
+     font-size: 48px;
+     margin-top: 1em;
+   }
+-
+-  .pricing {
+-    margin-top: 2em;
+-    margin-bottom: 4em;
+-
+-    .dollar, .number, .name {
+-      display: inline-block;
+-      vertical-align: bottom;
+-      color: #a5a1ac;
+-    }
+-
+-    .plus {
+-      font-size: 34px;
+-      color: #a5a1ac;
+-    }
+-
+-    .dollar {
+-      margin-bottom: 1.5em;
+-      font-size: 32px;
+-      font-weight: bold;
+-    }
+-
+-    .name {
+-      font-size: 24px;
+-      margin-bottom: .8em;
+-      margin-left: .5em;
+-    }
+-
+-    .number {
+-      font-size: 72px;
+-      font-weight: bolder;
+-    }
+-  }
+-
+-  .payment-options {
+-    margin-bottom: 4em;
+-
+-    .purple-box {
+-      background-color: #4f2a93;
+-      color: #fff;
+-      padding: .5em;
+-      border-radius: 8px;
+-      width: 200px;
+-      height: 215px;
+-
+-      .dollar {
+-      }
+-
+-      .number {
+-        font-size: 60px;
+-      }
+-
+-      .name {
+-        width: 100px;
+-        margin-left: .3em;
+-      }
+-
+-      .plus {
+-        width: 100%;
+-        text-align: center;
+-      }
+-
+-      div {
+-        display: inline-block;
+-      }
+-    }
+-
+-    .box, .purple-box {
+-      display: inline-block;
+-      vertical-align: bottom;
+-    }
+-  }
+-
+-  .payment-button {
+-    width: 200px;
+-    height: 80px;
+-    margin-bottom: .5em;
+-    padding: .5em;
+-    display: block;
+-  }
+-
+-  .payment-button:hover {
+-    cursor: pointer;
+-  }
+ </style>
+ 
+ <script>
+ import { mapState } from 'client/libs/store';
+ import group from 'assets/svg/group.svg';
+ import positiveIcon from 'assets/svg/positive.svg';
++import axios from 'axios';
+ 
+ export default {
+   mixins: [],
+@@ -296,9 +153,7 @@ export default {
+       PAGES: {
+         CREATE_GROUP: 'create-group',
+         UPGRADE_GROUP: 'upgrade-group',
+-        PAY: 'pay',
+       },
+-      paymentMethod: '',
+       newGroup: {
+         type: 'guild',
+         privacy: 'private',
+@@ -333,20 +188,25 @@ export default {
+       this.activePage = page;
+       window.scrollTo(0, 0);
+     },
+-    createGroup () {
+-      this.changePage(this.PAGES.PAY);
+-    },
+-    pay (paymentMethod) {
+-      let subscriptionKey = 'group_monthly'; // @TODO: Get from content API?
+-      let paymentData = {
+-        subscription: subscriptionKey,
+-        coupon: null,
+-      };
+-
++    async createGroup () {
+       if (this.upgradingGroup && this.upgradingGroup._id) {
+-        paymentData.groupId = this.upgradingGroup._id;
++        this.$router.push(
++          `/group-plans/${this.upgradingGroup._id}/task-information`
++        );
+       } else {
+-        paymentData.groupToCreate = this.newGroup;
++        let response = await axios.post('/api/v3/groups/create-plan', {
++          groupToCreate: this.newGroup,
++        });
++
++        if (response.status >= 400) {
++          alert(`Error: ${response.message}`);
++          return;
++        }
++
++        let newGroup = response.data.data;
++        this.user.guilds.push(newGroup._id);
++        this.$store.state.groupPlans.push(newGroup);
++        this.$router.push(`/group-plans/${newGroup._id}/task-information`);
+       }
+     },
+   },
+diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
+index 510f2fdd2..10a7d3fae 100644
+--- a/website/server/controllers/api-v3/groups.js
++++ b/website/server/controllers/api-v3/groups.js
+@@ -22,6 +22,7 @@ import { encrypt } from '../../libs/encryption';
+ import common from '../../../common';
+ import shared from '../../../common';
+ import apiMessages from '../../libs/apiMessages';
++import payments from '../../libs/payments';
+ 
+ const MAX_EMAIL_INVITES_BY_USER = 200;
+ const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
+@@ -163,8 +164,6 @@ api.createGroupPlan = {
+     let user = res.locals.user;
+     let group = new Group(Group.sanitize(req.body.groupToCreate));
+ 
+-    req.checkBody('paymentType', res.t('paymentTypeRequired')).notEmpty();
+-
+     let validationErrors = req.validationErrors();
+     if (validationErrors) throw validationErrors;
+ 
+@@ -174,6 +173,18 @@ api.createGroupPlan = {
+     user.guilds.push(group._id);
+ 
+     let results = await Bluebird.all([user.save(), group.save()]);
++
++    await payments.createSubscription({
++      user,
++      customerId: 'Gift',
++      paymentMethod: '',
++      sub: {
++        key: 'group_monthly',
++        quantity: 100000,
++      },
++      groupId: group.groupId,
++    });
++
+     let savedGroup = results[1];
+ 
+     // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
+diff --git a/website/server/models/group.js b/website/server/models/group.js
+index 85ac48f99..94932dafb 100644
+--- a/website/server/models/group.js
++++ b/website/server/models/group.js
+@@ -1368,15 +1368,13 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
+ };
+ 
+ schema.methods.isSubscribed = function isSubscribed () {
+-  let now = new Date();
+   let plan = this.purchased.plan;
+-  return plan && plan.customerId && (!plan.dateTerminated || moment(plan.dateTerminated).isAfter(now));
++  return plan && plan.customerId;
+ };
+ 
+ schema.methods.hasNotCancelled = function hasNotCancelled () {
+-  let plan = this.purchased.plan;
+-  return this.isSubscribed() && !plan.dateTerminated;
+-};
++  return this.isSubscribed();
++}
+ 
+ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember) {
+   // Recheck the group plan count
