@@ -45,6 +45,7 @@ let
     imports = [ ./. zshModule ];
 
     habitica.baseURL = "http://localhost:3000";
+    habitica.config.ENABLE_CONSOLE_LOGS_IN_PROD = "true";
 
     environment.systemPackages = [
       pkgs.htop
