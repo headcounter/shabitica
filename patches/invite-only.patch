@@ -44,13 +44,27 @@ index 75849de2c..48b4f51f3 100644
      methods: {
        validateEmail (email) {
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index d57ef6e1e..66de82870 100644
+index d57ef6e1e..45240df60 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
-@@ -150,6 +150,8 @@ api.registerLocal = {
+@@ -62,7 +62,9 @@ async function _handleGroupInvitation (user, invite) {
+     }
+   } catch (err) {
+     logger.error(err);
++    return false;
+   }
++  return true;
+ }
+ 
+ function hasBackupAuth (user, networkToRemove) {
+@@ -149,7 +151,11 @@ api.registerLocal = {
+ 
      // we check for partyInvite for backward compatibility
      if (req.query.groupInvite || req.query.partyInvite) {
-       await _handleGroupInvitation(newUser, req.query.groupInvite || req.query.partyInvite);
+-      await _handleGroupInvitation(newUser, req.query.groupInvite || req.query.partyInvite);
++      let success = await _handleGroupInvitation(newUser, req.query.groupInvite || req.query.partyInvite);
++      if (!success)
++        throw new NotAuthorized(res.t('inviteOnly'));
 +    } else {
 +      throw new NotAuthorized(res.t('inviteOnly'));
      }
