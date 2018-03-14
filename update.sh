@@ -13,7 +13,7 @@ get_package_json() {
   local srcpath="$1"
 
   local habitica="{\"habitica\": \"file:$srcpath\"}"
-  local tools="\"gulp-cli\", \"mocha\", \"node-pre-gyp\""
+  local tools="\"gulp-cli\", \"mocha\", {\"node-pre-gyp\": \"^0.8.0\"}"
   echo "[$tools, \"google-fonts-offline\", $habitica]"
 }
 

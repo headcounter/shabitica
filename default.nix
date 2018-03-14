@@ -206,7 +206,7 @@ let
       }))
     ];
     nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [
-      nodePackages.node-pre-gyp
+      (getPackage "node-pre-gyp")
       (getPackage "gulp")
       nodePackages.mocha
       pkgs.pkgconfig
