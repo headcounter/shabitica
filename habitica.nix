@@ -24,6 +24,41 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
     )
   '';
 
+  patches = [
+    # Fix infinite redirection occuring whenever the BASE_URL contains a port
+    # number.
+    patches/redirect-fix-port.patch
+
+    # Everybody gets a lifetime subscription.
+    patches/subscriptions4all.patch
+
+    # Apply the patch afterwards, so that we can keep its size small:
+    patches/remove-external-services.patch
+
+    # Don't allow anonymous users to register, we only want to invite people.
+    patches/invite-only.patch
+
+    # Poor mans sendmail implementation, because the official Habitica instance
+    # uses MailChimp and it appears that the templates reside on their account.
+    patches/sendmail.patch
+
+    # Official Habitica has different mail addresses for different positions,
+    # but for a private instance this is not really necessary. So let's use
+    # ADMIN_EMAIL everywhere.
+    patches/one-admin-mailaddr.patch
+
+    # This thing takes way too much space, so let's remove it.
+    patches/kill-footer.patch
+
+    # Registration is allowed for the first user of the instance.
+    patches/allow-register-first.patch
+
+    # Don't try to charge for group plans.
+    patches/free-group-plans.patch
+  ];
+
+  patchPhase = ":";
+
   # We don't want to have anything in the code referencing any of these
   # words/regexes:
   disallowedCanaries = lib.concatStringsSep "\\|" [
@@ -79,9 +114,6 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
   ];
 
   preRebuild = (drv.preRebuild or "") + ''
-    patch -p1 < ${patches/redirect-fix-port.patch}
-    patch -p1 < ${patches/subscriptions4all.patch}
-
     # Kill off files we do not want to have, as they redirect to external
     # services:
     ${lib.concatMapStrings (path: ''
@@ -114,30 +146,10 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
       "website/server/middlewares/analytics.js"
     ]}
 
-    # Apply the patch afterwards, so that we can keep its size small:
-    patch -p1 < ${patches/remove-external-services.patch}
-
-    # Don't allow anonymous users to register, we only want to invite people.
-    patch -p1 < ${patches/invite-only.patch}
-
-    # Poor mans sendmail implementation, because the official Habitica
-    # instance uses MailChimp and it appears that the templates reside on
-    # their account.
-    patch -p1 < ${patches/sendmail.patch}
-
-    # Official Habitica has different mail addresses for different positions,
-    # but for a private instance this is not really necessary. So let's use
-    # ADMIN_EMAIL everywhere.
-    patch -p1 < ${patches/one-admin-mailaddr.patch}
-
-    # This thing takes way too much space, so let's remove it.
-    patch -p1 < ${patches/kill-footer.patch}
-
-    # Registration is allowed for the first user of the instance.
-    patch -p1 < ${patches/allow-register-first.patch}
-
-    # Don't try to charge for group plans.
-    patch -p1 < ${patches/free-group-plans.patch}
+    for patch in $patches; do
+      echo "applying patch $patch" >&2
+      patch -p1 < "$patch"
+    done
 
     echo "checking whether we have external services in the code..." >&2
     extServices="$(
