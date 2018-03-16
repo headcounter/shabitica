@@ -44,6 +44,7 @@ let
   in {
     imports = [ ./. zshModule ];
 
+    habitica.hostName = "localhost";
     habitica.baseURL = "http://localhost:3000";
     habitica.config.ENABLE_CONSOLE_LOGS_IN_PROD = "true";
 
@@ -147,25 +148,6 @@ let
     systemd.services."serial-getty@hvc0".enable = false;
 
     services.nginx.enable = true;
-    services.nginx.virtualHosts."localhost".locations = {
-      "/".proxyPass = "http://unix:/run/habitica.sock:";
-      "/".extraConfig = ''
-        proxy_http_version 1.1;
-        proxy_set_header   X-Real-IP        $remote_addr;
-        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
-        proxy_set_header   X-NginX-Proxy    true;
-        proxy_set_header   Host             $http_host;
-        proxy_set_header   Upgrade          $http_upgrade;
-        proxy_redirect     off;
-      '';
-
-      "/static/js".alias = "${config.habitica.staticPath}/js";
-      "/static/css".alias = "${config.habitica.staticPath}/css";
-      "/static/svg".alias = "${config.habitica.staticPath}/svg";
-      "/static/images".alias = "${config.habitica.staticPath}/images";
-
-      "/apidoc".alias = config.habitica.apiDocPath;
-    };
 
     environment.etc."ssh/authorized_keys.d/root" = lib.mkForce {
       mode = "0444";
