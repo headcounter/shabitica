@@ -265,7 +265,7 @@ index 07c7f6b17..d38ebc396 100644
      },
    },
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 510f2fdd2..10a7d3fae 100644
+index 510f2fdd2..206bfab23 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,6 +22,7 @@ import { encrypt } from '../../libs/encryption';
@@ -292,13 +292,13 @@ index 510f2fdd2..10a7d3fae 100644
 +
 +    await payments.createSubscription({
 +      user,
-+      customerId: 'Gift',
++      customerId: 'habitrpg',
 +      paymentMethod: '',
 +      sub: {
 +        key: 'group_monthly',
 +        quantity: 100000,
 +      },
-+      groupId: group.groupId,
++      groupId: group._id,
 +    });
 +
      let savedGroup = results[1];
