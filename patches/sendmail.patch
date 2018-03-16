@@ -29,7 +29,7 @@ index 3181d70c5..4b187a7ec 100644
          "COMMUNITY_MANAGER_EMAIL" : "leslie@habitica.com",
          "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
 diff --git a/website/server/libs/email.js b/website/server/libs/email.js
-index 9d94b3fda..7512d9290 100644
+index 9d94b3fda..f51ba04fd 100644
 --- a/website/server/libs/email.js
 +++ b/website/server/libs/email.js
 @@ -7,21 +7,13 @@ import logger from './logger';
@@ -94,7 +94,7 @@ index 9d94b3fda..7512d9290 100644
 +Habitica
 +Unsubscribe: ${BASE_URL}${unsub}`;
 +
-+      if (emailType == "invite-friend") {
++      if (emailType == "invite-friend" || emailType == "invite-friend-guild") {
 +        let path = variables.find((o) => o.name == "LINK").content;
 +        let inviter = variables.find((o) => o.name == "INVITER").content;
 +        subject = `Invitation to Habitica from ${inviter}`;
