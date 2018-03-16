@@ -351,7 +351,7 @@ in {
         description = "Habitica";
         after = [ "habitica-init.service" "habitica-db.service" ];
 
-        environment = config.habitica.config;
+        environment = lib.mapAttrs (lib.const toString) config.habitica.config;
 
         serviceConfig = {
           ExecStart = let
