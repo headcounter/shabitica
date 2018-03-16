@@ -98,7 +98,7 @@ index 2827c3cf9..3b0c26d08 100644
  import attributesGrid from 'client/components/inventory/equipment/attributesGrid';
  const DROP_ANIMALS = keys(Content.pets);
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 66de82870..29b0173f5 100644
+index 3c93cba61..9ef90f8cd 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -22,8 +22,8 @@ import common from '../../../common';
@@ -152,7 +152,7 @@ index fa955944a..add58fc07 100644
  
  /**
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index ee87fb76e..f91146bf5 100644
+index 4c1a76e33..a04478742 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
 @@ -9,8 +9,8 @@ import {

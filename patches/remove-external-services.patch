@@ -1,5 +1,5 @@
 diff --git a/config.json.example b/config.json.example
-index efaa9298f..3181d70c5 100644
+index b2549efdb..3181d70c5 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -4,16 +4,6 @@
@@ -19,7 +19,7 @@ index efaa9298f..3181d70c5 100644
      "NODE_DB_URI":"mongodb://localhost/habitrpg",
      "TEST_DB_URI":"mongodb://localhost/habitrpg_test",
      "NODE_ENV":"development",
-@@ -31,86 +21,20 @@
+@@ -31,87 +21,20 @@
      "SMTP_HOST":"example.com",
      "SMTP_PORT": 587,
      "SMTP_TLS": true,
@@ -104,7 +104,9 @@ index efaa9298f..3181d70c5 100644
 -      "CLOUDKARAFKA_USERNAME": "",
 -      "CLOUDKARAFKA_PASSWORD": "",
 -      "CLOUDKARAFKA_TOPIC_PREFIX": ""
-     }
+-    },
+-    "STACK_IMPACT_KEY": "aaaabbbbccccddddeeeeffffgggg111100002222"
++    }
  }
 diff --git a/webpack/config/index.js b/webpack/config/index.js
 index ff54852be..c57519537 100644
@@ -165,7 +167,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index c1c877dfa..9b42c35f8 100644
+index 55400adec..a49180cb0 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -216,10 +218,20 @@ index c1c877dfa..9b42c35f8 100644
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -327,17 +317,6 @@ export default {
-     this.$root.$on('bv::show::modal', (modalId, data = {}) => {
-       if (data.fromRoot) return;
+@@ -344,8 +334,6 @@ export default {
+         if (data.fromRoot) return;
+         const modalStack = this.$store.state.modalStack;
  
+-        this.trackGemPurchase(modalId, data);
+-
+         // Add new modal to the stack
+         const prev = modalStack[modalStack.length - 1];
+         const prevId = prev ? prev.modalId : undefined;
+@@ -400,18 +388,6 @@ export default {
+ 
+       return true;
+     },
+-    trackGemPurchase (modalId, data) {
 -      // Track opening of gems modal unless it's been already tracked
 -      // For example the gems button in the menu already tracks the event by itself
 -      if (modalId === 'buy-gems' && data.alreadyTracked !== true) {
@@ -230,10 +242,10 @@ index c1c877dfa..9b42c35f8 100644
 -          eventLabel: 'Gems > Wallet',
 -        });
 -      }
--
-       // Get last modal on stack and hide
-       let modalStackLength = this.$store.state.modalStack.length;
-       let modalOnTop = this.$store.state.modalStack[modalStackLength - 1];
+-    },
+     resetItemToBuy ($event) {
+       // @TODO: Do we need this? I think selecting a new item
+       // overwrites. @negue might know
 diff --git a/website/client/components/achievements/achievementFooter.vue b/website/client/components/achievements/achievementFooter.vue
 index 862c19099..9b5328c7c 100644
 --- a/website/client/components/achievements/achievementFooter.vue
@@ -1233,7 +1245,7 @@ index b92f6de0e..fc0b22c24 100644
  </template>
  
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index 946356ade..4964c18cd 100644
+index 22bc305d8..4964c18cd 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -109,12 +109,6 @@
@@ -1273,7 +1285,7 @@ index 946356ade..4964c18cd 100644
        party: {},
        // Made available by the server as a script
        availableFormats: ['MM/dd/yyyy', 'dd/MM/yyyy', 'yyyy/MM/dd'],
-@@ -234,14 +225,9 @@ export default {
+@@ -234,16 +225,9 @@ export default {
      };
    },
    mounted () {
@@ -1284,11 +1296,13 @@ index 946356ade..4964c18cd 100644
 -    hello.init({
 -      facebook: process.env.FACEBOOK_KEY, // eslint-disable-line no-process-env
 -      google: process.env.GOOGLE_CLIENT_ID, // eslint-disable-line no-process-env
+-    }, {
+-      redirect_uri: '', // eslint-disable-line
 -    });
    },
    computed: {
      ...mapState({
-@@ -300,14 +286,6 @@ export default {
+@@ -302,14 +286,6 @@ export default {
        if (this.user.auth.local.username) {
          return true;
        }
@@ -1303,7 +1317,7 @@ index 946356ade..4964c18cd 100644
      },
      calculateNextCron () {
        let nextCron = moment().hours(this.newDayStart).minutes(0).seconds(0).milliseconds(0);
-@@ -354,26 +332,6 @@ export default {
+@@ -356,26 +332,6 @@ export default {
      openDeleteModal () {
        this.$root.$emit('bv::show::modal', 'delete');
      },
@@ -1426,10 +1440,10 @@ index e086f99f5..96481edfd 100644
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index bc2a9978c..a2bfba580 100644
+index 94edce871..88bef95eb 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
-@@ -253,7 +253,6 @@
+@@ -256,7 +256,6 @@
  </style>
  
  <script>
@@ -1437,7 +1451,7 @@ index bc2a9978c..a2bfba580 100644
    import spellsMixin from 'client/mixins/spells';
    import planGemLimits from 'common/script/libs/planGemLimits';
  
-@@ -393,14 +392,6 @@
+@@ -396,14 +395,6 @@
          this.hideDialog();
        },
        purchaseGems () {
@@ -2011,7 +2025,7 @@ index 5bbc2c9f5..176e9b934 100644
    window.location.href = '/logout';
  }
 diff --git a/website/client/store/actions/chat.js b/website/client/store/actions/chat.js
-index 7c9adc1eb..dc74c545a 100644
+index 5bb584093..6bfdc6402 100644
 --- a/website/client/store/actions/chat.js
 +++ b/website/client/store/actions/chat.js
 @@ -1,5 +1,4 @@
@@ -2316,7 +2330,7 @@ index 886db0d39..aab7013bd 100644
    if (armoireResp) resData.armoire = armoireResp;
  
 diff --git a/website/common/script/ops/buy/buyGear.js b/website/common/script/ops/buy/buyGear.js
-index 7250f74e3..c9b72ab46 100644
+index e811dd6fb..1a12b7fd5 100644
 --- a/website/common/script/ops/buy/buyGear.js
 +++ b/website/common/script/ops/buy/buyGear.js
 @@ -13,7 +13,7 @@ import ultimateGear from '../../fns/ultimateGear';
@@ -2344,7 +2358,7 @@ index 7250f74e3..c9b72ab46 100644
 -  }
 -
    return [
-     pick(user, splitWhitespace('items achievements stats flags')),
+     pick(user, splitWhitespace('items achievements stats flags pinnedItems')),
      message,
 diff --git a/website/common/script/ops/buy/buyHealthPotion.js b/website/common/script/ops/buy/buyHealthPotion.js
 index 81ce8bc18..f493b9940 100644
@@ -2691,10 +2705,10 @@ index 7531de25a..79ddbdbab 100644
  
    let lvl = capByLevel(user.stats.lvl);
 diff --git a/website/common/script/ops/releaseBoth.js b/website/common/script/ops/releaseBoth.js
-index 39b27e892..fc6ca5d5a 100644
+index 34f7e9b3f..6fefc2527 100644
 --- a/website/common/script/ops/releaseBoth.js
 +++ b/website/common/script/ops/releaseBoth.js
-@@ -6,7 +6,7 @@ import {
+@@ -7,7 +7,7 @@ import {
  import splitWhitespace from '../libs/splitWhitespace';
  import pick from 'lodash/pick';
  
@@ -2702,8 +2716,8 @@ index 39b27e892..fc6ca5d5a 100644
 +module.exports = function releaseBoth (user, req = {}) {
    let animal;
  
-   if (user.balance < 1.5 && !user.achievements.triadBingo) {
-@@ -18,16 +18,6 @@ module.exports = function releaseBoth (user, req = {}, analytics) {
+   if (!user.achievements.triadBingo) {
+@@ -23,16 +23,6 @@ module.exports = function releaseBoth (user, req = {}, analytics) {
    let giveMountMasterAchievement = true;
  
    if (!user.achievements.triadBingo) {
@@ -2721,10 +2735,10 @@ index 39b27e892..fc6ca5d5a 100644
    }
  
 diff --git a/website/common/script/ops/releaseMounts.js b/website/common/script/ops/releaseMounts.js
-index 0f7159502..2a45c3a2a 100644
+index 4462d11f4..a5c92dcff 100644
 --- a/website/common/script/ops/releaseMounts.js
 +++ b/website/common/script/ops/releaseMounts.js
-@@ -4,7 +4,7 @@ import {
+@@ -5,7 +5,7 @@ import {
    NotAuthorized,
  } from '../libs/errors';
  
@@ -2733,7 +2747,7 @@ index 0f7159502..2a45c3a2a 100644
    if (user.balance < 1) {
      throw new NotAuthorized(i18n.t('notEnoughGems', req.language));
    }
-@@ -33,16 +33,6 @@ module.exports = function releaseMounts (user, req = {}, analytics) {
+@@ -38,16 +38,6 @@ module.exports = function releaseMounts (user, req = {}, analytics) {
      user.achievements.mountMasterCount++;
    }
  
@@ -2751,10 +2765,10 @@ index 0f7159502..2a45c3a2a 100644
      user.items.mounts,
      i18n.t('mountsReleased'),
 diff --git a/website/common/script/ops/releasePets.js b/website/common/script/ops/releasePets.js
-index 6a356b862..3ae1e90d9 100644
+index 0124474a3..d9363e3df 100644
 --- a/website/common/script/ops/releasePets.js
 +++ b/website/common/script/ops/releasePets.js
-@@ -4,7 +4,7 @@ import {
+@@ -5,7 +5,7 @@ import {
    NotAuthorized,
  } from '../libs/errors';
  
@@ -2763,7 +2777,7 @@ index 6a356b862..3ae1e90d9 100644
    if (user.balance < 1) {
      throw new NotAuthorized(i18n.t('notEnoughGems', req.language));
    }
-@@ -33,16 +33,6 @@ module.exports = function releasePets (user, req = {}, analytics) {
+@@ -38,16 +38,6 @@ module.exports = function releasePets (user, req = {}, analytics) {
      user.achievements.beastMasterCount++;
    }
  
@@ -2893,7 +2907,7 @@ index bbe4a7910..d89c3e920 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 542e77b08..d57ef6e1e 100644
+index 70ee4fc4a..15a484124 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -18,7 +18,6 @@ import { model as EmailUnsubscription } from '../../models/emailUnsubscription';
@@ -2944,7 +2958,7 @@ index 542e77b08..d57ef6e1e 100644
  
      req.checkBody({
        email: {
-@@ -153,19 +144,8 @@ api.registerLocal = {
+@@ -160,19 +151,8 @@ api.registerLocal = {
        },
      };
  
@@ -2966,7 +2980,7 @@ index 542e77b08..d57ef6e1e 100644
  
      // we check for partyInvite for backward compatibility
      if (req.query.groupInvite || req.query.partyInvite) {
-@@ -189,17 +169,6 @@ api.registerLocal = {
+@@ -196,17 +176,6 @@ api.registerLocal = {
          if (!existingUser) sendTxnEmail(savedUser, 'welcome');
        });
  
@@ -2984,7 +2998,7 @@ index 542e77b08..d57ef6e1e 100644
      return null;
    },
  };
-@@ -272,14 +241,6 @@ api.loginLocal = {
+@@ -279,14 +248,6 @@ api.loginLocal = {
        await user.save();
      }
  
@@ -2999,7 +3013,7 @@ index 542e77b08..d57ef6e1e 100644
      return _loginRes(user, ...arguments);
    },
  };
-@@ -296,149 +257,6 @@ function _passportProfile (network, accessToken) {
+@@ -303,149 +264,6 @@ function _passportProfile (network, accessToken) {
    });
  }
  
@@ -3149,7 +3163,7 @@ index 542e77b08..d57ef6e1e 100644
  /**
   * @api {put} /api/v3/user/auth/update-username Update username
   * @apiDescription Update the username of a local user
-@@ -692,33 +510,4 @@ api.resetPasswordSetNewOne = {
+@@ -699,33 +517,4 @@ api.resetPasswordSetNewOne = {
    },
  };
  
@@ -4080,24 +4094,33 @@ index 9f075b27a..69136c9e6 100644
   * @api {get} /export/inbox.html Export user private messages as HTML document
   * @apiName ExportUserPrivateMessages
 diff --git a/website/server/index.js b/website/server/index.js
-index becea804a..3577e0d56 100644
+index df9493a08..3577e0d56 100644
 --- a/website/server/index.js
 +++ b/website/server/index.js
-@@ -18,12 +18,6 @@ const setupNconf = require('./libs/setupNconf');
+@@ -18,7 +18,6 @@ const setupNconf = require('./libs/setupNconf');
  setupNconf();
  
  const nconf = require('nconf');
 -const stackimpact = require('stackimpact');
--
--stackimpact.start({
--  agentKey: nconf.get('STACK_IMPACT_KEY'),
--  appName: 'Habitica',
--});
  
  const cluster = require('cluster');
  const logger = require('./libs/logger');
+@@ -27,13 +26,6 @@ const IS_PROD = nconf.get('IS_PROD');
+ const IS_DEV = nconf.get('IS_DEV');
+ const CORES = Number(nconf.get('WEB_CONCURRENCY')) || 0;
+ 
+-if (IS_PROD) {
+-  stackimpact.start({
+-    agentKey: nconf.get('STACK_IMPACT_KEY'),
+-    appName: 'Habitica',
+-  });
+-}
+-
+ // Setup the cluster module
+ if (CORES !== 0 && cluster.isMaster && (IS_DEV || IS_PROD)) {
+   // Fork workers. If config.json has WEB_CONCURRENCY=x, use that - otherwise, use all cpus-1 (production)
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index 58dee49e6..ee87fb76e 100644
+index fc2b61d88..4c1a76e33 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
 @@ -7,7 +7,6 @@ import {
@@ -4108,9 +4131,9 @@ index 58dee49e6..ee87fb76e 100644
  import { model as Group } from '../../models/group';
  
  const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
-@@ -54,13 +53,6 @@ export default class GroupChatReporter extends ChatReporter {
-       {name: 'GROUP_ID', content: group._id},
+@@ -57,14 +56,6 @@ export default class GroupChatReporter extends ChatReporter {
        {name: 'GROUP_URL', content: groupUrl},
+       {name: 'REPORTER_COMMENT', content: userComment || ''},
      ]));
 -
 -    slack.sendFlagNotification({
@@ -4118,6 +4141,7 @@ index 58dee49e6..ee87fb76e 100644
 -      flagger: this.user,
 -      group,
 -      message,
+-      userComment,
 -    });
    }
  
@@ -4440,12 +4464,12 @@ index c041e3c47..0e1c9f319 100644
  
 diff --git a/website/server/libs/queue/index.js b/website/server/libs/queue/index.js
 deleted file mode 100644
-index 90f7cfe1e..000000000
+index 7823e7f91..000000000
 --- a/website/server/libs/queue/index.js
 +++ /dev/null
-@@ -1,43 +0,0 @@
--import Kafka from 'node-rdkafka';
+@@ -1,59 +0,0 @@
 -import nconf from 'nconf';
+-import logger from '../logger';
 -
 -const GROUP_ID = nconf.get('KAFKA:GROUP_ID');
 -const CLOUDKARAFKA_BROKERS = nconf.get('KAFKA:CLOUDKARAFKA_BROKERS');
@@ -4453,36 +4477,52 @@ index 90f7cfe1e..000000000
 -const CLOUDKARAFKA_PASSWORD = nconf.get('KAFKA:CLOUDKARAFKA_PASSWORD');
 -const CLOUDKARAFKA_TOPIC_PREFIX = nconf.get('KAFKA:CLOUDKARAFKA_TOPIC_PREFIX');
 -
--const kafkaConf = {
--  'group.id': GROUP_ID,
--  'metadata.broker.list': CLOUDKARAFKA_BROKERS ? CLOUDKARAFKA_BROKERS.split(',') : '',
--  'socket.keepalive.enable': true,
--  'security.protocol': 'SASL_SSL',
--  'sasl.mechanisms': 'SCRAM-SHA-256',
--  'sasl.username': CLOUDKARAFKA_USERNAME,
--  'sasl.password': CLOUDKARAFKA_PASSWORD,
--  debug: 'generic,broker,security',
--};
--
 -const prefix = CLOUDKARAFKA_TOPIC_PREFIX;
 -const topic = `${prefix}-default`;
--const producer = new Kafka.Producer(kafkaConf);
 -
--producer.connect();
+-let Kafka;
+-let producer;
+-
+-try {
+-  Kafka = require('node-rdkafka'); // eslint-disable-line global-require
+-} catch (er) {
+-  Kafka = null;
+-}
+-
+-function createProducer () {
+-  const kafkaConf = {
+-    'group.id': GROUP_ID,
+-    'metadata.broker.list': CLOUDKARAFKA_BROKERS ? CLOUDKARAFKA_BROKERS.split(',') : '',
+-    'socket.keepalive.enable': true,
+-    'security.protocol': 'SASL_SSL',
+-    'sasl.mechanisms': 'SCRAM-SHA-256',
+-    'sasl.username': CLOUDKARAFKA_USERNAME,
+-    'sasl.password': CLOUDKARAFKA_PASSWORD,
+-    debug: 'generic,broker,security',
+-  };
+-
+-  producer = new Kafka.Producer(kafkaConf);
+-
+-  producer.connect();
+-}
+-
+-if (Kafka && GROUP_ID && CLOUDKARAFKA_BROKERS && CLOUDKARAFKA_USERNAME && CLOUDKARAFKA_PASSWORD && CLOUDKARAFKA_TOPIC_PREFIX) {
+-  createProducer();
+-}
 -
 -process.on('exit', () => {
--  if (producer.isConnected()) producer.disconnect();
+-  if (producer && producer.isConnected()) producer.disconnect();
 -});
 -
 -const api = {};
 -
 -api.sendMessage = function sendMessage (message, key) {
--  if (!producer.isConnected()) return;
+-  if (!producer || !producer.isConnected()) return;
 -
 -  try {
 -    producer.produce(topic, -1, new Buffer(JSON.stringify(message)), key);
--  } catch (e) {
--    // @TODO: Send the to loggly?
+-  } catch (err) {
+-    logger.error(err);
 -  }
 -};
 -
@@ -4594,7 +4634,7 @@ index 1829c41af..132948e0b 100644
  
  const topLevelRouter = express.Router(); // eslint-disable-line new-cap
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
-index 6d748c72c..2d50bec4b 100644
+index b00ef3368..42a04964c 100644
 --- a/website/server/models/challenge.js
 +++ b/website/server/models/challenge.js
 @@ -11,7 +11,6 @@ import {
@@ -4605,7 +4645,7 @@ index 6d748c72c..2d50bec4b 100644
  import { TaskQueue } from 'cwait';
  import { syncableAttrs, setNextDue } from '../libs/taskManager';
  
-@@ -326,14 +325,6 @@ schema.methods.closeChal = async function closeChal (broken = {}) {
+@@ -325,14 +324,6 @@ schema.methods.closeChal = async function closeChal (broken = {}) {
          {name: 'CHALLENGE_NAME', content: challenge.name},
        ]);
      }
@@ -4634,7 +4674,7 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 67f3fe39a..85ac48f99 100644
+index daa00269d..17ca9f8fd 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -21,16 +21,12 @@ import baseModel from '../libs/baseModel';
@@ -4654,7 +4694,7 @@ index 67f3fe39a..85ac48f99 100644
  import { model as UserNotification } from './userNotification';
  
  const questScrolls = shared.content.quests;
-@@ -584,12 +580,6 @@ schema.methods.sendChat = function sendChat (message, user, metaData) {
+@@ -583,12 +579,6 @@ schema.methods.sendChat = function sendChat (message, user, metaData) {
      User.update(query, lastSeenUpdateAddNew, {multi: true}).exec();
    });
  
@@ -4667,7 +4707,7 @@ index 67f3fe39a..85ac48f99 100644
    return newMessage;
  };
  
-@@ -680,7 +670,7 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -679,7 +669,7 @@ schema.methods.startQuest = async function startQuest (user) {
    // send notifications in the background without blocking
    User.find(
      { _id: { $in: nonUserQuestMembers } },
@@ -4676,7 +4716,7 @@ index 67f3fe39a..85ac48f99 100644
    ).exec().then((membersToNotify) => {
      let membersToEmail = _.filter(membersToNotify, (member) => {
        // send push notifications and filter users that disabled emails
-@@ -690,19 +680,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -689,19 +679,6 @@ schema.methods.startQuest = async function startQuest (user) {
      sendTxnEmail(membersToEmail, 'quest-started', [
        { name: 'PARTY_URL', content: '/party' },
      ]);
@@ -4696,7 +4736,7 @@ index 67f3fe39a..85ac48f99 100644
    });
    this.sendChat(`\`Your quest, ${quest.text('en')}, has started.\``, null, {
      participatingMembers: this.getParticipatingQuestMembers().join(', '),
-@@ -1145,12 +1122,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1144,12 +1121,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      promises.push(User.update({_id: user._id}, {$pull: {guilds: group._id}}).exec());
    } else {
      promises.push(User.update({_id: user._id}, {$set: {party: {}}}).exec());
@@ -4709,7 +4749,7 @@ index 67f3fe39a..85ac48f99 100644
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  
-@@ -1416,12 +1387,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1415,12 +1386,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;

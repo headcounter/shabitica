@@ -62,7 +62,7 @@ in {
         ADMIN_EMAIL = "aszlig@nix.build";
         NODE_ENV = "production";
         BASE_URL = config.habitica.baseURL;
-        NODE_DB_URI = "mongodb:///run/habitica/db.sock";
+        NODE_DB_URI = "mongodb://%2Frun%2Fhabitica%2Fdb.sock";
         PORT = "/run/habitica.sock";
         SENDMAIL_PATH = "${config.security.wrapperDir}/sendmail";
         MAIL_FROM = "no-reply@headcounter.org";

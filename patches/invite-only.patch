@@ -44,7 +44,7 @@ index 75849de2c..48b4f51f3 100644
      methods: {
        validateEmail (email) {
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index d57ef6e1e..45240df60 100644
+index 15a484124..3c93cba61 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -62,7 +62,9 @@ async function _handleGroupInvitation (user, invite) {
@@ -57,7 +57,7 @@ index d57ef6e1e..45240df60 100644
  }
  
  function hasBackupAuth (user, networkToRemove) {
-@@ -149,7 +151,11 @@ api.registerLocal = {
+@@ -156,7 +158,11 @@ api.registerLocal = {
  
      // we check for partyInvite for backward compatibility
      if (req.query.groupInvite || req.query.partyInvite) {

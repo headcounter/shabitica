@@ -167,6 +167,7 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
       | grep -v 'user/schema\.js: *pushNotifications:' \
       | grep -v 'user/methods\.js:schema\.statics\.pushNotification' \
       | grep -v 'api-v3/groups.js:.*payments' \
+      | grep -v 'libs/bannedSlurs.js://.*socialites' \
       || :)"
 
     if [ -n "$extServicesWithoutFalsePositives" ]; then
