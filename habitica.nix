@@ -120,6 +120,9 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
     "website/static/presskit"
   ];
 
+  # For PhantomJS 2 with NixOS 17.09:
+  QT_QPA_PLATFORM = "offscreen";
+
   preRebuild = (drv.preRebuild or "") + ''
     # Kill off files we do not want to have, as they redirect to external
     # services:
