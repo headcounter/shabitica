@@ -24,6 +24,13 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
     )
   '';
 
+  emojis = fetchFromGitHub {
+    owner = "WebpageFX";
+    repo = "emoji-cheat-sheet.com";
+    rev = "c59bf0aad0a7238050c1a3896ecad650af227d59";
+    sha256 = "1s696nsvndp4p697yiaq908s387gc0m2xmby7cab071xf2p8c4h7";
+  };
+
   patches = [
     # Fix infinite redirection occuring whenever the BASE_URL contains a port
     # number.
@@ -177,6 +184,16 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
     fi
 
     cp --no-preserve=mode -rt website/static "$googleFonts/fonts"
+    cp --no-preserve=mode -rt website/static "$emojis/public/graphics/emojis"
+
+    sed -i -e '
+      s|https://s3.amazonaws.com/habitica-assets/cdn/emoji|${
+        habiticaConfig.BASE_URL
+      }/static/emojis|
+    ' node_modules/habitica-markdown-emoji/index.js
+
+    echo "checking whether emojis refer to S3 bucket..." >&2
+    ! grep -r amazonaws node_modules/habitica-markdown-emoji
 
     sed -i -e '
       s!\.dest(.*)!.dest("'${libjpeg.bin}'/bin")!
