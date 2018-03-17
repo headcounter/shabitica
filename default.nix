@@ -172,6 +172,14 @@ in {
         "/".index = "index.html";
         "/".tryFiles = "$uri $uri/ @backend";
 
+        # This is ugly as hell and basically disables caching.
+        # See https://github.com/NixOS/nixpkgs/issues/25485
+        "/".extraConfig = ''
+          if_modified_since off;
+          add_header Last-Modified "";
+          etag off;
+        '';
+
         "@backend".proxyPass = "http://unix:/run/habitica.sock:";
         "@backend".extraConfig = ''
           proxy_http_version 1.1;
