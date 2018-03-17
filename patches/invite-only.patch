@@ -1,5 +1,5 @@
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index 75849de2c..48b4f51f3 100644
+index 75849de2c..cc8307c8b 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -5,7 +5,7 @@
@@ -11,21 +11,20 @@ index 75849de2c..48b4f51f3 100644
          .row
            .col-12.col-sm-6.col-md-6.col-lg-6
              img(src='~assets/images/home/home-main@3x.png', width='357px')
-@@ -23,6 +23,13 @@
+@@ -23,6 +23,12 @@
                button.sign-up(@click="register()") {{$t('signup')}}
            .col-12
              .spacer.svg-icon(v-html='icons.spacer')
 +      .container(v-if='!invited')
-+        .row
-+          img(src='~assets/images/home/home-main@3x.png', width='357px')
-+          h1 {{$t('motivateYourself')}}
-+          p.section-main {{$t('timeToGetThingsDone')}}
-+          .col-12
-+            .spacer.svg-icon(v-html='icons.spacer')
++        img(src='~assets/images/home/home-main@3x.png', width='357px')
++        h1 {{$t('motivateYourself')}}
++        p.section-main {{$t('timeToGetThingsDone')}}
++        .col-12
++          .spacer.svg-icon(v-html='icons.spacer')
  
      #gamify-life.purple-2
        .container-fluid
-@@ -501,6 +508,17 @@
+@@ -501,6 +507,17 @@
          if (this.passwordConfirm.length <= 3) return false;
          return this.passwordConfirm !== this.password;
        },
