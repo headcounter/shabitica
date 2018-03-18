@@ -62,6 +62,10 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
 
     # Don't try to charge for group plans.
     patches/free-group-plans.patch
+
+    # We have subscriptions for all, so let's allow to change group leader in a
+    # group that has a subscription.
+    patches/always-permit-group-leader-change.patch
   ];
 
   patchPhase = ":";

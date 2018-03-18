@@ -1,0 +1,13 @@
+diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
+index 206bfab23..a4e2af798 100644
+--- a/website/server/controllers/api-v3/groups.js
++++ b/website/server/controllers/api-v3/groups.js
+@@ -392,8 +392,6 @@ api.updateGroup = {
+     if (group.leader !== user._id && group.type === 'party') throw new NotAuthorized(res.t('messageGroupOnlyLeaderCanUpdate'));
+     else if (group.leader !== user._id && !user.contributor.admin) throw new NotAuthorized(res.t('messageGroupOnlyLeaderCanUpdate'));
+ 
+-    if (req.body.leader !== user._id && group.hasNotCancelled()) throw new NotAuthorized(res.t('cannotChangeLeaderWithActiveGroupPlan'));
+-
+     _.assign(group, _.merge(group.toObject(), Group.sanitizeUpdate(req.body)));
+ 
+     let savedGroup = await group.save();
