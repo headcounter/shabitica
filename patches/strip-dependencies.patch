@@ -1,9 +1,9 @@
 diff --git a/package.json b/package.json
-index ea6b6c3e9..68726fc01 100644
+index 666b8b72b..1448e9701 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,13 +4,9 @@
-   "version": "4.31.1",
+   "version": "4.32.1",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@slack/client": "^3.8.1",
