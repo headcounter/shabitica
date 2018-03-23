@@ -1,5 +1,5 @@
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 542e77b08..70ee4fc4a 100644
+index ae62382f4..0ed9cdce4 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -148,6 +148,13 @@ api.registerLocal = {

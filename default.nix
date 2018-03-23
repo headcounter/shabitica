@@ -154,7 +154,7 @@ in {
           ExecStart = let
             websitePath = "${habitica}/lib/node_modules/habitica/website";
           in lib.concatMapStringsSep " " lib.escapeShellArg [
-            "@${pkgs.nodejs-6_x}/bin/node" "habitica-server"
+            "@${pkgs.nodejs-8_x}/bin/node" "habitica-server"
             "${websitePath}/transpiled-babel/index.js"
           ];
 

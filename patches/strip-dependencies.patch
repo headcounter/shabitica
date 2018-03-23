@@ -1,9 +1,9 @@
 diff --git a/package.json b/package.json
-index 666b8b72b..1448e9701 100644
+index 48e7fbc75..f82b5f82f 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,13 +4,9 @@
-   "version": "4.32.1",
+   "version": "4.33.0",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@slack/client": "^3.8.1",
@@ -12,16 +12,16 @@ index 666b8b72b..1448e9701 100644
 -    "amplitude": "^3.5.0",
      "apidoc": "^0.17.5",
      "autoprefixer": "^8.1.0",
--    "aws-sdk": "^2.209.0",
+-    "aws-sdk": "^2.211.0",
      "axios": "^0.18.0",
      "axios-progress-bar": "^1.1.8",
      "babel-core": "^6.0.0",
-@@ -50,10 +46,8 @@
+@@ -49,10 +45,8 @@
      "gulp-nodemon": "^2.2.1",
      "gulp.spritesmith": "^6.9.0",
      "habitica-markdown": "^1.3.0",
 -    "hellojs": "^1.15.1",
-     "html-webpack-plugin": "^2.8.1",
+     "html-webpack-plugin": "^3.0.0",
      "image-size": "^0.6.2",
 -    "in-app-purchase": "^1.8.9",
      "intro.js": "^2.6.0",
@@ -58,7 +58,7 @@ index 666b8b72b..1448e9701 100644
      "svgo": "^1.0.5",
      "svgo-loader": "^2.1.0",
 -    "universal-analytics": "^0.4.16",
-     "url-loader": "^0.6.2",
+     "url-loader": "^1.0.0",
      "useragent": "^2.1.9",
      "uuid": "^3.0.1",
 @@ -108,7 +92,6 @@
@@ -69,7 +69,7 @@ index 666b8b72b..1448e9701 100644
      "xml2js": "^0.4.4"
    },
    "private": true,
-@@ -184,8 +167,5 @@
+@@ -186,8 +169,5 @@
      "webpack-bundle-analyzer": "^2.11.1",
      "webpack-dev-middleware": "^2.0.5",
      "webpack-hot-middleware": "^2.21.2"

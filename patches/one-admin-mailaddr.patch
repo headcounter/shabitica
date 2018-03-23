@@ -85,10 +85,10 @@ index becbd69fa..b902c8f79 100644
    export default {
      data () {
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 2827c3cf9..3b0c26d08 100644
+index ebba6c095..5219cf597 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
-@@ -573,7 +573,7 @@ import markdown from 'client/directives/markdown';
+@@ -563,7 +563,7 @@ import markdown from 'client/directives/markdown';
  import toggleSwitch from 'client/components/ui/toggleSwitch';
  import achievementsLib from '../../../common/script/libs/achievements';
  // @TODO: EMAILS.COMMUNITY_MANAGER_EMAIL
@@ -98,7 +98,7 @@ index 2827c3cf9..3b0c26d08 100644
  import attributesGrid from 'client/components/inventory/equipment/attributesGrid';
  const DROP_ANIMALS = keys(Content.pets);
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 3c93cba61..9ef90f8cd 100644
+index d9499e5b8..bb27905be 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -22,8 +22,8 @@ import common from '../../../common';
@@ -113,10 +113,10 @@ index 3c93cba61..9ef90f8cd 100644
  const USERNAME_LENGTH_MAX = 20;
  
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 97cc16e57..95732370e 100644
+index 11e740da6..d90b51324 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
-@@ -18,7 +18,7 @@ import guildsAllowingBannedWords from '../../libs/guildsAllowingBannedWords';
+@@ -17,7 +17,7 @@ import guildsAllowingBannedWords from '../../libs/guildsAllowingBannedWords';
  import { getMatchesByWordArray } from '../../libs/stringUtils';
  import bannedSlurs from '../../libs/bannedSlurs';
  
@@ -126,10 +126,10 @@ index 97cc16e57..95732370e 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index ccf377491..510f2fdd2 100644
+index ca9b485ba..ea2b11f43 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -24,7 +24,7 @@ import shared from '../../../common';
+@@ -23,7 +23,7 @@ import shared from '../../../common';
  import apiMessages from '../../libs/apiMessages';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
@@ -139,10 +139,10 @@ index ccf377491..510f2fdd2 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index fa955944a..add58fc07 100644
+index 3e55f3e36..e28514988 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -19,7 +19,7 @@ import {
+@@ -18,7 +18,7 @@ import {
  import nconf from 'nconf';
  import get from 'lodash/get';
  

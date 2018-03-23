@@ -167,7 +167,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 55400adec..a49180cb0 100644
+index d8d36bddc..c599489ac 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -178,7 +178,7 @@ index 55400adec..a49180cb0 100644
      snackbars
      router-view(v-if="!isUserLoggedIn || isStaticPage")
      template(v-else)
-@@ -120,12 +119,9 @@ import AppFooter from './components/appFooter';
+@@ -184,12 +183,9 @@ import AppFooter from './components/appFooter';
  import notificationsDisplay from './components/notifications';
  import snackbars from './components/snackbars/notifications';
  import { mapState } from 'client/libs/store';
@@ -190,8 +190,8 @@ index 55400adec..a49180cb0 100644
 -import amazonPaymentsModal from 'client/components/payments/amazonModal';
  import spellsMixin from 'client/mixins/spells';
  
- export default {
-@@ -139,7 +135,6 @@ export default {
+ import svgClose from 'assets/svg/close.svg';
+@@ -205,7 +201,6 @@ export default {
      snackbars,
      BuyModal,
      SelectMembersModal,
@@ -199,7 +199,7 @@ index 55400adec..a49180cb0 100644
    },
    data () {
      return {
-@@ -299,8 +294,6 @@ export default {
+@@ -372,8 +367,6 @@ export default {
          this.$store.dispatch('tasks:fetchUserTasks'),
        ]).then(() => {
          this.$store.state.isUserLoaded = true;
@@ -208,7 +208,7 @@ index 55400adec..a49180cb0 100644
  
          this.hideLoadingScreen();
  
-@@ -312,9 +305,6 @@ export default {
+@@ -385,9 +378,6 @@ export default {
          }
  
          this.$nextTick(() => {
@@ -218,7 +218,7 @@ index 55400adec..a49180cb0 100644
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -344,8 +334,6 @@ export default {
+@@ -417,8 +407,6 @@ export default {
          if (data.fromRoot) return;
          const modalStack = this.$store.state.modalStack;
  
@@ -227,7 +227,7 @@ index 55400adec..a49180cb0 100644
          // Add new modal to the stack
          const prev = modalStack[modalStack.length - 1];
          const prevId = prev ? prev.modalId : undefined;
-@@ -400,18 +388,6 @@ export default {
+@@ -473,18 +461,6 @@ export default {
  
        return true;
      },
@@ -1245,7 +1245,7 @@ index b92f6de0e..fc0b22c24 100644
  </template>
  
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index 22bc305d8..4964c18cd 100644
+index a6857abc6..d082f027d 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -109,12 +109,6 @@
@@ -1254,8 +1254,8 @@ index 22bc305d8..4964c18cd 100644
          div
 -          ul.list-inline
 -            li(v-for='network in SOCIAL_AUTH_NETWORKS')
--              button.btn.btn-primary(v-if='!user.auth[network.key].id', @click='socialAuth(network.key, user)') {{ $t('registerWithSocial', {network: network.name}) }}
--              button.btn.btn-primary(disabled='disabled', v-if='!hasBackupAuthOption(network.key) && user.auth[network.key].id') {{ $t('registeredWithSocial', {network: network.name}) }}
+-              button.btn.btn-primary.mb-2(v-if='!user.auth[network.key].id', @click='socialAuth(network.key, user)') {{ $t('registerWithSocial', {network: network.name}) }}
+-              button.btn.btn-primary.mb-2(disabled='disabled', v-if='!hasBackupAuthOption(network.key) && user.auth[network.key].id') {{ $t('registeredWithSocial', {network: network.name}) }}
 -              button.btn.btn-danger(@click='deleteSocialAuth(network.key)', v-if='hasBackupAuthOption(network.key) && user.auth[network.key].id') {{ $t('detachSocial', {network: network.name}) }}
 -          hr
            div(v-if='!user.auth.local.username')
@@ -1803,7 +1803,7 @@ index a49a47896..2ef93f2bc 100644
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
        const crit = tmp.crit;
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index ee89f5045..2827c3cf9 100644
+index 78575aeb6..ebba6c095 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -59,14 +59,12 @@ div
@@ -1837,7 +1837,7 @@ index ee89f5045..2827c3cf9 100644
  
          .col-12.text-center
            button.btn.btn-primary(@click='save()') {{ $t("save") }}
-@@ -580,7 +569,6 @@ import autoAllocate from '../../../common/script/fns/autoAllocate';
+@@ -570,7 +559,6 @@ import autoAllocate from '../../../common/script/fns/autoAllocate';
  import allocate from  '../../../common/script/ops/stats/allocate';
  
  import MemberDetails from '../memberDetails';
@@ -1845,7 +1845,7 @@ index ee89f5045..2827c3cf9 100644
  import markdown from 'client/directives/markdown';
  import toggleSwitch from 'client/components/ui/toggleSwitch';
  import achievementsLib from '../../../common/script/libs/achievements';
-@@ -602,7 +590,6 @@ export default {
+@@ -592,7 +580,6 @@ export default {
      markdown,
    },
    components: {
@@ -2068,7 +2068,7 @@ index 5bb584093..6bfdc6402 100644
      message: payload.message,
    });
 diff --git a/website/client/store/actions/guilds.js b/website/client/store/actions/guilds.js
-index 9805da9fa..649e24a1f 100644
+index 564030e55..7bb5e1645 100644
 --- a/website/client/store/actions/guilds.js
 +++ b/website/client/store/actions/guilds.js
 @@ -1,7 +1,6 @@
@@ -2079,7 +2079,7 @@ index 9805da9fa..649e24a1f 100644
  
  export async function getPublicGuilds (store, payload) {
    let params = {
-@@ -68,8 +67,6 @@ export async function join (store, payload) {
+@@ -74,8 +73,6 @@ export async function join (store, payload) {
      if (invitationI !== -1) invitations.parties.splice(invitationI, 1);
  
      user.party._id = groupId;
@@ -2164,7 +2164,7 @@ index f3131cb5a..719a69382 100644
    group_plan_auto: {
      target: 'user',
 diff --git a/website/common/script/fns/randomDrop.js b/website/common/script/fns/randomDrop.js
-index 3156c8259..5b4885918 100644
+index deaf0127b..26283710a 100644
 --- a/website/common/script/fns/randomDrop.js
 +++ b/website/common/script/fns/randomDrop.js
 @@ -25,7 +25,7 @@ function trueRandom () {
@@ -2242,8 +2242,87 @@ index 57eaa890c..5a9e61a0a 100644
    GUILDS_PER_PAGE,
    PARTY_LIMIT_MEMBERS,
  };
+diff --git a/website/common/script/ops/buy/abstractBuyOperation.js b/website/common/script/ops/buy/abstractBuyOperation.js
+index d641372a5..028383055 100644
+--- a/website/common/script/ops/buy/abstractBuyOperation.js
++++ b/website/common/script/ops/buy/abstractBuyOperation.js
+@@ -9,12 +9,10 @@ export class AbstractBuyOperation {
+   /**
+    * @param {User} user - the User-Object
+    * @param {Request} req - the Request-Object
+-   * @param {analytics} analytics
+    */
+-  constructor (user, req, analytics) {
++  constructor (user, req) {
+     this.user = user;
+     this.req = req || {};
+-    this.analytics = analytics;
+ 
+     this.quantity = _get(req, 'quantity', 1);
+   }
+@@ -49,10 +47,6 @@ export class AbstractBuyOperation {
+     throw new NotImplementedError('executeChanges');
+   }
+ 
+-  analyticsData () {
+-    throw new NotImplementedError('sendToAnalytics');
+-  }
+-
+   purchase () {
+     if (!this.multiplePurchaseAllowed() && this.quantity > 1) {
+       throw new NotAuthorized(this.i18n('messageNotAbleToBuyInBulk'));
+@@ -62,33 +56,13 @@ export class AbstractBuyOperation {
+ 
+     let resultObj = this.executeChanges(this.user, this.item, this.req);
+ 
+-    if (this.analytics) {
+-      this.sendToAnalytics(this.analyticsData());
+-    }
+-
+     return resultObj;
+   }
+-
+-  sendToAnalytics (additionalData = {}) {
+-    // spread-operator produces an "unexpected token" error
+-    let analyticsData = _merge(additionalData, {
+-      // ...additionalData,
+-      uuid: this.user._id,
+-      category: 'behavior',
+-      headers: this.req.headers,
+-    });
+-
+-    if (this.multiplePurchaseAllowed()) {
+-      analyticsData.quantityPurchased = this.quantity;
+-    }
+-
+-    this.analytics.track('acquire item', analyticsData);
+-  }
+ }
+ 
+ export class AbstractGoldItemOperation extends AbstractBuyOperation {
+-  constructor (user, req, analytics) {
+-    super(user, req, analytics);
++  constructor (user, req) {
++    super(user, req);
+   }
+ 
+   getItemValue (item) {
+@@ -115,13 +89,4 @@ export class AbstractGoldItemOperation extends AbstractBuyOperation {
+ 
+     user.stats.gp -= itemValue * quantity;
+   }
+-
+-  analyticsData () {
+-    return {
+-      itemKey: this.item.key,
+-      itemType: 'Market',
+-      acquireMethod: 'Gold',
+-      goldCost: this.getItemValue(this.item),
+-    };
+-  }
+ }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index 1ecb149c9..dcd270e7d 100644
+index 51e054f5b..aae2fcd1a 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
 @@ -17,7 +17,7 @@ import hourglassPurchase from './hourglassPurchase';
@@ -2292,12 +2371,12 @@ index 1ecb149c9..dcd270e7d 100644
 -      buyRes = buySpecialSpell(user, req, analytics);
 +      buyRes = buySpecialSpell(user, req);
        break;
-     default:
--      buyRes = buyGear(user, req, analytics);
-+      buyRes = buyGear(user, req);
-       break;
-   }
+     default: {
+-      const buyOp = new BuyMarketGearOperation(user, req, analytics);
++      const buyOp = new BuyMarketGearOperation(user, req);
  
+       buyRes = buyOp.purchase();
+       break;
 diff --git a/website/common/script/ops/buy/buyArmoire.js b/website/common/script/ops/buy/buyArmoire.js
 index 886db0d39..aab7013bd 100644
 --- a/website/common/script/ops/buy/buyArmoire.js
@@ -2329,37 +2408,6 @@ index 886db0d39..aab7013bd 100644
    let resData = pick(user, splitWhitespace('items flags'));
    if (armoireResp) resData.armoire = armoireResp;
  
-diff --git a/website/common/script/ops/buy/buyGear.js b/website/common/script/ops/buy/buyGear.js
-index e811dd6fb..1a12b7fd5 100644
---- a/website/common/script/ops/buy/buyGear.js
-+++ b/website/common/script/ops/buy/buyGear.js
-@@ -13,7 +13,7 @@ import ultimateGear from '../../fns/ultimateGear';
- 
- import { removePinnedGearAddPossibleNewOnes } from '../pinnedGearUtils';
- 
--module.exports = function buyGear (user, req = {}, analytics) {
-+module.exports = function buyGear (user, req = {}) {
-   let key = get(req, 'params.key');
-   if (!key) throw new BadRequest(i18n.t('missingKeyParam', req.language));
- 
-@@ -64,17 +64,6 @@ module.exports = function buyGear (user, req = {}, analytics) {
-     }, req.language);
-   }
- 
--  if (analytics) {
--    analytics.track('acquire item', {
--      uuid: user._id,
--      itemKey: key,
--      acquireMethod: 'Gold',
--      goldCost: item.value,
--      category: 'behavior',
--      headers: req.headers,
--    });
--  }
--
-   return [
-     pick(user, splitWhitespace('items achievements stats flags pinnedItems')),
-     message,
 diff --git a/website/common/script/ops/buy/buyHealthPotion.js b/website/common/script/ops/buy/buyHealthPotion.js
 index 81ce8bc18..f493b9940 100644
 --- a/website/common/script/ops/buy/buyHealthPotion.js
@@ -2393,6 +2441,21 @@ index 81ce8bc18..f493b9940 100644
    return [
      user.stats,
      message,
+diff --git a/website/common/script/ops/buy/buyMarketGear.js b/website/common/script/ops/buy/buyMarketGear.js
+index 6ed392808..2de6fac29 100644
+--- a/website/common/script/ops/buy/buyMarketGear.js
++++ b/website/common/script/ops/buy/buyMarketGear.js
+@@ -15,8 +15,8 @@ import {removePinnedGearAddPossibleNewOnes} from '../pinnedGearUtils';
+ import { AbstractGoldItemOperation } from './abstractBuyOperation';
+ 
+ export class BuyMarketGearOperation extends AbstractGoldItemOperation {
+-  constructor (user, req, analytics) {
+-    super(user, req, analytics);
++  constructor (user, req) {
++    super(user, req);
+   }
+ 
+   multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buyMysterySet.js b/website/common/script/ops/buy/buyMysterySet.js
 index 3a8b17a01..a6030275f 100644
 --- a/website/common/script/ops/buy/buyMysterySet.js
@@ -2705,35 +2768,31 @@ index 7531de25a..79ddbdbab 100644
  
    let lvl = capByLevel(user.stats.lvl);
 diff --git a/website/common/script/ops/releaseBoth.js b/website/common/script/ops/releaseBoth.js
-index 34f7e9b3f..6fefc2527 100644
+index c306d9279..3231a3914 100644
 --- a/website/common/script/ops/releaseBoth.js
 +++ b/website/common/script/ops/releaseBoth.js
-@@ -7,7 +7,7 @@ import {
- import splitWhitespace from '../libs/splitWhitespace';
- import pick from 'lodash/pick';
- 
--module.exports = function releaseBoth (user, req = {}, analytics) {
-+module.exports = function releaseBoth (user, req = {}) {
-   let animal;
- 
-   if (!user.achievements.triadBingo) {
-@@ -23,16 +23,6 @@ module.exports = function releaseBoth (user, req = {}, analytics) {
+@@ -22,21 +22,6 @@ module.exports = function releaseBoth (user, req = {}) {
+   let giveBeastMasterAchievement = true;
    let giveMountMasterAchievement = true;
  
-   if (!user.achievements.triadBingo) {
--    if (analytics) {
--      analytics.track('release pets & mounts', {
--        uuid: user._id,
--        acquireMethod: 'Gems',
--        gemCost: 6,
--        category: 'behavior',
--        headers: req.headers,
--      });
--    }
+-  // @TODO: We are only offering the free version now
+-  // if (!user.achievements.triadBingo) {
+-  //   if (analytics) {
+-  //     analytics.track('release pets & mounts', {
+-  //       uuid: user._id,
+-  //       acquireMethod: 'Gems',
+-  //       gemCost: 6,
+-  //       category: 'behavior',
+-  //       headers: req.headers,
+-  //     });
+-  //   }
+-  //
+-  //   user.balance -= 1.5;
+-  // }
 -
-     user.balance -= 1.5;
-   }
+   let mountInfo = content.mountInfo[user.items.currentMount];
  
+   if (mountInfo && mountInfo.type === 'drop') {
 diff --git a/website/common/script/ops/releaseMounts.js b/website/common/script/ops/releaseMounts.js
 index 4462d11f4..a5c92dcff 100644
 --- a/website/common/script/ops/releaseMounts.js
@@ -2907,7 +2966,7 @@ index bbe4a7910..d89c3e920 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 70ee4fc4a..15a484124 100644
+index 0ed9cdce4..15883a97d 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -18,7 +18,6 @@ import { model as EmailUnsubscription } from '../../models/emailUnsubscription';
@@ -3198,10 +3257,10 @@ index 70ee4fc4a..15a484124 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 326a66d5e..8c8a1a53d 100644
+index fa89accff..72028fa9f 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
-@@ -202,16 +202,6 @@ api.createChallenge = {
+@@ -201,16 +201,6 @@ api.createChallenge = {
      };
      response.group = getChallengeGroupResponse(group);
  
@@ -3218,7 +3277,7 @@ index 326a66d5e..8c8a1a53d 100644
      res.respond(201, response);
    },
  };
-@@ -261,16 +251,6 @@ api.joinChallenge = {
+@@ -260,16 +250,6 @@ api.joinChallenge = {
      let chalLeader = await User.findById(response.leader).select(nameFields).exec();
      response.leader = chalLeader ? chalLeader.toJSON({minimize: true}) : null;
  
@@ -3235,9 +3294,9 @@ index 326a66d5e..8c8a1a53d 100644
      res.respond(200, response);
    },
  };
-@@ -308,16 +288,6 @@ api.leaveChallenge = {
+@@ -307,16 +287,6 @@ api.leaveChallenge = {
      // Unlink challenge's tasks from user's tasks and save the challenge
-     await Bluebird.all([challenge.unlinkTasks(user, keep), challenge.save()]);
+     await Promise.all([challenge.unlinkTasks(user, keep), challenge.save()]);
  
 -    res.analytics.track('challenge leave', {
 -      uuid: user._id,
@@ -3252,7 +3311,7 @@ index 326a66d5e..8c8a1a53d 100644
      res.respond(200, {});
    },
  };
-@@ -651,16 +621,6 @@ api.deleteChallenge = {
+@@ -660,16 +630,6 @@ api.deleteChallenge = {
      // Close channel in background, some ops are run in the background without `await`ing
      await challenge.closeChal({broken: 'CHALLENGE_DELETED'});
  
@@ -3269,7 +3328,7 @@ index 326a66d5e..8c8a1a53d 100644
      res.respond(200, {});
    },
  };
-@@ -700,17 +660,6 @@ api.selectChallengeWinner = {
+@@ -709,17 +669,6 @@ api.selectChallengeWinner = {
      // Close channel in background, some ops are run in the background without `await`ing
      await challenge.closeChal({broken: 'CHALLENGE_CLOSED', winner});
  
@@ -3288,7 +3347,7 @@ index 326a66d5e..8c8a1a53d 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index fba5277d4..97cc16e57 100644
+index de48a80c4..11e740da6 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -9,8 +9,6 @@ import {
@@ -3300,7 +3359,7 @@ index fba5277d4..97cc16e57 100644
  import { getAuthorEmailFromMessage } from '../../libs/chat';
  import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
  import nconf from 'nconf';
-@@ -141,14 +139,6 @@ api.postChat = {
+@@ -140,14 +138,6 @@ api.postChat = {
  
        sendTxn(FLAG_REPORT_EMAILS, 'slur-report-to-mods', report);
  
@@ -3315,9 +3374,9 @@ index fba5277d4..97cc16e57 100644
        throw new BadRequest(res.t('bannedSlurUsed'));
      }
  
-@@ -186,13 +176,6 @@ api.postChat = {
+@@ -185,13 +175,6 @@ api.postChat = {
  
-     let [savedGroup] = await Bluebird.all(toSave);
+     let [savedGroup] = await Promise.all(toSave);
  
 -    // realtime chat is only enabled for private groups (for now only for parties)
 -    if (savedGroup.privacy === 'private' && savedGroup.type === 'party') {
@@ -3343,10 +3402,10 @@ index 5fc0f4cbf..f92f7f279 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 67512a51b..ccf377491 100644
+index 834a6dfc5..ca9b485ba 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -19,12 +19,7 @@ import {
+@@ -18,12 +18,7 @@ import {
  import { removeFromArray } from '../../libs/collectionManipulators';
  import { sendTxn as sendTxnEmail } from '../../libs/email';
  import { encrypt } from '../../libs/encryption';
@@ -3359,7 +3418,7 @@ index 67512a51b..ccf377491 100644
  import shared from '../../../common';
  import apiMessages from '../../libs/apiMessages';
  
-@@ -149,22 +144,6 @@ api.createGroup = {
+@@ -148,22 +143,6 @@ api.createGroup = {
        profile: {name: user.profile.name},
      };
  
@@ -3382,8 +3441,8 @@ index 67512a51b..ccf377491 100644
      res.respond(201, response); // do not remove chat flags data as we've just created the group
    },
  };
-@@ -197,54 +176,6 @@ api.createGroupPlan = {
-     let results = await Bluebird.all([user.save(), group.save()]);
+@@ -196,54 +175,6 @@ api.createGroupPlan = {
+     let results = await Promise.all([user.save(), group.save()]);
      let savedGroup = results[1];
  
 -    // Analytics
@@ -3437,7 +3496,7 @@ index 67512a51b..ccf377491 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -572,7 +503,6 @@ api.joinGroup = {
+@@ -576,7 +507,6 @@ api.joinGroup = {
      if (group.memberCount === 0) group.leader = user._id; // If new user is only member -> set as leader
  
      if (group.hasNotCancelled())  {
@@ -3445,7 +3504,7 @@ index 67512a51b..ccf377491 100644
        await group.updateGroupPlan();
      }
  
-@@ -625,22 +555,6 @@ api.joinGroup = {
+@@ -629,22 +559,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -3468,7 +3527,7 @@ index 67512a51b..ccf377491 100644
      res.respond(200, response);
    },
  };
-@@ -777,9 +691,6 @@ api.leaveGroup = {
+@@ -781,9 +695,6 @@ api.leaveGroup = {
      }
  
      let isMemberOfGroupPlan = await user.isMemberOfGroupPlan();
@@ -3478,7 +3537,7 @@ index 67512a51b..ccf377491 100644
  
      res.respond(200, {});
    },
-@@ -869,7 +780,6 @@ api.removeGroupMember = {
+@@ -873,7 +784,6 @@ api.removeGroupMember = {
        group.memberCount -= 1;
        if (group.hasNotCancelled())  {
          await group.updateGroupPlan(true);
@@ -3486,7 +3545,7 @@ index 67512a51b..ccf377491 100644
        }
  
        if (group.quest && group.quest.leader === member._id) {
-@@ -885,12 +795,6 @@ api.removeGroupMember = {
+@@ -889,12 +799,6 @@ api.removeGroupMember = {
          removeFromArray(member.guilds, group._id);
        }
        if (isInGroup === 'party') {
@@ -3499,7 +3558,7 @@ index 67512a51b..ccf377491 100644
          member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
        }
  
-@@ -991,19 +895,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -995,19 +899,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -3519,7 +3578,7 @@ index 67512a51b..ccf377491 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1019,8 +910,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1023,8 +914,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},
@@ -3529,18 +3588,18 @@ index 67512a51b..ccf377491 100644
      .select({_id: true, 'preferences.emailNotifications': true})
      .exec();
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index 279f759ee..ea5b2d262 100644
+index 61e0e3ec1..988ba2f92 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
-@@ -19,7 +19,6 @@ import {
+@@ -18,7 +18,6 @@ import {
+   getUserInfo,
    sendTxn as sendTxnEmail,
  } from '../../libs/email';
- import Bluebird from 'bluebird';
 -import { sendNotification as sendPushNotification } from '../../libs/pushNotifications';
  import { achievements } from '../../../../website/common/';
  
  let api = {};
-@@ -494,18 +493,6 @@ api.sendPrivateMessage = {
+@@ -493,18 +492,6 @@ api.sendPrivateMessage = {
          {name: 'SENDER', content: getUserInfo(sender, ['name']).name},
        ]);
      }
@@ -3559,7 +3618,7 @@ index 279f759ee..ea5b2d262 100644
  
      res.respond(200, {});
    },
-@@ -584,15 +571,6 @@ api.transferGems = {
+@@ -583,15 +570,6 @@ api.transferGems = {
          {name: 'X_GEMS_GIFTED', content: gemAmount},
        ]);
      }
@@ -3576,18 +3635,17 @@ index 279f759ee..ea5b2d262 100644
      res.respond(200, {});
    },
 diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
-index 792c37e12..c5acd25af 100644
+index 7ae92b1b3..56036a65d 100644
 --- a/website/server/controllers/api-v3/quests.js
 +++ b/website/server/controllers/api-v3/quests.js
-@@ -1,7 +1,6 @@
+@@ -1,6 +1,5 @@
  import _ from 'lodash';
- import Bluebird from 'bluebird';
  import { authWithHeaders } from '../../middlewares/auth';
 -import analytics from '../../libs/analyticsService';
  import {
    model as Group,
    basicFields as basicGroupFields,
-@@ -17,7 +16,6 @@ import {
+@@ -16,7 +15,6 @@ import {
    sendTxn as sendTxnEmail,
  } from '../../libs/email';
  import common from '../../../common';
@@ -3595,7 +3653,7 @@ index 792c37e12..c5acd25af 100644
  
  const questScrolls = common.content.quests;
  
-@@ -79,7 +77,7 @@ api.inviteToQuest = {
+@@ -78,7 +76,7 @@ api.inviteToQuest = {
        'party._id': group._id,
        _id: {$ne: user._id},
      })
@@ -3604,7 +3662,7 @@ index 792c37e12..c5acd25af 100644
        .exec();
  
      group.markModified('quest');
-@@ -119,20 +117,6 @@ api.inviteToQuest = {
+@@ -118,20 +116,6 @@ api.inviteToQuest = {
      // send out invites
      let inviterVars = getUserInfo(user, ['name', 'email']);
      let membersToEmail = members.filter(member => {
@@ -3625,7 +3683,7 @@ index 792c37e12..c5acd25af 100644
        return member.preferences.emailNotifications.invitedQuest !== false;
      });
      sendTxnEmail(membersToEmail, `invite-${quest.boss ? 'boss' : 'collection'}-quest`, [
-@@ -140,17 +124,6 @@ api.inviteToQuest = {
+@@ -139,17 +123,6 @@ api.inviteToQuest = {
        {name: 'INVITER', content: inviterVars.name},
        {name: 'PARTY_URL', content: '/party'},
      ]);
@@ -3643,7 +3701,7 @@ index 792c37e12..c5acd25af 100644
    },
  };
  
-@@ -199,17 +172,6 @@ api.acceptQuest = {
+@@ -198,17 +171,6 @@ api.acceptQuest = {
      let savedGroup = await group.save();
  
      res.respond(200, savedGroup.quest);
@@ -3661,7 +3719,7 @@ index 792c37e12..c5acd25af 100644
    },
  };
  
-@@ -259,16 +221,6 @@ api.rejectQuest = {
+@@ -258,16 +220,6 @@ api.rejectQuest = {
      let savedGroup = await group.save();
  
      res.respond(200, savedGroup.quest);
@@ -3678,7 +3736,7 @@ index 792c37e12..c5acd25af 100644
    },
  };
  
-@@ -318,16 +270,6 @@ api.forceStart = {
+@@ -317,16 +269,6 @@ api.forceStart = {
      ]);
  
      res.respond(200, savedGroup.quest);
@@ -3696,10 +3754,10 @@ index 792c37e12..c5acd25af 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index 8b9672afd..bc1977f83 100644
+index 348a9e687..4d89b41ef 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
-@@ -167,16 +167,6 @@ api.createUserTasks = {
+@@ -166,16 +166,6 @@ api.createUserTasks = {
      res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
  
      tasks.forEach((task) => {
@@ -3716,7 +3774,7 @@ index 8b9672afd..bc1977f83 100644
        taskActivityWebhook.send(user.webhooks, {
          type: 'created',
          task,
-@@ -252,16 +242,6 @@ api.createChallengeTasks = {
+@@ -251,16 +241,6 @@ api.createChallengeTasks = {
  
      // If adding tasks to a challenge -> sync users
      if (challenge) challenge.addTasks(tasks);
@@ -3733,7 +3791,7 @@ index 8b9672afd..bc1977f83 100644
    },
  };
  
-@@ -607,7 +587,7 @@ api.scoreTask = {
+@@ -606,7 +586,7 @@ api.scoreTask = {
  
      let [delta] = common.ops.scoreTask({task, user, direction}, req);
      // Drop system (don't run on the client, as it would only be discarded since ops are sent to the API, not the results)
@@ -3742,7 +3800,7 @@ index 8b9672afd..bc1977f83 100644
  
      // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
      // TODO move to common code?
-@@ -676,17 +656,6 @@ api.scoreTask = {
+@@ -675,17 +655,6 @@ api.scoreTask = {
          logger.error(e);
        }
      }
@@ -3761,10 +3819,10 @@ index 8b9672afd..bc1977f83 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks/groups.js b/website/server/controllers/api-v3/tasks/groups.js
-index 449a0e39b..5b77c9dec 100644
+index 45eb8839d..5086ae281 100644
 --- a/website/server/controllers/api-v3/tasks/groups.js
 +++ b/website/server/controllers/api-v3/tasks/groups.js
-@@ -57,16 +57,6 @@ api.createGroupTasks = {
+@@ -56,16 +56,6 @@ api.createGroupTasks = {
      let tasks = await createTasks(req, res, {user, group});
  
      res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
@@ -3782,10 +3840,10 @@ index 449a0e39b..5b77c9dec 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index ac2e82722..fa955944a 100644
+index 1ae8a17df..3e55f3e36 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -16,7 +16,6 @@ import {
+@@ -15,7 +15,6 @@ import {
    getUserInfo,
    sendTxn as txnEmail,
  } from '../../libs/email';
@@ -3793,7 +3851,7 @@ index ac2e82722..fa955944a 100644
  import nconf from 'nconf';
  import get from 'lodash/get';
  
-@@ -395,8 +394,6 @@ api.deleteUser = {
+@@ -394,8 +393,6 @@ api.deleteUser = {
      if (user.auth.local.hashed_password && user.auth.local.email) {
        let isValidPassword = await passwordUtils.compare(user, password);
        if (!isValidPassword) throw new NotAuthorized(res.t('wrongPassword'));
@@ -3802,7 +3860,7 @@ index ac2e82722..fa955944a 100644
      }
  
      let feedback = req.body.feedback;
-@@ -433,14 +430,6 @@ api.deleteUser = {
+@@ -432,14 +429,6 @@ api.deleteUser = {
        ]);
      }
  
@@ -3817,7 +3875,7 @@ index ac2e82722..fa955944a 100644
      res.respond(200, {});
    },
  };
-@@ -482,8 +471,6 @@ api.getUserAnonymized = {
+@@ -481,8 +470,6 @@ api.getUserAnonymized = {
      delete user.apiToken;
      if (user.auth) {
        delete user.auth.local;
@@ -3826,7 +3884,7 @@ index ac2e82722..fa955944a 100644
      }
      delete user.newMessages;
      delete user.profile;
-@@ -546,7 +533,7 @@ api.sleep = {
+@@ -545,7 +532,7 @@ api.sleep = {
    url: '/user/sleep',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3835,7 +3893,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...sleepRes);
    },
-@@ -606,7 +593,7 @@ api.buy = {
+@@ -605,7 +592,7 @@ api.buy = {
      let quantity = 1;
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
@@ -3844,7 +3902,7 @@ index ac2e82722..fa955944a 100644
  
      await user.save();
      res.respond(200, ...buyRes);
-@@ -654,7 +641,7 @@ api.buyGear = {
+@@ -653,7 +640,7 @@ api.buyGear = {
    url: '/user/buy-gear/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3853,7 +3911,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...buyGearRes);
    },
-@@ -696,7 +683,7 @@ api.buyArmoire = {
+@@ -695,7 +682,7 @@ api.buyArmoire = {
      let user = res.locals.user;
      req.type = 'armoire';
      req.params.key = 'armoire';
@@ -3862,7 +3920,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...buyArmoireResponse);
    },
-@@ -736,7 +723,7 @@ api.buyHealthPotion = {
+@@ -735,7 +722,7 @@ api.buyHealthPotion = {
      let user = res.locals.user;
      req.type = 'potion';
      req.params.key = 'potion';
@@ -3871,7 +3929,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...buyHealthPotionResponse);
    },
-@@ -777,7 +764,7 @@ api.buyMysterySet = {
+@@ -776,7 +763,7 @@ api.buyMysterySet = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'mystery';
@@ -3880,7 +3938,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...buyMysterySetRes);
    },
-@@ -818,7 +805,7 @@ api.buyQuest = {
+@@ -817,7 +804,7 @@ api.buyQuest = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'quest';
@@ -3889,7 +3947,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...buyQuestRes);
    },
-@@ -1008,7 +995,7 @@ api.changeClass = {
+@@ -1007,7 +994,7 @@ api.changeClass = {
    url: '/user/change-class',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3898,7 +3956,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...changeClassRes);
    },
-@@ -1077,7 +1064,7 @@ api.purchase = {
+@@ -1076,7 +1063,7 @@ api.purchase = {
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
  
@@ -3907,7 +3965,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...purchaseRes);
    },
-@@ -1108,7 +1095,7 @@ api.userPurchaseHourglass = {
+@@ -1107,7 +1094,7 @@ api.userPurchaseHourglass = {
    url: '/user/purchase-hourglass/:type/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3916,7 +3974,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...purchaseHourglassRes);
    },
-@@ -1202,7 +1189,7 @@ api.userOpenMysteryItem = {
+@@ -1201,7 +1188,7 @@ api.userOpenMysteryItem = {
    url: '/user/open-mystery-item',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3925,7 +3983,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...openMysteryItemRes);
    },
-@@ -1234,7 +1221,7 @@ api.userReleasePets = {
+@@ -1233,7 +1220,7 @@ api.userReleasePets = {
    url: '/user/release-pets',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3934,7 +3992,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...releasePetsRes);
    },
-@@ -1283,7 +1270,7 @@ api.userReleaseBoth = {
+@@ -1282,7 +1269,7 @@ api.userReleaseBoth = {
    url: '/user/release-both',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3943,7 +4001,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...releaseBothRes);
    },
-@@ -1319,7 +1306,7 @@ api.userReleaseMounts = {
+@@ -1318,7 +1305,7 @@ api.userReleaseMounts = {
    url: '/user/release-mounts',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3952,7 +4010,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...releaseMountsRes);
    },
-@@ -1392,7 +1379,7 @@ api.userUnlock = {
+@@ -1391,7 +1378,7 @@ api.userUnlock = {
    url: '/user/unlock',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3961,7 +4019,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...unlockRes);
    },
-@@ -1418,7 +1405,7 @@ api.userRevive = {
+@@ -1417,7 +1404,7 @@ api.userRevive = {
    url: '/user/revive',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3970,7 +4028,7 @@ index ac2e82722..fa955944a 100644
      await user.save();
      res.respond(200, ...reviveRes);
    },
-@@ -1464,7 +1451,7 @@ api.userRebirth = {
+@@ -1463,7 +1450,7 @@ api.userRebirth = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      }).exec();
  
@@ -3979,7 +4037,7 @@ index ac2e82722..fa955944a 100644
  
      let toSave = tasks.map(task => task.save());
  
-@@ -1622,7 +1609,7 @@ api.userReroll = {
+@@ -1621,7 +1608,7 @@ api.userReroll = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      };
      let tasks = await Tasks.Task.find(query).exec();
@@ -3988,7 +4046,7 @@ index ac2e82722..fa955944a 100644
  
      let promises = tasks.map(task => task.save());
      promises.push(user.save());
-@@ -1673,12 +1660,6 @@ api.userReset = {
+@@ -1672,12 +1659,6 @@ api.userReset = {
        user.save(),
      ]);
  
@@ -4002,12 +4060,12 @@ index ac2e82722..fa955944a 100644
    },
  };
 diff --git a/website/server/controllers/top-level/dataexport.js b/website/server/controllers/top-level/dataexport.js
-index 9f075b27a..69136c9e6 100644
+index 7943355bb..03f7207eb 100644
 --- a/website/server/controllers/top-level/dataexport.js
 +++ b/website/server/controllers/top-level/dataexport.js
-@@ -13,11 +13,6 @@ import nconf from 'nconf';
+@@ -12,11 +12,6 @@ import Pageres from 'pageres';
+ import nconf from 'nconf';
  import got from 'got';
- import Bluebird from 'bluebird';
  import md from 'habitica-markdown';
 -import {
 -  S3,
@@ -4017,7 +4075,7 @@ index 9f075b27a..69136c9e6 100644
  
  const BASE_URL = nconf.get('BASE_URL');
  
-@@ -189,75 +184,6 @@ api.exportUserAvatarHtml = {
+@@ -188,75 +183,6 @@ api.exportUserAvatarHtml = {
    },
  };
  
@@ -4076,7 +4134,7 @@ index 9f075b27a..69136c9e6 100644
 -      Body: stream,
 -    });
 -
--    let s3res = await new Bluebird((resolve, reject) => {
+-    let s3res = await new Promise((resolve, reject) => {
 -      s3upload.send((err, s3uploadRes) => {
 -        if (err) {
 -          reject(err);
@@ -4094,10 +4152,10 @@ index 9f075b27a..69136c9e6 100644
   * @api {get} /export/inbox.html Export user private messages as HTML document
   * @apiName ExportUserPrivateMessages
 diff --git a/website/server/index.js b/website/server/index.js
-index df9493a08..3577e0d56 100644
+index 4c952caf7..c53937b22 100644
 --- a/website/server/index.js
 +++ b/website/server/index.js
-@@ -18,7 +18,6 @@ const setupNconf = require('./libs/setupNconf');
+@@ -12,7 +12,6 @@ const setupNconf = require('./libs/setupNconf');
  setupNconf();
  
  const nconf = require('nconf');
@@ -4105,7 +4163,7 @@ index df9493a08..3577e0d56 100644
  
  const cluster = require('cluster');
  const logger = require('./libs/logger');
-@@ -27,13 +26,6 @@ const IS_PROD = nconf.get('IS_PROD');
+@@ -21,13 +20,6 @@ const IS_PROD = nconf.get('IS_PROD');
  const IS_DEV = nconf.get('IS_DEV');
  const CORES = Number(nconf.get('WEB_CONCURRENCY')) || 0;
  
@@ -4147,7 +4205,7 @@ index fc2b61d88..4c1a76e33 100644
  
    async flagGroupMessage (group, message) {
 diff --git a/website/server/libs/cron.js b/website/server/libs/cron.js
-index 1e27c9ddb..9b323ce11 100644
+index 1c5855e6d..f28aff362 100644
 --- a/website/server/libs/cron.js
 +++ b/website/server/libs/cron.js
 @@ -159,22 +159,6 @@ function performSleepTasks (user, tasksByType, now, daysMissed) {
@@ -4562,10 +4620,10 @@ index 4c0861a1f..32440e146 100644
 -  clientSecret: nconf.get('GOOGLE_CLIENT_SECRET'),
 -}, (accessToken, refreshToken, profile, done) => done(null, profile)));
 diff --git a/website/server/middlewares/cron.js b/website/server/middlewares/cron.js
-index 0264c985d..d0173bcd5 100644
+index 750cf1ab8..dda2d04cd 100644
 --- a/website/server/middlewares/cron.js
 +++ b/website/server/middlewares/cron.js
-@@ -48,7 +48,6 @@ async function cronAsync (req, res) {
+@@ -47,7 +47,6 @@ async function cronAsync (req, res) {
    let user = res.locals.user;
    if (!user) return null; // User might not be available when authentication is not mandatory
  
@@ -4573,7 +4631,7 @@ index 0264c985d..d0173bcd5 100644
    let now = new Date();
  
    try {
-@@ -74,7 +73,7 @@ async function cronAsync (req, res) {
+@@ -73,7 +72,7 @@ async function cronAsync (req, res) {
      tasks.forEach(task => tasksByType[`${task.type}s`].push(task));
  
      // Run cron
@@ -4634,10 +4692,10 @@ index 1829c41af..132948e0b 100644
  
  const topLevelRouter = express.Router(); // eslint-disable-line new-cap
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
-index b00ef3368..42a04964c 100644
+index 6d16d3b7e..a8a5b22f1 100644
 --- a/website/server/models/challenge.js
 +++ b/website/server/models/challenge.js
-@@ -11,7 +11,6 @@ import {
+@@ -10,7 +10,6 @@ import {
  import { removeFromArray } from '../libs/collectionManipulators';
  import shared from '../../common';
  import { sendTxn as txnEmail } from '../libs/email';
@@ -4645,7 +4703,7 @@ index b00ef3368..42a04964c 100644
  import { TaskQueue } from 'cwait';
  import { syncableAttrs, setNextDue } from '../libs/taskManager';
  
-@@ -325,14 +324,6 @@ schema.methods.closeChal = async function closeChal (broken = {}) {
+@@ -324,14 +323,6 @@ schema.methods.closeChal = async function closeChal (broken = {}) {
          {name: 'CHALLENGE_NAME', content: challenge.name},
        ]);
      }
@@ -4674,12 +4732,12 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index daa00269d..17ca9f8fd 100644
+index 5ea63aa78..7d641d012 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
-@@ -21,16 +21,12 @@ import baseModel from '../libs/baseModel';
+@@ -20,16 +20,12 @@ import {
+ import baseModel from '../libs/baseModel';
  import { sendTxn as sendTxnEmail } from '../libs/email';
- import Bluebird from 'bluebird';
  import nconf from 'nconf';
 -import { sendNotification as sendPushNotification } from '../libs/pushNotifications';
 -import pusher from '../libs/pusher';
@@ -4694,7 +4752,7 @@ index daa00269d..17ca9f8fd 100644
  import { model as UserNotification } from './userNotification';
  
  const questScrolls = shared.content.quests;
-@@ -583,12 +579,6 @@ schema.methods.sendChat = function sendChat (message, user, metaData) {
+@@ -585,12 +581,6 @@ schema.methods.sendChat = function sendChat (message, user, metaData) {
      User.update(query, lastSeenUpdateAddNew, {multi: true}).exec();
    });
  
@@ -4707,7 +4765,7 @@ index daa00269d..17ca9f8fd 100644
    return newMessage;
  };
  
-@@ -679,7 +669,7 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -686,7 +676,7 @@ schema.methods.startQuest = async function startQuest (user) {
    // send notifications in the background without blocking
    User.find(
      { _id: { $in: nonUserQuestMembers } },
@@ -4716,7 +4774,7 @@ index daa00269d..17ca9f8fd 100644
    ).exec().then((membersToNotify) => {
      let membersToEmail = _.filter(membersToNotify, (member) => {
        // send push notifications and filter users that disabled emails
-@@ -689,19 +679,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -696,19 +686,6 @@ schema.methods.startQuest = async function startQuest (user) {
      sendTxnEmail(membersToEmail, 'quest-started', [
        { name: 'PARTY_URL', content: '/party' },
      ]);
@@ -4736,7 +4794,7 @@ index daa00269d..17ca9f8fd 100644
    });
    this.sendChat(`\`Your quest, ${quest.text('en')}, has started.\``, null, {
      participatingMembers: this.getParticipatingQuestMembers().join(', '),
-@@ -1144,12 +1121,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1151,12 +1128,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      promises.push(User.update({_id: user._id}, {$pull: {guilds: group._id}}).exec());
    } else {
      promises.push(User.update({_id: user._id}, {$set: {party: {}}}).exec());
@@ -4749,7 +4807,7 @@ index daa00269d..17ca9f8fd 100644
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  
-@@ -1415,12 +1386,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1422,12 +1393,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;
@@ -4791,10 +4849,10 @@ index e3994c8e0..c6f8a4a17 100644
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
-index d77c45cb6..e4f0a4666 100644
+index 0ebcfe673..810bf46a2 100644
 --- a/website/server/models/user/hooks.js
 +++ b/website/server/models/user/hooks.js
-@@ -165,29 +165,11 @@ function _setUpNewUser (user) {
+@@ -164,29 +164,11 @@ function _setUpNewUser (user) {
    return _populateDefaultTasks(user, taskTypes);
  }
  
@@ -4826,10 +4884,10 @@ index d77c45cb6..e4f0a4666 100644
  
  schema.pre('validate', function preValidateUser (next) {
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index fab636972..89b6da387 100644
+index 1f8712fef..c5f9a9d74 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
-@@ -12,9 +12,6 @@ import { defaults, map, flatten, flow, compact, uniq, partialRight } from 'lodas
+@@ -11,9 +11,6 @@ import { defaults, map, flatten, flow, compact, uniq, partialRight } from 'lodas
  import { model as UserNotification } from '../userNotification';
  import schema from './schema';
  import payments from '../../libs/payments';
@@ -4839,7 +4897,7 @@ index fab636972..89b6da387 100644
  
  const daysSince = common.daysSince;
  
-@@ -191,7 +188,7 @@ schema.methods.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -190,7 +187,7 @@ schema.methods.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
   * @param  options
   * @param  options.user  The user object who is purchasing
   * @param  options.groupId  The id of the group purchasing a subscription
@@ -4848,7 +4906,7 @@ index fab636972..89b6da387 100644
   * @param  options.cancellationReason  A text string to control sending an email
   *
   * @return a Promise from api.cancelSubscription()
-@@ -205,14 +202,6 @@ schema.methods.cancelSubscription = async function cancelSubscription (options =
+@@ -204,14 +201,6 @@ schema.methods.cancelSubscription = async function cancelSubscription (options =
    let plan = this.purchased.plan;
  
    options.user = this;

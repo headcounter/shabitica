@@ -43,7 +43,7 @@ index 75849de2c..cc8307c8b 100644
      methods: {
        validateEmail (email) {
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 15a484124..3c93cba61 100644
+index 15883a97d..d9499e5b8 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -62,7 +62,9 @@ async function _handleGroupInvitation (user, invite) {

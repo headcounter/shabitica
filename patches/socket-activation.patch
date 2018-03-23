@@ -1,5 +1,5 @@
 diff --git a/package.json b/package.json
-index 1448e9701..931f79824 100644
+index f82b5f82f..46a217dc9 100644
 --- a/package.json
 +++ b/package.json
 @@ -76,6 +76,7 @@
@@ -7,22 +7,22 @@ index 1448e9701..931f79824 100644
      "svgo": "^1.0.5",
      "svgo-loader": "^2.1.0",
 +    "systemd-socket": "^0.0.0",
-     "url-loader": "^0.6.2",
+     "url-loader": "^1.0.0",
      "useragent": "^2.1.9",
      "uuid": "^3.0.1",
 diff --git a/website/server/server.js b/website/server/server.js
-index 473cc4a28..8a281205f 100644
+index f76537da9..91c8e530e 100644
 --- a/website/server/server.js
 +++ b/website/server/server.js
-@@ -3,6 +3,7 @@ import logger from './libs/logger';
+@@ -2,6 +2,7 @@ import nconf from 'nconf';
+ import logger from './libs/logger';
  import express from 'express';
  import http from 'http';
- import Bluebird from 'bluebird';
 +import systemdSocket from 'systemd-socket';
  
- global.Promise = Bluebird;
- 
-@@ -29,7 +30,7 @@ import './models/user';
+ // @TODO: May need to remove - testing
+ import memwatch from 'memwatch-next';
+@@ -34,7 +35,7 @@ import './models/user';
  attachMiddlewares(app, server);
  
  server.on('request', app);

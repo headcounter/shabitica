@@ -128,6 +128,10 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
   QT_QPA_PLATFORM = "offscreen";
 
   preRebuild = (drv.preRebuild or "") + ''
+    # Remove package lock file, because we want to make sure we only use the
+    # dependencies in package.json as we have patches altering the file.
+    rm package-lock.json
+
     # Kill off files we do not want to have, as they redirect to external
     # services:
     ${lib.concatMapStrings (path: ''

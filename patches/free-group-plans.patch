@@ -265,10 +265,10 @@ index 07c7f6b17..d38ebc396 100644
      },
    },
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 510f2fdd2..206bfab23 100644
+index ea2b11f43..ef335aac2 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -22,6 +22,7 @@ import { encrypt } from '../../libs/encryption';
+@@ -21,6 +21,7 @@ import { encrypt } from '../../libs/encryption';
  import common from '../../../common';
  import shared from '../../../common';
  import apiMessages from '../../libs/apiMessages';
@@ -276,7 +276,7 @@ index 510f2fdd2..206bfab23 100644
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
  const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
-@@ -163,8 +164,6 @@ api.createGroupPlan = {
+@@ -162,8 +163,6 @@ api.createGroupPlan = {
      let user = res.locals.user;
      let group = new Group(Group.sanitize(req.body.groupToCreate));
  
@@ -285,10 +285,10 @@ index 510f2fdd2..206bfab23 100644
      let validationErrors = req.validationErrors();
      if (validationErrors) throw validationErrors;
  
-@@ -174,6 +173,18 @@ api.createGroupPlan = {
+@@ -173,6 +172,18 @@ api.createGroupPlan = {
      user.guilds.push(group._id);
  
-     let results = await Bluebird.all([user.save(), group.save()]);
+     let results = await Promise.all([user.save(), group.save()]);
 +
 +    await payments.createSubscription({
 +      user,
@@ -305,10 +305,10 @@ index 510f2fdd2..206bfab23 100644
  
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 17ca9f8fd..d98ef7f3c 100644
+index 7d641d012..92f26d6e6 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
-@@ -1367,15 +1367,13 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
+@@ -1374,15 +1374,13 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
  };
  
  schema.methods.isSubscribed = function isSubscribed () {

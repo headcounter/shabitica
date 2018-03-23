@@ -65,7 +65,7 @@ version="${sha_ver#*:}"
 
 srcpath="$(fetch_archive "$version" "$sha256")"
 
-node2nix -6 \
+node2nix -8 \
   -i <(get_package_json "$srcpath") \
   -o generated/node-packages.nix \
   --no-copy-node-env \
