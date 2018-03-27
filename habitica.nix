@@ -206,6 +206,9 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
     echo "checking whether emojis refer to S3 bucket..." >&2
     ! grep -r amazonaws node_modules/habitica-markdown-emoji
 
+    ${jq}/bin/jq '.url = "'"$BASE_URL"'"' < apidoc.json > tmp
+    mv tmp apidoc.json
+
     sed -i -e '
       s!\.dest(.*)!.dest("'${libjpeg.bin}'/bin")!
     ' node_modules/jpegtran-bin/lib/index.js
