@@ -1,0 +1,41 @@
+commit d2f3205166ea4e71addc27ae9c2231d708f36ae7
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 07:32:57 2018 +0200
+
+    Do not restrict email domains
+    
+    Those restrictions are on habitica.com and habitrpg.com, so they don't
+    apply to a standalone setup anyway.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: dont-restrict-email-domains.patch
+
+diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
+index 35c61bea8..c1738b5e7 100644
+--- a/website/server/models/user/schema.js
++++ b/website/server/models/user/schema.js
+@@ -14,8 +14,6 @@ import {
+ 
+ const Schema = mongoose.Schema;
+ 
+-const RESTRICTED_EMAIL_DOMAINS = Object.freeze(['habitica.com', 'habitrpg.com']);
+-
+ // User schema definition
+ let schema = new Schema({
+   apiToken: {
+@@ -37,15 +35,6 @@ let schema = new Schema({
+         validate: [{
+           validator: validator.isEmail,
+           message: shared.i18n.t('invalidEmail'),
+-        }, {
+-          validator (email) {
+-            let lowercaseEmail = email.toLowerCase();
+-
+-            return RESTRICTED_EMAIL_DOMAINS.every((domain) => {
+-              return !lowercaseEmail.endsWith(`@${domain}`);
+-            });
+-          },
+-          message: shared.i18n.t('invalidEmailDomain', { domains: RESTRICTED_EMAIL_DOMAINS.join(', ')}),
+         }],
+       },
+       username: {

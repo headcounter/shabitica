@@ -1,4 +1,4 @@
-commit 1c82d649221d901a8cb7e70503967eea0998809c
+commit e0a8a73516e8a765a8b4f49a8b4419a5b89ab476
 Author: aszlig <aszlig@nix.build>
 Date:   Tue Mar 27 05:37:18 2018 +0200
 
@@ -11,9 +11,9 @@ Date:   Tue Mar 27 05:37:18 2018 +0200
     For a standalone instance it doesn't make a lot of sense to have these,
     as the amount of users residing on that instance will be very low.
     
-    Right now I have added my own email address whenever a specific email
-    address was hardcoded, so we need to make sure we change that at some
-    point in time.
+    Other than that there are a few hardcoded email addresses spread around
+    the code, which is not the scope of this commit because we're patching
+    them while building the Nix derivation using sed.
     
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: one-admin-mailaddr.patch
@@ -52,71 +52,6 @@ index cf04a520a..5bfbbd7ef 100644
    },
  };
  
-diff --git a/website/client/components/settings/api.vue b/website/client/components/settings/api.vue
-index d9abca8c0..03100fc16 100644
---- a/website/client/components/settings/api.vue
-+++ b/website/client/components/settings/api.vue
-@@ -73,7 +73,7 @@
- import { mapState } from 'client/libs/store';
- import uuid from '../../../common/script/libs/uuid';
- // @TODO: env.EMAILS.TECH_ASSISTANCE_EMAIL
--const TECH_ASSISTANCE_EMAIL = 'admin@habitica.com';
-+const TECH_ASSISTANCE_EMAIL = 'aszlig@nix.build';
- 
- export default {
-   data () {
-diff --git a/website/client/components/static/communityGuidelines.vue b/website/client/components/static/communityGuidelines.vue
-index 1c22dcad5..621efe255 100644
---- a/website/client/components/static/communityGuidelines.vue
-+++ b/website/client/components/static/communityGuidelines.vue
-@@ -322,7 +322,7 @@
- 
- <script>
-   // @TODO: EMAILS.COMMUNITY_MANAGER_EMAIL
--  const COMMUNITY_MANAGER_EMAIL = 'admin@habitica.com';
-+  const COMMUNITY_MANAGER_EMAIL = 'aszlig@nix.build';
- 
-   export default {
-     data () {
-diff --git a/website/client/components/static/faq.vue b/website/client/components/static/faq.vue
-index a26e1260c..21edbc00c 100644
---- a/website/client/components/static/faq.vue
-+++ b/website/client/components/static/faq.vue
-@@ -24,7 +24,7 @@
- 
- <script>
-   // @TODO:  env.EMAILS.TECH_ASSISTANCE_EMAIL
--  const TECH_ASSISTANCE_EMAIL = 'admin@habitica.com';
-+  const TECH_ASSISTANCE_EMAIL = 'aszlig@nix.build';
-   import markdownDirective from 'client/directives/markdown';
- 
-   export default {
-diff --git a/website/client/components/static/pressKit.vue b/website/client/components/static/pressKit.vue
-index becbd69fa..b902c8f79 100644
---- a/website/client/components/static/pressKit.vue
-+++ b/website/client/components/static/pressKit.vue
-@@ -29,7 +29,7 @@
- 
- <script>
-   // @TODO: EMAILS.PRESS_ENQUIRY_EMAIL
--  const PRESS_ENQUIRY_EMAIL = 'admin@habitica.com';
-+  const PRESS_ENQUIRY_EMAIL = 'aszlig@nix.build';
- 
-   export default {
-     data () {
-diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index ebba6c095..5219cf597 100644
---- a/website/client/components/userMenu/profile.vue
-+++ b/website/client/components/userMenu/profile.vue
-@@ -563,7 +563,7 @@ import markdown from 'client/directives/markdown';
- import toggleSwitch from 'client/components/ui/toggleSwitch';
- import achievementsLib from '../../../common/script/libs/achievements';
- // @TODO: EMAILS.COMMUNITY_MANAGER_EMAIL
--const COMMUNITY_MANAGER_EMAIL = 'admin@habitica.com';
-+const COMMUNITY_MANAGER_EMAIL = 'aszlig@nix.build';
- import Content from '../../../common/script/content';
- import attributesGrid from 'client/components/inventory/equipment/attributesGrid';
- const DROP_ANIMALS = keys(Content.pets);
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
 index d9499e5b8..bb27905be 100644
 --- a/website/server/controllers/api-v3/auth.js

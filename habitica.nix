@@ -66,6 +66,9 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
     # We have subscriptions for all, so let's allow to change group leader in a
     # group that has a subscription.
     patches/always-permit-group-leader-change.patch
+
+    # Don't restrict to use email domains such as habitica.com or habitrpg.com.
+    patches/dont-restrict-email-domains.patch
   ];
 
   patchPhase = ":";
@@ -85,6 +88,7 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
     "fcm"
     "gcm"
     "google"
+    "habitica\\.com"
     "hellojs"
     "instagram"
     "itunes"
@@ -112,6 +116,7 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
     "package-lock.json"
     "package.json"
     "test"
+    "website/README.md"
     "website/client/assets"
     "website/client/components/settings/api.vue"
     "website/client/components/static/privacy.vue"
@@ -126,6 +131,22 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
 
   # For PhantomJS 2 with NixOS 17.09:
   QT_QPA_PLATFORM = "offscreen";
+
+  # Change all habitica.com URLs to use BASE_URL and all hardcoded email
+  # addresses to use ADMIN_EMAIL:
+  rewriteHabiticaURIs = let
+    sedEscape = lib.escape ["\\" "&" "!"];
+    mkHtmlMail = lib.replaceStrings ["@" "."] ["&commat;" "&period;"];
+
+    escBaseURL = sedEscape habiticaConfig.BASE_URL;
+    escSimpleMail = sedEscape habiticaConfig.ADMIN_EMAIL;
+    escHtmlMail = sedEscape (mkHtmlMail habiticaConfig.ADMIN_EMAIL);
+
+  in lib.concatStringsSep "; " [
+    "s!https\\?://habitica\\.com!${escBaseURL}!g"
+    "s![a-z]\\+@habitica\\.com!${escSimpleMail}!g"
+    "s![a-z]\\+&commat;habitica&period;com!${escHtmlMail}!g"
+  ];
 
   preRebuild = (drv.preRebuild or "") + ''
     # Remove package lock file, because we want to make sure we only use the
@@ -169,6 +190,10 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
       patch -p1 < "$patch"
     done
 
+    # See 'rewriteHabiticaURIs' attribute above.
+    find . -path ./test -prune -o -path ./website/static -prune -o \
+      -type f -exec sed -i -e "$rewriteHabiticaURIs" {} +
+
     echo "checking whether we have external services in the code..." >&2
     extServices="$(
       eval find . $excludedCanaryPaths -o -type f \
@@ -205,9 +230,6 @@ nodePackages.habitica.overrideAttrs (drv: habiticaConfig // {
 
     echo "checking whether emojis refer to S3 bucket..." >&2
     ! grep -r amazonaws node_modules/habitica-markdown-emoji
-
-    ${jq}/bin/jq '.url = "'"$BASE_URL"'"' < apidoc.json > tmp
-    mv tmp apidoc.json
 
     sed -i -e '
       s!\.dest(.*)!.dest("'${libjpeg.bin}'/bin")!
