@@ -1,3 +1,17 @@
+commit 892c3474bb6ab7018ee7a76a1d08ddaa4cc1636b
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:13 2018 +0200
+
+    Only allow users with a valid invitation link
+    
+    We don't want everybody to create accounts on this instance but only
+    selected users we explicitly invite, so let's remove the registration
+    form from the home page and only show it whenever the user directly
+    follows an invitation URL.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: invite-only.patch
+
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
 index 75849de2c..cc8307c8b 100644
 --- a/website/client/components/static/home.vue

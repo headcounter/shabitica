@@ -1,3 +1,19 @@
+commit ce1fb2cb884fb65b1721936091ab83d6f730f692
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:23 2018 +0200
+
+    Allow anybody to create a group plan
+    
+    Group plans are not free on the official instance, so in order to get
+    this feature in the standalone instance we need to create the group in
+    the same way as it would be created when the user would use one of the
+    payment systems to pay for the subscription.
+    
+    The subscription is unlimited of course.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: free-group-plans.patch
+
 diff --git a/website/client/components/group-plans/index.vue b/website/client/components/group-plans/index.vue
 index 7674d4b6f..82c2825f4 100644
 --- a/website/client/components/group-plans/index.vue

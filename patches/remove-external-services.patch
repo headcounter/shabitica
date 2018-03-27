@@ -1,3 +1,45 @@
+commit e659ac00ed68805fdc4f13971b5ccd5cf679f111
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:11 2018 +0200
+
+    Remove all external services from the code
+    
+    This is one of the bigger changes in our standalone version and this
+    removes all the analytics, trackers, payment systems, social networking
+    integration and others.
+    
+    The services that are removed are the following:
+    
+      * Amazon Payments
+      * Amazon S3
+      * Amplitude (users behavior analytics)
+      * Apple Push Notifications
+      * Apple iTunes Store
+      * CloudKarafka (hosted Apache Kafka service)
+      * External request to Google Fonts
+      * Facebook share buttons
+      * Facebook social authentication
+      * Firebase Cloud Messaging
+      * Google Analytics
+      * Google Cloud Messaging
+      * Google Docs links
+      * Google In-App-Payments
+      * Google Play Store
+      * Google social authentication
+      * Instagram links
+      * Loggly log analysis
+      * New Relic analytics
+      * Paypal payments
+      * Pusher (publish/subscribe)
+      * Slack integration
+      * StackImpact (external service for performance profiling)
+      * Stripe payments
+      * Tumblr share buttons
+      * Twitter share buttons
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: remove-external-services.patch
+
 diff --git a/config.json.example b/config.json.example
 index b2549efdb..3181d70c5 100644
 --- a/config.json.example

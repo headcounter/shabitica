@@ -1,3 +1,17 @@
+commit f4524d7e17ea610cd290b58be368dcdf7e264b47
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:08 2018 +0200
+
+    Fix parsing port number in URLs during redirection
+    
+    The parsing in the redirects module was simply determining the base host
+    via trimming off everything up to //, so something like
+    http://localhost:3000 will result in localhost:3000, which isn't a valid
+    host name.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: redirect-fix-port.patch
+
 diff --git a/website/server/middlewares/redirects.js b/website/server/middlewares/redirects.js
 index 9bc40cb43..0de427c2e 100644
 --- a/website/server/middlewares/redirects.js

@@ -1,3 +1,19 @@
+commit 4d0e15941b793b4487111814304d86f04bb615b3
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:09 2018 +0200
+
+    Grant lifetime subscriptions to everybody
+    
+    We do not use payment for our standalone instance, so let's actually
+    make sure that everybody is able to play the game without stumbling on
+    stuff they can't buy.
+    
+    Having a lifetime subscription allows players to buy gems for 20 gold in
+    the market.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: subscriptions4all.patch
+
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
 index ae62382f4..0ed9cdce4 100644
 --- a/website/server/controllers/api-v3/auth.js

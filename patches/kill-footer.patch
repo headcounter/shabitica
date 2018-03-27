@@ -1,3 +1,18 @@
+commit 5601fe9b9ae08263fc8fd871a338d2a9dfd3fc5f
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:21 2018 +0200
+
+    Remove footer from every page
+    
+    The footer really takes up too much space and also has links to stuff
+    that is only relevant for the official instance.
+    
+    We might reintroduce it in a smaller form someday, but for now let's get
+    rid of it.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: kill-footer.patch
+
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
 index 3c559ee1e..5b35d07e3 100644
 --- a/website/client/components/appFooter.vue

@@ -1,3 +1,23 @@
+commit f7cf04e818e811c17545a4dbc6b09534671ff4c7
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:16 2018 +0200
+
+    Support email notifications using sendmail utility
+    
+    The official Habitica setup uses MailChimp to send out emails and it's
+    doing so by talking to their API, giving only a few template variables.
+    
+    However, the real mail templates are hosted within their MailChimp
+    account, so we don't have access to the templates.
+    
+    So I've added a few of those templates as simple text mails and using
+    ugly inline code instead of proper templates.
+    
+    But for now I think this will do.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: sendmail.patch
+
 diff --git a/config.json.example b/config.json.example
 index 3181d70c5..4b187a7ec 100644
 --- a/config.json.example

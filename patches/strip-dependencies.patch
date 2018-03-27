@@ -1,3 +1,15 @@
+commit 0cb210e78a0e62c149d0aaab86834cfe7402b783
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:02 2018 +0200
+
+    Remove unneeded dependencies
+    
+    These dependencies are mostly for external services we certainly do not
+    need.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: strip-dependencies.patch
+
 diff --git a/package.json b/package.json
 index 48e7fbc75..f82b5f82f 100644
 --- a/package.json

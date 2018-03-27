@@ -1,3 +1,19 @@
+commit 9c8607fb4d68bb685f5c98db8df90a341f0d79a8
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:27 2018 +0200
+
+    Always allow to change the group leader
+    
+    We have free group plans anyway, so it really doesn't make much sense to
+    prevent a group leader to hand over leadership to another person.
+    
+    For the official instance something like this would make sense, because
+    the other person didn't necessarily pay or is able to pay for the group
+    plan, but on our instance the group plan is free.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: always-permit-group-leader-change.patch
+
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
 index ef335aac2..baf9f9141 100644
 --- a/website/server/controllers/api-v3/groups.js

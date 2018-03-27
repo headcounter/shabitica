@@ -1,3 +1,23 @@
+commit 1c82d649221d901a8cb7e70503967eea0998809c
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:18 2018 +0200
+
+    Use ADMIN_EMAIL everywhere, except when hardcoded
+    
+    There were multiple different email addresses for different
+    responsibilities, like COMMUNITY_MANAGER_EMAIL, TECH_ASSISTANCE_EMAIL,
+    FLAG_REPORT_EMAILS and PRESS_ENQUIRY_EMAIL.
+    
+    For a standalone instance it doesn't make a lot of sense to have these,
+    as the amount of users residing on that instance will be very low.
+    
+    Right now I have added my own email address whenever a specific email
+    address was hardcoded, so we need to make sure we change that at some
+    point in time.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: one-admin-mailaddr.patch
+
 diff --git a/config.json.example b/config.json.example
 index 4b187a7ec..7f562276f 100644
 --- a/config.json.example

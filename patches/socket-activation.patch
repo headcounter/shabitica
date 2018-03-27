@@ -1,3 +1,15 @@
+commit 057a7f862f498c6f31a17337a199b9a21de78d9e
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:06 2018 +0200
+
+    Support for systemd socket activation
+    
+    This adds another dependency to make support for socket activation very
+    trivial.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: socket-activation.patch
+
 diff --git a/package.json b/package.json
 index f82b5f82f..46a217dc9 100644
 --- a/package.json

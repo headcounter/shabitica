@@ -1,3 +1,20 @@
+commit 5778833c7444135193091f0d257e5397512eff34
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:23 2018 +0200
+
+    Allow to register if the instance has no users
+    
+    Our instance is invite-only, so there needs to be a first user who can
+    invite other people.
+    
+    Other than that it also makes it more convenient for test instances,
+    because we don't need to use a database command to create the first
+    user, where the data needed for the user entry might change between
+    releases.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: allow-register-first.patch
+
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
 index bb27905be..1f2f6c6d8 100644
 --- a/website/server/controllers/api-v3/auth.js
