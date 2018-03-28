@@ -1,4 +1,4 @@
-commit 057a7f862f498c6f31a17337a199b9a21de78d9e
+commit 519ac5e32b0371ab83cf3dd5f470000ce56d8114
 Author: aszlig <aszlig@nix.build>
 Date:   Tue Mar 27 05:37:06 2018 +0200
 
@@ -11,7 +11,7 @@ Date:   Tue Mar 27 05:37:06 2018 +0200
     Filename: socket-activation.patch
 
 diff --git a/package.json b/package.json
-index f82b5f82f..46a217dc9 100644
+index 987d9ca7a..7231c9a1e 100644
 --- a/package.json
 +++ b/package.json
 @@ -76,6 +76,7 @@
@@ -23,7 +23,7 @@ index f82b5f82f..46a217dc9 100644
      "useragent": "^2.1.9",
      "uuid": "^3.0.1",
 diff --git a/website/server/server.js b/website/server/server.js
-index f76537da9..91c8e530e 100644
+index 5dee447b9..36382f0fe 100644
 --- a/website/server/server.js
 +++ b/website/server/server.js
 @@ -2,6 +2,7 @@ import nconf from 'nconf';

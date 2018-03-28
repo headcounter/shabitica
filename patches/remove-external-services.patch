@@ -1,4 +1,4 @@
-commit e659ac00ed68805fdc4f13971b5ccd5cf679f111
+commit 9d7d04445643585973cf66f52a6421165fac79ab
 Author: aszlig <aszlig@nix.build>
 Date:   Tue Mar 27 05:37:11 2018 +0200
 
@@ -209,7 +209,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index d8d36bddc..c599489ac 100644
+index 9cb26b962..192fce2fc 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -241,7 +241,7 @@ index d8d36bddc..c599489ac 100644
    },
    data () {
      return {
-@@ -372,8 +367,6 @@ export default {
+@@ -373,8 +368,6 @@ export default {
          this.$store.dispatch('tasks:fetchUserTasks'),
        ]).then(() => {
          this.$store.state.isUserLoaded = true;
@@ -250,7 +250,7 @@ index d8d36bddc..c599489ac 100644
  
          this.hideLoadingScreen();
  
-@@ -385,9 +378,6 @@ export default {
+@@ -386,9 +379,6 @@ export default {
          }
  
          this.$nextTick(() => {
@@ -260,7 +260,7 @@ index d8d36bddc..c599489ac 100644
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -417,8 +407,6 @@ export default {
+@@ -418,8 +408,6 @@ export default {
          if (data.fromRoot) return;
          const modalStack = this.$store.state.modalStack;
  
@@ -269,7 +269,7 @@ index d8d36bddc..c599489ac 100644
          // Add new modal to the stack
          const prev = modalStack[modalStack.length - 1];
          const prevId = prev ? prev.modalId : undefined;
-@@ -473,18 +461,6 @@ export default {
+@@ -474,18 +462,6 @@ export default {
  
        return true;
      },
