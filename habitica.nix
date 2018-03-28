@@ -116,4 +116,6 @@ in rec {
       cp -rdT apidoc_build "$out"
     '';
   });
+
+  source = src;
 }
