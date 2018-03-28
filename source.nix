@@ -67,6 +67,9 @@ stdenv.mkDerivation rec {
 
     # Hardcode the server version using substituteInPlace below.
     patches/hardcoded-server-version.patch
+
+    # Don't serve static files as we do have a web server for that.
+    patches/remove-static-middleware.patch
   ];
 
   # Kill off files we do not want to have, as they redirect to external

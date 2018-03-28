@@ -1,0 +1,62 @@
+commit 9b1bd9a236564c4f89c70a94efaed6cbb708db75
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Mar 28 08:26:40 2018 +0200
+
+    server: Remove static middleware
+    
+    We do have a web server which is serving static files, so let's make
+    sure that express doesn't serve any static files, mainly because I don't
+    trust it very much to handle directory traversal very well.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: remove-static-middleware.patch
+
+diff --git a/website/server/middlewares/index.js b/website/server/middlewares/index.js
+index 501a8c354..48a1e3f7d 100644
+--- a/website/server/middlewares/index.js
++++ b/website/server/middlewares/index.js
+@@ -6,7 +6,6 @@ import nconf from 'nconf';
+ import morgan from 'morgan';
+ import cookieSession from 'cookie-session';
+ import cors from './cors';
+-import staticMiddleware from './static';
+ import domainMiddleware from './domain';
+ import mongoose from 'mongoose';
+ import compression from 'compression';
+@@ -90,7 +89,6 @@ module.exports = function attachMiddlewares (app, server) {
+   app.use('/api/v2', v2);
+   app.use('/api/v1', v1);
+   app.use(v3); // the main app, also setup top-level routes
+-  staticMiddleware(app);
+ 
+   app.use(notFoundHandler);
+ 
+diff --git a/website/server/middlewares/static.js b/website/server/middlewares/static.js
+deleted file mode 100644
+index 81d391d9a..000000000
+--- a/website/server/middlewares/static.js
++++ /dev/null
+@@ -1,23 +0,0 @@
+-import express from 'express';
+-import nconf from 'nconf';
+-import path from 'path';
+-
+-const IS_PROD = nconf.get('IS_PROD');
+-const MAX_AGE = IS_PROD ? 31536000000 : 0;
+-const BASE_DIR = path.join(__dirname, '/../../..');
+-
+-module.exports = function staticMiddleware (expressApp) {
+-  // Expose static files for new client
+-  expressApp.use('/static/js', express.static(`${BASE_DIR}/dist-client/static/js`, { maxAge: MAX_AGE }));
+-  expressApp.use('/static/css', express.static(`${BASE_DIR}/dist-client/static/css`, { maxAge: MAX_AGE }));
+-  expressApp.use('/static/svg', express.static(`${BASE_DIR}/dist-client/static/svg`, { maxAge: MAX_AGE }));
+-  expressApp.use('/static/images', express.static(`${BASE_DIR}/dist-client/static/images`, { maxAge: MAX_AGE }));
+-
+-  // @TODO img/js/css under /static have their names hashed after every change so they can be cached
+-  // Not files in /audio and /sprites, that's why we don't cache them.
+-  // Hash their file names and cache the entire /static folder
+-  expressApp.use('/static', express.static(`${BASE_DIR}/dist-client/static`));
+-
+-  // Apidoc
+-  expressApp.use('/apidoc', express.static(`${BASE_DIR}/apidoc_build`));
+-};
