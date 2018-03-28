@@ -38,7 +38,7 @@ let
     ];
   };
 
-in {
+in rec {
   client = stdenv.mkDerivation (common // {
     name = "habitica-client-${version}";
     inherit src version;
@@ -77,6 +77,11 @@ in {
       sed -i -e '/^const PATH_TO_CONFIG/ {
         c const PATH_TO_CONFIG = "'"$out"'/etc/habitica/config.json";
       }' website/server/libs/setupNconf.js
+
+      # Hardcode the data of the client's index.html.
+      indexData="$(sed -e 's/[\\'\''']/\\&/g' "${client}/index.html")"
+      substituteInPlace website/server/libs/client.js \
+        --subst-var-by CLIENT_INDEX_DATA "$indexData"
     '';
 
     nativeBuildInputs = common.nativeBuildInputs ++ [ makeWrapper ];

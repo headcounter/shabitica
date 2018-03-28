@@ -1,0 +1,26 @@
+commit aac42cb253e88816fdf3046e2f71beb3cf439743
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Mar 28 08:39:05 2018 +0200
+
+    server: Don't make assumptions about client path
+    
+    In our setup, the client's index.html is in a different location than
+    what is assumed by the code, so let's include a substvar here so we can
+    hardcode the full string data of the client's index.html during Nix
+    build.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: server-client-path.patch
+
+diff --git a/website/server/libs/client.js b/website/server/libs/client.js
+index 12aa476c9..41e6a536d 100644
+--- a/website/server/libs/client.js
++++ b/website/server/libs/client.js
+@@ -1,5 +1,5 @@
+ const ROOT = `${__dirname}/../../../`;
+ 
+ export function serveClient (expressRes) {
+-  return expressRes.sendFile('./dist-client/index.html', {root: ROOT});
++  return expressRes.send('@CLIENT_INDEX_DATA@');
+ }
+\ No newline at end of file

@@ -70,6 +70,10 @@ stdenv.mkDerivation rec {
 
     # Don't serve static files as we do have a web server for that.
     patches/remove-static-middleware.patch
+
+    # Correctly serve the client's index.html (patched using substituteInPlace
+    # in habitica.nix).
+    patches/server-client-path.patch
   ];
 
   # Kill off files we do not want to have, as they redirect to external
