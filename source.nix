@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
   version = "4.33.0";
 
   src = fetchFromGitHub {
+    name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
