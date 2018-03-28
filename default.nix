@@ -1,18 +1,9 @@
-{ config, pkgs, system, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   habitica = pkgs.callPackage ./habitica.nix {
-    nodePackages = lib.mapAttrs' (lib.const (attrs: {
-      name = attrs.packageName;
-      value = attrs;
-    })) (import ./generated {
-      inherit pkgs; inherit (config.nixpkgs) system;
-    });
     habiticaConfig = config.habitica.config;
   };
-
-  basePath = "${habitica}/lib/node_modules/habitica";
-  basePathText = "\${habitica}/lib/node_modules/habitica";
 
 in {
   options.habitica = {
@@ -24,22 +15,23 @@ in {
 
     baseURL = lib.mkOption {
       type = lib.types.str;
-      default = "https://habitica.headcounter.org";
+      default = "https://${config.habitica.hostName}";
+      defaultText = "https://\${config.habitica.hostName}";
       description = "The base URL to use for serving web site content.";
     };
 
     staticPath = lib.mkOption {
       type = lib.types.path;
-      default = "${basePath}/dist-client";
-      defaultText = "${basePathText}/dist-client";
+      default = "${habitica}/share/habitica/client";
+      defaultText = "\${habitica}/share/habitica/client";
       readOnly = true;
       description = "The path to the static assets of Habitica.";
     };
 
     apiDocPath = lib.mkOption {
       type = lib.types.path;
-      default = "${basePath}/apidoc_build";
-      defaultText = "${basePathText}/apidoc_build";
+      default = "${habitica}/share/habitica/apidoc";
+      defaultText = "\${habitica}/share/habitica/apidoc";
       readOnly = true;
       description = "The path to the API documentation.";
     };
@@ -148,22 +140,11 @@ in {
         description = "Habitica";
         after = [ "habitica-init.service" "habitica-db.service" ];
 
-        environment = lib.mapAttrs (lib.const toString) config.habitica.config;
-
-        serviceConfig = {
-          ExecStart = let
-            websitePath = "${habitica}/lib/node_modules/habitica/website";
-          in lib.concatMapStringsSep " " lib.escapeShellArg [
-            "@${pkgs.nodejs-8_x}/bin/node" "habitica-server"
-            "${websitePath}/transpiled-babel/index.js"
-          ];
-
-          User = "habitica";
-          Group = "habitica";
-          PrivateTmp = true;
-          PrivateNetwork = true;
-          WorkingDirectory = "${habitica}/lib/node_modules/habitica";
-        };
+        serviceConfig.ExecStart = "${habitica}/bin/habitica-server";
+        serviceConfig.User = "habitica";
+        serviceConfig.Group = "habitica";
+        serviceConfig.PrivateTmp = true;
+        serviceConfig.PrivateNetwork = true;
       };
     }
     (lib.mkIf config.habitica.useNginx {

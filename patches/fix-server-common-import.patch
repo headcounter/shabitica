@@ -1,0 +1,28 @@
+commit 9820ab5c52b1f6af0370e508cae14ee0de115bc9
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Mar 28 07:08:45 2018 +0200
+
+    Fix import of common module from server
+    
+    It's not really necessary to go through ../website here, because server
+    and common are in the same directory.
+    
+    In our setup, the directory layout is a little bit different, so we
+    don't have a "website" directory.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: fix-server-common-import.patch
+
+diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
+index 988ba2f92..afa7c4c72 100644
+--- a/website/server/controllers/api-v3/members.js
++++ b/website/server/controllers/api-v3/members.js
+@@ -18,7 +18,7 @@ import {
+   getUserInfo,
+   sendTxn as sendTxnEmail,
+ } from '../../libs/email';
+-import { achievements } from '../../../../website/common/';
++import { achievements } from '../../../common/';
+ 
+ let api = {};
+ 

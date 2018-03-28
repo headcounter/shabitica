@@ -1,0 +1,61 @@
+commit 2ada42f9022668bce752b5656907e8648bddd118
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Mar 28 07:11:27 2018 +0200
+
+    webpack: Use NODE_PATH for resolving dependencies
+    
+    While this won't help for resolving *all* required modules, this at
+    least works around a few issues with file-loader.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: webpack-node-path.patch
+
+diff --git a/webpack/webpack.base.conf.js b/webpack/webpack.base.conf.js
+index 5da0df5a5..ea89f6eb7 100644
+--- a/webpack/webpack.base.conf.js
++++ b/webpack/webpack.base.conf.js
+@@ -1,6 +1,7 @@
+ /* eslint-disable no-process-env, no-console */
+ 
+ const path = require('path');
++const fs = require('fs');
+ const config = require('./config');
+ const utils = require('./utils');
+ const webpack = require('webpack');
+@@ -8,6 +9,10 @@ const projectRoot = path.resolve(__dirname, '../');
+ const autoprefixer = require('autoprefixer');
+ const postcssEasyImport = require('postcss-easy-import');
+ const IS_PROD = process.env.NODE_ENV === 'production';
++const nodePathBase = process.env.NODE_PATH.split(':');
++const nodePathDeep = nodePathBase.map(p =>
++  path.join(p, fs.readdirSync(p)[0], 'node_modules'))
++const nodePath = nodePathBase.concat(nodePathDeep);
+ 
+ const baseConfig = {
+   entry: {
+@@ -28,13 +33,15 @@ const baseConfig = {
+       return filename;
+     },
+   },
++  resolveLoader: {
++    modules: nodePath,
++  },
+   resolve: {
+     extensions: ['*', '.js', '.vue', '.json'],
+     modules: [
+       path.join(projectRoot, 'website'),
+       path.join(projectRoot, 'test/client/unit'),
+-      path.join(projectRoot, 'node_modules'),
+-    ],
++    ].concat(nodePath),
+     alias: {
+       website: path.resolve(projectRoot, 'website'),
+       common: path.resolve(projectRoot, 'website/common'),
+@@ -57,6 +64,7 @@ const baseConfig = {
+               config.build.productionSourceMap :
+               config.dev.cssSourceMap,
+             extract: IS_PROD,
++            modules: nodePath,
+           }),
+           postcss: [
+             autoprefixer({
