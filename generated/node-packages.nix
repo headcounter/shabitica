@@ -2830,15 +2830,6 @@ let
         sha1 = "458c07e09e0d900fc28b70a3fec2dacd1d2cb7f6";
       };
     };
-    "combine-source-map-0.7.2" = {
-      name = "combine-source-map";
-      packageName = "combine-source-map";
-      version = "0.7.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/combine-source-map/-/combine-source-map-0.7.2.tgz";
-        sha1 = "0870312856b307a87cc4ac486f3a9a62aeccc09e";
-      };
-    };
     "combine-source-map-0.8.0" = {
       name = "combine-source-map";
       packageName = "combine-source-map";
@@ -4378,13 +4369,13 @@ let
         sha1 = "45355248a88979034b6792e19bb81f2b7975dd0d";
       };
     };
-    "es5-ext-0.10.41" = {
+    "es5-ext-0.10.42" = {
       name = "es5-ext";
       packageName = "es5-ext";
-      version = "0.10.41";
+      version = "0.10.42";
       src = fetchurl {
-        url = "https://registry.npmjs.org/es5-ext/-/es5-ext-0.10.41.tgz";
-        sha512 = "21picpky6mk1gfm8c9j9790mqmy2m8a1sh9z6zx99fqxw66ablibsk4cdj85cx186105vxk95faq0wnx1ijbi4lgci37hfz0pdv90ii";
+        url = "https://registry.npmjs.org/es5-ext/-/es5-ext-0.10.42.tgz";
+        sha512 = "1412ssfrx1kvraz8kp4x9lc1jzcdh2952vbmlimrfalmbjv44rh504ihb4fg5mjwx8ix1f1wii0a0qngwrfk4gl271mcywgp7b4x700";
       };
     };
     "es6-iterator-2.0.3" = {
@@ -6871,13 +6862,13 @@ let
         sha512 = "1wsmzzva3rfjb4bfks7ba2nvha9ziwgq2kag6xxibc5cc6mz19xbgj4fm3a7ghvfbfx4am0x13ibc8j2s5m3sv12nph44rq56gnvv47";
       };
     };
-    "insert-module-globals-7.0.4" = {
+    "insert-module-globals-7.0.5" = {
       name = "insert-module-globals";
       packageName = "insert-module-globals";
-      version = "7.0.4";
+      version = "7.0.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/insert-module-globals/-/insert-module-globals-7.0.4.tgz";
-        sha512 = "3lad31igjs8dr3aswr8l7bw75cjvcr2y8yrlw8mh0awqx1mlxbahkhw9an8zg7r26pr3xjsxba2r0wzszwxs5sfvp822awfcb3izyv7";
+        url = "https://registry.npmjs.org/insert-module-globals/-/insert-module-globals-7.0.5.tgz";
+        sha512 = "3fk0jxs2s9i64hqs1y6ncl81nddpb2kr58myi8805mg9j3xgmn5svxmk8xwvm2358snahh9r0k1zmpv6512sq383zp4m6sc5an6s162";
       };
     };
     "interpret-1.1.0" = {
@@ -16019,7 +16010,7 @@ in
       sources."each-props-1.3.1"
       sources."end-of-stream-1.4.1"
       sources."error-ex-1.3.1"
-      sources."es5-ext-0.10.41"
+      sources."es5-ext-0.10.42"
       sources."es6-iterator-2.0.3"
       sources."es6-symbol-3.1.1"
       sources."es6-weak-map-2.0.2"
@@ -18588,7 +18579,7 @@ in
       sources."enhanced-resolve-3.4.1"
       sources."errno-0.1.7"
       sources."error-ex-1.3.1"
-      sources."es5-ext-0.10.41"
+      sources."es5-ext-0.10.42"
       sources."es6-iterator-2.0.3"
       sources."es6-map-0.1.5"
       sources."es6-set-0.1.5"
@@ -22598,10 +22589,10 @@ in
   "sinon-^4.4.5" = nodeEnv.buildNodePackage {
     name = "sinon";
     packageName = "sinon";
-    version = "4.4.9";
+    version = "4.4.10";
     src = fetchurl {
-      url = "https://registry.npmjs.org/sinon/-/sinon-4.4.9.tgz";
-      sha512 = "2bdgcfah5adjs0bn6m7lksmki9lp32w4vw174j000c4z9j5h0hnjbp896fxhgr38a2as8rw1vp0q0m9ws0za22ycjdbmxxw85f26gfi";
+      url = "https://registry.npmjs.org/sinon/-/sinon-4.4.10.tgz";
+      sha512 = "2hmi98cl2p9pnh4dchy8f6a2mzhrs49azk3svbnl3mz6wckriyqlymam480k5562aycacsnlj4s390kqi5fkq3q8lyqdfg1hf0ha5hv";
     };
     dependencies = [
       sources."@sinonjs/formatio-2.0.0"
@@ -23391,7 +23382,6 @@ in
       (sources."browserify-14.5.0" // {
         dependencies = [
           sources."acorn-5.5.3"
-          sources."combine-source-map-0.7.2"
           sources."hash-base-2.0.2"
           sources."isarray-2.0.4"
           sources."process-nextick-args-2.0.0"
@@ -23573,7 +23563,7 @@ in
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
       sources."inline-source-map-0.6.2"
-      (sources."insert-module-globals-7.0.4" // {
+      (sources."insert-module-globals-7.0.5" // {
         dependencies = [
           sources."concat-stream-1.6.2"
         ];
