@@ -77,6 +77,8 @@ stdenv.mkDerivation rec {
     patches/server-client-path.patch
   ];
 
+  patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
+
   # Kill off files we do not want to have, as they redirect to external
   # services:
   prePatch = lib.concatMapStrings (path: ''
