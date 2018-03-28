@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  habitica = pkgs.callPackage ./habitica.nix {
+  habitica = pkgs.callPackages ./habitica.nix {
     habiticaConfig = config.habitica.config;
   };
 
@@ -22,16 +22,16 @@ in {
 
     staticPath = lib.mkOption {
       type = lib.types.path;
-      default = "${habitica}/share/habitica/client";
-      defaultText = "\${habitica}/share/habitica/client";
+      default = habitica.client;
+      defaultText = "habitica.client";
       readOnly = true;
       description = "The path to the static assets of Habitica.";
     };
 
     apiDocPath = lib.mkOption {
       type = lib.types.path;
-      default = "${habitica}/share/habitica/apidoc";
-      defaultText = "\${habitica}/share/habitica/apidoc";
+      default = habitica.apidoc;
+      defaultText = "habitica.apidoc";
       readOnly = true;
       description = "The path to the API documentation.";
     };
@@ -140,7 +140,7 @@ in {
         description = "Habitica";
         after = [ "habitica-init.service" "habitica-db.service" ];
 
-        serviceConfig.ExecStart = "${habitica}/bin/habitica-server";
+        serviceConfig.ExecStart = "${habitica.server}/bin/habitica-server";
         serviceConfig.User = "habitica";
         serviceConfig.Group = "habitica";
         serviceConfig.PrivateTmp = true;
