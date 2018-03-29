@@ -19,6 +19,8 @@ let
 
   common = {
     configurePhase = ''
+      runHook preConfigure
+
       # Merge config.json.example with our config and create config.json:
       echo ${lib.escapeShellArg (builtins.toJSON habiticaConfig)} \
         | ${jq}/bin/jq -s '.[0] * .[1]' config.json.example - > config.json
@@ -29,7 +31,13 @@ let
     buildPhase = let
       mkVar = key: val: "${key}=${lib.escapeShellArg (toString val)}";
       env = lib.concatStringsSep " " (lib.mapAttrsToList mkVar habiticaConfig);
-    in "HOME=\"$PWD\" ${env} gulp $gulpTarget";
+    in ''
+      runHook preBuild
+
+      HOME="$PWD" ${env} gulp $gulpTarget
+
+      runHook postBuild
+    '';
 
     nativeBuildInputs = [ nodejs-8_x ];
     buildInputs = (lib.attrValues nodePackages.main) ++ [
