@@ -82,6 +82,9 @@ stdenv.mkDerivation rec {
 
     # Changes the privacy policy to be less awful.
     patches/privacy-policy.patch
+
+    # Import moment by importing moment-recur instead.
+    patches/fix-moment-recur-import.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
