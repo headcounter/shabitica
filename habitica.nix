@@ -93,13 +93,14 @@ in rec {
     installPhase = ''
       mkdir -p "$out/bin" "$out/libexec/habitica"
       install -vD -m 0644 config.json "$out/etc/habitica/config.json"
-      cp -rdT website/transpiled-babel "$out/libexec/habitica/transpiled-babel"
-      cp -rdT website/common "$out/libexec/habitica/common"
+      cp -rdT website/transpiled-babel "$out/libexec/habitica/server"
+      cp -rdT website/common/transpiled-babel "$out/libexec/habitica/common"
+      cp -rdT website/common/locales "$out/libexec/habitica/common/locales"
 
       makeWrapper \
         ${lib.escapeShellArg "${nodejs-8_x}/bin/node"} \
         "$out/bin/habitica-server" \
-        --add-flags "$out/libexec/habitica/transpiled-babel/index.js" \
+        --add-flags "$out/libexec/habitica/server/index.js" \
         --set NODE_ENV production \
         --set NODE_PATH "$runtimeNodePath" \
         --run "cd '$out/libexec/habitica'"
