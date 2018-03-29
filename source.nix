@@ -79,6 +79,9 @@ stdenv.mkDerivation rec {
     # Fixes a circular import happening with spells.js and it's the reason why
     # spells weren't working from within the UI.
     patches/fix-client-circular-import.patch
+
+    # Changes the privacy policy to be less awful.
+    patches/privacy-policy.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
