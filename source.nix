@@ -75,6 +75,10 @@ stdenv.mkDerivation rec {
     # Correctly serve the client's index.html (patched using substituteInPlace
     # in habitica.nix).
     patches/server-client-path.patch
+
+    # Fixes a circular import happening with spells.js and it's the reason why
+    # spells weren't working from within the UI.
+    patches/fix-client-circular-import.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

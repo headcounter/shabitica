@@ -1,0 +1,34 @@
+commit 9d751f7c9797e1edfee3dc53cdfee29e91aebb7a
+Author: aszlig <aszlig@nix.build>
+Date:   Thu Mar 29 05:54:18 2018 +0200
+
+    client: Fix circular import in statsComputed
+    
+    This happens in spells.js, which imports statsComputed. The latter
+    imports content/index, which in turn imports spells.js.
+    
+    However, the only thing that is needed by statsComputed is content/gear,
+    which we can also import directly because it's not altered in any way in
+    content/index.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: fix-client-circular-import.patch
+
+diff --git a/website/common/script/libs/statsComputed.js b/website/common/script/libs/statsComputed.js
+index 0997cae00..ea395b1fc 100644
+--- a/website/common/script/libs/statsComputed.js
++++ b/website/common/script/libs/statsComputed.js
+@@ -1,11 +1,11 @@
+ import each from 'lodash/each';
+ import get from 'lodash/get';
+ import values from 'lodash/values';
+-import content from '../content/index';
++import contentGear from '../content/gear';
+ import * as statHelpers from '../statHelpers';
+ 
+ function equipmentStatBonusComputed (stat, user) {
+-  let gear = content.gear.flat;
++  let gear = contentGear.flat;
+   let gearBonus = 0;
+   let classBonus = 0;
+ 
