@@ -100,6 +100,10 @@ stdenv.mkDerivation rec {
 
     # We don't need the community guidelines for our standalone version.
     patches/remove-community-guidelines.patch
+
+    # Temporary until news.js gets updated. We have a canary for instagram,
+    # Facebook and so on, so let's remove the links.
+    patches/news-remove-instagram.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -193,7 +197,6 @@ stdenv.mkDerivation rec {
     "website/client/components/static/terms.vue"
     "website/common/locales"
     "website/raw_sprites"
-    "website/server/controllers/api-v3/news.js"
     "website/server/libs/bannedWords.js"
     "website/static/audio"
     "website/static/merch"
