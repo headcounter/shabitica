@@ -97,6 +97,9 @@ stdenv.mkDerivation rec {
     # Remove the contact form which is also transmitting user data to
     # https://contact.habitica.com/.
     patches/remove-contact-form.patch
+
+    # We don't need the community guidelines for our standalone version.
+    patches/remove-community-guidelines.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -144,6 +147,7 @@ stdenv.mkDerivation rec {
     "amz"
     "analytics"
     "apple"
+    "communityguidelines"
     "facebook"
     "fcm"
     "gcm"
