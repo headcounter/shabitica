@@ -104,6 +104,10 @@ stdenv.mkDerivation rec {
     # Temporary until news.js gets updated. We have a canary for instagram,
     # Facebook and so on, so let's remove the links.
     patches/news-remove-instagram.patch
+
+    # Remove external links, such as to Trello tickets and official guilds that
+    # do not exist on our instance.
+    patches/remove-external-links.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -149,6 +153,7 @@ stdenv.mkDerivation rec {
   # We don't want to have anything in the code referencing any of these
   # words/regexes:
   disallowedCanaries = lib.concatStringsSep "\\|" [
+    "/groups/guild/[a-f0-9-]\\{36\\}"
     "\\<apn"
     "\\<buygemsmodal\\>"
     "\\<payments\\>"
@@ -176,12 +181,14 @@ stdenv.mkDerivation rec {
     "social"
     "stripe[^d]"
     "transifex"
+    "trello"
     "twitter"
   ];
 
   excludedCanaryPaths = let
     mkExclude = path: "-path ${lib.escapeShellArg "./${path}"} -prune";
   in lib.concatMapStringsSep " -o " mkExclude [
+    ".github"
     "Dockerfile-Production"
     "database_reports"
     "gulp"

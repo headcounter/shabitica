@@ -1,0 +1,142 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Sat Mar 31 00:52:13 2018 +0200
+
+    Remove links to Trello and official Guilds
+    
+    The Trello tickets are about submitting bugs and asking for features and
+    are also linking to their Trello account which we can't control.
+    
+    Those official Guilds however simply do not exist on our instance and
+    thus will result in a broken link, so let's get rid of them as well.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: remove-external-links.patch
+
+diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
+index 58bb3b46c..8c2615eb3 100644
+--- a/website/client/components/groups/tavern.vue
++++ b/website/client/components/groups/tavern.vue
+@@ -132,7 +132,6 @@
+         .section.row(v-if="sections.helpfulLinks")
+           ul
+             li
+-              router-link(to="/groups/guild/f2db2a7f-13c5-454d-b3ee-ea1f5089e601") {{ $t('lookingForGroup') }}
+             li
+              router-link(to='/static/faq', v-once) {{ $t('faq') }}
+             li
+@@ -141,14 +140,6 @@
+               a(href='http://habitica.wikia.com/wiki/Habitica_Wiki', v-once) {{ $t('wiki') }}
+             li
+               a(href='https://oldgods.net/habitrpg/habitrpg_user_data_display.html', v-once) {{ $t('dataDisplayTool') }}
+-            li
+-              router-link(to="/groups/guild/a29da26b-37de-4a71-b0c6-48e72a900dac") {{ $t('reportProblem') }}
+-            li
+-              a(href='https://trello.com/c/odmhIqyW/440-read-first-table-of-contents', v-once) {{ $t('requestFeature') }}
+-            li
+-              a(href='', v-html="$t('communityForum')")
+-            li
+-              router-link(to="/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a") {{ $t('askQuestionGuild') }}
+ 
+       .section-header
+         .row
+diff --git a/website/client/components/hall/heroes.vue b/website/client/components/hall/heroes.vue
+index 010ed7ec6..3efc605f5 100644
+--- a/website/client/components/hall/heroes.vue
++++ b/website/client/components/hall/heroes.vue
+@@ -23,10 +23,6 @@
+             label {{ $t('contribLevel') }}
+             input.form-control(type='number', v-model='hero.contributor.level')
+             small {{ $t('contribHallText') }}
+-            |&nbsp;
+-            a(target='_blank', href='https://trello.com/c/wkFzONhE/277-contributor-gear') {{ $t('moreDetails') }}
+-            |,&nbsp;
+-            a(target='_blank', href='https://github.com/HabitRPG/habitica/issues/3801') {{ $t('moreDetails2') }}
+           .form-group
+             textarea.form-control(cols=5, :placeholder="$t('contributions')", v-model='hero.contributor.contributions')
+             //include ../../shared/formattiv-help
+diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
+index d5cfc5e99..1a71bad1d 100644
+--- a/website/client/components/header/menu.vue
++++ b/website/client/components/header/menu.vue
+@@ -50,9 +50,6 @@ div
+           .dropdown-menu
+             router-link.dropdown-item(:to="{name: 'faq'}") {{ $t('faq') }}
+             router-link.dropdown-item(:to="{name: 'overview'}") {{ $t('overview') }}
+-            router-link.dropdown-item(to="/groups/guild/a29da26b-37de-4a71-b0c6-48e72a900dac") {{ $t('reportBug') }}
+-            router-link.dropdown-item(to="/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a") {{ $t('askAQuestion') }}
+-            a.dropdown-item(href="https://trello.com/c/odmhIqyW/440-read-first-table-of-contents", target='_blank') {{ $t('requestAF') }}
+             a.dropdown-item(href="http://habitica.wikia.com/wiki/Contributing_to_Habitica", target='_blank') {{ $t('contributing') }}
+             a.dropdown-item(href="http://habitica.wikia.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
+       .user-menu.d-flex.align-items-center
+diff --git a/website/client/components/static/faq.vue b/website/client/components/static/faq.vue
+index a26e1260c..f55c3624f 100644
+--- a/website/client/components/static/faq.vue
++++ b/website/client/components/static/faq.vue
+@@ -3,7 +3,7 @@
+     .row
+       .col-12.col-md-6.offset-md-3
+         h1 {{ $t('frequentlyAskedQuestions') }}
+-        .faq-question(v-for='(heading, index) in headings')
++        .faq-question(v-for='(heading, index) in headings', v-if="heading != ''")
+           h2.accordion(@click='setActivePage(heading)') {{ $t(`faqQuestion${index}`) }}
+           div(v-if='pageState[heading]', v-markdown="$t('webFaqAnswer' + index, replacements)")
+         hr
+@@ -43,8 +43,8 @@
+         'character-classes',
+         'blue-mana-bar',
+         'monsters-quests',
+-        'gems',
+-        'bugs-features',
++        '', // No gems
++        '', // No bugs & feature requests
+         'world-boss',
+       ];
+ 
+@@ -61,11 +61,6 @@
+           techAssistanceEmail: TECH_ASSISTANCE_EMAIL,
+           wikiTechAssistanceEmail: `mailto:${TECH_ASSISTANCE_EMAIL}`,
+         },
+-        // @TODO webFaqStillNeedHelp: {
+-        // linkStart: '[',
+-        // linkEnd: '](/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a)',
+-        // },
+-        // "webFaqStillNeedHelp": "If you have a question that isn't on this list or on the [Wiki FAQ](http://habitica.wikia.com/wiki/FAQ), come ask in the <%= linkStart %>Habitica Help guild<%= linkEnd %>! We're happy to help."
+       };
+     },
+     methods: {
+diff --git a/website/client/components/static/overview.vue b/website/client/components/static/overview.vue
+index cfd14c700..9f373bb87 100644
+--- a/website/client/components/static/overview.vue
++++ b/website/client/components/static/overview.vue
+@@ -8,7 +8,6 @@
+         h3 {{ $t('step'+step) }}
+         p(v-markdown="$t('webStep'+step+'Text')")
+         hr
+-      p(v-markdown="$t('overviewQuestions')")
+ </template>
+ 
+ <style lang='scss'>
+diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
+index baf9f9141..48750dfec 100644
+--- a/website/server/controllers/api-v3/groups.js
++++ b/website/server/controllers/api-v3/groups.js
+@@ -717,7 +717,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
+       {name: 'GROUP_NAME', content: group.name},
+       {name: 'MESSAGE', content: message},
+       {name: 'GUILDS_LINK', content: '/groups/discovery'},
+-      {name: 'PARTY_WANTED_GUILD', content: '/groups/guild/f2db2a7f-13c5-454d-b3ee-ea1f5089e601'},
+     ]);
+   }
+ }
+diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
+index 51f8e2864..1aef16677 100644
+--- a/website/server/models/user/schema.js
++++ b/website/server/models/user/schema.js
+@@ -116,7 +116,6 @@ let schema = new Schema({
+   },
+ 
+   contributor: {
+-    // 1-9, see https://trello.com/c/wkFzONhE/277-contributor-gear https://github.com/HabitRPG/habitica/issues/3801
+     level: {
+       type: Number,
+       min: 0,
