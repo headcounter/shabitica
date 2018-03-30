@@ -17,5 +17,5 @@ for rev in $(git rev-list "$(git describe --abbrev=0)...HEAD"); do
     echo "Unable to find patch file name for commit $rev." >&2
     exit 1
   fi
-  git show "$rev" > "$patchdir/$filename"
+  git show "$rev" | tail -n +2 > "$patchdir/$filename"
 done
