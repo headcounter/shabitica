@@ -10,7 +10,7 @@ Date:   Tue Mar 27 05:37:06 2018 +0200
     Filename: socket-activation.patch
 
 diff --git a/package.json b/package.json
-index 987d9ca7a..7231c9a1e 100644
+index 30f59a731..8e5ff3c5e 100644
 --- a/package.json
 +++ b/package.json
 @@ -76,6 +76,7 @@

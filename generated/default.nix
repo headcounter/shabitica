@@ -18,10 +18,10 @@ in {
     "cross-spawn" = nodePackages."cross-spawn-^6.0.5";
     eslint = nodePackages."eslint-^4.19.0";
     "eslint-config-habitrpg" = nodePackages."eslint-config-habitrpg-^4.0.0";
-    "eslint-friendly-formatter" = nodePackages."eslint-friendly-formatter-^3.0.0";
+    "eslint-friendly-formatter" = nodePackages."eslint-friendly-formatter-^4.0.0";
     "eslint-loader" = nodePackages."eslint-loader-^2.0.0";
     "eslint-plugin-html" = nodePackages."eslint-plugin-html-^4.0.2";
-    "eslint-plugin-mocha" = nodePackages."eslint-plugin-mocha-^4.12.1";
+    "eslint-plugin-mocha" = nodePackages."eslint-plugin-mocha-^5.0.0";
     "eventsource-polyfill" = nodePackages."eventsource-polyfill-^0.9.6";
     "expect.js" = nodePackages."expect.js-^0.3.1";
     "http-proxy-middleware" = nodePackages."http-proxy-middleware-^0.18.0";
@@ -37,7 +37,7 @@ in {
     "karma-sinon-stub-promise" = nodePackages."karma-sinon-stub-promise-^1.0.0";
     "karma-sourcemap-loader" = nodePackages."karma-sourcemap-loader-^0.3.7";
     "karma-spec-reporter" = nodePackages."karma-spec-reporter-0.0.32";
-    "karma-webpack" = nodePackages."karma-webpack-^2.0.13";
+    "karma-webpack" = nodePackages."karma-webpack-^3.0.0";
     "lcov-result-merger" = nodePackages."lcov-result-merger-^2.0.0";
     mocha = nodePackages."mocha-^5.0.4";
     monk = nodePackages."monk-^6.0.5";

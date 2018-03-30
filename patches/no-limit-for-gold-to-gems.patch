@@ -68,10 +68,10 @@ index 88bef95eb..9ac68ebaf 100644
          return !this.enoughCurrency(this.getPriceClass(), this.item.value * this.selectedAmountToBuy);
        },
 diff --git a/website/client/components/shops/market/index.vue b/website/client/components/shops/market/index.vue
-index 2eb6b91c9..4928e837b 100644
+index 017101540..a91a5b15e 100644
 --- a/website/client/components/shops/market/index.vue
 +++ b/website/client/components/shops/market/index.vue
-@@ -147,7 +147,6 @@
+@@ -145,7 +145,6 @@
              @click="itemSelected(item)"
            )
              span(slot="popoverContent")
@@ -79,7 +79,7 @@ index 2eb6b91c9..4928e837b 100644
                h4.popover-content-title {{ item.text }}
              template(slot="itemBadge", slot-scope="ctx")
                countBadge(
-@@ -155,8 +154,6 @@
+@@ -153,8 +152,6 @@
                  :show="userItems[item.purchaseType][item.key] != 0",
                  :count="userItems[item.purchaseType][item.key] || 0"
                )
@@ -88,7 +88,7 @@ index 2eb6b91c9..4928e837b 100644
                span.badge.badge-pill.badge-item.badge-svg(
                  :class="{'item-selected-badge': ctx.item.pinned, 'hide': !ctx.item.pinned}",
                  @click.prevent.stop="togglePinned(ctx.item)"
-@@ -334,11 +331,6 @@
+@@ -332,11 +329,6 @@
      }
    }
  
@@ -100,7 +100,7 @@ index 2eb6b91c9..4928e837b 100644
    @media only screen and (max-width: 768px) {
      .featuredItems .content {
        display: none !important;
-@@ -574,10 +566,6 @@ export default {
+@@ -572,10 +564,6 @@ export default {
            },
          ];
        },
@@ -112,7 +112,7 @@ index 2eb6b91c9..4928e837b 100644
      methods: {
        getClassName (classType) {
 diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index e46d7e4f1..da1de7843 100644
+index ba4dd3628..06aa98c04 100644
 --- a/website/common/script/ops/buy/purchase.js
 +++ b/website/common/script/ops/buy/purchase.js
 @@ -31,10 +31,6 @@ function buyGems (user, req, key) {

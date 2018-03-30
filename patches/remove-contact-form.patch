@@ -1,0 +1,214 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Fri Mar 30 19:32:26 2018 +0200
+
+    Remove contact form
+    
+    This submits user data to https://contact.habitica.com/ when the user
+    clicks on the contact link within the "Help" menu item.
+    
+    We don't want that, so let's remove it and the whole contact buttons
+    altogether.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: remove-contact-form.patch
+
+diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
+index 766653335..4f2fd97de 100644
+--- a/website/client/components/groups/tavern.vue
++++ b/website/client/components/groups/tavern.vue
+@@ -133,8 +133,6 @@
+               .svg-icon(v-html="icons.downIcon")
+         .section.row(v-if="sections.helpfulLinks")
+           ul
+-            li
+-              a(href='', @click.prevent='modForm()') {{ $t('contactForm') }}
+             li
+              router-link(to='/static/community-guidelines', v-once) {{ $t('communityGuidelinesLink') }}
+             li
+@@ -517,7 +515,6 @@
+ <script>
+ import debounce from 'lodash/debounce';
+ import { mapState } from 'client/libs/store';
+-import { goToModForm } from 'client/libs/modform';
+ 
+ import { TAVERN_ID } from '../../../common/script/constants';
+ import chatMessage from '../chat/chatMessages';
+@@ -707,9 +704,6 @@ export default {
+     this.group = await this.$store.dispatch('guilds:getGroup', {groupId: TAVERN_ID});
+   },
+   methods: {
+-    modForm () {
+-      goToModForm(this.user);
+-    },
+     // https://medium.com/@_jh3y/how-to-where-s-the-caret-getting-the-xy-position-of-the-caret-a24ba372990a
+     getCoord (e, text) {
+       let carPos = text.selectionEnd;
+diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
+index 842e46b79..d5cfc5e99 100644
+--- a/website/client/components/header/menu.vue
++++ b/website/client/components/header/menu.vue
+@@ -55,7 +55,6 @@ div
+             a.dropdown-item(href="https://trello.com/c/odmhIqyW/440-read-first-table-of-contents", target='_blank') {{ $t('requestAF') }}
+             a.dropdown-item(href="http://habitica.wikia.com/wiki/Contributing_to_Habitica", target='_blank') {{ $t('contributing') }}
+             a.dropdown-item(href="http://habitica.wikia.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
+-            a.dropdown-item(@click='modForm()') {{ $t('contactForm') }}
+       .user-menu.d-flex.align-items-center
+         .item-with-icon(v-if="userHourglasses > 0")
+           .top-menu-icon.svg-icon(v-html="icons.hourglasses", v-b-tooltip.hover.bottom="$t('mysticHourglassesTooltip')")
+@@ -283,7 +282,6 @@ div
+ 
+ <script>
+ import { mapState, mapGetters } from 'client/libs/store';
+-import { goToModForm } from 'client/libs/modform';
+ 
+ import gemIcon from 'assets/svg/gem.svg';
+ import goldIcon from 'assets/svg/gold.svg';
+@@ -331,9 +329,6 @@ export default {
+     this.getUserGroupPlans();
+   },
+   methods: {
+-    modForm () {
+-      goToModForm(this.user);
+-    },
+     toggleUserDropdown () {
+       this.isUserDropdownOpen = !this.isUserDropdownOpen;
+     },
+diff --git a/website/client/components/static/contact.vue b/website/client/components/static/contact.vue
+deleted file mode 100644
+index da945b06f..000000000
+--- a/website/client/components/static/contact.vue
++++ /dev/null
+@@ -1,56 +0,0 @@
+-<template lang="pug">
+-  .container-fluid
+-    .row
+-      .col-md-6.offset-3
+-        h1 {{ $t('contactUs') }}
+-
+-        p
+-          | {{ $t('reportAccountProblems') }}
+-          | &colon;&nbsp;
+-          a(href='mailto:admin@habitica.com') admin&commat;habitica&period;com
+-          br
+-          | {{ $t('reportBug') }}
+-          | &colon;&nbsp;
+-          a(target='_blank', href='/groups/guild/a29da26b-37de-4a71-b0c6-48e72a900dac') Report a Bug guild
+-          | &nbsp;or&nbsp;
+-          a(target='_blank', href='https://github.com/HabitRPG/habitica/issues?q=is%3Aopen') GitHub
+-          span(v-if='this.user')
+-            br
+-            | {{ $t('reportCommunityIssues') }}
+-            | &colon;&nbsp;
+-            a(@click.prevent='modForm()', href='') {{ $t('contactForm') }}
+-          br
+-          | {{ $t('subscriptionPaymentIssues') }}
+-          | &colon;&nbsp;
+-          a(href='mailto:admin@habitica.com') admin&commat;habitica&period;com
+-          br
+-          | {{ $t('generalQuestionsSite') }}
+-          | &colon;&nbsp;
+-          a(target='_blank', href='/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a') Habitica Help guild
+-          br
+-          | {{ $t('businessInquiries') }}
+-          | &colon;&nbsp;
+-          a(href='mailto:admin@habitica.com') admin@habitica.com
+-          br
+-          | {{ $t('merchandiseInquiries') }}
+-          | &colon;&nbsp;
+-          a(href='mailto:admin@habitica.com') admin&commat;habitica&period;com
+-</template>
+-
+-<script>
+-import { mapState } from 'client/libs/store';
+-import { goToModForm } from 'client/libs/modform';
+-
+-export default {
+-  computed: {
+-    ...mapState({
+-      user: 'user.data',
+-    }),
+-  },
+-  methods: {
+-    modForm () {
+-      goToModForm(this.user);
+-    },
+-  },
+-};
+-</script>
+diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
+index 1cb966bbe..619860113 100644
+--- a/website/client/components/static/header.vue
++++ b/website/client/components/static/header.vue
+@@ -15,8 +15,6 @@
+           a.nav-link(href='http://blog.habitrpg.com/', target='_blank') {{ $t('tumblr') }}
+         router-link.nav-item(tag='li', to='/static/press-kit')
+           a.nav-link(v-once) {{ $t('presskit') }}
+-        router-link.nav-item(tag='li', to='/static/contact')
+-          a.nav-link(v-once) {{ $t('contactUs') }}
+       ul.navbar-nav.mr-auto(v-else)
+         router-link.nav-item(tag='li', to='/register')
+           a.nav-link(v-once) {{ $t('getStarted') }}
+diff --git a/website/client/libs/modform.js b/website/client/libs/modform.js
+deleted file mode 100644
+index ce6b1d337..000000000
+--- a/website/client/libs/modform.js
++++ /dev/null
+@@ -1,38 +0,0 @@
+-// @TODO: I have abstracted this in another PR. Use that function when merged
+-function getApiKey () {
+-  let AUTH_SETTINGS = localStorage.getItem('habit-mobile-settings');
+-
+-  if (AUTH_SETTINGS) {
+-    AUTH_SETTINGS = JSON.parse(AUTH_SETTINGS);
+-
+-    if (AUTH_SETTINGS.auth && AUTH_SETTINGS.auth.apiId && AUTH_SETTINGS.auth.apiToken) {
+-      return AUTH_SETTINGS.auth.apiToken;
+-    }
+-  }
+-}
+-
+-export function goToModForm (user) {
+-  if (!user) return;
+-
+-  const apiKey = getApiKey();
+-  if (!apiKey) return;
+-
+-  const tenMins = 10 * 60 * 1000;
+-  let dateTime;
+-  dateTime = new Date();
+-  dateTime.setTime(dateTime.getTime() + tenMins);
+-  const expires = `expires=${dateTime.toGMTString()}`;
+-
+-  const email = encodeURIComponent(user.auth.local.email);
+-
+-  const userData = {
+-    email,
+-    profileName: user.profile.name,
+-    uuid: user._id,
+-    apiKey,
+-  };
+-
+-  document.cookie = `habiticauserdata=${JSON.stringify(userData)};${expires};domain=.habitica.com;path=/`;
+-
+-  window.location.href = 'http://contact.habitica.com';
+-}
+diff --git a/website/client/router.js b/website/client/router.js
+index b06fe97a4..caa1a22f3 100644
+--- a/website/client/router.js
++++ b/website/client/router.js
+@@ -14,7 +14,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'./components/stati
+ const AppPage = () => import(/* webpackChunkName: "static" */'./components/static/app');
+ const ClearBrowserDataPage = () => import(/* webpackChunkName: "static" */'./components/static/clearBrowserData');
+ const CommunityGuidelinesPage = () => import(/* webpackChunkName: "static" */'./components/static/communityGuidelines');
+-const ContactPage = () => import(/* webpackChunkName: "static" */'./components/static/contact');
+ const FAQPage = () => import(/* webpackChunkName: "static" */'./components/static/faq');
+ const FeaturesPage = () => import(/* webpackChunkName: "static" */'./components/static/features');
+ const GroupPlansPage = () => import(/* webpackChunkName: "static" */'./components/static/groupPlans');
+@@ -252,7 +251,6 @@ const router = new VueRouter({
+         { name: 'app', path: 'app', component: AppPage, meta: {requiresLogin: false}},
+         { name: 'clearBrowserData', path: 'clear-browser-data', component: ClearBrowserDataPage, meta: {requiresLogin: false}},
+         { name: 'communityGuidelines', path: 'community-guidelines', component: CommunityGuidelinesPage, meta: {requiresLogin: false}},
+-        { name: 'contact', path: 'contact', component: ContactPage, meta: {requiresLogin: false}},
+         { name: 'faq', path: 'faq', component: FAQPage, meta: {requiresLogin: false}},
+         { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
+         { name: 'groupPlans', path: 'group-plans', component: GroupPlansPage, meta: {requiresLogin: false}},

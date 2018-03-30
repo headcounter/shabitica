@@ -3,14 +3,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.33.2";
+  version = "4.34.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1qf1srx79xk23f4k0zig3mlrcx3s5dxl1am88cyk82szhc68b4c2";
+    sha256 = "1wcdp0yy50m2irnrwhxs30mcz726bfwn5ipzr6adqyvm0za4h6vv";
   };
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
@@ -93,6 +93,10 @@ stdenv.mkDerivation rec {
     # we're going to generate them on first start of the service and provide
     # them via environment variables.
     patches/remove-session-secret-from-config.patch
+
+    # Remove the contact form which is also transmitting user data to
+    # https://contact.habitica.com/.
+    patches/remove-contact-form.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -179,6 +183,7 @@ stdenv.mkDerivation rec {
     "website/client/components/static/terms.vue"
     "website/common/locales"
     "website/raw_sprites"
+    "website/server/controllers/api-v3/news.js"
     "website/server/libs/bannedWords.js"
     "website/static/audio"
     "website/static/merch"
