@@ -1,0 +1,365 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Sat Mar 31 01:16:24 2018 +0200
+
+    Remove staff links and player tiers in tavern
+    
+    These are only relevant for the official instance and the links are dead
+    links anyway.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: tavern-remove-staff-and-tiers.patch
+
+diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
+index 8c2615eb3..1c8629b4c 100644
+--- a/website/client/components/groups/tavern.vue
++++ b/website/client/components/groups/tavern.vue
+@@ -102,24 +102,6 @@
+         button.btn.btn-secondary.pause-button(v-if='user.preferences.sleep', @click='toggleSleep()', v-once) {{ $t('unpauseDailies') }}
+ 
+     .below-header-sections
+-      .section-header
+-        .row
+-          .col-10
+-            h3(v-once) {{ $t('staffAndModerators') }}
+-          .col-2
+-            .toggle-up(@click="sections.staff = !sections.staff", v-if="sections.staff")
+-              .svg-icon(v-html="icons.upIcon")
+-            .toggle-down(@click="sections.staff = !sections.staff", v-if="!sections.staff")
+-              .svg-icon(v-html="icons.downIcon")
+-        .section.row(v-if="sections.staff")
+-          .col-4.staff(v-for='user in staff', :class='{staff: user.type === "Staff", moderator: user.type === "Moderator", bailey: user.name === "It\'s Bailey"}')
+-            div
+-              a.title(@click="viewStaffProfile(user.uuid)") {{user.name}}
+-              .svg-icon.staff-icon(v-html="icons.tierStaff", v-if='user.type === "Staff"')
+-              .svg-icon.mod-icon(v-html="icons.tierMod", v-if='user.type === "Moderator" && user.name !== "It\'s Bailey"')
+-              .svg-icon.npc-icon(v-html="icons.tierNPC", v-if='user.name === "It\'s Bailey"')
+-            .type {{user.type}}
+-
+       .section-header
+         .row
+           .col-10
+@@ -140,50 +122,6 @@
+               a(href='http://habitica.wikia.com/wiki/Habitica_Wiki', v-once) {{ $t('wiki') }}
+             li
+               a(href='https://oldgods.net/habitrpg/habitrpg_user_data_display.html', v-once) {{ $t('dataDisplayTool') }}
+-
+-      .section-header
+-        .row
+-          .col-10
+-            h3(v-once) {{ $t('playerTiers') }}
+-          .col-2
+-            .toggle-up(@click="sections.playerTiers = !sections.playerTiers", v-if="sections.playerTiers")
+-              .svg-icon(v-html="icons.upIcon")
+-            .toggle-down(@click="sections.playerTiers = !sections.playerTiers", v-if="!sections.playerTiers")
+-              .svg-icon(v-html="icons.downIcon")
+-        .section.row(v-if="sections.playerTiers")
+-          .col-12
+-            p(v-once) {{ $t('playerTiersDesc') }}
+-            ul.tier-list
+-              li.tier1(v-once)
+-               | {{ $t('tier1') }}
+-               .svg-icon.tier1-icon(v-html="icons.tier1")
+-              li.tier2(v-once)
+-                | {{ $t('tier2') }}
+-                .svg-icon.tier2-icon(v-html="icons.tier2")
+-              li.tier3(v-once)
+-                | {{ $t('tier3') }}
+-                .svg-icon.tier3-icon(v-html="icons.tier3")
+-              li.tier4(v-once)
+-                | {{ $t('tier4') }}
+-                .svg-icon.tier4-icon(v-html="icons.tier4")
+-              li.tier5(v-once)
+-                | {{ $t('tier5') }}
+-                .svg-icon.tier5-icon(v-html="icons.tier5")
+-              li.tier6(v-once)
+-                | {{ $t('tier6') }}
+-                .svg-icon.tier6-icon(v-html="icons.tier6")
+-              li.tier7(v-once)
+-                | {{ $t('tier7') }}
+-                .svg-icon.tier7-icon(v-html="icons.tier7")
+-              li.moderator(v-once)
+-                | {{ $t('tierModerator') }}
+-                .svg-icon.mod-icon(v-html="icons.tierMod")
+-              li.staff(v-once)
+-                | {{ $t('tierStaff') }}
+-                .svg-icon.staff-icon(v-html="icons.tierStaff")
+-              li.npc(v-once)
+-                | {{ $t('tierNPC') }}
+-                .svg-icon.npc-icon(v-html="icons.tierNPC")
+ </template>
+ 
+ <style lang='scss' scoped>
+@@ -277,26 +215,6 @@
+     margin-left: .5em;
+   }
+ 
+-  .tier1-icon, .tier2-icon {
+-    width: 11px;
+-  }
+-
+-  .tier5-icon, .tier6-icon {
+-    width: 8px;
+-  }
+-
+-  .tier7-icon {
+-    width: 12px;
+-  }
+-
+-  .mod-icon {
+-    width: 13px;
+-  }
+-
+-  .npc-icon {
+-    width: 8px;
+-  }
+-
+   .boss-icon {
+     width: 16px;
+     margin-top: .1em;
+@@ -307,88 +225,6 @@
+     width: 48px;
+   }
+ 
+-  .staff {
+-    margin-bottom: 1em;
+-
+-    .staff-icon  {
+-      width: 11px;
+-    }
+-
+-    .title {
+-      color: #6133b4;
+-      font-weight: bold;
+-      display: inline-block;
+-    }
+-  }
+-
+-  .tier-list {
+-    list-style-type: none;
+-    padding: 0;
+-    width: 98%;
+-
+-    li {
+-      border-radius: 2px;
+-      background-color: #edecee;
+-      border: solid 1px #c3c0c7;
+-      text-align: center;
+-      padding: 1em;
+-      margin-bottom: 1em;
+-      font-weight: bold;
+-    }
+-
+-    .tier1 {
+-      color: #c42870;
+-    }
+-
+-    .tier2 {
+-      color: #b01515;
+-    }
+-
+-    .tier3 {
+-      color: #d70e14;
+-    }
+-
+-    .tier4 {
+-      color: #c24d00;
+-    }
+-
+-    .tier5 {
+-      color: #9e650f;
+-    }
+-
+-    .tier6 {
+-      color: #2b8363;
+-    }
+-
+-    .tier7 {
+-      color: #167e87;
+-    }
+-
+-    .tier8, .moderator {
+-      color: #277eab;
+-    }
+-
+-    .tier9, .staff {
+-      color: #6133b4;
+-    }
+-
+-    .npc {
+-      color: $black;
+-    }
+-  }
+-
+-  .staff .title {
+-    color: #6133b4;
+-  }
+-
+-  .moderator .title {
+-    color: #277eab;
+-  }
+-
+-  .bailey .title {
+-    color: $black;
+-  }
+-
+   .boss-section {
+     padding: 1.75em;
+   }
+@@ -520,17 +356,6 @@ import rageIcon from 'assets/svg/rage.svg';
+ import swordIcon from 'assets/svg/sword.svg';
+ import upIcon from 'assets/svg/up.svg';
+ 
+-import tier1 from 'assets/svg/tier-1.svg';
+-import tier2 from 'assets/svg/tier-2.svg';
+-import tier3 from 'assets/svg/tier-3.svg';
+-import tier4 from 'assets/svg/tier-4.svg';
+-import tier5 from 'assets/svg/tier-5.svg';
+-import tier6 from 'assets/svg/tier-6.svg';
+-import tier7 from 'assets/svg/tier-7.svg';
+-import tierMod from 'assets/svg/tier-mod.svg';
+-import tierNPC from 'assets/svg/tier-npc.svg';
+-import tierStaff from 'assets/svg/tier-staff.svg';
+-
+ import quests from 'common/script/content/quests';
+ 
+ export default {
+@@ -553,124 +378,15 @@ export default {
+         questBackground,
+         rageIcon,
+         swordIcon,
+-        tier1,
+-        tier2,
+-        tier3,
+-        tier4,
+-        tier5,
+-        tier6,
+-        tier7,
+-        tierMod,
+-        tierNPC,
+-        tierStaff,
+         upIcon,
+       }),
+       group: {
+         chat: [],
+       },
+       sections: {
+-        staff: true,
+         helpfulLinks: true,
+-        playerTiers: true,
+         worldBoss: true,
+       },
+-      staff: [
+-        {
+-          name: 'beffymaroo',
+-          type: 'Staff',
+-          uuid: '9fe7183a-4b79-4c15-9629-a1aee3873390',
+-        },
+-        // {
+-        //   name: 'lefnire',
+-        //   type: 'Staff',
+-        //   uuid: '00000000-0000-4000-9000-000000000000',
+-        // },
+-        {
+-          name: 'Lemoness',
+-          type: 'Staff',
+-          uuid: '7bde7864-ebc5-4ee2-a4b7-1070d464cdb0',
+-        },
+-        {
+-          name: 'paglias',
+-          type: 'Staff',
+-          uuid: 'ed4c688c-6652-4a92-9d03-a5a79844174a',
+-        },
+-        {
+-          name: 'redphoenix',
+-          type: 'Staff',
+-          uuid: 'cb46ad54-8c78-4dbc-a8ed-4e3185b2b3ff',
+-        },
+-        {
+-          name: 'SabreCat',
+-          type: 'Staff',
+-          uuid: '7f14ed62-5408-4e1b-be83-ada62d504931',
+-        },
+-        {
+-          name: 'TheHollidayInn',
+-          type: 'Staff',
+-          uuid: '206039c6-24e4-4b9f-8a31-61cbb9aa3f66',
+-        },
+-        {
+-          name: 'viirus',
+-          type: 'Staff',
+-          uuid: 'a327d7e0-1c2e-41be-9193-7b30b484413f',
+-        },
+-        {
+-          name: 'It\'s Bailey',
+-          type: 'Moderator',
+-          uuid: '9da65443-ed43-4c21-804f-d260c1361596',
+-        },
+-        {
+-          name: 'Alys',
+-          type: 'Moderator',
+-          uuid: 'd904bd62-da08-416b-a816-ba797c9ee265',
+-        },
+-        {
+-          name: 'Blade',
+-          type: 'Moderator',
+-          uuid: '75f270e8-c5db-4722-a5e6-a83f1b23f76b',
+-        },
+-        {
+-          name: 'Breadstrings',
+-          type: 'Moderator',
+-          uuid: '3b675c0e-d7a6-440c-8687-bc67cd0bf4e9',
+-        },
+-        {
+-          name: 'Cantras',
+-          type: 'Moderator',
+-          uuid: '28771972-ca6d-4c03-8261-e1734aa7d21d',
+-        },
+-        // {
+-        //   name: 'Daniel the Bard',
+-        //   type: 'Moderator',
+-        //   uuid: '1f7c4a74-03a3-4b2c-b015-112d0acbd593',
+-        // },
+-        {
+-          name: 'deilann 5.0.5b',
+-          type: 'Moderator',
+-          uuid: 'e7b5d1e2-3b6e-4192-b867-8bafdb03eeec',
+-        },
+-        {
+-          name: 'Dewines',
+-          type: 'Moderator',
+-          uuid: '262a7afb-6b57-4d81-88e0-80d2e9f6cbdc',
+-        },
+-        {
+-          name: 'Fox_town',
+-          type: 'Moderator',
+-          uuid: 'a05f0152-d66b-4ef1-93ac-4adb195d0031',
+-        },
+-        {
+-          name: 'Megan',
+-          type: 'Moderator',
+-          uuid: '73e5125c-2c87-4004-8ccd-972aeac4f17a',
+-        },
+-        {
+-          name: 'shanaqui',
+-          type: 'Moderator',
+-          uuid: 'bb089388-28ae-4e42-a8fa-f0c2bfb6f779',
+-        },
+-      ],
+       newMessage: '',
+       coords: {
+         TOP: 0,
+@@ -765,14 +481,6 @@ export default {
+         this.$root.$emit('bv::show::modal', 'world-boss-rage');
+       }
+     },
+-
+-    async viewStaffProfile (staffId) {
+-      let staffDetails = await this.$store.dispatch('members:fetchMember', { memberId: staffId });
+-      this.$root.$emit('habitica:show-profile', {
+-        user: staffDetails.data.data,
+-        startingPage: 'profile',
+-      });
+-    },
+   },
+ };
+ </script>

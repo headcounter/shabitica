@@ -108,6 +108,10 @@ stdenv.mkDerivation rec {
     # Remove external links, such as to Trello tickets and official guilds that
     # do not exist on our instance.
     patches/remove-external-links.patch
+
+    # Those staff members don't exist on our version and tiers are also not
+    # very useful for self-hosted instances.
+    patches/tavern-remove-staff-and-tiers.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
