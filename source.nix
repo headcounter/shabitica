@@ -104,17 +104,21 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
 
-  # Kill off files we do not want to have, as they redirect to external
-  # services:
+  # Kill off files we do not want to have, most of them because they redirect
+  # to external services:
   prePatch = lib.concatMapStrings (path: ''
     rm ${lib.escapeShellArg path}
   '') [
     "scripts/paypalBillingSetup.js"
+    "website/client/components/groups/communityGuidelines.vue"
     "website/client/components/payments/amazonModal.vue"
     "website/client/components/payments/buyGemsModal.vue"
     "website/client/components/payments/sendGemsModal.vue"
+    "website/client/components/static/communityGuidelines.vue"
+    "website/client/components/static/contact.vue"
     "website/client/libs/analytics.js"
     "website/client/libs/logging.js"
+    "website/client/libs/modform.js"
     "website/client/libs/payments.js"
     "website/client/mixins/payments.js"
     "website/server/controllers/api-v3/iap.js"
@@ -131,9 +135,11 @@ stdenv.mkDerivation rec {
     "website/server/libs/paypalPayments.js"
     "website/server/libs/pushNotifications.js"
     "website/server/libs/pusher.js"
+    "website/server/libs/queue/index.js"
     "website/server/libs/slack.js"
     "website/server/libs/stripePayments.js"
     "website/server/middlewares/analytics.js"
+    "website/server/middlewares/static.js"
   ];
 
   # We don't want to have anything in the code referencing any of these

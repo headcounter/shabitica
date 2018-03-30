@@ -73,68 +73,6 @@ index 842e46b79..d5cfc5e99 100644
      toggleUserDropdown () {
        this.isUserDropdownOpen = !this.isUserDropdownOpen;
      },
-diff --git a/website/client/components/static/contact.vue b/website/client/components/static/contact.vue
-deleted file mode 100644
-index da945b06f..000000000
---- a/website/client/components/static/contact.vue
-+++ /dev/null
-@@ -1,56 +0,0 @@
--<template lang="pug">
--  .container-fluid
--    .row
--      .col-md-6.offset-3
--        h1 {{ $t('contactUs') }}
--
--        p
--          | {{ $t('reportAccountProblems') }}
--          | &colon;&nbsp;
--          a(href='mailto:admin@habitica.com') admin&commat;habitica&period;com
--          br
--          | {{ $t('reportBug') }}
--          | &colon;&nbsp;
--          a(target='_blank', href='/groups/guild/a29da26b-37de-4a71-b0c6-48e72a900dac') Report a Bug guild
--          | &nbsp;or&nbsp;
--          a(target='_blank', href='https://github.com/HabitRPG/habitica/issues?q=is%3Aopen') GitHub
--          span(v-if='this.user')
--            br
--            | {{ $t('reportCommunityIssues') }}
--            | &colon;&nbsp;
--            a(@click.prevent='modForm()', href='') {{ $t('contactForm') }}
--          br
--          | {{ $t('subscriptionPaymentIssues') }}
--          | &colon;&nbsp;
--          a(href='mailto:admin@habitica.com') admin&commat;habitica&period;com
--          br
--          | {{ $t('generalQuestionsSite') }}
--          | &colon;&nbsp;
--          a(target='_blank', href='/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a') Habitica Help guild
--          br
--          | {{ $t('businessInquiries') }}
--          | &colon;&nbsp;
--          a(href='mailto:admin@habitica.com') admin@habitica.com
--          br
--          | {{ $t('merchandiseInquiries') }}
--          | &colon;&nbsp;
--          a(href='mailto:admin@habitica.com') admin&commat;habitica&period;com
--</template>
--
--<script>
--import { mapState } from 'client/libs/store';
--import { goToModForm } from 'client/libs/modform';
--
--export default {
--  computed: {
--    ...mapState({
--      user: 'user.data',
--    }),
--  },
--  methods: {
--    modForm () {
--      goToModForm(this.user);
--    },
--  },
--};
--</script>
 diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
 index 1cb966bbe..619860113 100644
 --- a/website/client/components/static/header.vue
@@ -148,50 +86,6 @@ index 1cb966bbe..619860113 100644
        ul.navbar-nav.mr-auto(v-else)
          router-link.nav-item(tag='li', to='/register')
            a.nav-link(v-once) {{ $t('getStarted') }}
-diff --git a/website/client/libs/modform.js b/website/client/libs/modform.js
-deleted file mode 100644
-index ce6b1d337..000000000
---- a/website/client/libs/modform.js
-+++ /dev/null
-@@ -1,38 +0,0 @@
--// @TODO: I have abstracted this in another PR. Use that function when merged
--function getApiKey () {
--  let AUTH_SETTINGS = localStorage.getItem('habit-mobile-settings');
--
--  if (AUTH_SETTINGS) {
--    AUTH_SETTINGS = JSON.parse(AUTH_SETTINGS);
--
--    if (AUTH_SETTINGS.auth && AUTH_SETTINGS.auth.apiId && AUTH_SETTINGS.auth.apiToken) {
--      return AUTH_SETTINGS.auth.apiToken;
--    }
--  }
--}
--
--export function goToModForm (user) {
--  if (!user) return;
--
--  const apiKey = getApiKey();
--  if (!apiKey) return;
--
--  const tenMins = 10 * 60 * 1000;
--  let dateTime;
--  dateTime = new Date();
--  dateTime.setTime(dateTime.getTime() + tenMins);
--  const expires = `expires=${dateTime.toGMTString()}`;
--
--  const email = encodeURIComponent(user.auth.local.email);
--
--  const userData = {
--    email,
--    profileName: user.profile.name,
--    uuid: user._id,
--    apiKey,
--  };
--
--  document.cookie = `habiticauserdata=${JSON.stringify(userData)};${expires};domain=.habitica.com;path=/`;
--
--  window.location.href = 'http://contact.habitica.com';
--}
 diff --git a/website/client/router.js b/website/client/router.js
 index b06fe97a4..caa1a22f3 100644
 --- a/website/client/router.js
