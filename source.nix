@@ -85,6 +85,9 @@ stdenv.mkDerivation rec {
 
     # Import moment by importing moment-recur instead.
     patches/fix-moment-recur-import.patch
+
+    # Do not limit the amount of gems somebody can buy for gold.
+    patches/no-limit-for-gold-to-gems.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

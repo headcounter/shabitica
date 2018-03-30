@@ -1,0 +1,129 @@
+commit e09e6a5aa8440df265600512aa76d33144fe1225
+Author: aszlig <aszlig@nix.build>
+Date:   Fri Mar 30 02:41:52 2018 +0200
+
+    Don't limit the amount of gems that can be bought
+    
+    Everybody has a free lifetime subscription, so there really is no reason
+    to limit the amount of gems that can be bought.
+    
+    I assume limit was originally introduced only because people bought a
+    subscription, got a lot of gems and then cancelled the payment of the
+    subscription.
+    
+    So this really isn't something that we have to defend against :-)
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: no-limit-for-gold-to-gems.patch
+
+diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
+index 88bef95eb..9ac68ebaf 100644
+--- a/website/client/components/shops/buyModal.vue
++++ b/website/client/components/shops/buyModal.vue
+@@ -55,13 +55,6 @@
+             span.svg-icon.inline.icon-32(aria-hidden="true", v-html="icons[getPriceClass()]")
+             span.cost(:class="getPriceClass()") {{ item.value }}
+ 
+-        .gems-left(v-if='item.key === "gem"')
+-          strong(v-if='gemsLeft > 0') {{ gemsLeft }} {{ $t('gemsRemaining') }}
+-          strong(v-if='gemsLeft === 0') {{ $t('maxBuyGems') }}
+-
+-        div(v-if='attemptingToPurchaseMoreGemsThanAreLeft')
+-          | {{$t('notEnoughGemsToBuy')}}
+-
+         button.btn.btn-primary(
+           @click="purchaseGems()",
+           v-if="getPriceClass() === 'gems' && !this.enoughCurrency(getPriceClass(), item.value * selectedAmountToBuy)"
+@@ -70,7 +63,6 @@
+         button.btn.btn-primary(
+           @click="buyItem()",
+           v-else,
+-          :disabled='item.key === "gem" && gemsLeft === 0 || attemptingToPurchaseMoreGemsThanAreLeft',
+           :class="{'notEnough': !preventHealthPotion || !this.enoughCurrency(getPriceClass(), item.value * selectedAmountToBuy)}"
+         ) {{ $t('buyNow') }}
+ 
+@@ -248,10 +240,6 @@
+ 
+       margin: 10px 0 24px;
+     }
+-
+-    .gems-left {
+-      margin-top: .5em;
+-    }
+   }
+ </style>
+ 
+@@ -345,14 +333,6 @@
+       limitedString () {
+         return this.$t('limitedOffer', {date: moment(seasonalShopConfig.dateRange.end).format('LL')});
+       },
+-      gemsLeft () {
+-        if (!this.user.purchased.plan) return 0;
+-        return planGemLimits.convCap + this.user.purchased.plan.consecutive.gemCapExtra - this.user.purchased.plan.gemsBought;
+-      },
+-      attemptingToPurchaseMoreGemsThanAreLeft () {
+-        if (this.item && this.item.key && this.item.key === 'gem' && this.selectedAmountToBuy > this.gemsLeft) return true;
+-        return false;
+-      },
+       notEnoughCurrency () {
+         return !this.enoughCurrency(this.getPriceClass(), this.item.value * this.selectedAmountToBuy);
+       },
+diff --git a/website/client/components/shops/market/index.vue b/website/client/components/shops/market/index.vue
+index 2eb6b91c9..4928e837b 100644
+--- a/website/client/components/shops/market/index.vue
++++ b/website/client/components/shops/market/index.vue
+@@ -147,7 +147,6 @@
+             @click="itemSelected(item)"
+           )
+             span(slot="popoverContent")
+-              strong(v-if='item.key === "gem" && gemsLeft === 0') {{ $t('maxBuyGems') }}
+               h4.popover-content-title {{ item.text }}
+             template(slot="itemBadge", slot-scope="ctx")
+               countBadge(
+@@ -155,8 +154,6 @@
+                 :show="userItems[item.purchaseType][item.key] != 0",
+                 :count="userItems[item.purchaseType][item.key] || 0"
+               )
+-              .badge.badge-pill.badge-purple.gems-left(v-if='item.key === "gem"')
+-                | {{ gemsLeft }}
+               span.badge.badge-pill.badge-item.badge-svg(
+                 :class="{'item-selected-badge': ctx.item.pinned, 'hide': !ctx.item.pinned}",
+                 @click.prevent.stop="togglePinned(ctx.item)"
+@@ -334,11 +331,6 @@
+     }
+   }
+ 
+-  .market .gems-left {
+-    right: -.5em;
+-    top: -.5em;
+-  }
+-
+   @media only screen and (max-width: 768px) {
+     .featuredItems .content {
+       display: none !important;
+@@ -574,10 +566,6 @@ export default {
+           },
+         ];
+       },
+-      gemsLeft () {
+-        if (!this.user.purchased.plan) return 0;
+-        return planGemLimits.convCap + this.user.purchased.plan.consecutive.gemCapExtra - this.user.purchased.plan.gemsBought;
+-      },
+     },
+     methods: {
+       getClassName (classType) {
+diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
+index e46d7e4f1..da1de7843 100644
+--- a/website/common/script/ops/buy/purchase.js
++++ b/website/common/script/ops/buy/purchase.js
+@@ -31,10 +31,6 @@ function buyGems (user, req, key) {
+     throw new NotAuthorized(i18n.t('messageNotEnoughGold', req.language));
+   }
+ 
+-  if (user.purchased.plan.gemsBought >= convCap) {
+-    throw new NotAuthorized(i18n.t('reachedGoldToGemCap', {convCap}, req.language));
+-  }
+-
+   user.balance += 0.25;
+   user.purchased.plan.gemsBought++;
+   user.stats.gp -= convRate;
