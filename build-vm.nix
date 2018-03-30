@@ -167,6 +167,8 @@ let
       "-net nic,vlan=0,model=virtio"
       "-net user,vlan=0,${devOpts}\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
     ];
+
+    virtualisation.qemu.options = [ "-device virtio-rng-pci" ];
   };
 
 in (import <nixpkgs/nixos/lib/eval-config.nix> {
