@@ -106,8 +106,8 @@ in {
           import random, secrets
           secrets = {
             'SESSION_SECRET': secrets.token_hex(random.randint(50, 300)),
-            'SESSION_SECRET_KEY': secrets.token_hex(random.randint(50, 100)),
-            'SESSION_SECRET_IV': secrets.token_hex(random.randint(20, 50))
+            'SESSION_SECRET_KEY': secrets.token_hex(32),
+            'SESSION_SECRET_IV': secrets.token_hex(16)
           }
           lines = [key + '="' + val + '"\n' for key, val in secrets.items()]
           open('/var/lib/habitica/secrets.env', 'w').write("".join(lines))
