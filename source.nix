@@ -88,6 +88,11 @@ stdenv.mkDerivation rec {
 
     # Do not limit the amount of gems somebody can buy for gold.
     patches/no-limit-for-gold-to-gems.patch
+
+    # Remove the SESSION_SECRET* variables from the example config, because
+    # we're going to generate them on first start of the service and provide
+    # them via environment variables.
+    patches/remove-session-secret-from-config.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

@@ -93,10 +93,35 @@ in {
         '';
       };
 
+      systemd.services.habitica-secrets-init = {
+        description = "Initialize Secrets for Habitica";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "local-fs.target" "habitica-statedir-init.service" ];
+        unitConfig.ConditionPathExists = "!/var/lib/habitica/secrets.env";
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+        serviceConfig.UMask = "0077";
+        serviceConfig.ExecStart = pkgs.writeScript "init-secrets.py" ''
+          #!${pkgs.python3Packages.python.interpreter}
+          import random, secrets
+          secrets = {
+            'SESSION_SECRET': secrets.token_hex(random.randint(50, 300)),
+            'SESSION_SECRET_KEY': secrets.token_hex(random.randint(50, 100)),
+            'SESSION_SECRET_IV': secrets.token_hex(random.randint(20, 50))
+          }
+          lines = [key + '="' + val + '"\n' for key, val in secrets.items()]
+          open('/var/lib/habitica/secrets.env', 'w').write("".join(lines))
+        '';
+      };
+
       systemd.services.habitica-init = {
         description = "Initialize Habitica";
         wantedBy = [ "multi-user.target" ];
-        after = [ "local-fs.target" "habitica-statedir-init.service" ];
+        after = [
+          "local-fs.target"
+          "habitica-statedir-init.service"
+          "habitica-secrets-init.service"
+        ];
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
         unitConfig.ConditionPathExists = "!/run/habitica";
@@ -145,6 +170,7 @@ in {
         serviceConfig.Group = "habitica";
         serviceConfig.PrivateTmp = true;
         serviceConfig.PrivateNetwork = true;
+        serviceConfig.EnvironmentFile = "/var/lib/habitica/secrets.env";
       };
     }
     (lib.mkIf config.habitica.useNginx {
