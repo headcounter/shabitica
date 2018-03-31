@@ -112,6 +112,9 @@ stdenv.mkDerivation rec {
     # Those staff members don't exist on our version and tiers are also not
     # very useful for self-hosted instances.
     patches/tavern-remove-staff-and-tiers.patch
+
+    # Remove links to press kit, merch and group plans.
+    patches/remove-presskit-merch-plans.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -119,7 +122,7 @@ stdenv.mkDerivation rec {
   # Kill off files we do not want to have, most of them because they redirect
   # to external services:
   prePatch = lib.concatMapStrings (path: ''
-    rm ${lib.escapeShellArg path}
+    rm -r ${lib.escapeShellArg path}
   '') [
     "scripts/paypalBillingSetup.js"
     "website/client/components/groups/communityGuidelines.vue"
@@ -128,6 +131,9 @@ stdenv.mkDerivation rec {
     "website/client/components/payments/sendGemsModal.vue"
     "website/client/components/static/communityGuidelines.vue"
     "website/client/components/static/contact.vue"
+    "website/client/components/static/groupPlans.vue"
+    "website/client/components/static/merch.vue"
+    "website/client/components/static/pressKit.vue"
     "website/client/libs/analytics.js"
     "website/client/libs/logging.js"
     "website/client/libs/modform.js"
@@ -152,6 +158,9 @@ stdenv.mkDerivation rec {
     "website/server/libs/stripePayments.js"
     "website/server/middlewares/analytics.js"
     "website/server/middlewares/static.js"
+    "website/static/emails"
+    "website/static/merch"
+    "website/static/presskit"
   ];
 
   # We don't want to have anything in the code referencing any of these
@@ -160,6 +169,7 @@ stdenv.mkDerivation rec {
     "/groups/guild/[a-f0-9-]\\{36\\}"
     "\\<apn"
     "\\<buygemsmodal\\>"
+    "\\<merch\\>"
     "\\<payments\\>"
     "\\<sendgemsmodal\\>"
     "amazon"
@@ -180,12 +190,14 @@ stdenv.mkDerivation rec {
     "paypal"
     "play.*api"
     "play.*store"
+    "press.\\?kit"
     "pushnotif"
     "slack"
     "social"
     "stripe[^d]"
     "transifex"
     "trello"
+    "tumblr"
     "twitter"
   ];
 
