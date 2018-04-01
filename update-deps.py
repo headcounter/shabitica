@@ -39,16 +39,13 @@ def generate(depmap):
         json.dump(flattened, fp)
         fp.flush()
         cmd = [
-            'node2nix', '-8', '--no-copy-node-env',
-            '-e', '<nixpkgs/pkgs/development/node-packages/node-env.nix>',
+            'node2nix', '-8',
+            '-e', os.path.join(OUTPUT_DIR, 'node-env.nix'),
             '-i', fp.name,
             '-o', os.path.join(OUTPUT_DIR, 'node-packages.nix'),
             '-c', COMPOSITION_FILE
         ]
         subprocess.check_call(cmd, cwd=BASEDIR)
-
-    data = open(COMPOSITION_FILE, 'r').read()
-    open(COMPOSITION_FILE, 'w').write(data.replace("../<nixpkgs", "<nixpkgs"))
 
 
 def generate_depmap_expr(depmap):

@@ -5,7 +5,7 @@
   }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs-8_x"}:
 
 let
-  nodeEnv = import <nixpkgs/pkgs/development/node-packages/node-env.nix> {
+  nodeEnv = import ./node-env.nix {
     inherit (pkgs) stdenv python2 utillinux runCommand writeTextFile;
     inherit nodejs;
   };
