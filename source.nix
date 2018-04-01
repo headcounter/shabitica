@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
 
   # We don't want to have anything in the code referencing any of these
   # words/regexes:
-  disallowedCanaries = lib.concatStringsSep "\\|" [
+  disallowedCanaries = lib.concatStringsSep "\\|" (functionCanaries ++ [
     "/groups/guild/[a-f0-9-]\\{36\\}"
     "\\<apn"
     "\\<buygemsmodal\\>"
@@ -199,6 +199,35 @@ stdenv.mkDerivation rec {
     "trello"
     "tumblr"
     "twitter"
+  ]);
+
+  # These are for changed function arguments, because we don't want to miss
+  # these in future upstream updates. Use 'find-canaries.py' to find these.
+  functionCanaries = [
+    "BuyMarketGearOperation([^,]*,[^,)]*,"
+    "buy([^,]*,[^,)]*,"
+    "buyArmoire([^,]*,[^,)]*,"
+    "buyGems([^,]*,[^,)]*,"
+    "buyGems([^,]*,[^,]*,[^,)]*,"
+    "buyHealthPotion([^,]*,[^,)]*,"
+    "buyMysterySet([^,]*,[^,)]*,"
+    "buyQuest([^,]*,[^,)]*,"
+    "buySpecialSpell([^,]*,[^,)]*,"
+    "changeClass([^,]*,[^,)]*,"
+    "cron([^,]*,[^,]*,[^,]*,[^,]*,[^,]*,[^,)]*,"
+    "hourglassPurchase([^,]*,[^,)]*,"
+    "openMysteryItem([^,]*,[^,)]*,"
+    "purchaseOp([^,]*,[^{,)]*,"
+    "rebirth([^,]*,[^,]*,[^,)]*,"
+    "releaseBoth([^,]*,[^,)]*,"
+    "releaseMounts([^,]*,[^,)]*,"
+    "releasePets([^,]*,[^,)]*,"
+    "reroll([^,]*,[^,]*,[^,)]*,"
+    "revive([^,]*,[^,)]*,"
+    "sleep([^,]*,[^,)]*,"
+    "unlock([^,]*,[^,)]*,"
+    "updateGroupPlan([^)]"
+    "updateStats([^,]*,[^,)]*,"
   ];
 
   excludedCanaryPaths = let
