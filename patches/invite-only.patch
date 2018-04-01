@@ -12,7 +12,7 @@ Date:   Tue Mar 27 05:37:13 2018 +0200
     Filename: invite-only.patch
 
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index 75849de2c..cc8307c8b 100644
+index 75849de2c..96ccab21d 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -5,7 +5,7 @@
@@ -50,16 +50,16 @@ index 75849de2c..cc8307c8b 100644
 +        if (this.$route.query && this.$route.query.groupInvite) {
 +          groupInvite = this.$route.query.groupInvite;
 +        }
-+        return !!groupInvite;
++        return Boolean(groupInvite);
 +      },
      },
      methods: {
        validateEmail (email) {
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 15883a97d..d9499e5b8 100644
+index 34b3849a8..041376e39 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
-@@ -62,7 +62,9 @@ async function _handleGroupInvitation (user, invite) {
+@@ -60,7 +60,9 @@ async function _handleGroupInvitation (user, invite) {
      }
    } catch (err) {
      logger.error(err);
@@ -68,8 +68,8 @@ index 15883a97d..d9499e5b8 100644
 +  return true;
  }
  
- function hasBackupAuth (user, networkToRemove) {
-@@ -156,7 +158,11 @@ api.registerLocal = {
+ /**
+@@ -150,7 +152,11 @@ api.registerLocal = {
  
      // we check for partyInvite for backward compatibility
      if (req.query.groupInvite || req.query.partyInvite) {

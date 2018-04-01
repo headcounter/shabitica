@@ -52,10 +52,10 @@ index cf04a520a..5bfbbd7ef 100644
  };
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index d9499e5b8..bb27905be 100644
+index 041376e39..ea05f41e7 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
-@@ -22,8 +22,8 @@ import common from '../../../common';
+@@ -20,8 +20,8 @@ import { send as sendEmail } from '../../libs/email';
  import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs/password';
  
  const BASE_URL = nconf.get('BASE_URL');
@@ -80,10 +80,10 @@ index 11e740da6..d90b51324 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index ca9b485ba..ea2b11f43 100644
+index 89a22d4fc..137688e34 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -23,7 +23,7 @@ import shared from '../../../common';
+@@ -22,7 +22,7 @@ import common from '../../../common';
  import apiMessages from '../../libs/apiMessages';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
@@ -93,7 +93,7 @@ index ca9b485ba..ea2b11f43 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 3e55f3e36..e28514988 100644
+index f61237ef2..6ad0f1aeb 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -18,7 +18,7 @@ import {
@@ -102,9 +102,9 @@ index 3e55f3e36..e28514988 100644
  
 -const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
 +const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
- const DELETE_CONFIRMATION = 'DELETE';
  
  /**
+  * @apiDefine UserNotFound
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
 index 4c1a76e33..a04478742 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
@@ -120,19 +120,6 @@ index 4c1a76e33..a04478742 100644
    return { email, canSend: true };
  });
  
-diff --git a/website/server/libs/payments.js b/website/server/libs/payments.js
-index 0e1c9f319..aac5f652a 100644
---- a/website/server/libs/payments.js
-+++ b/website/server/libs/payments.js
-@@ -16,7 +16,7 @@ import {
-   NotFound,
- } from './errors';
- 
--const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
-+const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
- const JOINED_GROUP_PLAN = 'joined group plan';
- 
- let api = {};
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
 index b86f525d3..3ccd9cf31 100644
 --- a/website/server/middlewares/auth.js

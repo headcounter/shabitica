@@ -16,7 +16,7 @@ Date:   Fri Mar 30 02:41:52 2018 +0200
     Filename: no-limit-for-gold-to-gems.patch
 
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 88bef95eb..9ac68ebaf 100644
+index 88bef95eb..35955c545 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -55,13 +55,6 @@
@@ -41,7 +41,7 @@ index 88bef95eb..9ac68ebaf 100644
            :class="{'notEnough': !preventHealthPotion || !this.enoughCurrency(getPriceClass(), item.value * selectedAmountToBuy)}"
          ) {{ $t('buyNow') }}
  
-@@ -248,10 +240,6 @@
+@@ -248,16 +240,11 @@
  
        margin: 10px 0 24px;
      }
@@ -52,7 +52,13 @@ index 88bef95eb..9ac68ebaf 100644
    }
  </style>
  
-@@ -345,14 +333,6 @@
+ <script>
+   import spellsMixin from 'client/mixins/spells';
+-  import planGemLimits from 'common/script/libs/planGemLimits';
+ 
+   import svgClose from 'assets/svg/close.svg';
+   import svgGold from 'assets/svg/gold.svg';
+@@ -345,14 +332,6 @@
        limitedString () {
          return this.$t('limitedOffer', {date: moment(seasonalShopConfig.dateRange.end).format('LL')});
        },
@@ -68,7 +74,7 @@ index 88bef95eb..9ac68ebaf 100644
          return !this.enoughCurrency(this.getPriceClass(), this.item.value * this.selectedAmountToBuy);
        },
 diff --git a/website/client/components/shops/market/index.vue b/website/client/components/shops/market/index.vue
-index 017101540..a91a5b15e 100644
+index 017101540..8869b09c8 100644
 --- a/website/client/components/shops/market/index.vue
 +++ b/website/client/components/shops/market/index.vue
 @@ -145,7 +145,6 @@
@@ -100,7 +106,15 @@ index 017101540..a91a5b15e 100644
    @media only screen and (max-width: 768px) {
      .featuredItems .content {
        display: none !important;
-@@ -572,10 +564,6 @@ export default {
+@@ -382,7 +374,6 @@
+   import getItemInfo from 'common/script/libs/getItemInfo';
+   import isPinned from 'common/script/libs/isPinned';
+   import shops from 'common/script/libs/shops';
+-  import planGemLimits from 'common/script/libs/planGemLimits';
+ 
+   import _filter from 'lodash/filter';
+   import _sortBy from 'lodash/sortBy';
+@@ -572,10 +563,6 @@ export default {
            },
          ];
        },
@@ -112,10 +126,19 @@ index 017101540..a91a5b15e 100644
      methods: {
        getClassName (classType) {
 diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index ba4dd3628..06aa98c04 100644
+index 20e7d28f7..2e2721f42 100644
 --- a/website/common/script/ops/buy/purchase.js
 +++ b/website/common/script/ops/buy/purchase.js
-@@ -31,10 +31,6 @@ function buyGems (user, req, key) {
+@@ -16,8 +16,6 @@ import getItemInfo from '../../libs/getItemInfo';
+ 
+ function buyGems (user, req) {
+   let convRate = planGemLimits.convRate;
+-  let convCap = planGemLimits.convCap;
+-  convCap += user.purchased.plan.consecutive.gemCapExtra;
+ 
+   // Some groups limit their members ability to obtain gems
+   // The check is async so it's done on the server (in server/controllers/api-v3/user#purchase)
+@@ -31,10 +29,6 @@ function buyGems (user, req) {
      throw new NotAuthorized(i18n.t('messageNotEnoughGold', req.language));
    }
  

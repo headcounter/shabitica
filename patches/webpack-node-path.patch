@@ -10,7 +10,7 @@ Date:   Wed Mar 28 07:11:27 2018 +0200
     Filename: webpack-node-path.patch
 
 diff --git a/webpack/webpack.base.conf.js b/webpack/webpack.base.conf.js
-index 5da0df5a5..ea89f6eb7 100644
+index 5da0df5a5..770ff2b6b 100644
 --- a/webpack/webpack.base.conf.js
 +++ b/webpack/webpack.base.conf.js
 @@ -1,6 +1,7 @@
@@ -27,7 +27,7 @@ index 5da0df5a5..ea89f6eb7 100644
  const IS_PROD = process.env.NODE_ENV === 'production';
 +const nodePathBase = process.env.NODE_PATH.split(':');
 +const nodePathDeep = nodePathBase.map(p =>
-+  path.join(p, fs.readdirSync(p)[0], 'node_modules'))
++  path.join(p, fs.readdirSync(p)[0], 'node_modules'));
 +const nodePath = nodePathBase.concat(nodePathDeep);
  
  const baseConfig = {

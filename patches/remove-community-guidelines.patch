@@ -145,10 +145,10 @@ index caa1a22f3..d8670a57f 100644
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
          { name: 'groupPlans', path: 'group-plans', component: GroupPlansPage, meta: {requiresLogin: false}},
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index e28514988..e72d12147 100644
+index 6ad0f1aeb..b12587609 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -182,7 +182,6 @@ let updatablePaths = [
+@@ -181,7 +181,6 @@ let updatablePaths = [
    'flags.showTour',
    'flags.tour',
    'flags.tutorial',

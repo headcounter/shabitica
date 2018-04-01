@@ -363,7 +363,7 @@ index 862c19099..9b5328c7c 100644
 -};
 -</script>
 diff --git a/website/client/components/achievements/levelUp.vue b/website/client/components/achievements/levelUp.vue
-index 0f815deec..39b99fb78 100644
+index 0f815deec..cd47be7a0 100644
 --- a/website/client/components/achievements/levelUp.vue
 +++ b/website/client/components/achievements/levelUp.vue
 @@ -12,18 +12,6 @@
@@ -417,16 +417,18 @@ index 0f815deec..39b99fb78 100644
    }
  </style>
  
-@@ -118,8 +81,6 @@ import Avatar from '../avatar';
+@@ -118,10 +81,6 @@ import Avatar from '../avatar';
  import { mapState } from 'client/libs/store';
  import {maxHealth} from '../../../common/script/index';
  import styleHelper from 'client/mixins/styleHelper';
 -import twitter from 'assets/svg/twitter.svg';
 -import facebook from 'assets/svg/facebook.svg';
+-
+-let BASE_URL = 'https://habitica.com';
  
- let BASE_URL = 'https://habitica.com';
- 
-@@ -129,18 +90,9 @@ export default {
+ export default {
+   mixins: [styleHelper],
+@@ -129,18 +88,9 @@ export default {
      Avatar,
    },
    data () {
@@ -1286,7 +1288,7 @@ index b92f6de0e..fc0b22c24 100644
  </template>
  
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index 0e583df0e..c81583fb2 100644
+index 0e583df0e..29322418d 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -109,12 +109,6 @@
@@ -1343,10 +1345,14 @@ index 0e583df0e..c81583fb2 100644
    },
    computed: {
      ...mapState({
-@@ -305,14 +289,6 @@ export default {
-       if (this.user.auth.local.username) {
-         return true;
-       }
+@@ -301,19 +285,6 @@ export default {
+     showBailey () {
+       this.$root.$emit('bv::show::modal', 'new-stuff');
+     },
+-    hasBackupAuthOption (networkKeyToCheck) {
+-      if (this.user.auth.local.username) {
+-        return true;
+-      }
 -
 -      return find(this.SOCIAL_AUTH_NETWORKS, (network) => {
 -        if (network.key !== networkKeyToCheck) {
@@ -1355,10 +1361,11 @@ index 0e583df0e..c81583fb2 100644
 -          }
 -        }
 -      });
-     },
+-    },
      calculateNextCron () {
        let nextCron = moment().hours(this.newDayStart).minutes(0).seconds(0).milliseconds(0);
-@@ -359,26 +335,6 @@ export default {
+ 
+@@ -359,26 +330,6 @@ export default {
      openDeleteModal () {
        this.$root.$emit('bv::show::modal', 'delete');
      },
@@ -1386,7 +1393,7 @@ index 0e583df0e..c81583fb2 100644
        if (confirmationNeeded && !confirm(this.$t('changeClassConfirmCost'))) return;
        try {
 diff --git a/website/client/components/settings/subscription.vue b/website/client/components/settings/subscription.vue
-index e086f99f5..96481edfd 100644
+index e086f99f5..b2317612f 100644
 --- a/website/client/components/settings/subscription.vue
 +++ b/website/client/components/settings/subscription.vue
 @@ -67,21 +67,9 @@
@@ -1471,12 +1478,13 @@ index e086f99f5..96481edfd 100644
 -      });
 -    },
      async applyCoupon (coupon) {
-       const response = await axios.post(`/api/v3/coupons/validate/${coupon}`);
+-      const response = await axios.post(`/api/v3/coupons/validate/${coupon}`);
 -
 -      if (!response.data.data.valid) return;
 -
 -      this.text('Coupon applied!');
 -      this.subscription.key = 'google_6mo';
++      await axios.post(`/api/v3/coupons/validate/${coupon}`);
      },
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
@@ -1891,7 +1899,7 @@ index 7e86bb5d3..5180aded1 100644
  
  export default new Vue({
 diff --git a/website/client/mixins/guide.js b/website/client/mixins/guide.js
-index 0d5029fb7..0ccbdbf6c 100644
+index 0d5029fb7..f2e502586 100644
 --- a/website/client/mixins/guide.js
 +++ b/website/client/mixins/guide.js
 @@ -1,6 +1,5 @@
@@ -1901,18 +1909,20 @@ index 0d5029fb7..0ccbdbf6c 100644
  
  export default {
    data () {
-@@ -137,10 +136,6 @@ export default {
+@@ -136,12 +135,6 @@ export default {
+         case 'equipment':  return this.goto('equipment', 0);
        }
      },
-     hoyo (user) {
+-    hoyo (user) {
 -      // @TODO: What is was the timeout for?
 -      // @TODO move to analytics
 -      window.amplitude.setUserId(user._id);
 -      window.ga('set', {userId: user._id});
-     },
+-    },
      goto (chapter, page, force) {
        if (chapter === 'intro' && this.user.flags.welcomed !== true)  {
-@@ -158,15 +153,6 @@ export default {
+         // @TODO: Add dispatch User.set({'flags.welcomed': true});
+@@ -158,15 +151,6 @@ export default {
          opts.steps  = opts.steps.concat(this.chapters[chapter][p]);
        });
  
@@ -1928,7 +1938,7 @@ index 0d5029fb7..0ccbdbf6c 100644
        // @TODO: Do we always need to initialize here?
        let intro = Intro.introJs();
        intro.setOptions({
-@@ -197,22 +183,11 @@ export default {
+@@ -197,22 +181,11 @@ export default {
        //     //   message: this.$t('checkinEarned'),
        //     //   nextRewardAt: 1,
        //     // };
@@ -2082,19 +2092,30 @@ index 564030e55..7bb5e1645 100644
  
    return response.data.data;
 diff --git a/website/client/store/actions/quests.js b/website/client/store/actions/quests.js
-index ff13c36ab..26d727490 100644
+index ff13c36ab..a9cdfbb2c 100644
 --- a/website/client/store/actions/quests.js
 +++ b/website/client/store/actions/quests.js
-@@ -1,5 +1,4 @@
+@@ -1,25 +1,9 @@
  import axios from 'axios';
 -import * as Analytics from 'client/libs/analytics';
  
  // export async function initQuest (store) {
  // }
-@@ -18,8 +17,6 @@ export async function sendAction (store, payload) {
-     };
-   }
  
+ export async function sendAction (store, payload) {
+-  // @TODO: Maybe move this to server
+-  let partyData = {
+-    partyID: store.state.user.data.party._id,
+-    partySize: store.state.partyMembers.data.length,
+-  };
+-
+-  if (store.state.party && store.state.party.data) {
+-    partyData = {
+-      partyID: store.state.party.data._id,
+-      partySize: store.state.party.data.memberCount,
+-    };
+-  }
+-
 -  Analytics.updateUser(partyData);
 -
    let response = await axios.post(`/api/v3/groups/${payload.groupId}/${payload.action}`);
@@ -2128,6 +2149,41 @@ index 1bc330846..ff0e5f1d6 100644
  export const GUILDS_PER_PAGE = 30; // number of guilds to return per page when using pagination
  
  export const PARTY_LIMIT_MEMBERS = 30;
+diff --git a/website/common/script/content/spells.js b/website/common/script/content/spells.js
+index 84bf7be5c..431dd6531 100644
+--- a/website/common/script/content/spells.js
++++ b/website/common/script/content/spells.js
+@@ -44,13 +44,13 @@ spells.wizard = {
+     lvl: 11,
+     target: 'task',
+     notes: t('spellWizardFireballNotes'),
+-    cast (user, target, req) {
++    cast (user, target) {
+       let bonus = statsComputed(user).int * crit.crit(user, 'per');
+       bonus *= Math.ceil((target.value < 0 ? 1 : target.value + 1) * 0.075);
+       user.stats.exp += diminishingReturns(bonus, 75);
+       if (!user.party.quest.progress.up) user.party.quest.progress.up = 0;
+       user.party.quest.progress.up += Math.ceil(statsComputed(user).int * 0.1);
+-      updateStats(user, user.stats, req);
++      updateStats(user, user.stats);
+     },
+   },
+   mpheal: { // Ethereal Surge
+@@ -168,12 +168,12 @@ spells.rogue = {
+     lvl: 12,
+     target: 'task',
+     notes: t('spellRogueBackStabNotes'),
+-    cast (user, target, req) {
++    cast (user, target) {
+       let _crit = crit.crit(user, 'str', 0.3);
+       let bonus = calculateBonus(target.value, statsComputed(user).str, _crit);
+       user.stats.exp += diminishingReturns(bonus, 75, 50);
+       user.stats.gp += diminishingReturns(bonus, 18, 75);
+-      updateStats(user, user.stats, req);
++      updateStats(user, user.stats);
+     },
+   },
+   toolsOfTrade: { // Tools of the Trade
 diff --git a/website/common/script/content/subscriptionBlocks.js b/website/common/script/content/subscriptionBlocks.js
 index f3131cb5a..719a69382 100644
 --- a/website/common/script/content/subscriptionBlocks.js
@@ -2187,7 +2243,7 @@ index deaf0127b..26283710a 100644
      user.items.lastDrop.date = Number(new Date());
      user.items.lastDrop.count++;
 diff --git a/website/common/script/fns/updateStats.js b/website/common/script/fns/updateStats.js
-index 77d547341..397d024fa 100644
+index 77d547341..0bd0218b6 100644
 --- a/website/common/script/fns/updateStats.js
 +++ b/website/common/script/fns/updateStats.js
 @@ -6,7 +6,7 @@ import {
@@ -2195,7 +2251,7 @@ index 77d547341..397d024fa 100644
  import autoAllocate from './autoAllocate';
  
 -module.exports = function updateStats (user, stats, req = {}, analytics) {
-+module.exports = function updateStats (user, stats, req = {}) {
++module.exports = function updateStats (user, stats) {
    let allocatedStatPoints;
    let totalStatPoints;
    let experienceToNextLevel;
@@ -2236,10 +2292,17 @@ index 57eaa890c..5a9e61a0a 100644
    PARTY_LIMIT_MEMBERS,
  };
 diff --git a/website/common/script/ops/buy/abstractBuyOperation.js b/website/common/script/ops/buy/abstractBuyOperation.js
-index d641372a5..028383055 100644
+index d641372a5..d1b100d68 100644
 --- a/website/common/script/ops/buy/abstractBuyOperation.js
 +++ b/website/common/script/ops/buy/abstractBuyOperation.js
-@@ -9,12 +9,10 @@ export class AbstractBuyOperation {
+@@ -2,19 +2,16 @@ import i18n from '../../i18n';
+ import {
+   NotAuthorized, NotImplementedError,
+ } from '../../libs/errors';
+-import _merge from 'lodash/merge';
+ import _get from 'lodash/get';
+ 
+ export class AbstractBuyOperation {
    /**
     * @param {User} user - the User-Object
     * @param {Request} req - the Request-Object
@@ -2253,7 +2316,7 @@ index d641372a5..028383055 100644
  
      this.quantity = _get(req, 'quantity', 1);
    }
-@@ -49,10 +47,6 @@ export class AbstractBuyOperation {
+@@ -49,10 +46,6 @@ export class AbstractBuyOperation {
      throw new NotImplementedError('executeChanges');
    }
  
@@ -2264,7 +2327,7 @@ index d641372a5..028383055 100644
    purchase () {
      if (!this.multiplePurchaseAllowed() && this.quantity > 1) {
        throw new NotAuthorized(this.i18n('messageNotAbleToBuyInBulk'));
-@@ -62,33 +56,13 @@ export class AbstractBuyOperation {
+@@ -62,33 +55,13 @@ export class AbstractBuyOperation {
  
      let resultObj = this.executeChanges(this.user, this.item, this.req);
  
@@ -2300,7 +2363,7 @@ index d641372a5..028383055 100644
    }
  
    getItemValue (item) {
-@@ -115,13 +89,4 @@ export class AbstractGoldItemOperation extends AbstractBuyOperation {
+@@ -115,13 +88,4 @@ export class AbstractGoldItemOperation extends AbstractBuyOperation {
  
      user.stats.gp -= itemValue * quantity;
    }
@@ -2577,7 +2640,7 @@ index d9afc4b44..4f712db74 100644
      { items: user.items, purchasedPlanConsecutive: user.purchased.plan.consecutive },
      i18n.t('hourglassPurchase', req.language),
 diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index 2fa5218c6..ba4dd3628 100644
+index 2fa5218c6..20e7d28f7 100644
 --- a/website/common/script/ops/buy/purchase.js
 +++ b/website/common/script/ops/buy/purchase.js
 @@ -14,7 +14,7 @@ import {
@@ -2585,7 +2648,7 @@ index 2fa5218c6..ba4dd3628 100644
  import getItemInfo from '../../libs/getItemInfo';
  
 -function buyGems (user, analytics, req, key) {
-+function buyGems (user, req, key) {
++function buyGems (user, req) {
    let convRate = planGemLimits.convRate;
    let convCap = planGemLimits.convCap;
    convCap += user.purchased.plan.consecutive.gemCapExtra;
@@ -2621,7 +2684,7 @@ index 2fa5218c6..ba4dd3628 100644
      let gemResponse;
      for (let i = 0; i < quantity; i += 1) {
 -      gemResponse = buyGems(user, analytics, req, key);
-+      gemResponse = buyGems(user, req, key);
++      gemResponse = buyGems(user, req);
      }
      return gemResponse;
    }
@@ -2906,13 +2969,25 @@ index b8ddb0b63..67eb51776 100644
    return [
      user.items,
      message,
+diff --git a/website/common/script/ops/scoreTask.js b/website/common/script/ops/scoreTask.js
+index 78e5e3945..28f554c48 100644
+--- a/website/common/script/ops/scoreTask.js
++++ b/website/common/script/ops/scoreTask.js
+@@ -295,6 +295,6 @@ module.exports = function scoreTask (options = {}, req = {}) {
+     }
+   }
+ 
+-  updateStats(user, stats, req);
++  updateStats(user, stats);
+   return [delta];
+ };
 diff --git a/website/common/script/ops/sleep.js b/website/common/script/ops/sleep.js
-index e80f766b0..58b2cf813 100644
+index e80f766b0..48a283ce2 100644
 --- a/website/common/script/ops/sleep.js
 +++ b/website/common/script/ops/sleep.js
 @@ -1,14 +1,4 @@
 -module.exports = function sleep (user, req = {}, analytics) {
-+module.exports = function sleep (user, req = {}) {
++module.exports = function sleep (user) {
    user.preferences.sleep = !user.preferences.sleep;
 -
 -  if (analytics) {
@@ -2959,21 +3034,30 @@ index bbe4a7910..d89c3e920 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 0ed9cdce4..15883a97d 100644
+index 0ed9cdce4..34b3849a8 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
-@@ -18,7 +18,6 @@ import { model as EmailUnsubscription } from '../../models/emailUnsubscription';
+@@ -1,6 +1,5 @@
+ import validator from 'validator';
+ import moment from 'moment';
+-import passport from 'passport';
+ import nconf from 'nconf';
+ import {
+   authWithHeaders,
+@@ -18,8 +17,6 @@ import { model as EmailUnsubscription } from '../../models/emailUnsubscription';
  import { sendTxn as sendTxnEmail } from '../../libs/email';
  import { decrypt, encrypt } from '../../libs/encryption';
  import { send as sendEmail } from '../../libs/email';
 -import pusher from '../../libs/pusher';
- import common from '../../../common';
+-import common from '../../../common';
  import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs/password';
  
-@@ -67,20 +66,12 @@ async function _handleGroupInvitation (user, invite) {
+ const BASE_URL = nconf.get('BASE_URL');
+@@ -66,21 +63,9 @@ async function _handleGroupInvitation (user, invite) {
+   }
  }
  
- function hasBackupAuth (user, networkToRemove) {
+-function hasBackupAuth (user, networkToRemove) {
 -  if (user.auth.local.username) {
 -    return true;
 -  }
@@ -2983,9 +3067,8 @@ index 0ed9cdce4..15883a97d 100644
 -  });
 -
 -  return hasAlternateNetwork;
-+  return Boolean(user.auth.local.username);
- }
- 
+-}
+-
  /**
   * @api {post} /api/v3/user/auth/local/register Register
 - * @apiDescription Register a new user with email, login name, and password or attach local auth to a social user
@@ -2993,7 +3076,7 @@ index 0ed9cdce4..15883a97d 100644
   * @apiName UserRegisterLocal
   * @apiGroup User
   *
-@@ -89,14 +80,14 @@ function hasBackupAuth (user, networkToRemove) {
+@@ -89,14 +74,14 @@ function hasBackupAuth (user, networkToRemove) {
   * @apiParam (Body) {String} password Password for the new user
   * @apiParam (Body) {String} confirmPassword Password confirmation
   *
@@ -3010,7 +3093,7 @@ index 0ed9cdce4..15883a97d 100644
  
      req.checkBody({
        email: {
-@@ -160,19 +151,8 @@ api.registerLocal = {
+@@ -160,19 +145,8 @@ api.registerLocal = {
        },
      };
  
@@ -3032,7 +3115,7 @@ index 0ed9cdce4..15883a97d 100644
  
      // we check for partyInvite for backward compatibility
      if (req.query.groupInvite || req.query.partyInvite) {
-@@ -196,17 +176,6 @@ api.registerLocal = {
+@@ -196,17 +170,6 @@ api.registerLocal = {
          if (!existingUser) sendTxnEmail(savedUser, 'welcome');
        });
  
@@ -3050,7 +3133,7 @@ index 0ed9cdce4..15883a97d 100644
      return null;
    },
  };
-@@ -279,14 +248,6 @@ api.loginLocal = {
+@@ -279,173 +242,10 @@ api.loginLocal = {
        await user.save();
      }
  
@@ -3065,10 +3148,19 @@ index 0ed9cdce4..15883a97d 100644
      return _loginRes(user, ...arguments);
    },
  };
-@@ -303,149 +264,6 @@ function _passportProfile (network, accessToken) {
-   });
- }
  
+-function _passportProfile (network, accessToken) {
+-  return new Promise((resolve, reject) => {
+-    passport._strategies[network].userProfile(accessToken, (err, profile) => {
+-      if (err) {
+-        reject(err);
+-      } else {
+-        resolve(profile);
+-      }
+-    });
+-  });
+-}
+-
 -// Called as a callback by Facebook (or other social providers). Internal route
 -api.loginSocial = {
 -  method: 'POST',
@@ -3215,7 +3307,7 @@ index 0ed9cdce4..15883a97d 100644
  /**
   * @api {put} /api/v3/user/auth/update-username Update username
   * @apiDescription Update the username of a local user
-@@ -699,33 +517,4 @@ api.resetPasswordSetNewOne = {
+@@ -699,33 +499,4 @@ api.resetPasswordSetNewOne = {
    },
  };
  
@@ -3395,10 +3487,10 @@ index 5fc0f4cbf..f92f7f279 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 834a6dfc5..ca9b485ba 100644
+index 834a6dfc5..89a22d4fc 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -18,12 +18,7 @@ import {
+@@ -18,13 +18,7 @@ import {
  import { removeFromArray } from '../../libs/collectionManipulators';
  import { sendTxn as sendTxnEmail } from '../../libs/email';
  import { encrypt } from '../../libs/encryption';
@@ -3408,10 +3500,11 @@ index 834a6dfc5..ca9b485ba 100644
 -import payments from '../../libs/payments';
 -import stripePayments from '../../libs/stripePayments';
 -import amzLib from '../../libs/amazonPayments';
- import shared from '../../../common';
+-import shared from '../../../common';
  import apiMessages from '../../libs/apiMessages';
  
-@@ -148,22 +143,6 @@ api.createGroup = {
+ const MAX_EMAIL_INVITES_BY_USER = 200;
+@@ -148,22 +142,6 @@ api.createGroup = {
        profile: {name: user.profile.name},
      };
  
@@ -3434,7 +3527,7 @@ index 834a6dfc5..ca9b485ba 100644
      res.respond(201, response); // do not remove chat flags data as we've just created the group
    },
  };
-@@ -196,54 +175,6 @@ api.createGroupPlan = {
+@@ -196,54 +174,6 @@ api.createGroupPlan = {
      let results = await Promise.all([user.save(), group.save()]);
      let savedGroup = results[1];
  
@@ -3489,7 +3582,7 @@ index 834a6dfc5..ca9b485ba 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -576,7 +507,6 @@ api.joinGroup = {
+@@ -576,7 +506,6 @@ api.joinGroup = {
      if (group.memberCount === 0) group.leader = user._id; // If new user is only member -> set as leader
  
      if (group.hasNotCancelled())  {
@@ -3497,7 +3590,7 @@ index 834a6dfc5..ca9b485ba 100644
        await group.updateGroupPlan();
      }
  
-@@ -629,22 +559,6 @@ api.joinGroup = {
+@@ -629,22 +558,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -3520,25 +3613,38 @@ index 834a6dfc5..ca9b485ba 100644
      res.respond(200, response);
    },
  };
-@@ -781,9 +695,6 @@ api.leaveGroup = {
+@@ -771,7 +684,7 @@ api.leaveGroup = {
      }
  
-     let isMemberOfGroupPlan = await user.isMemberOfGroupPlan();
+     await group.leave(user, req.query.keep, req.body.keepChallenges);
+-    if (group.hasNotCancelled()) await group.updateGroupPlan(true);
++    if (group.hasNotCancelled()) await group.updateGroupPlan();
+     _removeMessagesFromMember(user, group._id);
+     await user.save();
+ 
+@@ -780,11 +693,6 @@ api.leaveGroup = {
+       user.guilds.splice(guildIndex, 1);
+     }
+ 
+-    let isMemberOfGroupPlan = await user.isMemberOfGroupPlan();
 -    if (!isMemberOfGroupPlan) {
 -      await payments.cancelGroupSubscriptionForUser(user, group);
 -    }
- 
+-
      res.respond(200, {});
    },
-@@ -873,7 +784,6 @@ api.removeGroupMember = {
+ };
+@@ -872,8 +780,7 @@ api.removeGroupMember = {
+     if (isInGroup) {
        group.memberCount -= 1;
        if (group.hasNotCancelled())  {
-         await group.updateGroupPlan(true);
+-        await group.updateGroupPlan(true);
 -        await payments.cancelGroupSubscriptionForUser(member, group, true);
++        await group.updateGroupPlan();
        }
  
        if (group.quest && group.quest.leader === member._id) {
-@@ -889,12 +799,6 @@ api.removeGroupMember = {
+@@ -889,12 +796,6 @@ api.removeGroupMember = {
          removeFromArray(member.guilds, group._id);
        }
        if (isInGroup === 'party') {
@@ -3551,7 +3657,7 @@ index 834a6dfc5..ca9b485ba 100644
          member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
        }
  
-@@ -995,19 +899,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -995,19 +896,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -3571,7 +3677,7 @@ index 834a6dfc5..ca9b485ba 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1023,8 +914,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1023,8 +911,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},
@@ -3747,10 +3853,18 @@ index 7ae92b1b3..56036a65d 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index 348a9e687..4d89b41ef 100644
+index 348a9e687..2b4f35fb6 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
-@@ -166,16 +166,6 @@ api.createUserTasks = {
+@@ -22,7 +22,6 @@ import {
+ import common from '../../../common';
+ import _ from 'lodash';
+ import logger from '../../libs/logger';
+-import moment from 'moment';
+ 
+ const MAX_SCORE_NOTES_LENGTH = 256;
+ 
+@@ -166,16 +165,6 @@ api.createUserTasks = {
      res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
  
      tasks.forEach((task) => {
@@ -3767,7 +3881,7 @@ index 348a9e687..4d89b41ef 100644
        taskActivityWebhook.send(user.webhooks, {
          type: 'created',
          task,
-@@ -251,16 +241,6 @@ api.createChallengeTasks = {
+@@ -251,16 +240,6 @@ api.createChallengeTasks = {
  
      // If adding tasks to a challenge -> sync users
      if (challenge) challenge.addTasks(tasks);
@@ -3784,7 +3898,7 @@ index 348a9e687..4d89b41ef 100644
    },
  };
  
-@@ -606,7 +586,7 @@ api.scoreTask = {
+@@ -606,7 +585,7 @@ api.scoreTask = {
  
      let [delta] = common.ops.scoreTask({task, user, direction}, req);
      // Drop system (don't run on the client, as it would only be discarded since ops are sent to the API, not the results)
@@ -3793,7 +3907,7 @@ index 348a9e687..4d89b41ef 100644
  
      // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
      // TODO move to common code?
-@@ -675,17 +655,6 @@ api.scoreTask = {
+@@ -675,17 +654,6 @@ api.scoreTask = {
          logger.error(e);
        }
      }
@@ -3833,10 +3947,10 @@ index 45eb8839d..5086ae281 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 1ae8a17df..3e55f3e36 100644
+index 1ae8a17df..f61237ef2 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -15,7 +15,6 @@ import {
+@@ -15,12 +15,10 @@ import {
    getUserInfo,
    sendTxn as txnEmail,
  } from '../../libs/email';
@@ -3844,7 +3958,12 @@ index 1ae8a17df..3e55f3e36 100644
  import nconf from 'nconf';
  import get from 'lodash/get';
  
-@@ -394,8 +393,6 @@ api.deleteUser = {
+ const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
+-const DELETE_CONFIRMATION = 'DELETE';
+ 
+ /**
+  * @apiDefine UserNotFound
+@@ -394,8 +392,6 @@ api.deleteUser = {
      if (user.auth.local.hashed_password && user.auth.local.email) {
        let isValidPassword = await passwordUtils.compare(user, password);
        if (!isValidPassword) throw new NotAuthorized(res.t('wrongPassword'));
@@ -3853,7 +3972,7 @@ index 1ae8a17df..3e55f3e36 100644
      }
  
      let feedback = req.body.feedback;
-@@ -432,14 +429,6 @@ api.deleteUser = {
+@@ -432,14 +428,6 @@ api.deleteUser = {
        ]);
      }
  
@@ -3868,7 +3987,7 @@ index 1ae8a17df..3e55f3e36 100644
      res.respond(200, {});
    },
  };
-@@ -481,8 +470,6 @@ api.getUserAnonymized = {
+@@ -481,8 +469,6 @@ api.getUserAnonymized = {
      delete user.apiToken;
      if (user.auth) {
        delete user.auth.local;
@@ -3877,16 +3996,16 @@ index 1ae8a17df..3e55f3e36 100644
      }
      delete user.newMessages;
      delete user.profile;
-@@ -545,7 +532,7 @@ api.sleep = {
+@@ -545,7 +531,7 @@ api.sleep = {
    url: '/user/sleep',
    async handler (req, res) {
      let user = res.locals.user;
 -    let sleepRes = common.ops.sleep(user, req, res.analytics);
-+    let sleepRes = common.ops.sleep(user, req);
++    let sleepRes = common.ops.sleep(user);
      await user.save();
      res.respond(200, ...sleepRes);
    },
-@@ -605,7 +592,7 @@ api.buy = {
+@@ -605,7 +591,7 @@ api.buy = {
      let quantity = 1;
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
@@ -3895,7 +4014,7 @@ index 1ae8a17df..3e55f3e36 100644
  
      await user.save();
      res.respond(200, ...buyRes);
-@@ -653,7 +640,7 @@ api.buyGear = {
+@@ -653,7 +639,7 @@ api.buyGear = {
    url: '/user/buy-gear/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3904,7 +4023,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...buyGearRes);
    },
-@@ -695,7 +682,7 @@ api.buyArmoire = {
+@@ -695,7 +681,7 @@ api.buyArmoire = {
      let user = res.locals.user;
      req.type = 'armoire';
      req.params.key = 'armoire';
@@ -3913,7 +4032,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...buyArmoireResponse);
    },
-@@ -735,7 +722,7 @@ api.buyHealthPotion = {
+@@ -735,7 +721,7 @@ api.buyHealthPotion = {
      let user = res.locals.user;
      req.type = 'potion';
      req.params.key = 'potion';
@@ -3922,7 +4041,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...buyHealthPotionResponse);
    },
-@@ -776,7 +763,7 @@ api.buyMysterySet = {
+@@ -776,7 +762,7 @@ api.buyMysterySet = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'mystery';
@@ -3931,7 +4050,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...buyMysterySetRes);
    },
-@@ -817,7 +804,7 @@ api.buyQuest = {
+@@ -817,7 +803,7 @@ api.buyQuest = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'quest';
@@ -3940,7 +4059,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...buyQuestRes);
    },
-@@ -1007,7 +994,7 @@ api.changeClass = {
+@@ -1007,7 +993,7 @@ api.changeClass = {
    url: '/user/change-class',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3949,7 +4068,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...changeClassRes);
    },
-@@ -1076,7 +1063,7 @@ api.purchase = {
+@@ -1076,7 +1062,7 @@ api.purchase = {
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
  
@@ -3958,7 +4077,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...purchaseRes);
    },
-@@ -1107,7 +1094,7 @@ api.userPurchaseHourglass = {
+@@ -1107,7 +1093,7 @@ api.userPurchaseHourglass = {
    url: '/user/purchase-hourglass/:type/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3967,7 +4086,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...purchaseHourglassRes);
    },
-@@ -1201,7 +1188,7 @@ api.userOpenMysteryItem = {
+@@ -1201,7 +1187,7 @@ api.userOpenMysteryItem = {
    url: '/user/open-mystery-item',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3976,7 +4095,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...openMysteryItemRes);
    },
-@@ -1233,7 +1220,7 @@ api.userReleasePets = {
+@@ -1233,7 +1219,7 @@ api.userReleasePets = {
    url: '/user/release-pets',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3985,7 +4104,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...releasePetsRes);
    },
-@@ -1282,7 +1269,7 @@ api.userReleaseBoth = {
+@@ -1282,7 +1268,7 @@ api.userReleaseBoth = {
    url: '/user/release-both',
    async handler (req, res) {
      let user = res.locals.user;
@@ -3994,7 +4113,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...releaseBothRes);
    },
-@@ -1318,7 +1305,7 @@ api.userReleaseMounts = {
+@@ -1318,7 +1304,7 @@ api.userReleaseMounts = {
    url: '/user/release-mounts',
    async handler (req, res) {
      let user = res.locals.user;
@@ -4003,7 +4122,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...releaseMountsRes);
    },
-@@ -1391,7 +1378,7 @@ api.userUnlock = {
+@@ -1391,7 +1377,7 @@ api.userUnlock = {
    url: '/user/unlock',
    async handler (req, res) {
      let user = res.locals.user;
@@ -4012,7 +4131,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...unlockRes);
    },
-@@ -1417,7 +1404,7 @@ api.userRevive = {
+@@ -1417,7 +1403,7 @@ api.userRevive = {
    url: '/user/revive',
    async handler (req, res) {
      let user = res.locals.user;
@@ -4021,7 +4140,7 @@ index 1ae8a17df..3e55f3e36 100644
      await user.save();
      res.respond(200, ...reviveRes);
    },
-@@ -1463,7 +1450,7 @@ api.userRebirth = {
+@@ -1463,7 +1449,7 @@ api.userRebirth = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      }).exec();
  
@@ -4030,7 +4149,7 @@ index 1ae8a17df..3e55f3e36 100644
  
      let toSave = tasks.map(task => task.save());
  
-@@ -1621,7 +1608,7 @@ api.userReroll = {
+@@ -1621,7 +1607,7 @@ api.userReroll = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      };
      let tasks = await Tasks.Task.find(query).exec();
@@ -4039,7 +4158,7 @@ index 1ae8a17df..3e55f3e36 100644
  
      let promises = tasks.map(task => task.save());
      promises.push(user.save());
-@@ -1672,12 +1659,6 @@ api.userReset = {
+@@ -1672,12 +1658,6 @@ api.userReset = {
        user.save(),
      ]);
  
@@ -4053,22 +4172,28 @@ index 1ae8a17df..3e55f3e36 100644
    },
  };
 diff --git a/website/server/controllers/top-level/dataexport.js b/website/server/controllers/top-level/dataexport.js
-index 7943355bb..03f7207eb 100644
+index 7943355bb..cf1e614ff 100644
 --- a/website/server/controllers/top-level/dataexport.js
 +++ b/website/server/controllers/top-level/dataexport.js
-@@ -12,11 +12,6 @@ import Pageres from 'pageres';
- import nconf from 'nconf';
- import got from 'got';
+@@ -8,17 +8,7 @@ import _ from 'lodash';
+ import csvStringify from '../../libs/csvStringify';
+ import moment from 'moment';
+ import js2xml from 'js2xmlparser';
+-import Pageres from 'pageres';
+-import nconf from 'nconf';
+-import got from 'got';
  import md from 'habitica-markdown';
 -import {
 -  S3,
 -} from '../../libs/aws';
 -
 -const S3_BUCKET = nconf.get('S3:bucket');
+-
+-const BASE_URL = nconf.get('BASE_URL');
  
- const BASE_URL = nconf.get('BASE_URL');
+ let api = {};
  
-@@ -188,75 +183,6 @@ api.exportUserAvatarHtml = {
+@@ -188,75 +178,6 @@ api.exportUserAvatarHtml = {
    },
  };
  
@@ -4252,10 +4377,18 @@ index 1c5855e6d..f28aff362 100644
    return _progress;
  }
 diff --git a/website/server/libs/email.js b/website/server/libs/email.js
-index 330f2d2ac..9d94b3fda 100644
+index 330f2d2ac..74a0c4a69 100644
 --- a/website/server/libs/email.js
 +++ b/website/server/libs/email.js
-@@ -39,8 +39,6 @@ export function getUserInfo (user, fields = []) {
+@@ -4,7 +4,6 @@ import { TAVERN_ID } from '../models/group';
+ import { encrypt } from './encryption';
+ import got from 'got';
+ import logger from './logger';
+-import common from '../../common';
+ 
+ const IS_PROD = nconf.get('IS_PROD');
+ const EMAIL_SERVER = {
+@@ -39,8 +38,6 @@ export function getUserInfo (user, fields = []) {
      if (!info.name) {
        if (user.auth.local && user.auth.local.username) {
          info.name = user.auth.local.username;
@@ -4264,7 +4397,7 @@ index 330f2d2ac..9d94b3fda 100644
        }
      }
    }
-@@ -48,12 +46,6 @@ export function getUserInfo (user, fields = []) {
+@@ -48,12 +45,6 @@ export function getUserInfo (user, fields = []) {
    if (fields.indexOf('email') !== -1) {
      if (user.auth.local && user.auth.local.email) {
        info.email = user.auth.local.email;
@@ -4302,12 +4435,12 @@ index 67bc4df2a..21622d863 100644
  } else if (!IS_TEST || IS_TEST && ENABLE_LOGS_IN_TEST) { // Do not log anything when testing unless specified
    logger
 diff --git a/website/server/libs/payments.js b/website/server/libs/payments.js
-index c041e3c47..0e1c9f319 100644
+index c041e3c47..bb5aed2f7 100644
 --- a/website/server/libs/payments.js
 +++ b/website/server/libs/payments.js
-@@ -1,12 +1,10 @@
+@@ -1,12 +1,9 @@
  import _ from 'lodash';
- import nconf from 'nconf';
+-import nconf from 'nconf';
 -import analytics from './analyticsService';
  import {
    getUserInfo,
@@ -4318,15 +4451,17 @@ index c041e3c47..0e1c9f319 100644
  import shared from '../../common';
  import {
    model as Group,
-@@ -17,7 +15,6 @@ import {
+@@ -17,9 +14,7 @@ import {
    NotAuthorized,
    NotFound,
  } from './errors';
 -import slack from './slack';
  
- const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
+-const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
  const JOINED_GROUP_PLAN = 'joined group plan';
-@@ -28,8 +25,6 @@ api.constants = {
+ 
+ let api = {};
+@@ -28,8 +23,6 @@ api.constants = {
    UNLIMITED_CUSTOMER_ID: 'habitrpg', // Users with the customerId have an unlimted free subscription
    GROUP_PLAN_CUSTOMER_ID: 'group-plan',
    GROUP_PLAN_PAYMENT_METHOD: 'Group Plan',
@@ -4335,7 +4470,7 @@ index c041e3c47..0e1c9f319 100644
  };
  
  function revealMysteryItems (user) {
-@@ -89,8 +84,6 @@ api.addSubscriptionToGroupUsers = async function addSubscriptionToGroupUsers (gr
+@@ -89,8 +82,6 @@ api.addSubscriptionToGroupUsers = async function addSubscriptionToGroupUsers (gr
  api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
    // These EMAIL_TEMPLATE constants are used to pass strings into templates that are
    // stored externally and so their values must not be changed.
@@ -4344,7 +4479,7 @@ index c041e3c47..0e1c9f319 100644
    const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GROUP_PLAN = 'group_plan_free_subscription';
    const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_LIFETIME_FREE = 'lifetime_free_subscription';
    const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_NORMAL = 'normal_subscription';
-@@ -100,7 +93,6 @@ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
+@@ -100,7 +91,6 @@ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
    // When changing customerIdsToIgnore or paymentMethodsToIgnore, the code blocks below for
    // the `group-member-join` email template will probably need to be changed.
    let customerIdsToIgnore = [this.constants.GROUP_PLAN_CUSTOMER_ID, this.constants.UNLIMITED_CUSTOMER_ID];
@@ -4352,7 +4487,7 @@ index c041e3c47..0e1c9f319 100644
    let previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_NONE;
    let leader = await User.findById(group.leader).exec();
  
-@@ -135,29 +127,12 @@ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
+@@ -135,29 +125,12 @@ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
    let memberPlan = member.purchased.plan;
    if (member.isSubscribed()) {
      let customerHasCancelledGroupPlan = memberPlan.customerId === this.constants.GROUP_PLAN_CUSTOMER_ID && !member.hasNotCancelled();
@@ -4384,7 +4519,28 @@ index c041e3c47..0e1c9f319 100644
          previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_LIFETIME_FREE;
        } else if (memberPlan.customerId === this.constants.GROUP_PLAN_CUSTOMER_ID) {
          previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GROUP_PLAN;
-@@ -332,9 +307,7 @@ api.createSubscription = async function createSubscription (data) {
+@@ -278,9 +251,6 @@ api.createSubscription = async function createSubscription (data) {
+   let today = new Date();
+   let plan;
+   let group;
+-  let groupId;
+-  let itemPurchased = 'Subscription';
+-  let purchaseType = 'subscribe';
+   let emailType = 'subscription-begins';
+ 
+   //  If we are buying a group subscription
+@@ -297,10 +267,7 @@ api.createSubscription = async function createSubscription (data) {
+     }
+ 
+     recipient = group;
+-    itemPurchased = 'Group-Subscription';
+-    purchaseType = 'group-subscribe';
+     emailType = 'group-subscription-begins';
+-    groupId = group._id;
+     recipient.purchased.plan.quantity = data.sub.quantity;
+ 
+     await this.addSubscriptionToGroupUsers(group);
+@@ -332,9 +299,7 @@ api.createSubscription = async function createSubscription (data) {
        paymentMethod: data.paymentMethod,
        extraMonths: Number(plan.extraMonths) + _dateDiff(today, plan.dateTerminated),
        dateTerminated: null,
@@ -4395,7 +4551,7 @@ index c041e3c47..0e1c9f319 100644
        nextPaymentProcessing: data.nextPaymentProcessing,
        nextBillingDate: data.nextBillingDate,
        additionalData: data.additionalData,
-@@ -370,19 +343,6 @@ api.createSubscription = async function createSubscription (data) {
+@@ -370,19 +335,6 @@ api.createSubscription = async function createSubscription (data) {
      txnEmail(data.user, emailType);
    }
  
@@ -4415,7 +4571,7 @@ index c041e3c47..0e1c9f319 100644
    if (!group) data.user.purchased.txnCount++;
  
    if (data.gift) {
-@@ -417,19 +377,6 @@ api.createSubscription = async function createSubscription (data) {
+@@ -417,19 +369,6 @@ api.createSubscription = async function createSubscription (data) {
          {name: 'X_MONTHS_SUBSCRIPTION', content: months},
        ]);
      }
@@ -4435,7 +4591,7 @@ index c041e3c47..0e1c9f319 100644
    }
  
    if (group) {
-@@ -439,22 +386,6 @@ api.createSubscription = async function createSubscription (data) {
+@@ -439,30 +378,12 @@ api.createSubscription = async function createSubscription (data) {
    }
  
    if (data.gift) await data.gift.member.save();
@@ -4458,10 +4614,23 @@ index c041e3c47..0e1c9f319 100644
  };
  
  // Cancels a subscription or group plan, setting termination to happen later
-@@ -529,15 +460,6 @@ api.cancelSubscription = async function cancelSubscription (data) {
-     cancelType = 'group-unsubscribe';
-     groupId = group._id;
+ api.cancelSubscription = async function cancelSubscription (data) {
+   let plan;
+   let group;
+-  let cancelType = 'unsubscribe';
+-  let groupId;
+   let emailType;
+   let emailMergeData = [];
+   let sendEmail = true;
+@@ -524,20 +445,6 @@ api.cancelSubscription = async function cancelSubscription (data) {
    }
+ 
+   if (sendEmail) txnEmail(data.user, emailType, emailMergeData);
+-
+-  if (group) {
+-    cancelType = 'group-unsubscribe';
+-    groupId = group._id;
+-  }
 -
 -  analytics.track(cancelType, {
 -    uuid: data.user._id,
@@ -4474,7 +4643,7 @@ index c041e3c47..0e1c9f319 100644
  };
  
  api.buyGems = async function buyGems (data) {
-@@ -549,18 +471,6 @@ api.buyGems = async function buyGems (data) {
+@@ -549,18 +456,6 @@ api.buyGems = async function buyGems (data) {
  
    if (!data.gift) txnEmail(data.user, 'donation');
  
@@ -4493,7 +4662,7 @@ index c041e3c47..0e1c9f319 100644
    if (data.gift) {
      let byUsername = getUserInfo(data.user, ['name']).name;
      let gemAmount = data.gift.gems.amount || 20;
-@@ -595,19 +505,6 @@ api.buyGems = async function buyGems (data) {
+@@ -595,19 +490,6 @@ api.buyGems = async function buyGems (data) {
        ]);
      }
  
@@ -4514,12 +4683,12 @@ index c041e3c47..0e1c9f319 100644
    }
  
 diff --git a/website/server/libs/setupPassport.js b/website/server/libs/setupPassport.js
-index 4c0861a1f..32440e146 100644
+index 4c0861a1f..51d872942 100644
 --- a/website/server/libs/setupPassport.js
 +++ b/website/server/libs/setupPassport.js
-@@ -1,28 +1,10 @@
+@@ -1,28 +1,9 @@
  import passport from 'passport';
- import nconf from 'nconf';
+-import nconf from 'nconf';
 -import { Strategy as FacebookStrategy } from 'passport-facebook';
 -import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
  
@@ -4660,7 +4829,7 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 6cdc5d710..55f6ed7fb 100644
+index 6cdc5d710..0b963a98b 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -20,16 +20,12 @@ import {
@@ -4735,6 +4904,15 @@ index 6cdc5d710..55f6ed7fb 100644
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  
+@@ -1420,7 +1391,7 @@ schema.methods.hasNotCancelled = function hasNotCancelled () {
+   return this.isSubscribed() && !plan.dateTerminated;
+ };
+ 
+-schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember) {
++schema.methods.updateGroupPlan = async function updateGroupPlan () {
+   // Recheck the group plan count
+   let members;
+   if (this.type === 'guild') {
 @@ -1429,12 +1400,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
@@ -4812,7 +4990,7 @@ index 0ebcfe673..810bf46a2 100644
  
  schema.pre('validate', function preValidateUser (next) {
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 1f8712fef..c5f9a9d74 100644
+index 1f8712fef..e85f1e7cc 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -11,9 +11,6 @@ import { defaults, map, flatten, flow, compact, uniq, partialRight } from 'lodas
@@ -4834,9 +5012,12 @@ index 1f8712fef..c5f9a9d74 100644
   * @param  options.cancellationReason  A text string to control sending an email
   *
   * @return a Promise from api.cancelSubscription()
-@@ -204,14 +201,6 @@ schema.methods.cancelSubscription = async function cancelSubscription (options =
-   let plan = this.purchased.plan;
- 
+@@ -201,18 +198,7 @@ schema.methods.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+ // In summary, currently is is best practice to use this method to cancel a user subscription, rather than calling the
+ // payment helper.
+ schema.methods.cancelSubscription = async function cancelSubscription (options = {}) {
+-  let plan = this.purchased.plan;
+-
    options.user = this;
 -  if (plan.paymentMethod === amazonPayments.constants.PAYMENT_METHOD) {
 -    return await amazonPayments.cancelSubscription(options);
@@ -4846,6 +5027,7 @@ index 1f8712fef..c5f9a9d74 100644
 -    return await paypalPayments.subscribeCancel(options);
 -  }
 -  // Android and iOS subscriptions cannot be cancelled by Habitica.
- 
+-
    return await payments.cancelSubscription(options);
  };
+ 
