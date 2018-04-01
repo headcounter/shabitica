@@ -9,8 +9,23 @@ in {
   options.habitica = {
     hostName = lib.mkOption {
       type = lib.types.str;
-      default = "habitica.headcounter.org";
+      default = "localhost";
+      example = "habitica.example.org";
       description = "The host name to use for Habitica.";
+    };
+
+    adminMailAddress = lib.mkOption {
+      type = lib.types.str;
+      default = "root@localhost";
+      example = "habitica-admin@example.org";
+      description = "Email address of the administrator.";
+    };
+
+    senderMailAddress = lib.mkOption {
+      type = lib.types.str;
+      default = "habitica@localhost";
+      example = "habitica@example.org";
+      description = "The email address to use for sending notifications.";
     };
 
     baseURL = lib.mkOption {
@@ -51,13 +66,13 @@ in {
 
   config = lib.mkMerge [
     { habitica.config = {
-        ADMIN_EMAIL = "aszlig@nix.build";
+        ADMIN_EMAIL = config.habitica.adminMailAddress;
         NODE_ENV = "production";
         BASE_URL = config.habitica.baseURL;
         NODE_DB_URI = "mongodb://%2Frun%2Fhabitica%2Fdb.sock";
         PORT = "/run/habitica.sock";
         SENDMAIL_PATH = "${config.security.wrapperDir}/sendmail";
-        MAIL_FROM = "no-reply@headcounter.org";
+        MAIL_FROM = config.habitica.senderMailAddress;
       };
 
       users.users.habitica-db = {
