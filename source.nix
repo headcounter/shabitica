@@ -167,6 +167,7 @@ stdenv.mkDerivation rec {
   # words/regexes:
   disallowedCanaries = lib.concatStringsSep "\\|" (functionCanaries ++ [
     "/groups/guild/[a-f0-9-]\\{36\\}"
+    "EMAILS:[A-Z]"
     "\\<apn"
     "\\<buygemsmodal\\>"
     "\\<merch\\>"
