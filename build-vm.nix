@@ -147,8 +147,6 @@ let
     systemd.services."serial-getty@ttyS0".enable = false;
     systemd.services."serial-getty@hvc0".enable = false;
 
-    services.nginx.enable = true;
-
     environment.etc."ssh/authorized_keys.d/root" = lib.mkForce {
       mode = "0444";
       source = "${sshKeyPair}/key.pub";

@@ -189,6 +189,7 @@ in {
       };
     }
     (lib.mkIf config.habitica.useNginx {
+      services.nginx.enable = lib.mkOverride 900 true;
       services.nginx.virtualHosts.${config.habitica.hostName}.locations = {
         "/".root = config.habitica.staticPath;
         "/".index = "index.html";
