@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wcdp0yy50m2irnrwhxs30mcz726bfwn5ipzr6adqyvm0za4h6vv";
   };
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+  phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
 
   patches = [
     # Remove all unneeded dependencies (eg. to external services and payment)
@@ -280,7 +280,6 @@ stdenv.mkDerivation rec {
     cp --no-preserve=mode -rt website/static "$emojis/public/graphics/emojis"
   '';
 
-
   googleFonts = runCommand "google-fonts" {
     name = "google-fonts";
     outputHashAlgo = "sha256";
@@ -304,6 +303,24 @@ stdenv.mkDerivation rec {
     rev = "c59bf0aad0a7238050c1a3896ecad650af227d59";
     sha256 = "1s696nsvndp4p697yiaq908s387gc0m2xmby7cab071xf2p8c4h7";
   };
+
+  doCheck = true;
+
+  # We only do an ESLint check here, to make sure the source is in good shape
+  # after our patches. The actual unit tests are not part of the source
+  # preparation and are done elsewhere.
+  checkPhase = let
+    eslintNodePath = let
+      isEslint = name: lib.hasPrefix "eslint" name || name == "babel-eslint";
+      devAndMain = nodePackages.dev // nodePackages.main;
+      eslintDeps = lib.filterAttrs (n: lib.const (isEslint n)) devAndMain;
+      mkSubdep = p: "${p}/lib/node_modules/${p.packageName}/node_modules";
+      mkDep = p: "${p}/lib/node_modules:${mkSubdep p}";
+    in lib.concatMapStringsSep ":" mkDep (lib.attrValues eslintDeps);
+    eslintCmd = lib.concatMapStringsSep " " lib.escapeShellArg [
+      "${nodePackages.dev.eslint}/bin/eslint" "--ext" ".js,.vue" "."
+    ];
+  in "NODE_PATH=${lib.escapeShellArg eslintNodePath} ${eslintCmd}";
 
   installPhase = "cp -r . \"$out\"";
 }
