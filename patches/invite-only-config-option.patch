@@ -1,0 +1,47 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Mon Apr 2 06:30:04 2018 +0200
+
+    Make invite-only configurable
+    
+    This is mainly used for tests, but could be useful for some instances as
+    well.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: invite-only-config-option.patch
+
+diff --git a/config.json.example b/config.json.example
+index 9b3b5ca72..16b1f7986 100644
+--- a/config.json.example
++++ b/config.json.example
+@@ -13,5 +13,6 @@
+     "MAINTENANCE_MODE": "false",
+     "ADMIN_EMAIL": "you@example.com",
+     "SENDMAIL_PATH": "/usr/sbin/sendmail",
+-    "MAIL_FROM": "unconfigured@example.com"
++    "MAIL_FROM": "unconfigured@example.com",
++    "INVITE_ONLY": "true"
+ }
+diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
+index 25e8e3ebb..a99ed2462 100644
+--- a/website/server/controllers/api-v3/auth.js
++++ b/website/server/controllers/api-v3/auth.js
+@@ -22,6 +22,7 @@ import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs
+ const BASE_URL = nconf.get('BASE_URL');
+ const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
+ const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
++const INVITE_ONLY = nconf.get('INVITE_ONLY') === 'true';
+ const USERNAME_LENGTH_MIN = 1;
+ const USERNAME_LENGTH_MAX = 20;
+ 
+@@ -155,9 +156,9 @@ api.registerLocal = {
+     // we check for partyInvite for backward compatibility
+     if (req.query.groupInvite || req.query.partyInvite) {
+       let success = await _handleGroupInvitation(newUser, req.query.groupInvite || req.query.partyInvite);
+-      if (hasUsers && !success)
++      if (INVITE_ONLY && hasUsers && !success)
+         throw new NotAuthorized(res.t('inviteOnly'));
+-    } else if (hasUsers) {
++    } else if (INVITE_ONLY && hasUsers) {
+       throw new NotAuthorized(res.t('inviteOnly'));
+     }
+ 
