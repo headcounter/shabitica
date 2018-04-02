@@ -17,7 +17,14 @@ let
   src = callPackage ./source.nix {};
   inherit (src) version;
 
-  common = {
+  mkCommonBuild = attrs: let
+    filteredAttrs = removeAttrs attrs [
+      "name" "version" "nativeBuildInputs" "buildInputs"
+    ];
+  in stdenv.mkDerivation ({
+    name = "habitica-${attrs.name}-${version}";
+    inherit src version;
+
     configurePhase = ''
       runHook preConfigure
 
@@ -39,17 +46,19 @@ let
       runHook postBuild
     '';
 
-    nativeBuildInputs = [ nodejs-8_x ];
+    nativeBuildInputs = [ nodejs-8_x ] ++ (attrs.nativeBuildInputs or []);
+
     buildInputs = (lib.attrValues nodePackages.main) ++ [
       nodePackages.dev.babel-plugin-istanbul
       nodePackages.dev.babel-plugin-syntax-object-rest-spread
-    ];
-  };
+    ] ++ (attrs.buildInputs or []);
+  } // removeAttrs attrs [
+    "name" "version" "nativeBuildInputs" "buildInputs"
+  ]);
 
 in rec {
-  client = stdenv.mkDerivation (common // {
-    name = "habitica-client-${version}";
-    inherit src version;
+  client = mkCommonBuild {
+    name = "client";
 
     gulpTarget = "build:client";
 
@@ -66,17 +75,16 @@ in rec {
     NODE_PATH = let
       needsSubdep = p: lib.elem p.packageName [ "svg-url-loader" "webpack" ];
       mkSubdep = p: "${p}/lib/node_modules/${p.packageName}/node_modules";
-      eligibleInputs = lib.filter needsSubdep common.buildInputs;
-    in lib.concatMapStringsSep ":" mkSubdep eligibleInputs;
+      eligible = lib.filter needsSubdep (lib.attrValues nodePackages.main);
+    in lib.concatMapStringsSep ":" mkSubdep eligible;
 
     installPhase = ''
       cp -rdT dist-client "$out"
     '';
-  });
+  };
 
-  server = stdenv.mkDerivation (common // {
-    name = "habitica-server-${version}";
-    inherit src version;
+  server = mkCommonBuild {
+    name = "server";
 
     gulpTarget = "build:server";
 
@@ -92,7 +100,7 @@ in rec {
         --subst-var-by CLIENT_INDEX_DATA "$indexData"
     '';
 
-    nativeBuildInputs = common.nativeBuildInputs ++ [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
     runtimeNodePath = let
       packages = lib.attrValues nodePackages.main;
@@ -113,18 +121,14 @@ in rec {
         --set NODE_PATH "$runtimeNodePath" \
         --run "cd '$out/libexec/habitica'"
     '';
-  });
+  };
 
-  apidoc = stdenv.mkDerivation (common // {
-    name = "habitica-apidoc-${version}";
-    inherit src version;
-
+  apidoc = mkCommonBuild {
+    name = "apidoc";
     gulpTarget = "apidoc";
+    installPhase = "cp -rdT apidoc_build \"$out\"";
+  };
 
-    installPhase = ''
-      cp -rdT apidoc_build "$out"
-    '';
-  });
-
+  inherit mkCommonBuild nodePackages;
   source = src;
 }
