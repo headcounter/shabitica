@@ -1,0 +1,120 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Mon Apr 2 04:50:12 2018 +0200
+
+    Do not cancel group subscription if a user leaves
+    
+    We don't want to make a big difference between groups with a plan and a
+    group without one because everything on the standalone version is free.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: dont-cancel-group-subscription-on-leave.patch
+
+diff --git a/test/api/v3/integration/groups/POST-groups_groupId_leave.js b/test/api/v3/integration/groups/POST-groups_groupId_leave.js
+index 615b5e01e..59d84a958 100644
+--- a/test/api/v3/integration/groups/POST-groups_groupId_leave.js
++++ b/test/api/v3/integration/groups/POST-groups_groupId_leave.js
+@@ -10,8 +10,6 @@ import { v4 as generateUUID } from 'uuid';
+ import {
+   each,
+ } from 'lodash';
+-import { model as User } from '../../../../../website/server/models/user';
+-import * as payments from '../../../../../website/server/libs/payments';
+ 
+ describe('POST /groups/:groupId/leave', () => {
+   let typesOfGroups = {
+@@ -274,45 +272,4 @@ describe('POST /groups/:groupId/leave', () => {
+       expect(userWithNonExistentParty.party).to.eql({});
+     });
+   });
+-
+-  context('Leaving a group plan', () => {
+-    it('cancels the free subscription', async () => {
+-      // Create group
+-      let { group, groupLeader, members } = await createAndPopulateGroup({
+-        groupDetails: {
+-          name: 'Test Private Guild',
+-          type: 'guild',
+-        },
+-        members: 1,
+-      });
+-
+-      let leader = groupLeader;
+-      let member = members[0];
+-      let userWithFreePlan = await User.findById(leader._id).exec();
+-
+-      // Create subscription
+-      let paymentData = {
+-        user: userWithFreePlan,
+-        groupId: group._id,
+-        sub: {
+-          key: 'basic_3mo',
+-        },
+-        customerId: 'customer-id',
+-        paymentMethod: 'Payment Method',
+-        headers: {
+-          'x-client': 'habitica-web',
+-          'user-agent': '',
+-        },
+-      };
+-      await payments.createSubscription(paymentData);
+-      await member.sync();
+-      expect(member.purchased.plan.planId).to.equal('group_plan_auto');
+-      expect(member.purchased.plan.dateTerminated).to.not.exist;
+-
+-      // Leave
+-      await member.post(`/groups/${group._id}/leave`);
+-      await member.sync();
+-      expect(member.purchased.plan.dateTerminated).to.exist;
+-    });
+-  });
+ });
+diff --git a/test/api/v3/unit/models/group.test.js b/test/api/v3/unit/models/group.test.js
+index 1a33edcf4..1b4788251 100644
+--- a/test/api/v3/unit/models/group.test.js
++++ b/test/api/v3/unit/models/group.test.js
+@@ -778,10 +778,13 @@ describe('Group Model', () => {
+       });
+ 
+       it('deletes a private group when the last member leaves and a subscription is active', async () => {
+-        party.memberCount = 1;
+         party.purchased.plan.customerId = '110002222333';
++        await party.save();
+ 
+         await party.leave(participatingMember);
++        await party.leave(questLeader);
++        await party.leave(nonParticipatingMember);
++        await party.leave(undecidedMember);
+ 
+         party = await Group.findOne({_id: party._id});
+         expect(party).to.not.exist;
+@@ -790,6 +793,7 @@ describe('Group Model', () => {
+       it('allows a leader to leave a group with an active subscription', async () => {
+         party.memberCount = 2;
+         party.purchased.plan.customerId = '110002222333';
++        await party.save();
+ 
+         await party.leave(questLeader);
+ 
+diff --git a/website/server/models/group.js b/website/server/models/group.js
+index 5125827f5..9a8ca0578 100644
+--- a/website/server/models/group.js
++++ b/website/server/models/group.js
+@@ -9,7 +9,6 @@ import { model as Challenge} from './challenge';
+ import * as Tasks from './task';
+ import validator from 'validator';
+ import { removeFromArray } from '../libs/collectionManipulators';
+-import payments from '../libs/payments';
+ import { groupChatReceivedWebhook } from '../libs/webhook';
+ import {
+   InternalServerError,
+@@ -1128,10 +1127,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+     update.$unset = {[`quest.members.${user._id}`]: 1};
+   }
+ 
+-  if (group.purchased.plan.customerId) {
+-    promises.push(payments.cancelGroupSubscriptionForUser(user, this));
+-  }
+-
+   // If user is the last one in group and group is private, delete it
+   if (group.memberCount <= 1 && group.privacy === 'private') {
+     // double check the member count is correct so we don't accidentally delete a group that still has users in it

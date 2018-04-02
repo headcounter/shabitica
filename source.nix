@@ -115,6 +115,10 @@ stdenv.mkDerivation rec {
 
     # Remove links to press kit, merch and group plans.
     patches/remove-presskit-merch-plans.patch
+
+    # Everything in our instance is free, so don't remove subscriptions (it
+    # won't make a difference anyway though).
+    patches/dont-cancel-group-subscription-on-leave.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
