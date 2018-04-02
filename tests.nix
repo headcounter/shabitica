@@ -41,18 +41,60 @@ let
 
   runTests = cat: lib.mapAttrs (name: mkTest "${cat}-${name}");
 
-in lib.mapAttrs runTests {
-  basic = {
-    sanity.target = "sanity";
-    content.target = "content";
-    common.target = "common";
+  upstreamTests = lib.mapAttrs runTests {
+    basic = {
+      sanity.target = "sanity";
+      content.target = "content";
+      common.target = "common";
+    };
+
+    api = {
+      unit.target = "api-v3:unit";
+      unit.useDB = true;
+
+      integration.target = "api-v3:integration";
+      integration.useDB = true;
+    };
   };
 
-  api = {
-    unit.target = "api-v3:unit";
-    unit.useDB = true;
+  nixos = import <nixpkgs/nixos/tests/make-test.nix> {
+    name = "habitica";
 
-    integration.target = "api-v3:integration";
-    integration.useDB = true;
+    nodes.habitica = {
+      imports = [ ./. ];
+      networking.firewall.enable = false;
+      habitica.hostName = "habitica";
+      virtualisation.diskSize = 16384;
+      virtualisation.memorySize = 1024;
+    };
+
+    nodes.client = {};
+
+    testScript = let
+      mkPerlString = val: "'${lib.escape ["\\" "'"] val}'";
+      listToCommand = lib.concatMapStringsSep " " lib.escapeShellArg;
+      registerUser = username: let
+        data = builtins.toJSON {
+          inherit username;
+          email = "${username}@example.org";
+          password = "test";
+          confirmPassword = "test";
+        };
+        url = "http://habitica/api/v3/user/auth/local/register";
+      in mkPerlString (listToCommand [
+        "curl" "-f" "-H" "Content-Type: application/json" "-d" data url
+      ]);
+    in ''
+      startAll;
+
+      $habitica->waitForUnit('nginx.service');
+      $habitica->waitForOpenPort(80);
+
+      subtest "check if service only allows first user to register", sub {
+        $client->succeed(${registerUser "foo"});
+        $client->fail(${registerUser "bar"});
+      };
+    '';
   };
-}
+
+in upstreamTests // { inherit nixos; }
