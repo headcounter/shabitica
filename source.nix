@@ -123,6 +123,10 @@ stdenv.mkDerivation rec {
     # Allows to configure whether the instance only allows to register via an
     # invitation link.
     patches/invite-only-config-option.patch
+
+    # All users get a free subscription, but by default Habitica prevents to
+    # delete a user if he/she has a subscription, this patch allows it anyway.
+    patches/always-allow-delete.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

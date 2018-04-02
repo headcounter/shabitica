@@ -1,0 +1,34 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Mon Apr 2 07:05:41 2018 +0200
+
+    Always allow to delete user, despite subscription
+    
+    With free subscriptions, there is no need to hold back users from
+    deleting themselves.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: always-allow-delete.patch
+
+diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
+index b12587609..dfc8cc1bc 100644
+--- a/website/server/controllers/api-v3/user.js
++++ b/website/server/controllers/api-v3/user.js
+@@ -383,7 +383,6 @@ api.deleteUser = {
+   url: '/user',
+   async handler (req, res) {
+     let user = res.locals.user;
+-    let plan = user.purchased.plan;
+ 
+     let password = req.body.password;
+     if (!password) throw new BadRequest(res.t('missingPassword'));
+@@ -396,10 +395,6 @@ api.deleteUser = {
+     let feedback = req.body.feedback;
+     if (feedback && feedback.length > 10000) throw new BadRequest(`Account deletion feedback is limited to 10,000 characters. For lengthy feedback, email ${TECH_ASSISTANCE_EMAIL}.`);
+ 
+-    if (plan && plan.customerId && !plan.dateTerminated) {
+-      throw new NotAuthorized(res.t('cannotDeleteActiveAccount'));
+-    }
+-
+     let types = ['party', 'guilds'];
+     let groupFields = basicGroupFields.concat(' leader memberCount purchased');
+ 
