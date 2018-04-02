@@ -15,6 +15,30 @@ Date:   Fri Mar 30 02:41:52 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: no-limit-for-gold-to-gems.patch
 
+diff --git a/test/common/ops/buy/purchase.js b/test/common/ops/buy/purchase.js
+index 85658fd7d..69e5ca48a 100644
+--- a/test/common/ops/buy/purchase.js
++++ b/test/common/ops/buy/purchase.js
+@@ -65,19 +65,6 @@ describe('shared.ops.purchase', () => {
+       }
+     });
+ 
+-    it('prevents user that have reached the conversion cap from buying gems', (done) => {
+-      user.stats.gp = goldPoints;
+-      user.purchased.plan.gemsBought = gemsBought;
+-
+-      try {
+-        purchase(user, {params: {type: 'gems', key: 'gem'}});
+-      } catch (err) {
+-        expect(err).to.be.an.instanceof(NotAuthorized);
+-        expect(err.message).to.equal(i18n.t('reachedGoldToGemCap', {convCap: planGemLimits.convCap}));
+-        done();
+-      }
+-    });
+-
+     it('prevents user from buying an invalid quantity', (done) => {
+       user.stats.gp = goldPoints;
+       user.purchased.plan.gemsBought = gemsBought;
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
 index 88bef95eb..35955c545 100644
 --- a/website/client/components/shops/buyModal.vue

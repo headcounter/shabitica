@@ -14,6 +14,18 @@ Date:   Thu Mar 29 09:49:42 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: fix-moment-recur-import.patch
 
+diff --git a/test/common/shouldDo.test.js b/test/common/shouldDo.test.js
+index 9658f3504..97f91dab4 100644
+--- a/test/common/shouldDo.test.js
++++ b/test/common/shouldDo.test.js
+@@ -1,6 +1,5 @@
+ import { shouldDo, DAY_MAPPING } from '../../website/common/script/cron';
+-import moment from 'moment';
+-import 'moment-recur';
++import moment from 'moment-recur';
+ 
+ describe('shouldDo', () => {
+   let day, dailyTask;
 diff --git a/website/common/script/cron.js b/website/common/script/cron.js
 index b93df4b80..ca6ca3667 100644
 --- a/website/common/script/cron.js

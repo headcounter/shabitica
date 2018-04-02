@@ -13,6 +13,191 @@ Date:   Tue Mar 27 05:37:23 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: free-group-plans.patch
 
+diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
+index 2b942213e..95f27ed65 100644
+--- a/test/api/v3/integration/groups/POST-groups_invite.test.js
++++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
+@@ -1,14 +1,11 @@
+ import {
+   generateUser,
+-  generateGroup,
+   translate as t,
+ } from '../../../../helpers/api-v3-integration.helper';
+ import { v4 as generateUUID } from 'uuid';
+-import nconf from 'nconf';
+ 
+ const INVITES_LIMIT = 100;
+ const PARTY_LIMIT_MEMBERS = 30;
+-const MAX_EMAIL_INVITES_BY_USER = 200;
+ 
+ describe('Post /groups/:groupId/invite', () => {
+   let inviter;
+@@ -210,27 +207,6 @@ describe('Post /groups/:groupId/invite', () => {
+         });
+     });
+ 
+-    it('returns an error when a user has sent the max number of email invites', async () => {
+-      let inviterWithMax = await generateUser({
+-        invitesSent: MAX_EMAIL_INVITES_BY_USER,
+-        balance: 4,
+-      });
+-      let tmpGroup = await inviterWithMax.post('/groups', {
+-        name: groupName,
+-        type: 'guild',
+-      });
+-
+-      await expect(inviterWithMax.post(`/groups/${tmpGroup._id}/invite`, {
+-        emails: [testInvite],
+-        inviter: 'inviter name',
+-      }))
+-        .to.eventually.be.rejected.and.eql({
+-          code: 401,
+-          error: 'NotAuthorized',
+-          message: t('inviteLimitReached', {techAssistanceEmail: nconf.get('ADMIN_EMAIL')}),
+-        });
+-    });
+-
+     it('invites a user to a group by email', async () => {
+       let res = await inviter.post(`/groups/${group._id}/invite`, {
+         emails: [testInvite],
+@@ -299,25 +275,6 @@ describe('Post /groups/:groupId/invite', () => {
+       expect(invitedUser.invitations.guilds[0].id).to.equal(group._id);
+       expect(invite).to.exist;
+     });
+-
+-    it('invites marks invite with cancelled plan', async () => {
+-      let cancelledPlanGroup = await generateGroup(inviter, {
+-        type: 'guild',
+-        name: generateUUID(),
+-      });
+-      await cancelledPlanGroup.createCancelledSubscription();
+-
+-      let newUser = await generateUser();
+-      let invite = await inviter.post(`/groups/${cancelledPlanGroup._id}/invite`, {
+-        uuids: [newUser._id],
+-        emails: [{name: 'test', email: 'test@habitica.com'}],
+-      });
+-      let invitedUser = await newUser.get('/user');
+-
+-      expect(invitedUser.invitations.guilds[0].id).to.equal(cancelledPlanGroup._id);
+-      expect(invitedUser.invitations.guilds[0].cancelledPlan).to.be.true;
+-      expect(invite).to.exist;
+-    });
+   });
+ 
+   describe('guild invites', () => {
+diff --git a/test/api/v3/unit/models/group.test.js b/test/api/v3/unit/models/group.test.js
+index 8c963e26d..1a33edcf4 100644
+--- a/test/api/v3/unit/models/group.test.js
++++ b/test/api/v3/unit/models/group.test.js
+@@ -1,4 +1,3 @@
+-import moment from 'moment';
+ import { v4 as generateUUID } from 'uuid';
+ import validator from 'validator';
+ import { sleep } from '../../../../helpers/api-unit.helper';
+@@ -14,7 +13,6 @@ import { quests as questScrolls } from '../../../../../website/common/script/con
+ import { groupChatReceivedWebhook } from '../../../../../website/server/libs/webhook';
+ import * as email from '../../../../../website/server/libs/email';
+ import { TAVERN_ID } from '../../../../../website/common/script/';
+-import shared from '../../../../../website/common';
+ 
+ describe('Group Model', () => {
+   let party, questLeader, participatingMember, nonParticipatingMember, undecidedMember;
+@@ -779,32 +777,21 @@ describe('Group Model', () => {
+         expect(party).to.not.exist;
+       });
+ 
+-      it('does not delete a private group when the last member leaves and a subscription is active', async () => {
++      it('deletes a private group when the last member leaves and a subscription is active', async () => {
+         party.memberCount = 1;
+         party.purchased.plan.customerId = '110002222333';
+ 
+-        await expect(party.leave(participatingMember))
+-          .to.eventually.be.rejected.and.to.eql({
+-            name: 'NotAuthorized',
+-            httpCode: 401,
+-            message: shared.i18n.t('cannotDeleteActiveGroup'),
+-          });
++        await party.leave(participatingMember);
+ 
+         party = await Group.findOne({_id: party._id});
+-        expect(party).to.exist;
+-        expect(party.memberCount).to.eql(1);
++        expect(party).to.not.exist;
+       });
+ 
+-      it('does not allow a leader to leave a group with an active subscription', async () => {
++      it('allows a leader to leave a group with an active subscription', async () => {
+         party.memberCount = 2;
+         party.purchased.plan.customerId = '110002222333';
+ 
+-        await expect(party.leave(questLeader))
+-          .to.eventually.be.rejected.and.to.eql({
+-            name: 'NotAuthorized',
+-            httpCode: 401,
+-            message: shared.i18n.t('leaderCannotLeaveGroupWithActiveGroup'),
+-          });
++        await party.leave(questLeader);
+ 
+         party = await Group.findOne({_id: party._id});
+         expect(party).to.exist;
+@@ -1770,7 +1757,7 @@ describe('Group Model', () => {
+ 
+     context('isSubscribed', () => {
+       it('returns false if group does not have customer id', () => {
+-        expect(party.isSubscribed()).to.be.undefined;
++        expect(party.isSubscribed()).to.be.false;
+       });
+ 
+       it('returns true if group does not have plan.dateTerminated', () => {
+@@ -1778,25 +1765,11 @@ describe('Group Model', () => {
+ 
+         expect(party.isSubscribed()).to.be.true;
+       });
+-
+-      it('returns true if group if plan.dateTerminated is after today', () => {
+-        party.purchased.plan.customerId = 'test-id';
+-        party.purchased.plan.dateTerminated = moment().add(1, 'days').toDate();
+-
+-        expect(party.isSubscribed()).to.be.true;
+-      });
+-
+-      it('returns false if group if plan.dateTerminated is before today', () => {
+-        party.purchased.plan.customerId = 'test-id';
+-        party.purchased.plan.dateTerminated = moment().subtract(1, 'days').toDate();
+-
+-        expect(party.isSubscribed()).to.be.false;
+-      });
+     });
+ 
+     context('hasNotCancelled', () => {
+       it('returns false if group does not have customer id', () => {
+-        expect(party.hasNotCancelled()).to.be.undefined;
++        expect(party.hasNotCancelled()).to.be.false;
+       });
+ 
+       it('returns true if party does not have plan.dateTerminated', () => {
+@@ -1804,20 +1777,6 @@ describe('Group Model', () => {
+ 
+         expect(party.hasNotCancelled()).to.be.true;
+       });
+-
+-      it('returns false if party if plan.dateTerminated is after today', () => {
+-        party.purchased.plan.customerId = 'test-id';
+-        party.purchased.plan.dateTerminated = moment().add(1, 'days').toDate();
+-
+-        expect(party.hasNotCancelled()).to.be.false;
+-      });
+-
+-      it('returns false if party if plan.dateTerminated is before today', () => {
+-        party.purchased.plan.customerId = 'test-id';
+-        party.purchased.plan.dateTerminated = moment().subtract(1, 'days').toDate();
+-
+-        expect(party.hasNotCancelled()).to.be.false;
+-      });
+     });
+   });
+ });
 diff --git a/website/client/components/group-plans/index.vue b/website/client/components/group-plans/index.vue
 index 7674d4b6f..82c2825f4 100644
 --- a/website/client/components/group-plans/index.vue
@@ -320,7 +505,7 @@ index 137688e34..86a17e474 100644
  
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 0b963a98b..1e6ab73e0 100644
+index 0b963a98b..fc7124c6c 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -1,4 +1,3 @@
@@ -335,7 +520,7 @@ index 0b963a98b..1e6ab73e0 100644
 -  let now = new Date();
    let plan = this.purchased.plan;
 -  return plan && plan.customerId && (!plan.dateTerminated || moment(plan.dateTerminated).isAfter(now));
-+  return plan && plan.customerId;
++  return Boolean(plan && plan.customerId);
  };
  
  schema.methods.hasNotCancelled = function hasNotCancelled () {

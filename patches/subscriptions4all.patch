@@ -13,6 +13,50 @@ Date:   Tue Mar 27 05:37:09 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: subscriptions4all.patch
 
+diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
+index ea9b79f92..2a21a1d61 100644
+--- a/test/api/v3/integration/user/DELETE-user.test.js
++++ b/test/api/v3/integration/user/DELETE-user.test.js
+@@ -72,16 +72,13 @@ describe('DELETE /user', () => {
+       });
+     });
+ 
+-    it('returns an error if user has active subscription', async () => {
++    it('returns no error if user has active subscription', async () => {
+       let userWithSubscription = await generateUser({'purchased.plan.customerId': 'fake-customer-id'});
+ 
+-      await expect(userWithSubscription.del('/user', {
++      await userWithSubscription.del('/user', {
+         password,
+-      })).to.be.rejected.and.to.eventually.eql({
+-        code: 401,
+-        error: 'NotAuthorized',
+-        message: t('cannotDeleteActiveAccount'),
+       });
++      await expect(checkExistence('users', userWithSubscription._id)).to.eventually.eql(false);
+     });
+ 
+     it('deletes the user\'s tasks', async () => {
+diff --git a/test/api/v3/integration/user/POST-user_purchase.test.js b/test/api/v3/integration/user/POST-user_purchase.test.js
+index b1d374925..b803a7643 100644
+--- a/test/api/v3/integration/user/POST-user_purchase.test.js
++++ b/test/api/v3/integration/user/POST-user_purchase.test.js
+@@ -17,15 +17,6 @@ describe('POST /user/purchase/:type/:key', () => {
+ 
+   // More tests in common code unit tests
+ 
+-  it('returns an error when key is not provided', async () => {
+-    await expect(user.post('/user/purchase/gems/gem'))
+-      .to.eventually.be.rejected.and.eql({
+-        code: 401,
+-        error: 'NotAuthorized',
+-        message: t('mustSubscribeToPurchaseGems'),
+-      });
+-  });
+-
+   it('purchases a gem item', async () => {
+     await user.post(`/user/purchase/${type}/${key}`);
+     await user.sync();
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
 index ae62382f4..0ed9cdce4 100644
 --- a/website/server/controllers/api-v3/auth.js

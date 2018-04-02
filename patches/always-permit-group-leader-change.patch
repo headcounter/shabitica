@@ -26,3 +26,30 @@ index 86a17e474..c2d8acb06 100644
      _.assign(group, _.merge(group.toObject(), Group.sanitizeUpdate(req.body)));
  
      let savedGroup = await group.save();
+diff --git a/website/server/models/group.js b/website/server/models/group.js
+index fc7124c6c..5125827f5 100644
+--- a/website/server/models/group.js
++++ b/website/server/models/group.js
+@@ -14,7 +14,6 @@ import { groupChatReceivedWebhook } from '../libs/webhook';
+ import {
+   InternalServerError,
+   BadRequest,
+-  NotAuthorized,
+ } from '../libs/errors';
+ import baseModel from '../libs/baseModel';
+ import { sendTxn as sendTxnEmail } from '../libs/email';
+@@ -1095,14 +1094,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+   let group = this;
+   let update = {};
+ 
+-  if (group.memberCount <= 1 && group.privacy === 'private' && group.hasNotCancelled()) {
+-    throw new NotAuthorized(shared.i18n.t('cannotDeleteActiveGroup'));
+-  }
+-
+-  if (group.leader === user._id && group.hasNotCancelled()) {
+-    throw new NotAuthorized(shared.i18n.t('leaderCannotLeaveGroupWithActiveGroup'));
+-  }
+-
+   // only remove user from challenges if it's set to leave-challenges
+   if (keepChallenges === 'leave-challenges') {
+     let challenges = await Challenge.find({

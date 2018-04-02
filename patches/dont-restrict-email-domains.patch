@@ -9,6 +9,51 @@ Date:   Tue Mar 27 07:32:57 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: dont-restrict-email-domains.patch
 
+diff --git a/test/api/v3/integration/user/auth/POST-register_local.test.js b/test/api/v3/integration/user/auth/POST-register_local.test.js
+index 6bc46c2d5..bd108aa72 100644
+--- a/test/api/v3/integration/user/auth/POST-register_local.test.js
++++ b/test/api/v3/integration/user/auth/POST-register_local.test.js
+@@ -372,40 +372,6 @@ describe('POST /user/auth/local/register', () => {
+       expect(user.auth.local.email).to.equal(email.toLowerCase());
+     });
+ 
+-    it('fails on a habitica.com email', async () => {
+-      let username = generateRandomUserName();
+-      let email = `${username}@habitica.com`;
+-      let password = 'password';
+-
+-      await expect(api.post('/user/auth/local/register', {
+-        username,
+-        email,
+-        password,
+-        confirmPassword: password,
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: 'User validation failed',
+-      });
+-    });
+-
+-    it('fails on a habitrpg.com email', async () => {
+-      let username = generateRandomUserName();
+-      let email = `${username}@habitrpg.com`;
+-      let password = 'password';
+-
+-      await expect(api.post('/user/auth/local/register', {
+-        username,
+-        email,
+-        password,
+-        confirmPassword: password,
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: 'User validation failed',
+-      });
+-    });
+-
+     it('requires a password', async () => {
+       let username = generateRandomUserName();
+       let email = `${username}@example.com`;
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
 index 35c61bea8..c1738b5e7 100644
 --- a/website/server/models/user/schema.js
