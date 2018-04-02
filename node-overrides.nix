@@ -1,5 +1,6 @@
 { lib, fetchFromGitHub
 , libsass, libjpeg, optipng, gifsicle, pkgconfig, phantomjs2
+, chromedriver, chromium
 
 , habiticaConfig
 }:
@@ -66,6 +67,37 @@
           s!\.dest(.*)!.dest("'${gifsicle}'/bin")!
         }
       ' {} +
+    '';
+  };
+
+  dev.chromedriver = drv: let
+    chromedriverBin = "${chromedriver}/bin/chromedriver";
+    binJsString = "'${lib.escape ["\\" "'"] chromedriverBin}'";
+  in {
+    preRebuild = (drv.preRebuild or "") + ''
+      # Remove the install script, so it won't try to download chromedriver
+      sed -i -e '/"scripts": *{/,/},/d' package.json
+      rm install.js
+
+      # Hardcode the binary path to chromedriver
+      sed -i -e '
+        /^process\.env\.PATH *+=/d
+        s!^\(process\.path *= *\).*!\1'${lib.escapeShellArg binJsString}';!
+      ' lib/chromedriver.js
+    '';
+  };
+
+  dev.puppeteer = drv: let
+    chromiumBin = "${chromium}/bin/chromium";
+    chromiumJsString = "'${lib.escape ["\\" "'"] chromiumBin}'";
+  in {
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
+
+    preRebuild = (drv.preRebuild or "") + ''
+      sed -i -e '/static \+executablePath().*{/ {
+        :l; N; /^ *} *$/!bl
+        c static executablePath() { return '${chromiumJsString}'; }
+      }' lib/Launcher.js node6/lib/Launcher.js
     '';
   };
 }
