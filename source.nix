@@ -1,4 +1,6 @@
-{ stdenv, lib, runCommand, fetchFromGitHub, nodePackages, habiticaConfig }:
+{ stdenv, lib, runCommand, fetchFromGitHub, fetchpatch, nodePackages
+, habiticaConfig
+}:
 
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
@@ -127,7 +129,17 @@ stdenv.mkDerivation rec {
     # All users get a free subscription, but by default Habitica prevents to
     # delete a user if he/she has a subscription, this patch allows it anyway.
     patches/always-allow-delete.patch
-  ];
+
+    # Removes maxBuffer options to child_process.exec() and fixes the paths of
+    # programs needed for running the tests.
+    patches/fixup-test-runners.patch
+
+  ] ++ lib.singleton (fetchpatch {
+    # Fix challenge count check in paging tests
+    url = "https://github.com/HabitRPG/habitica/commit/"
+        + "ed607d2bae6512c88fdd93436429bf91ad41df96.patch";
+    sha256 = "0lrs5ggb4g0rh6n1zvq8qw440kk75dvpwrvdinkn846mpcvlgs8h";
+  });
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
 
@@ -137,6 +149,17 @@ stdenv.mkDerivation rec {
     rm -r ${lib.escapeShellArg path}
   '') [
     "scripts/paypalBillingSetup.js"
+    "test/api/v3/integration/payments"
+    "test/api/v3/integration/user/auth/DELETE-user_auth_social_network.test.js"
+    "test/api/v3/integration/user/auth/POST-user_auth_pusher.test.js"
+    "test/api/v3/integration/user/auth/POST-user_auth_social.test.js"
+    "test/api/v3/unit/libs/analyticsService.test.js"
+    "test/api/v3/unit/libs/applePayments.test.js"
+    "test/api/v3/unit/libs/googlePayments.test.js"
+    "test/api/v3/unit/libs/payments"
+    "test/api/v3/unit/libs/pushNotifications.js"
+    "test/api/v3/unit/libs/slack.js"
+    "test/api/v3/unit/middlewares/analytics.test.js"
     "website/client/components/groups/communityGuidelines.vue"
     "website/client/components/payments/amazonModal.vue"
     "website/client/components/payments/buyGemsModal.vue"
