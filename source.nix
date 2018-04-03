@@ -134,6 +134,10 @@ stdenv.mkDerivation rec {
     # programs needed for running the tests.
     patches/fixup-test-runners.patch
 
+    # Generate nice HTML/CSS reports for tests in addition to writing what's
+    # going on to standard I/O.
+    patches/html-test-reports.patch
+
   ] ++ lib.singleton (fetchpatch {
     # Fix challenge count check in paging tests
     url = "https://github.com/HabitRPG/habitica/commit/"

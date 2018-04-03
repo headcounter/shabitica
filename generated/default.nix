@@ -40,6 +40,8 @@ in {
     "karma-webpack" = nodePackages."karma-webpack-^3.0.0";
     "lcov-result-merger" = nodePackages."lcov-result-merger-^2.0.0";
     mocha = nodePackages."mocha-^5.0.4";
+    "mocha-multi-reporters" = nodePackages."mocha-multi-reporters-^1.1.7";
+    "mocha-simple-html-reporter" = nodePackages."mocha-simple-html-reporter-^1.1.0";
     monk = nodePackages."monk-^6.0.5";
     nightwatch = nodePackages."nightwatch-^0.9.20";
     puppeteer = nodePackages."puppeteer-^1.2.0";

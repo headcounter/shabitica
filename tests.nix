@@ -25,6 +25,8 @@ let
     nativeBuildInputs = lib.attrValues habitica.nodePackages.dev
                      ++ lib.singleton pkgs.mongodb;
 
+    createHydraTestFailure = true;
+
     preConfigure = let
       mongoDbCfg = pkgs.writeText "mongodb.conf" (builtins.toJSON {
         net.bindIp = "/tmp/db.sock";
@@ -36,7 +38,12 @@ let
       cmd = "mkdir db; mongod --config ${mongoDbCfg} &> /dev/null &";
     in lib.optionalString useDB cmd;
 
-    installPhase = "touch \"$out\"";
+    installPhase = ''
+      mkdir -p "$out/nix-support"
+      cp test-report.html "$out/report.html"
+      echo "report test-report $out report.html" \
+        > "$out/nix-support/hydra-build-products"
+    '';
   };
 
   runTests = cat: lib.mapAttrs (name: mkTest "${cat}-${name}");

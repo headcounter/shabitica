@@ -10696,6 +10696,15 @@ let
         sha1 = "f480f40434ef80741f8469099f8dea18f55a4dc9";
       };
     };
+    "parse-ms-1.0.1" = {
+      name = "parse-ms";
+      packageName = "parse-ms";
+      version = "1.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/parse-ms/-/parse-ms-1.0.1.tgz";
+        sha1 = "56346d4749d78f23430ca0c713850aef91aa361d";
+      };
+    };
     "parse-passwd-1.0.0" = {
       name = "parse-passwd";
       packageName = "parse-passwd";
@@ -11513,6 +11522,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/pretty-hrtime/-/pretty-hrtime-1.0.3.tgz";
         sha1 = "b7e3ea42435a4c9b2759d99e0f201eb195802ee1";
+      };
+    };
+    "pretty-ms-3.0.1" = {
+      name = "pretty-ms";
+      packageName = "pretty-ms";
+      version = "3.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/pretty-ms/-/pretty-ms-3.0.1.tgz";
+        sha1 = "7c18b73c228a9b8f6edc2835a12cb8f7ed85f9f4";
       };
     };
     "private-0.1.8" = {
@@ -21253,6 +21271,29 @@ in
     production = true;
     bypassCache = true;
   };
+  "mocha-simple-html-reporter-^1.1.0" = nodeEnv.buildNodePackage {
+    name = "mocha-simple-html-reporter";
+    packageName = "mocha-simple-html-reporter";
+    version = "1.1.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/mocha-simple-html-reporter/-/mocha-simple-html-reporter-1.1.0.tgz";
+      sha512 = "31gqnfawy92wkn0s79wjg7lj146w0kmzkvh3ir45xjzf8lx03j55vzczq03v141845zj04cnb7h5mpcf1psiqvis0q2lvbdswyspvf8";
+    };
+    dependencies = [
+      sources."irregular-plurals-1.4.0"
+      sources."parse-ms-1.0.1"
+      sources."plur-2.1.2"
+      sources."pretty-ms-3.0.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "HTML reporter for Mocha";
+      homepage = "https://github.com/blond/mocha-simple-html-reporter#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+  };
   "cross-spawn-^6.0.5" = nodeEnv.buildNodePackage {
     name = "cross-spawn";
     packageName = "cross-spawn";
@@ -23873,6 +23914,28 @@ in
     meta = {
       description = "Spectacular Test Runner for JavaScript.";
       homepage = http://karma-runner.github.io/;
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+  };
+  "mocha-multi-reporters-^1.1.7" = nodeEnv.buildNodePackage {
+    name = "mocha-multi-reporters";
+    packageName = "mocha-multi-reporters";
+    version = "1.1.7";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/mocha-multi-reporters/-/mocha-multi-reporters-1.1.7.tgz";
+      sha1 = "cc7f3f4d32f478520941d852abb64d9988587d82";
+    };
+    dependencies = [
+      sources."debug-3.1.0"
+      sources."lodash-4.17.5"
+      sources."ms-2.0.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Generate multiple mocha reports in a single mocha execution.";
+      homepage = "https://github.com/stanleyhlng/mocha-multi-reporters#readme";
       license = "MIT";
     };
     production = true;

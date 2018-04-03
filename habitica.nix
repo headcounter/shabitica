@@ -41,7 +41,14 @@ let
     in ''
       runHook preBuild
 
-      HOME="$PWD" ${env} gulp $gulpTarget
+      if ! HOME="$PWD" ${env} gulp $gulpTarget; then
+        if [ -n "$createHydraTestFailure" ]; then
+          mkdir -p "$out/nix-support"
+          touch "$out/nix-support/failed"
+        else
+          exit 1
+        fi
+      fi
 
       runHook postBuild
     '';
