@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ nixpkgs ? <nixpkgs>, pkgs ? import nixpkgs {} }:
 
 let
   inherit (pkgs) lib;
@@ -57,7 +57,7 @@ let
     };
   };
 
-  nixos = import <nixpkgs/nixos/tests/make-test.nix> {
+  nixos = import "${nixpkgs}/nixos/tests/make-test.nix" {
     name = "habitica";
 
     nodes.habitica = {
