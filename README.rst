@@ -61,6 +61,12 @@ Project goals
 * Make it as easy as possible to spin up an instance on your server.
 * Aim for private servers, typically with a small amount of users.
 
+Ideas
+-----
+
+* Allow to build the client as an Electron app, and allow to use end-to-end
+  encryption for tasks.
+
 .. _Habitica: https://habitica.com/
 .. _Nix: https://nixos.org/nix/
 .. _NixOS configuration: https://nixos.org/nixos/manual/index.html#sec-configuration-file
