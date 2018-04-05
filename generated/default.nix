@@ -44,6 +44,7 @@ in {
     "mocha-simple-html-reporter" = nodePackages."mocha-simple-html-reporter-^1.1.0";
     monk = nodePackages."monk-^6.0.5";
     nightwatch = nodePackages."nightwatch-^0.9.20";
+    "nightwatch-html-reporter" = nodePackages."nightwatch-html-reporter-^2.0.5";
     puppeteer = nodePackages."puppeteer-^1.2.0";
     "require-again" = nodePackages."require-again-^2.0.0";
     "selenium-server" = nodePackages."selenium-server-^3.11.0";

@@ -138,6 +138,9 @@ stdenv.mkDerivation rec {
     # going on to standard I/O.
     patches/html-test-reports.patch
 
+    # Fixes and improvements for the Nightwatch automated test system.
+    patches/nightwatch.patch
+
   ] ++ lib.singleton (fetchpatch {
     # Fix challenge count check in paging tests
     url = "https://github.com/HabitRPG/habitica/commit/"

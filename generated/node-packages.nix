@@ -9733,6 +9733,15 @@ let
         sha1 = "5b57ad18b1ca092864ef62b0b1ed8194f383b71c";
       };
     };
+    "nconf-0.8.5" = {
+      name = "nconf";
+      packageName = "nconf";
+      version = "0.8.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/nconf/-/nconf-0.8.5.tgz";
+        sha1 = "f2941e1561952fa906bbb32328cf88d4c635e794";
+      };
+    };
     "ndarray-1.0.18" = {
       name = "ndarray";
       packageName = "ndarray";
@@ -10352,6 +10361,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/onetime/-/onetime-2.0.1.tgz";
         sha1 = "067428230fd67443b2794b22bba528b6867962d4";
+      };
+    };
+    "open-0.0.5" = {
+      name = "open";
+      packageName = "open";
+      version = "0.0.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/open/-/open-0.0.5.tgz";
+        sha1 = "42c3e18ec95466b6bf0dc42f3a2945c3f0cad8fc";
       };
     };
     "opencollective-1.0.3" = {
@@ -11675,6 +11693,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/public-encrypt/-/public-encrypt-4.0.0.tgz";
         sha1 = "39f699f3a46560dd5ebacbca693caf7c65c18cc6";
+      };
+    };
+    "pug-2.0.3" = {
+      name = "pug";
+      packageName = "pug";
+      version = "2.0.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/pug/-/pug-2.0.3.tgz";
+        sha1 = "71cba82537c95a5eab7ed04696e4221f53aa878e";
       };
     };
     "pug-attrs-2.0.3" = {
@@ -13630,6 +13657,15 @@ let
         sha512 = "22vw5mmwlyblqc2zyqwl39wyhyahhpiyknim8iz5fk6xi002x777gkswiq8fh297djs5ii4pgrys57wq33hr5zf3xfd0d7kjxkzl0g0";
       };
     };
+    "string_decoder-1.1.1" = {
+      name = "string_decoder";
+      packageName = "string_decoder";
+      version = "1.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz";
+        sha512 = "315yd4vzwrwk3vwj1klf46y1cj2jbvf88066y2rnwhksb98phj46jkxixbwsp3h607w7czy7cby522s7sx8mvspdpdm3s72y2ga3x4z";
+      };
+    };
     "stringstream-0.0.5" = {
       name = "stringstream";
       packageName = "stringstream";
@@ -15410,6 +15446,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/xdg-basedir/-/xdg-basedir-3.0.0.tgz";
         sha1 = "496b2cc109eca8dbacfe2dc72b603c17c5870ad4";
+      };
+    };
+    "xml2js-0.4.19" = {
+      name = "xml2js";
+      packageName = "xml2js";
+      version = "0.4.19";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/xml2js/-/xml2js-0.4.19.tgz";
+        sha512 = "3skianymbfq4rg2v5c1vwsz2kmxfik60qa892wh6a3rydd1wrv3l4vgyr8v4wd8krdf42jbmq7blp0ksbmwm332q5yr922fj8jngiks";
       };
     };
     "xml-char-classes-1.0.0" = {
@@ -22587,6 +22632,135 @@ in
       description = "A babel plugin that adds istanbul instrumentation to ES6 code";
       homepage = "https://github.com/istanbuljs/babel-plugin-istanbul#readme";
       license = "BSD-3-Clause";
+    };
+    production = true;
+    bypassCache = true;
+  };
+  "nightwatch-html-reporter-^2.0.5" = nodeEnv.buildNodePackage {
+    name = "nightwatch-html-reporter";
+    packageName = "nightwatch-html-reporter";
+    version = "2.0.5";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/nightwatch-html-reporter/-/nightwatch-html-reporter-2.0.5.tgz";
+      sha1 = "62c8e247c1ffa626a68fc2e6ce48ae1c2d62048d";
+    };
+    dependencies = [
+      sources."@types/babel-types-7.0.1"
+      sources."@types/babylon-6.16.2"
+      sources."acorn-3.3.0"
+      (sources."acorn-globals-3.1.0" // {
+        dependencies = [
+          sources."acorn-4.0.13"
+        ];
+      })
+      sources."align-text-0.1.4"
+      sources."ansi-regex-2.1.1"
+      sources."asap-2.0.6"
+      sources."async-2.6.0"
+      sources."babel-runtime-6.26.0"
+      sources."babel-types-6.26.0"
+      sources."babylon-6.18.0"
+      sources."balanced-match-1.0.0"
+      sources."brace-expansion-1.1.11"
+      sources."camelcase-2.1.1"
+      sources."center-align-0.1.3"
+      sources."character-parser-2.2.0"
+      sources."clean-css-4.1.11"
+      sources."cliui-3.2.0"
+      sources."code-point-at-1.1.0"
+      sources."concat-map-0.0.1"
+      sources."constantinople-3.1.2"
+      sources."core-js-2.5.4"
+      sources."core-util-is-1.0.2"
+      sources."decamelize-1.2.0"
+      sources."doctypes-1.1.0"
+      sources."esutils-2.0.2"
+      sources."function-bind-1.1.1"
+      sources."graceful-fs-4.1.11"
+      sources."has-1.0.1"
+      sources."inherits-2.0.3"
+      sources."ini-1.3.5"
+      sources."invert-kv-1.0.0"
+      sources."is-buffer-1.1.6"
+      sources."is-expression-3.0.0"
+      sources."is-fullwidth-code-point-1.0.0"
+      sources."is-promise-2.1.0"
+      sources."is-regex-1.0.4"
+      sources."isarray-1.0.0"
+      sources."js-stringify-1.0.2"
+      sources."jstransformer-1.0.0"
+      sources."kind-of-3.2.2"
+      sources."lazy-cache-1.0.4"
+      sources."lcid-1.0.0"
+      sources."lodash-4.17.5"
+      sources."longest-1.0.1"
+      sources."minimatch-3.0.4"
+      (sources."nconf-0.8.5" // {
+        dependencies = [
+          sources."async-1.5.2"
+        ];
+      })
+      sources."number-is-nan-1.0.1"
+      sources."object-assign-4.1.1"
+      sources."open-0.0.5"
+      sources."os-locale-1.4.0"
+      sources."path-parse-1.0.5"
+      sources."process-nextick-args-2.0.0"
+      sources."promise-7.3.1"
+      (sources."pug-2.0.3" // {
+        dependencies = [
+          sources."acorn-4.0.13"
+          sources."camelcase-1.2.1"
+          sources."cliui-2.1.0"
+          sources."window-size-0.1.0"
+          sources."yargs-3.10.0"
+        ];
+      })
+      sources."pug-attrs-2.0.3"
+      sources."pug-code-gen-2.0.1"
+      sources."pug-error-1.3.2"
+      sources."pug-filters-3.1.0"
+      sources."pug-lexer-4.0.0"
+      sources."pug-linker-3.0.5"
+      sources."pug-load-2.0.11"
+      sources."pug-parser-5.0.0"
+      sources."pug-runtime-2.0.4"
+      sources."pug-strip-comments-1.0.3"
+      sources."pug-walk-1.1.7"
+      sources."readable-stream-2.3.5"
+      sources."readdirp-2.1.0"
+      sources."regenerator-runtime-0.11.1"
+      sources."repeat-string-1.6.1"
+      sources."resolve-1.6.0"
+      sources."right-align-0.1.3"
+      sources."safe-buffer-5.1.1"
+      sources."sax-1.2.4"
+      sources."secure-keys-1.0.0"
+      sources."set-immediate-shim-1.0.1"
+      sources."source-map-0.5.7"
+      sources."string-width-1.0.2"
+      sources."string_decoder-1.1.1"
+      sources."strip-ansi-3.0.1"
+      sources."to-fast-properties-1.0.3"
+      sources."token-stream-0.0.1"
+      sources."uglify-js-2.8.29"
+      sources."uglify-to-browserify-1.0.2"
+      sources."util-deprecate-1.0.2"
+      sources."void-elements-2.0.1"
+      sources."window-size-0.1.4"
+      sources."with-5.1.1"
+      sources."wordwrap-0.0.2"
+      sources."wrap-ansi-2.1.0"
+      sources."xml2js-0.4.19"
+      sources."xmlbuilder-9.0.7"
+      sources."y18n-3.2.1"
+      sources."yargs-3.32.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Generates an HTML view of the Nightwatch.js test reports by either parsing the XML files generated by Nightwatch or by using the Nightwatch reporter options.";
+      homepage = https://github.com/jls/nightwatch-html-reporter;
+      license = "MIT";
     };
     production = true;
     bypassCache = true;
