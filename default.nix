@@ -1,9 +1,14 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config.habitica;
+
   habitica = pkgs.callPackages ./habitica.nix {
-    habiticaConfig = config.habitica.config;
+    habiticaConfig = cfg.config;
   };
+
+  hostIsFqdn = builtins.match ".+\\..+" cfg.hostName != null;
+  isFqdnText = "builtins.match \".+\\\\..+\" config.habitica.hostName != null";
 
 in {
   options.habitica = {
@@ -30,15 +35,24 @@ in {
 
     baseURL = lib.mkOption {
       type = lib.types.str;
-      default = "https://${config.habitica.hostName}";
-      defaultText = "https://\${config.habitica.hostName}";
-      description = "The base URL to use for serving web site content.";
+      default = let
+        defaultScheme = if cfg.useSSL then "https" else "http";
+      in "${defaultScheme}://${cfg.hostName}";
+      defaultText = let
+        schemeText = "if config.habitica.useSSL then \"https\" else \"http\"";
+        hostText = "config.habitica.hostName";
+      in lib.literalExample "\"\${${schemeText}}://\${${hostText}}\"";
+      description = ''
+        The base URL to use for serving web site content.
+        If the default is used the URL scheme is dependent on whether
+        <option>useSSL</option> is enabled or not.
+      '';
     };
 
     staticPath = lib.mkOption {
       type = lib.types.path;
       default = habitica.client;
-      defaultText = "habitica.client";
+      defaultText = lib.literalExample "habitica.client";
       readOnly = true;
       description = "The path to the static assets of Habitica.";
     };
@@ -46,9 +60,30 @@ in {
     apiDocPath = lib.mkOption {
       type = lib.types.path;
       default = habitica.apidoc;
-      defaultText = "habitica.apidoc";
+      defaultText = lib.literalExample "habitica.apidoc";
       readOnly = true;
       description = "The path to the API documentation.";
+    };
+
+    useSSL = lib.mkOption {
+      type = lib.types.bool;
+      default = hostIsFqdn;
+      defaultText = lib.literalExample isFqdnText;
+      description = ''
+        Whether to allow HTTPS connections only. If <option>hostName</option>
+        contains any dots the default is <literal>true</literal>, otherwise
+        it's <literal>false</literal>.
+      '';
+    };
+
+    useACME = lib.mkOption {
+      type = lib.types.bool;
+      default = cfg.useSSL;
+      description = ''
+        Whether to use ACME to get a certificate for the domain specified in
+        <option>hostName</option>. Defaults to <literal>true</literal> if
+        <option>useSSL</option> is enabled.
+      '';
     };
 
     useNginx = lib.mkOption {
@@ -66,13 +101,13 @@ in {
 
   config = lib.mkMerge [
     { habitica.config = {
-        ADMIN_EMAIL = config.habitica.adminMailAddress;
+        ADMIN_EMAIL = cfg.adminMailAddress;
         NODE_ENV = "production";
-        BASE_URL = config.habitica.baseURL;
+        BASE_URL = cfg.baseURL;
         NODE_DB_URI = "mongodb://%2Frun%2Fhabitica%2Fdb.sock";
         PORT = "/run/habitica.sock";
         SENDMAIL_PATH = "${config.security.wrapperDir}/sendmail";
-        MAIL_FROM = config.habitica.senderMailAddress;
+        MAIL_FROM = cfg.senderMailAddress;
       };
 
       users.users.habitica-db = {
@@ -188,34 +223,38 @@ in {
         serviceConfig.EnvironmentFile = "/var/lib/habitica/secrets.env";
       };
     }
-    (lib.mkIf config.habitica.useNginx {
+    (lib.mkIf cfg.useNginx {
       services.nginx.enable = lib.mkOverride 900 true;
-      services.nginx.virtualHosts.${config.habitica.hostName}.locations = {
-        "/".root = config.habitica.staticPath;
-        "/".index = "index.html";
-        "/".tryFiles = "$uri $uri/ @backend";
+      services.nginx.virtualHosts.${cfg.hostName} = {
+        forceSSL = cfg.useSSL;
+        locations = {
+          "/".root = cfg.staticPath;
+          "/".index = "index.html";
+          "/".tryFiles = "$uri $uri/ @backend";
 
-        # This is ugly as hell and basically disables caching.
-        # See https://github.com/NixOS/nixpkgs/issues/25485
-        "/".extraConfig = ''
-          if_modified_since off;
-          add_header Last-Modified "";
-          etag off;
-        '';
 
-        "@backend".proxyPass = "http://unix:/run/habitica.sock:";
-        "@backend".extraConfig = ''
-          proxy_http_version 1.1;
-          proxy_set_header   X-Real-IP        $remote_addr;
-          proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
-          proxy_set_header   X-NginX-Proxy    true;
-          proxy_set_header   Host             $http_host;
-          proxy_set_header   Upgrade          $http_upgrade;
-          proxy_redirect     off;
-        '';
+          # This is ugly as hell and basically disables caching.
+          # See https://github.com/NixOS/nixpkgs/issues/25485
+          "/".extraConfig = ''
+            if_modified_since off;
+            add_header Last-Modified "";
+            etag off;
+          '';
 
-        "/apidoc".alias = config.habitica.apiDocPath;
-        "/apidoc".index = "index.html";
+          "@backend".proxyPass = "http://unix:/run/habitica.sock:";
+          "@backend".extraConfig = ''
+            proxy_http_version 1.1;
+            proxy_set_header   X-Real-IP        $remote_addr;
+            proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+            proxy_set_header   X-NginX-Proxy    true;
+            proxy_set_header   Host             $http_host;
+            proxy_set_header   Upgrade          $http_upgrade;
+            proxy_redirect     off;
+          '';
+
+          "/apidoc".alias = cfg.apiDocPath;
+          "/apidoc".index = "index.html";
+        };
       };
     })
   ];
