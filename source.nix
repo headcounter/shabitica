@@ -141,6 +141,9 @@ stdenv.mkDerivation rec {
     # Fixes and improvements for the Nightwatch automated test system.
     patches/nightwatch.patch
 
+    # Fix up the one and only client:e2e test.
+    patches/fix-client-e2e-test.patch
+
   ] ++ lib.singleton (fetchpatch {
     # Fix challenge count check in paging tests
     url = "https://github.com/HabitRPG/habitica/commit/"

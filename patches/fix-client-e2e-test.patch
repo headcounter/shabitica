@@ -1,0 +1,27 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Thu Apr 5 12:32:08 2018 +0200
+
+    Fix e2e test for client
+    
+    It seems that upstream is not using the Selenium tests at all, but we
+    want to have as many tests as possible, so let's fix the test by just
+    matching the right <h1/> element and remove the check on the count of
+    <p/> elements.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: fix-client-e2e-test.patch
+
+diff --git a/test/client/e2e/specs/test.js b/test/client/e2e/specs/test.js
+index da58561b2..f43964476 100644
+--- a/test/client/e2e/specs/test.js
++++ b/test/client/e2e/specs/test.js
+@@ -12,8 +12,7 @@ module.exports = {
+       .url(devServer)
+       .waitForElementVisible('#app', 5000)
+       .assert.elementPresent('.logo')
+-      .assert.containsText('h1', 'Hello Vue!')
+-      .assert.elementCount('p', 3)
++      .assert.containsText('h1', 'Motivate yourself to achieve your goals.')
+       .end();
+   },
+ };
