@@ -1904,7 +1904,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 9cb26b962..192fce2fc 100644
+index b88f2bba2..49d6094a5 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -3185,7 +3185,7 @@ index e086f99f5..b2317612f 100644
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 94edce871..88bef95eb 100644
+index f9fca3908..0465becff 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -256,7 +256,6 @@
@@ -3196,7 +3196,7 @@ index 94edce871..88bef95eb 100644
    import spellsMixin from 'client/mixins/spells';
    import planGemLimits from 'common/script/libs/planGemLimits';
  
-@@ -396,14 +395,6 @@
+@@ -397,14 +396,6 @@
          this.hideDialog();
        },
        purchaseGems () {
@@ -3846,7 +3846,7 @@ index 1bc330846..ff0e5f1d6 100644
  
  export const PARTY_LIMIT_MEMBERS = 30;
 diff --git a/website/common/script/content/spells.js b/website/common/script/content/spells.js
-index 84bf7be5c..431dd6531 100644
+index cbe12e4ff..6bb229c1b 100644
 --- a/website/common/script/content/spells.js
 +++ b/website/common/script/content/spells.js
 @@ -44,13 +44,13 @@ spells.wizard = {
@@ -3988,7 +3988,7 @@ index 57eaa890c..5a9e61a0a 100644
    PARTY_LIMIT_MEMBERS,
  };
 diff --git a/website/common/script/ops/buy/abstractBuyOperation.js b/website/common/script/ops/buy/abstractBuyOperation.js
-index d641372a5..d1b100d68 100644
+index 444ab7ffb..d3e2b3baa 100644
 --- a/website/common/script/ops/buy/abstractBuyOperation.js
 +++ b/website/common/script/ops/buy/abstractBuyOperation.js
 @@ -2,19 +2,16 @@ import i18n from '../../i18n';
@@ -4194,7 +4194,7 @@ index 81ce8bc18..f493b9940 100644
      user.stats,
      message,
 diff --git a/website/common/script/ops/buy/buyMarketGear.js b/website/common/script/ops/buy/buyMarketGear.js
-index 6ed392808..2de6fac29 100644
+index 06fe881e4..7a1adc492 100644
 --- a/website/common/script/ops/buy/buyMarketGear.js
 +++ b/website/common/script/ops/buy/buyMarketGear.js
 @@ -15,8 +15,8 @@ import {removePinnedGearAddPossibleNewOnes} from '../pinnedGearUtils';

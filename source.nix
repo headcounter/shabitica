@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.34.1";
+  version = "4.35.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1wcdp0yy50m2irnrwhxs30mcz726bfwn5ipzr6adqyvm0za4h6vv";
+    sha256 = "05ks2kzibqkkgkbmyv7r71vb3php23ibk2xpmd3ss4kabm1w79kc";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -102,10 +102,6 @@ stdenv.mkDerivation rec {
 
     # We don't need the community guidelines for our standalone version.
     patches/remove-community-guidelines.patch
-
-    # Temporary until news.js gets updated. We have a canary for instagram,
-    # Facebook and so on, so let's remove the links.
-    patches/news-remove-instagram.patch
 
     # Remove external links, such as to Trello tickets and official guilds that
     # do not exist on our instance.
