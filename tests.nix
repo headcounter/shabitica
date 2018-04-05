@@ -20,7 +20,7 @@ let
 
   mkTest = name: { target, useDB ? false }: habitica.mkCommonBuild {
     name = "test-${name}";
-    gulpTarget = "test:${target}";
+    buildTarget = "test:${target}";
 
     nativeBuildInputs = lib.attrValues habitica.nodePackages.dev
                      ++ lib.singleton pkgs.mongodb;

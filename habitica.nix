@@ -41,7 +41,7 @@ let
     in ''
       runHook preBuild
 
-      if ! HOME="$PWD" ${env} gulp $gulpTarget; then
+      if ! HOME="$PWD" ${env} gulp $buildTarget; then
         if [ -n "$createHydraTestFailure" ]; then
           mkdir -p "$out/nix-support"
           touch "$out/nix-support/failed"
@@ -67,7 +67,7 @@ in rec {
   client = mkCommonBuild {
     name = "client";
 
-    gulpTarget = "build:client";
+    buildTarget = "build:client";
 
     # XXX: Ugly as fuck and only needed for webpack!
     postConfigure = ''
@@ -93,7 +93,7 @@ in rec {
   server = mkCommonBuild {
     name = "server";
 
-    gulpTarget = "build:server";
+    buildTarget = "build:server";
 
     postPatch = ''
       # Load config.json from $out/etc/habitica:
@@ -132,7 +132,7 @@ in rec {
 
   apidoc = mkCommonBuild {
     name = "apidoc";
-    gulpTarget = "apidoc";
+    buildTarget = "apidoc";
     installPhase = "cp -rdT apidoc_build \"$out\"";
   };
 
