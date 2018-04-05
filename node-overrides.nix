@@ -35,7 +35,7 @@
     LIBSASS_EXT = "auto";
     nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ pkgconfig ];
     buildInputs = (drv.buildInputs or []) ++ [
-      (if lib.versionOlder drv.version "3.5.0" then newerSass else libsass)
+      (if lib.versionOlder libsass.version "3.5.0" then newerSass else libsass)
     ];
   };
 
