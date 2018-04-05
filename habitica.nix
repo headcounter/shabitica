@@ -35,13 +35,15 @@ let
       runHook postConfigure
     '';
 
+    buildProg = "gulp";
+
     buildPhase = let
       mkVar = key: val: "${key}=${lib.escapeShellArg (toString val)}";
       env = lib.concatStringsSep " " (lib.mapAttrsToList mkVar habiticaConfig);
     in ''
       runHook preBuild
 
-      if ! HOME="$PWD" ${env} gulp $buildTarget; then
+      if ! HOME="$PWD" ${env} $buildProg $buildTarget; then
         if [ -n "$createHydraTestFailure" ]; then
           mkdir -p "$out/nix-support"
           touch "$out/nix-support/failed"
