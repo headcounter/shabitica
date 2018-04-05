@@ -227,6 +227,7 @@ in {
       services.nginx.enable = lib.mkOverride 900 true;
       services.nginx.virtualHosts.${cfg.hostName} = {
         forceSSL = cfg.useSSL;
+        enableACME = cfg.useACME;
         locations = {
           "/".root = cfg.staticPath;
           "/".index = "index.html";
