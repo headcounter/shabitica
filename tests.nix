@@ -64,6 +64,47 @@ let
     };
   };
 
+  client.e2e = (import "${nixpkgs}/nixos/lib/testing.nix" {
+    inherit (pkgs) system;
+  }).runInMachine {
+    drv = habitica.mkCommonBuild {
+      name = "test-client-e2e";
+      nativeBuildInputs = lib.attrValues habitica.nodePackages.dev;
+      createHydraTestFailure = true;
+      buildProg = "npm run";
+      buildTarget = "client:e2e";
+      installPhase = ''
+        nightwatch-html-reporter -d test/client/e2e/reports
+        install -vD -m 0777 test/client/e2e/reports/generatedReport.html \
+          "$out/report.html"
+      '';
+    };
+    machine = {
+      imports = [ ./. ];
+      networking.firewall.enable = false;
+      virtualisation.diskSize = 16384;
+      virtualisation.memorySize = 1024;
+
+      users.users.selenium.description = "Selenium User";
+
+      systemd.services.selenium = {
+        description = "Selenium Server";
+        requiredBy = [ "multi-user.target" ];
+        serviceConfig.ExecStart = let
+          bin = "${pkgs.selenium-server-standalone}/bin/selenium-server";
+          cmd = [ "${pkgs.xvfb_run}/bin/xvfb-run" bin "-port" "4444" ];
+        in lib.concatMapStringsSep " " lib.escapeShellArg cmd;
+        serviceConfig.User = "selenium";
+      };
+      # XXX: Figure out how to set the browser path for chromedriver, so we
+      #      don't need this ugly workaround.
+      system.activationScripts.chromium = ''
+        mkdir -m 0755 -p /bin
+        ln -sfn ${pkgs.chromium}/bin/chromium /bin/chromium
+      '';
+    };
+  };
+
   nixos = import "${nixpkgs}/nixos/tests/make-test.nix" {
     name = "habitica";
 
@@ -104,4 +145,4 @@ let
     '';
   };
 
-in upstreamTests // { inherit nixos; }
+in upstreamTests // { inherit client nixos; }
