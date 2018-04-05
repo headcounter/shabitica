@@ -119,3 +119,16 @@ index 8e5ff3c5e..ca781c8a4 100644
      "test:nodemon": "gulp test:nodemon",
      "coverage": "COVERAGE=true mocha --require register-handlers.js --reporter html-cov > coverage.html; open coverage.html",
      "sprites": "gulp sprites:compile",
+diff --git a/test/client/e2e/runner.js b/test/client/e2e/runner.js
+index 4c3829f78..4d40c020d 100644
+--- a/test/client/e2e/runner.js
++++ b/test/client/e2e/runner.js
+@@ -18,7 +18,7 @@ if (opts.indexOf('--env') === -1) {
+ }
+ 
+ const spawn = require('cross-spawn');
+-const runner = spawn('./node_modules/.bin/nightwatch', opts, { stdio: 'inherit' });
++const runner = spawn('nightwatch', opts, { stdio: 'inherit' });
+ 
+ runner.on('exit', function (code) {
+   server.close();
