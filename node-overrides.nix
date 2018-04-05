@@ -22,7 +22,7 @@
   main.node-sass = drv: let
     newerSass = libsass.overrideAttrs (drv: rec {
       name = "libsass-${version}";
-      version = assert lib.versionOlder drv.version "3.5.0"; "3.5.0";
+      version = "3.5.0";
       patchPhase = "export LIBSASS_VERSION=${version}";
       src = fetchFromGitHub {
         owner = "sass";
@@ -34,7 +34,9 @@
   in {
     LIBSASS_EXT = "auto";
     nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ pkgconfig ];
-    buildInputs = (drv.buildInputs or []) ++ [ newerSass ];
+    buildInputs = (drv.buildInputs or []) ++ [
+      (if lib.versionOlder drv.version "3.5.0" then newerSass else libsass)
+    ];
   };
 
   main.pageres = drv: {
