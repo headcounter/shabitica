@@ -84,7 +84,7 @@
       # Hardcode the binary path to chromedriver
       sed -i -e '
         /^process\.env\.PATH *+=/d
-        s!^\(process\.path *= *\).*!\1'${lib.escapeShellArg binJsString}';!
+        s!^\(exports\.path *= *\).*!\1'${lib.escapeShellArg binJsString}';!
       ' lib/chromedriver.js
     '';
   };
