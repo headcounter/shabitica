@@ -75,8 +75,10 @@ let
       buildTarget = "client:e2e";
       installPhase = ''
         nightwatch-html-reporter -d test/client/e2e/reports
-        install -vD -m 0777 test/client/e2e/reports/generatedReport.html \
-          "$out/report.html"
+        mkdir -p "$out/nix-support"
+        cp test/client/e2e/reports/generatedReport.html "$out/report.html"
+        echo "report test-report $out report.html" \
+          > "$out/nix-support/hydra-build-products"
       '';
     };
     machine = {
