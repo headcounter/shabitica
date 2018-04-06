@@ -13,7 +13,7 @@ Date:   Sat Mar 31 00:52:13 2018 +0200
     Filename: remove-external-links.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 58bb3b46c..8c2615eb3 100644
+index 695bbc973..72c2b0b0d 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -132,7 +132,6 @@
@@ -55,7 +55,7 @@ index 010ed7ec6..3efc605f5 100644
              textarea.form-control(cols=5, :placeholder="$t('contributions')", v-model='hero.contributor.contributions')
              //include ../../shared/formattiv-help
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index d5cfc5e99..1a71bad1d 100644
+index a3fda203c..c7a88a007 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -50,9 +50,6 @@ div
@@ -117,10 +117,10 @@ index cfd14c700..9f373bb87 100644
  
  <style lang='scss'>
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index c2d8acb06..e53c822b3 100644
+index 801619aad..083ebbb4c 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -714,7 +714,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
+@@ -716,7 +716,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
        {name: 'GROUP_NAME', content: group.name},
        {name: 'MESSAGE', content: message},
        {name: 'GUILDS_LINK', content: '/groups/discovery'},

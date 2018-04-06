@@ -10,7 +10,7 @@ Date:   Sat Mar 31 01:16:24 2018 +0200
     Filename: tavern-remove-staff-and-tiers.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 8c2615eb3..1c8629b4c 100644
+index 72c2b0b0d..085c7bb02 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -102,24 +102,6 @@
@@ -348,7 +348,7 @@ index 8c2615eb3..1c8629b4c 100644
        newMessage: '',
        coords: {
          TOP: 0,
-@@ -765,14 +481,6 @@ export default {
+@@ -766,14 +482,6 @@ export default {
          this.$root.$emit('bv::show::modal', 'world-boss-rage');
        }
      },

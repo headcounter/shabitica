@@ -69,7 +69,7 @@ index 615b5e01e..59d84a958 100644
 -  });
  });
 diff --git a/test/api/v3/unit/models/group.test.js b/test/api/v3/unit/models/group.test.js
-index 1a33edcf4..1b4788251 100644
+index 67432acb3..0da17735e 100644
 --- a/test/api/v3/unit/models/group.test.js
 +++ b/test/api/v3/unit/models/group.test.js
 @@ -778,10 +778,13 @@ describe('Group Model', () => {

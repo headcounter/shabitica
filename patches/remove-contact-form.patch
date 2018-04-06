@@ -13,7 +13,7 @@ Date:   Fri Mar 30 19:32:26 2018 +0200
     Filename: remove-contact-form.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 766653335..4f2fd97de 100644
+index 3ea95eed7..63ac66241 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -133,8 +133,6 @@
@@ -44,7 +44,7 @@ index 766653335..4f2fd97de 100644
      getCoord (e, text) {
        let carPos = text.selectionEnd;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 842e46b79..d5cfc5e99 100644
+index 46d92df23..a3fda203c 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -55,7 +55,6 @@ div
@@ -55,7 +55,7 @@ index 842e46b79..d5cfc5e99 100644
        .user-menu.d-flex.align-items-center
          .item-with-icon(v-if="userHourglasses > 0")
            .top-menu-icon.svg-icon(v-html="icons.hourglasses", v-b-tooltip.hover.bottom="$t('mysticHourglassesTooltip')")
-@@ -283,7 +282,6 @@ div
+@@ -284,7 +283,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -63,7 +63,7 @@ index 842e46b79..d5cfc5e99 100644
  
  import gemIcon from 'assets/svg/gem.svg';
  import goldIcon from 'assets/svg/gold.svg';
-@@ -331,9 +329,6 @@ export default {
+@@ -332,9 +330,6 @@ export default {
      this.getUserGroupPlans();
    },
    methods: {
@@ -74,10 +74,10 @@ index 842e46b79..d5cfc5e99 100644
        this.isUserDropdownOpen = !this.isUserDropdownOpen;
      },
 diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
-index 1cb966bbe..619860113 100644
+index 68d62bd34..d240ae6ac 100644
 --- a/website/client/components/static/header.vue
 +++ b/website/client/components/static/header.vue
-@@ -15,8 +15,6 @@
+@@ -16,8 +16,6 @@
            a.nav-link(href='http://blog.habitrpg.com/', target='_blank') {{ $t('tumblr') }}
          router-link.nav-item(tag='li', to='/static/press-kit')
            a.nav-link(v-once) {{ $t('presskit') }}
@@ -87,7 +87,7 @@ index 1cb966bbe..619860113 100644
          router-link.nav-item(tag='li', to='/register')
            a.nav-link(v-once) {{ $t('getStarted') }}
 diff --git a/website/client/router.js b/website/client/router.js
-index b06fe97a4..caa1a22f3 100644
+index db2d38cb6..ea2ed6c92 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -14,7 +14,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'./components/stati
@@ -98,7 +98,7 @@ index b06fe97a4..caa1a22f3 100644
  const FAQPage = () => import(/* webpackChunkName: "static" */'./components/static/faq');
  const FeaturesPage = () => import(/* webpackChunkName: "static" */'./components/static/features');
  const GroupPlansPage = () => import(/* webpackChunkName: "static" */'./components/static/groupPlans');
-@@ -252,7 +251,6 @@ const router = new VueRouter({
+@@ -245,7 +244,6 @@ const router = new VueRouter({
          { name: 'app', path: 'app', component: AppPage, meta: {requiresLogin: false}},
          { name: 'clearBrowserData', path: 'clear-browser-data', component: ClearBrowserDataPage, meta: {requiresLogin: false}},
          { name: 'communityGuidelines', path: 'community-guidelines', component: CommunityGuidelinesPage, meta: {requiresLogin: false}},

@@ -2245,22 +2245,22 @@ let
         sha1 = "b534e7c734c4f81ec5fbe8aca2ad24354b962c6c";
       };
     };
-    "caniuse-db-1.0.30000823" = {
+    "caniuse-db-1.0.30000824" = {
       name = "caniuse-db";
       packageName = "caniuse-db";
-      version = "1.0.30000823";
+      version = "1.0.30000824";
       src = fetchurl {
-        url = "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000823.tgz";
-        sha1 = "e68e5f8c70783ef4059d2ea0de81f551651da6fc";
+        url = "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000824.tgz";
+        sha1 = "bba3ff425296e04caa37fe426259206a7056551b";
       };
     };
-    "caniuse-lite-1.0.30000823" = {
+    "caniuse-lite-1.0.30000824" = {
       name = "caniuse-lite";
       packageName = "caniuse-lite";
-      version = "1.0.30000823";
+      version = "1.0.30000824";
       src = fetchurl {
-        url = "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30000823.tgz";
-        sha512 = "21yddxggqlrsysp56k75hmxrcjqiph53p3ixwp5wjq6w5ffjq79w2yyvdjk0frsg5y7sg8bvij9vyi5116515am6vq0l1kh9jly3fny";
+        url = "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30000824.tgz";
+        sha512 = "13m3jjn6q0m290124jrv65bl8rbnan1kn09kfrcg78yn188h5vx1cknmijms2k9m13g9hci0pj5wjbzdwzcpqn8wis379v4yl11xj19";
       };
     };
     "capture-stack-trace-1.0.0" = {
@@ -6871,13 +6871,13 @@ let
         sha512 = "1wsmzzva3rfjb4bfks7ba2nvha9ziwgq2kag6xxibc5cc6mz19xbgj4fm3a7ghvfbfx4am0x13ibc8j2s5m3sv12nph44rq56gnvv47";
       };
     };
-    "insert-module-globals-7.0.5" = {
+    "insert-module-globals-7.0.6" = {
       name = "insert-module-globals";
       packageName = "insert-module-globals";
-      version = "7.0.5";
+      version = "7.0.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/insert-module-globals/-/insert-module-globals-7.0.5.tgz";
-        sha512 = "3fk0jxs2s9i64hqs1y6ncl81nddpb2kr58myi8805mg9j3xgmn5svxmk8xwvm2358snahh9r0k1zmpv6512sq383zp4m6sc5an6s162";
+        url = "https://registry.npmjs.org/insert-module-globals/-/insert-module-globals-7.0.6.tgz";
+        sha512 = "3vjhls34i9vc0mm5cxlw6zbp1an494z9kbrrmj4hbv32fw0hx22nfpaj7j8i7lwkqa1sdqidxcfkga1630ya454h8h2ppbbl9s24ys7";
       };
     };
     "interpret-1.1.0" = {
@@ -9706,13 +9706,13 @@ let
         sha1 = "20a318c30cb45f71fe7adfbf7b21c99c1472ef11";
       };
     };
-    "natives-1.1.2" = {
+    "natives-1.1.3" = {
       name = "natives";
       packageName = "natives";
-      version = "1.1.2";
+      version = "1.1.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/natives/-/natives-1.1.2.tgz";
-        sha512 = "246d44jpalvlcvk1ig1b2qc05fsgq8gy926xcl86bdnx663k8bh7pi4ny1pa7xr0bxydm33rhkvwzz3fjrrr7pkrjx0pmj44x5l1d75";
+        url = "https://registry.npmjs.org/natives/-/natives-1.1.3.tgz";
+        sha512 = "3pbpfnk3183j5mwxprr19bzahf7lxarcka2bad0mhcywnjlj63i55phbxyk0pn4l4v7nj3wv4gjrzdk7xfxxfrjl5rvqf0qbrhr5485";
       };
     };
     "natural-compare-1.4.0" = {
@@ -15223,13 +15223,13 @@ let
         sha512 = "0xp18k8kc25bamdgip8y0ywg470qs2k3cvfyy970ivkr0crmd1cf3w7jyx8lgd0pw9h512y22l3cxlnpp5y9nl08kpd1qkb7wn4ngmn";
       };
     };
-    "webpack-log-1.1.2" = {
+    "webpack-log-1.2.0" = {
       name = "webpack-log";
       packageName = "webpack-log";
-      version = "1.1.2";
+      version = "1.2.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/webpack-log/-/webpack-log-1.1.2.tgz";
-        sha512 = "06da872xb996g1yg6dahk8bhd72nisnlmf4cyiwsk2zvdqimn51qsrbgr9hpvis3im9paaz0pp16r5p5hz746acfmcpl13qhc7x5787";
+        url = "https://registry.npmjs.org/webpack-log/-/webpack-log-1.2.0.tgz";
+        sha512 = "0f0lcci53li31zhx7vhwaq4di0xvhd0n02rgy54kb4bcq6fzki0lz34s6ldzwf1ppaqw1n6jc3hp64blldhz8ianvbl3rzf54h2gl2k";
       };
     };
     "webpack-sources-1.1.0" = {
@@ -16398,7 +16398,7 @@ in
       sources."big.js-3.2.0"
       sources."browserslist-1.7.7"
       sources."caniuse-api-1.6.1"
-      sources."caniuse-db-1.0.30000823"
+      sources."caniuse-db-1.0.30000824"
       sources."chalk-1.1.3"
       sources."clap-1.2.3"
       sources."clone-1.0.4"
@@ -19259,10 +19259,10 @@ in
   "express-validator-^5.0.3" = nodeEnv.buildNodePackage {
     name = "express-validator";
     packageName = "express-validator";
-    version = "5.1.0";
+    version = "5.1.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/express-validator/-/express-validator-5.1.0.tgz";
-      sha512 = "3yzsahn2knvbbjbx27l3q3ji9pqr2qp8p097i8b65bfnvpwxpi4cpccikkz2wkj9bjc1ghv9ipj5qzjwkw4jyh1zb4rk8k214fb8wm3";
+      url = "https://registry.npmjs.org/express-validator/-/express-validator-5.1.1.tgz";
+      sha512 = "3xzzndl6m0rzws0pzz09sx660qnps28idhhmmv3jv3fg8gfn066jvvjk0cjidvqm10snkjkkqimfqk1v2dqza7w53kd2zhxv7ghg8ga";
     };
     dependencies = [
       sources."lodash-4.17.5"
@@ -20035,7 +20035,7 @@ in
     dependencies = [
       sources."ansi-styles-3.2.1"
       sources."browserslist-3.2.4"
-      sources."caniuse-lite-1.0.30000823"
+      sources."caniuse-lite-1.0.30000824"
       sources."chalk-2.3.2"
       sources."color-convert-1.9.1"
       sources."color-name-1.1.3"
@@ -20817,7 +20817,7 @@ in
       sources."multipipe-0.1.2"
       sources."nan-2.10.0"
       sources."nanomatch-1.2.9"
-      sources."natives-1.1.2"
+      sources."natives-1.1.3"
       (sources."nodemon-1.17.3" // {
         dependencies = [
           sources."ansi-regex-3.0.0"
@@ -21636,7 +21636,7 @@ in
       sources."util-deprecate-1.0.2"
       sources."uuid-3.2.1"
       sources."webpack-dev-middleware-2.0.6"
-      sources."webpack-log-1.1.2"
+      sources."webpack-log-1.2.0"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -21745,7 +21745,7 @@ in
       sources."url-join-2.0.5"
       sources."util-deprecate-1.0.2"
       sources."uuid-3.2.1"
-      sources."webpack-log-1.1.2"
+      sources."webpack-log-1.2.0"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -23780,7 +23780,7 @@ in
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
       sources."inline-source-map-0.6.2"
-      (sources."insert-module-globals-7.0.5" // {
+      (sources."insert-module-globals-7.0.6" // {
         dependencies = [
           sources."concat-stream-1.6.2"
         ];

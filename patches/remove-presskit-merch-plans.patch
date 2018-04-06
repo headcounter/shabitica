@@ -10,12 +10,12 @@ Date:   Sat Mar 31 02:10:24 2018 +0200
     Filename: remove-presskit-merch-plans.patch
 
 diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
-index 619860113..db8c33cc6 100644
+index d240ae6ac..1c4fc0b98 100644
 --- a/website/client/components/static/header.vue
 +++ b/website/client/components/static/header.vue
-@@ -4,25 +4,13 @@
-       router-link.nav-item(:to='!isUserLoggedIn ? "/static/home" : "/"')
-         .logo.svg-icon(v-html='icons.logo')
+@@ -5,25 +5,13 @@
+         .logo.svg-icon(v-html='icons.purpleLogo', v-if='this.$route.name === "plans"')
+         .logo.svg-icon(v-html='icons.logo', v-else)
      .collapse.navbar-collapse
 -      ul.navbar-nav.mr-auto(v-if='$route.name !== "home"')
 +      ul.navbar-nav.mr-auto
@@ -44,7 +44,7 @@ index 619860113..db8c33cc6 100644
        button.btn.btn-primary.pull-right(@click='playButtonClick()', v-if='$route.name !== "home"') {{ $t('playButtonFull') }}
      router-link.btn.btn-primary.login-button.pull-right(to='/login', v-if='$route.name === "home"') {{ $t('login') }}
  </template>
-@@ -83,66 +71,10 @@
+@@ -84,66 +72,10 @@
      }
    }
  
@@ -112,7 +112,7 @@ index 619860113..db8c33cc6 100644
  </style>
  
 diff --git a/website/client/router.js b/website/client/router.js
-index d8670a57f..d70be0d23 100644
+index c5f8fab3c..3bae954e9 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -15,11 +15,8 @@ const AppPage = () => import(/* webpackChunkName: "static" */'./components/stati
@@ -127,7 +127,7 @@ index d8670a57f..d70be0d23 100644
  const PrivacyPage = () => import(/* webpackChunkName: "static" */'./components/static/privacy');
  const TermsPage = () => import(/* webpackChunkName: "static" */'./components/static/terms');
  
-@@ -251,14 +248,10 @@ const router = new VueRouter({
+@@ -244,14 +241,10 @@ const router = new VueRouter({
          { name: 'clearBrowserData', path: 'clear-browser-data', component: ClearBrowserDataPage, meta: {requiresLogin: false}},
          { name: 'faq', path: 'faq', component: FAQPage, meta: {requiresLogin: false}},
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},

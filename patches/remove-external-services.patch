@@ -150,7 +150,7 @@ index b2549efdb..3181d70c5 100644
 +    }
  }
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index c9b2d9738..9a704dd05 100644
+index 3069c245f..e8ced52ac 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -15,10 +15,6 @@ import { getMatchesByWordArray, removePunctuationFromString } from '../../../../
@@ -1497,7 +1497,7 @@ index ab72d1f2b..4e751b750 100644
  
    it('adds equipment to inventory', () => {
 diff --git a/test/common/ops/buy/buyArmoire.js b/test/common/ops/buy/buyArmoire.js
-index 0bad38927..09a045a00 100644
+index b711bc342..a7fff84b3 100644
 --- a/test/common/ops/buy/buyArmoire.js
 +++ b/test/common/ops/buy/buyArmoire.js
 @@ -31,7 +31,6 @@ describe('shared.ops.buyArmoire', () => {
@@ -1506,9 +1506,9 @@ index 0bad38927..09a045a00 100644
    let YIELD_EXP = 0.9;
 -  let analytics = {track () {}};
  
-   beforeEach(() => {
-     user = generateUser({
-@@ -46,12 +45,10 @@ describe('shared.ops.buyArmoire', () => {
+   function buyArmoire (_user, _req, _analytics) {
+     const buyOp = new BuyArmoireOperation(_user, _req, _analytics);
+@@ -52,12 +51,10 @@ describe('shared.ops.buyArmoire', () => {
      user.items.food = {};
  
      sandbox.stub(randomVal, 'trueRandom');
@@ -1521,7 +1521,7 @@ index 0bad38927..09a045a00 100644
    });
  
    context('failure conditions', () => {
-@@ -144,7 +141,7 @@ describe('shared.ops.buyArmoire', () => {
+@@ -150,7 +147,7 @@ describe('shared.ops.buyArmoire', () => {
  
        expect(_.size(user.items.gear.owned)).to.equal(2);
  
@@ -1530,7 +1530,7 @@ index 0bad38927..09a045a00 100644
  
        expect(_.size(user.items.gear.owned)).to.equal(3);
  
-@@ -152,7 +149,6 @@ describe('shared.ops.buyArmoire', () => {
+@@ -158,7 +155,6 @@ describe('shared.ops.buyArmoire', () => {
  
        expect(armoireCount).to.eql(_.size(getFullArmoire()) - 2);
        expect(user.stats.gp).to.eql(100);
@@ -1539,7 +1539,7 @@ index 0bad38927..09a045a00 100644
    });
  });
 diff --git a/test/common/ops/buy/buyHealthPotion.js b/test/common/ops/buy/buyHealthPotion.js
-index 195ccb2f8..208ce3478 100644
+index 9f04c4d6b..36ec2072c 100644
 --- a/test/common/ops/buy/buyHealthPotion.js
 +++ b/test/common/ops/buy/buyHealthPotion.js
 @@ -10,7 +10,6 @@ import i18n from '../../../../website/common/script/i18n';
@@ -1548,9 +1548,9 @@ index 195ccb2f8..208ce3478 100644
    let user;
 -  let analytics = {track () {}};
  
-   beforeEach(() => {
-     user = generateUser({
-@@ -26,19 +25,13 @@ describe('shared.ops.buyHealthPotion', () => {
+   function buyHealthPotion (_user, _req, _analytics) {
+     const buyOp = new BuyHealthPotionOperation(_user, _req, _analytics);
+@@ -32,19 +31,13 @@ describe('shared.ops.buyHealthPotion', () => {
        },
        stats: { gp: 200 },
      });
@@ -1904,14 +1904,14 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index b88f2bba2..49d6094a5 100644
+index aed6ff1b0..2a8b4d583 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
          h2 {{$t('tipTitle', {tipNumber: currentTipNumber})}}
          p {{currentTip}}
    #app(:class='{"casting-spell": castingSpell}')
--    amazon-payments-modal
+-    amazon-payments-modal(v-if='!isStaticPage')
      snackbars
      router-view(v-if="!isUserLoggedIn || isStaticPage")
      template(v-else)
@@ -2459,10 +2459,21 @@ index bcfc54d95..96f4fa9e3 100644
            button.btn.btn-primary(v-once, v-if='cloning', @click='createChallenge()', :disabled='loading') {{$t('createChallengeCloneTasks')}}
            button.btn.btn-primary(v-once, v-if='!creating && !cloning', @click='updateChallenge()') {{$t('updateChallenge')}}
 diff --git a/website/client/components/group-plans/billing.vue b/website/client/components/group-plans/billing.vue
-index f9b886d54..7c5b935b7 100644
+index f9b886d54..5f2f449af 100644
 --- a/website/client/components/group-plans/billing.vue
 +++ b/website/client/components/group-plans/billing.vue
-@@ -26,8 +26,6 @@
+@@ -11,10 +11,6 @@
+         td
+           h3 {{ $t('paymentDetails') }}
+           p(v-if='group.purchased.plan.planId') {{ $t('groupSubscriptionPrice') }}
+-      tr(v-if='group.purchased.plan.extraMonths')
+-        td
+-          span.glyphicon.glyphicon-credit-card
+-          | {{ $t('purchasedGroupPlanPlanExtraMonths', purchasedGroupPlanPlanExtraMonths) }}
+       tr(v-if='group.purchased.plan.consecutive.count || group.purchased.plan.consecutive.offset')
+         td
+           span.glyphicon.glyphicon-forward
+@@ -26,8 +22,6 @@
    .col-12.col-md-6.offset-md-3
      button.btn.btn-success(class='btn-success', v-if='group.purchased.plan.dateTerminated', @click='upgradeGroup()')
        | {{ $t('upgrade') }}
@@ -2471,7 +2482,7 @@ index f9b886d54..7c5b935b7 100644
      .btn.btn-sm.btn-danger(v-if='!group.purchased.plan.dateTerminated',
        @click='cancelSubscription({group: group})') {{ $t('cancelGroupSub') }}
  </template>
-@@ -35,10 +33,9 @@
+@@ -35,10 +29,9 @@
  <script>
  import moment from 'moment';
  import { mapState } from 'client/libs/store';
@@ -2609,10 +2620,10 @@ index ff5372f73..647d4ad5b 100644
          return quest > 0;
        });
 diff --git a/website/client/components/groups/groupFormModal.vue b/website/client/components/groups/groupFormModal.vue
-index 730a9e712..5b3480251 100644
+index 3ff0d4127..d719f2c7d 100644
 --- a/website/client/components/groups/groupFormModal.vue
 +++ b/website/client/components/groups/groupFormModal.vue
-@@ -382,13 +382,6 @@ export default {
+@@ -363,13 +363,6 @@ export default {
          alert(this.$t('notEnoughGems'));
          return;
          // @TODO return $rootScope.openModal('buyGems', {track:"Gems > Gems > Create Group"});
@@ -2627,7 +2638,7 @@ index 730a9e712..5b3480251 100644
  
        let errors = [];
 diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
-index 45c5fb470..07c7f6b17 100644
+index 848f14dd0..84ed4a636 100644
 --- a/website/client/components/groups/groupPlan.vue
 +++ b/website/client/components/groups/groupPlan.vue
 @@ -45,16 +45,6 @@ div
@@ -2689,7 +2700,7 @@ index 45c5fb470..07c7f6b17 100644
    }
  
    .header {
-@@ -319,20 +281,16 @@ div
+@@ -321,20 +283,16 @@ div
  </style>
  
  <script>
@@ -2711,11 +2722,10 @@ index 45c5fb470..07c7f6b17 100644
          positiveIcon,
        }),
        PAGES: {
-@@ -340,11 +298,6 @@ export default {
+@@ -342,10 +300,6 @@ export default {
          UPGRADE_GROUP: 'upgrade-group',
          PAY: 'pay',
        },
--      // @TODO: Import from payment library?
 -      PAYMENTS: {
 -        AMAZON: 'amazon',
 -        STRIPE: 'stripe',
@@ -2723,7 +2733,7 @@ index 45c5fb470..07c7f6b17 100644
        paymentMethod: '',
        newGroup: {
          type: 'guild',
-@@ -395,14 +348,6 @@ export default {
+@@ -396,14 +350,6 @@ export default {
        } else {
          paymentData.groupToCreate = this.newGroup;
        }
@@ -2871,10 +2881,10 @@ index e679b2c5c..42a054a41 100644
        if (this.expandedMember === memberId) {
          this.expandedMember = null;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 679a28997..842e46b79 100644
+index 09400e80d..46d92df23 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -283,7 +283,6 @@ div
+@@ -284,7 +284,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -2882,7 +2892,7 @@ index 679a28997..842e46b79 100644
  import { goToModForm } from 'client/libs/modform';
  
  import gemIcon from 'assets/svg/gem.svg';
-@@ -353,14 +352,6 @@ export default {
+@@ -354,14 +353,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -3089,10 +3099,20 @@ index 0e583df0e..29322418d 100644
        if (confirmationNeeded && !confirm(this.$t('changeClassConfirmCost'))) return;
        try {
 diff --git a/website/client/components/settings/subscription.vue b/website/client/components/settings/subscription.vue
-index e086f99f5..b2317612f 100644
+index e086f99f5..501203d6a 100644
 --- a/website/client/components/settings/subscription.vue
 +++ b/website/client/components/settings/subscription.vue
-@@ -67,21 +67,9 @@
+@@ -36,9 +36,6 @@
+             h4 {{ $t('subscribed') }}
+             p(v-if='hasPlan && !hasGroupPlan') {{ $t('purchasedPlanId', purchasedPlanIdInfo) }}
+             p(v-if='hasGroupPlan') {{ $t('youHaveGroupPlan') }}
+-          tr(v-if='user.purchased.plan.extraMonths'): td
+-            span.glyphicon.glyphicon-credit-card
+-            | &nbsp; {{ $t('purchasedPlanExtraMonths', purchasedPlanExtraMonthsDetails) }}
+           tr(v-if='hasConsecutiveSubscription'): td
+             span.glyphicon.glyphicon-forward
+             | &nbsp; {{ $t('consecutiveSubscription') }}
+@@ -67,21 +64,9 @@
                button.btn.btn-primary(type='button', @click='applyCoupon(subscription.coupon)') {{ $t("apply") }}
  
          div(v-if='hasSubscription')
@@ -3114,7 +3134,7 @@ index e086f99f5..b2317612f 100644
      .row
        .col-6
          h2 {{ $t('giftSubscription') }}
-@@ -112,11 +100,10 @@ import { mapState } from 'client/libs/store';
+@@ -112,11 +97,10 @@ import { mapState } from 'client/libs/store';
  
  import subscriptionBlocks from '../../../common/script/content/subscriptionBlocks';
  import planGemLimits from '../../../common/script/libs/planGemLimits';
@@ -3127,7 +3147,7 @@ index e086f99f5..b2317612f 100644
    data () {
      return {
        loading: false,
-@@ -127,14 +114,7 @@ export default {
+@@ -127,14 +111,7 @@ export default {
        subscription: {
          key: 'basic_earned',
        },
@@ -3142,7 +3162,7 @@ index e086f99f5..b2317612f 100644
          GIFT: 'Gift',
        },
      };
-@@ -171,10 +151,7 @@ export default {
+@@ -171,10 +148,7 @@ export default {
        return subscriptionBlocks;
      },
      canEditCardDetails () {
@@ -3154,7 +3174,7 @@ index e086f99f5..b2317612f 100644
      },
      hasSubscription () {
        return Boolean(this.user.purchased.plan.customerId);
-@@ -232,28 +209,14 @@ export default {
+@@ -232,28 +206,14 @@ export default {
      },
      canCancelSubscription () {
        return (
@@ -3228,10 +3248,10 @@ index cfcf1fa02..4dd4105b5 100644
 -        a(href='https://geo.itunes.apple.com/us/app/habitica/id994882113?mt=8', style='display:inline-block;overflow:hidden;background:url(http://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg#svgView) no-repeat;background-size:100%;width:152px;height:45px;margin-left:20px;image-rendering:auto')
  </template>
 diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
-index 6ec9434f5..1cb966bbe 100644
+index 667172b64..68d62bd34 100644
 --- a/website/client/components/static/header.vue
 +++ b/website/client/components/static/header.vue
-@@ -20,8 +20,6 @@
+@@ -21,8 +21,6 @@
        ul.navbar-nav.mr-auto(v-else)
          router-link.nav-item(tag='li', to='/register')
            a.nav-link(v-once) {{ $t('getStarted') }}
@@ -3240,15 +3260,15 @@ index 6ec9434f5..1cb966bbe 100644
          li.nav-item.dropdown
            a.nav-link.dropdown-toggle(v-once) {{ $t('learnMore') }}
            .dropdown-menu
-@@ -152,7 +150,6 @@
- 
+@@ -154,7 +152,6 @@
  <script>
  import logo from 'assets/svg/logo.svg';
+ import purpleLogo from 'assets/svg/purple-logo.svg';
 -import * as Analytics from 'client/libs/analytics';
  
  export default {
    data () {
-@@ -174,21 +171,8 @@ export default {
+@@ -177,21 +174,8 @@ export default {
          return;
        }
  
@@ -3467,10 +3487,10 @@ index 1e95ea76f..75849de2c 100644
    };
  </script>
 diff --git a/website/client/components/static/staticWrapper.vue b/website/client/components/static/staticWrapper.vue
-index 799c822e1..f2019c66a 100644
+index 34ff15ca5..e5dd03e02 100644
 --- a/website/client/components/static/staticWrapper.vue
 +++ b/website/client/components/static/staticWrapper.vue
-@@ -77,7 +77,7 @@ div
+@@ -90,7 +90,7 @@ div
        color: #bda8ff;
      }
  
@@ -3500,7 +3520,7 @@ index a49a47896..2ef93f2bc 100644
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
        const crit = tmp.crit;
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 400a2c420..27f48e4b4 100644
+index 0d6aa3b1c..bfb40a095 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -75,14 +75,12 @@ div
@@ -3534,22 +3554,22 @@ index 400a2c420..27f48e4b4 100644
  
          .col-12.text-center
            button.btn.btn-primary(@click='save()') {{ $t("save") }}
-@@ -587,7 +576,6 @@ import autoAllocate from '../../../common/script/fns/autoAllocate';
- import allocate from  '../../../common/script/ops/stats/allocate';
+@@ -310,7 +299,6 @@ import { mapState } from 'client/libs/store';
+ import cloneDeep from 'lodash/cloneDeep';
  
  import MemberDetails from '../memberDetails';
 -import sendGemsModal from 'client/components/payments/sendGemsModal';
  import markdown from 'client/directives/markdown';
- import toggleSwitch from 'client/components/ui/toggleSwitch';
  import achievementsLib from '../../../common/script/libs/achievements';
-@@ -614,7 +602,6 @@ export default {
+ // @TODO: EMAILS.COMMUNITY_MANAGER_EMAIL
+@@ -335,7 +323,6 @@ export default {
      markdown,
    },
    components: {
 -    sendGemsModal,
      MemberDetails,
-     toggleSwitch,
-     attributesGrid,
+     profileStats,
+   },
 diff --git a/website/client/index.html b/website/client/index.html
 index 50a5cda11..2e01bb631 100644
 --- a/website/client/index.html
@@ -3818,10 +3838,10 @@ index ff13c36ab..a9cdfbb2c 100644
  
    // @TODO: Update user?
 diff --git a/website/client/store/index.js b/website/client/store/index.js
-index f46fbc36c..9b4b13d74 100644
+index b47fce6de..4f33daf2a 100644
 --- a/website/client/store/index.js
 +++ b/website/client/store/index.js
-@@ -59,7 +59,6 @@ export default function () {
+@@ -51,7 +51,6 @@ export default function () {
        title: 'Habitica',
        isUserLoggedIn,
        isUserLoaded: false, // Means the user and the user's tasks are ready
@@ -3846,7 +3866,7 @@ index 1bc330846..ff0e5f1d6 100644
  
  export const PARTY_LIMIT_MEMBERS = 30;
 diff --git a/website/common/script/content/spells.js b/website/common/script/content/spells.js
-index cbe12e4ff..6bb229c1b 100644
+index d04bddd8e..62ebaed03 100644
 --- a/website/common/script/content/spells.js
 +++ b/website/common/script/content/spells.js
 @@ -44,13 +44,13 @@ spells.wizard = {
@@ -4074,7 +4094,7 @@ index 444ab7ffb..d3e2b3baa 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index 51e054f5b..aae2fcd1a 100644
+index ed7267142..87ab69009 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
 @@ -17,7 +17,7 @@ import hourglassPurchase from './hourglassPurchase';
@@ -4086,24 +4106,27 @@ index 51e054f5b..aae2fcd1a 100644
    let key = get(req, 'params.key');
    if (!key) throw new BadRequest(i18n.t('missingKeyParam', req.language));
  
-@@ -31,13 +31,13 @@ module.exports = function buy (user, req = {}, analytics) {
+@@ -31,16 +31,16 @@ module.exports = function buy (user, req = {}, analytics) {
  
    switch (type) {
-     case 'armoire':
--      buyRes = buyArmoire(user, req, analytics);
-+      buyRes = buyArmoire(user, req);
+     case 'armoire': {
+-      const buyOp = new BuyArmoireOperation(user, req, analytics);
++      const buyOp = new BuyArmoireOperation(user, req);
+ 
+       buyRes = buyOp.purchase();
        break;
+     }
      case 'mystery':
 -      buyRes = buyMysterySet(user, req, analytics);
 +      buyRes = buyMysterySet(user, req);
        break;
-     case 'potion':
--      buyRes = buyHealthPotion(user, req, analytics);
-+      buyRes = buyHealthPotion(user, req);
+     case 'potion': {
+-      const buyOp = new BuyHealthPotionOperation(user, req, analytics);
++      const buyOp = new BuyHealthPotionOperation(user, req);
+ 
+       buyRes = buyOp.purchase();
        break;
-     case 'eggs':
-     case 'hatchingPotions':
-@@ -46,20 +46,20 @@ module.exports = function buy (user, req = {}, analytics) {
+@@ -52,20 +52,20 @@ module.exports = function buy (user, req = {}, analytics) {
      case 'gear':
      case 'bundles':
      case 'gems':
@@ -4130,69 +4153,57 @@ index 51e054f5b..aae2fcd1a 100644
        buyRes = buyOp.purchase();
        break;
 diff --git a/website/common/script/ops/buy/buyArmoire.js b/website/common/script/ops/buy/buyArmoire.js
-index 886db0d39..aab7013bd 100644
+index 4d091a2c1..c3a6051f0 100644
 --- a/website/common/script/ops/buy/buyArmoire.js
 +++ b/website/common/script/ops/buy/buyArmoire.js
-@@ -17,7 +17,7 @@ import { removeItemByPath } from '../pinnedGearUtils';
- const YIELD_EQUIPMENT_THRESHOLD = 0.6;
+@@ -18,8 +18,8 @@ const YIELD_EQUIPMENT_THRESHOLD = 0.6;
  const YIELD_FOOD_THRESHOLD = 0.8;
  
--module.exports = function buyArmoire (user, req = {}, analytics) {
-+module.exports = function buyArmoire (user, req = {}) {
-   let item = content.armoire;
- 
-   if (user.stats.gp < item.value) {
-@@ -99,17 +99,6 @@ module.exports = function buyArmoire (user, req = {}, analytics) {
-     }, req.language);
+ export class BuyArmoireOperation extends AbstractGoldItemOperation {
+-  constructor (user, req, analytics) {
+-    super(user, req, analytics);
++  constructor (user, req) {
++    super(user, req);
    }
  
--  if (analytics) {
--    analytics.track('acquire item', {
--      uuid: user._id,
--      itemKey: 'Armoire',
--      acquireMethod: 'Gold',
--      goldCost: item.value,
--      category: 'behavior',
--      headers: req.headers,
--    });
--  }
+   multiplePurchaseAllowed () {
+@@ -135,10 +135,4 @@ export class BuyArmoireOperation extends AbstractGoldItemOperation {
+       },
+     };
+   }
 -
-   let resData = pick(user, splitWhitespace('items flags'));
-   if (armoireResp) resData.armoire = armoireResp;
- 
+-  analyticsData () {
+-    let data = super.analyticsData();
+-    data.itemKey = 'Armoire';
+-    return data;
+-  }
+ }
 diff --git a/website/common/script/ops/buy/buyHealthPotion.js b/website/common/script/ops/buy/buyHealthPotion.js
-index 81ce8bc18..f493b9940 100644
+index cad055a97..5bd6cf4b5 100644
 --- a/website/common/script/ops/buy/buyHealthPotion.js
 +++ b/website/common/script/ops/buy/buyHealthPotion.js
-@@ -4,7 +4,7 @@ import {
-   NotAuthorized,
- } from '../../libs/errors';
+@@ -6,8 +6,8 @@ import {
+ import { AbstractGoldItemOperation} from './abstractBuyOperation';
  
--module.exports = function buyHealthPotion (user, req = {}, analytics) {
-+module.exports = function buyHealthPotion (user, req = {}) {
-   let item = content.potion;
-   let quantity = req.quantity || 1;
+ export class BuyHealthPotionOperation extends AbstractGoldItemOperation {
+-  constructor (user, req, analytics) {
+-    super(user, req, analytics);
++  constructor (user, req) {
++    super(user, req);
+   }
  
-@@ -35,19 +35,6 @@ module.exports = function buyHealthPotion (user, req = {}, analytics) {
-     itemText: item.text(req.language),
-   }, req.language);
- 
+   multiplePurchaseAllowed () {
+@@ -46,10 +46,4 @@ export class BuyHealthPotionOperation extends AbstractGoldItemOperation {
+       message,
+     ];
+   }
 -
--  if (analytics) {
--    analytics.track('acquire item', {
--      uuid: user._id,
--      itemKey: 'Potion',
--      acquireMethod: 'Gold',
--      goldCost: item.value,
--      category: 'behavior',
--      headers: req.headers,
--      quantityPurchased: quantity,
--    });
+-  analyticsData () {
+-    let data = super.analyticsData();
+-    data.itemKey = 'Potion';
+-    return data;
 -  }
--
-   return [
-     user.stats,
-     message,
+ }
 diff --git a/website/common/script/ops/buy/buyMarketGear.js b/website/common/script/ops/buy/buyMarketGear.js
 index 06fe881e4..7a1adc492 100644
 --- a/website/common/script/ops/buy/buyMarketGear.js
@@ -5183,7 +5194,7 @@ index 5fc0f4cbf..f92f7f279 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 834a6dfc5..89a22d4fc 100644
+index 11d61791d..85bf0dac4 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5200,7 +5211,7 @@ index 834a6dfc5..89a22d4fc 100644
  import apiMessages from '../../libs/apiMessages';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
-@@ -148,22 +142,6 @@ api.createGroup = {
+@@ -150,22 +144,6 @@ api.createGroup = {
        profile: {name: user.profile.name},
      };
  
@@ -5223,7 +5234,7 @@ index 834a6dfc5..89a22d4fc 100644
      res.respond(201, response); // do not remove chat flags data as we've just created the group
    },
  };
-@@ -196,54 +174,6 @@ api.createGroupPlan = {
+@@ -198,54 +176,6 @@ api.createGroupPlan = {
      let results = await Promise.all([user.save(), group.save()]);
      let savedGroup = results[1];
  
@@ -5278,7 +5289,7 @@ index 834a6dfc5..89a22d4fc 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -576,7 +506,6 @@ api.joinGroup = {
+@@ -578,7 +508,6 @@ api.joinGroup = {
      if (group.memberCount === 0) group.leader = user._id; // If new user is only member -> set as leader
  
      if (group.hasNotCancelled())  {
@@ -5286,7 +5297,7 @@ index 834a6dfc5..89a22d4fc 100644
        await group.updateGroupPlan();
      }
  
-@@ -629,22 +558,6 @@ api.joinGroup = {
+@@ -631,22 +560,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -5309,7 +5320,7 @@ index 834a6dfc5..89a22d4fc 100644
      res.respond(200, response);
    },
  };
-@@ -771,7 +684,7 @@ api.leaveGroup = {
+@@ -773,7 +686,7 @@ api.leaveGroup = {
      }
  
      await group.leave(user, req.query.keep, req.body.keepChallenges);
@@ -5318,7 +5329,7 @@ index 834a6dfc5..89a22d4fc 100644
      _removeMessagesFromMember(user, group._id);
      await user.save();
  
-@@ -780,11 +693,6 @@ api.leaveGroup = {
+@@ -782,11 +695,6 @@ api.leaveGroup = {
        user.guilds.splice(guildIndex, 1);
      }
  
@@ -5330,7 +5341,7 @@ index 834a6dfc5..89a22d4fc 100644
      res.respond(200, {});
    },
  };
-@@ -872,8 +780,7 @@ api.removeGroupMember = {
+@@ -874,8 +782,7 @@ api.removeGroupMember = {
      if (isInGroup) {
        group.memberCount -= 1;
        if (group.hasNotCancelled())  {
@@ -5340,7 +5351,7 @@ index 834a6dfc5..89a22d4fc 100644
        }
  
        if (group.quest && group.quest.leader === member._id) {
-@@ -889,12 +796,6 @@ api.removeGroupMember = {
+@@ -891,12 +798,6 @@ api.removeGroupMember = {
          removeFromArray(member.guilds, group._id);
        }
        if (isInGroup === 'party') {
@@ -5353,7 +5364,7 @@ index 834a6dfc5..89a22d4fc 100644
          member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
        }
  
-@@ -995,19 +896,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -997,19 +898,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -5373,7 +5384,7 @@ index 834a6dfc5..89a22d4fc 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1023,8 +911,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1025,8 +913,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},

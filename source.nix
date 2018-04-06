@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.35.1";
+  version = "4.36.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "05ks2kzibqkkgkbmyv7r71vb3php23ibk2xpmd3ss4kabm1w79kc";
+    sha256 = "06vfcwicndpqj6dhd1q7dv992018j7n9ml7y0lrgjs9wn393byfg";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -140,12 +140,9 @@ stdenv.mkDerivation rec {
     # Fix up the one and only client:e2e test.
     patches/fix-client-e2e-test.patch
 
-  ] ++ lib.singleton (fetchpatch {
-    # Fix challenge count check in paging tests
-    url = "https://github.com/HabitRPG/habitica/commit/"
-        + "ed607d2bae6512c88fdd93436429bf91ad41df96.patch";
-    sha256 = "0lrs5ggb4g0rh6n1zvq8qw440kk75dvpwrvdinkn846mpcvlgs8h";
-  });
+    # Remove Twitter reference and URL so our canary test passes.
+    patches/no-twitter-in-news.patch
+  ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
 
@@ -166,6 +163,9 @@ stdenv.mkDerivation rec {
     "test/api/v3/unit/libs/pushNotifications.js"
     "test/api/v3/unit/libs/slack.js"
     "test/api/v3/unit/middlewares/analytics.test.js"
+    "website/client/components/auth/authForm.vue"
+    "website/client/components/group-plans/createGroupModalPages.vue"
+    "website/client/components/group-plans/groupPlanOverviewModal.vue"
     "website/client/components/groups/communityGuidelines.vue"
     "website/client/components/payments/amazonModal.vue"
     "website/client/components/payments/buyGemsModal.vue"
@@ -219,6 +219,7 @@ stdenv.mkDerivation rec {
     "analytics"
     "apple"
     "communityguidelines"
+    "credit.\\?card"
     "facebook"
     "fcm"
     "gcm"
