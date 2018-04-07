@@ -1,0 +1,334 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Sat Apr 7 03:03:48 2018 +0200
+
+    Don't censor chat messages
+    
+    There are banned words and slurs that aren't allowed in public chats,
+    but our version isn't public, so no need to censor anything.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: no-censorship.patch
+
+diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
+index e8ced52ac..fa96b1c8e 100644
+--- a/test/api/v3/integration/chat/POST-chat.test.js
++++ b/test/api/v3/integration/chat/POST-chat.test.js
+@@ -11,19 +11,10 @@ import {
+   TAVERN_ID,
+ } from '../../../../../website/server/models/group';
+ import { v4 as generateUUID } from 'uuid';
+-import { getMatchesByWordArray, removePunctuationFromString } from '../../../../../website/server/libs/stringUtils';
+-import bannedWords from '../../../../../website/server/libs/bannedWords';
+-import guildsAllowingBannedWords from '../../../../../website/server/libs/guildsAllowingBannedWords';
+-import * as email from '../../../../../website/server/libs/email';
+ 
+ describe('POST /chat', () => {
+   let user, groupWithChat, member, additionalMember;
+   let testMessage = 'Test Message';
+-  let testBannedWordMessage = 'TESTPLACEHOLDERSWEARWORDHERE';
+-  let testSlurMessage = 'message with TESTPLACEHOLDERSLURWORDHERE';
+-  let bannedWordErrorMessage = t('bannedWordUsed').split('.');
+-  bannedWordErrorMessage[0] += ` (${removePunctuationFromString(testBannedWordMessage.toLowerCase())})`;
+-  bannedWordErrorMessage = bannedWordErrorMessage.join('.');
+ 
+   before(async () => {
+     let { group, groupLeader, members } = await createAndPopulateGroup({
+@@ -84,199 +75,6 @@ describe('POST /chat', () => {
+     });
+   });
+ 
+-  context('banned word', () => {
+-    it('returns an error when chat message contains a banned word in tavern', async () => {
+-      await expect(user.post('/groups/habitrpg/chat', { message: testBannedWordMessage}))
+-        .to.eventually.be.rejected.and.eql({
+-          code: 400,
+-          error: 'BadRequest',
+-          message: bannedWordErrorMessage,
+-        });
+-    });
+-
+-    it('returns an error when chat message contains a banned word in a public guild', async () => {
+-      let { group, members } = await createAndPopulateGroup({
+-        groupDetails: {
+-          name: 'public guild',
+-          type: 'guild',
+-          privacy: 'public',
+-        },
+-        members: 1,
+-      });
+-
+-      await expect(members[0].post(`/groups/${group._id}/chat`, { message: testBannedWordMessage}))
+-        .to.eventually.be.rejected.and.eql({
+-          code: 400,
+-          error: 'BadRequest',
+-          message: bannedWordErrorMessage,
+-        });
+-    });
+-
+-    it('errors when word is part of a phrase', async () => {
+-      let wordInPhrase = `phrase ${testBannedWordMessage} end`;
+-      await expect(user.post('/groups/habitrpg/chat', { message: wordInPhrase}))
+-        .to.eventually.be.rejected.and.eql({
+-          code: 400,
+-          error: 'BadRequest',
+-          message: bannedWordErrorMessage,
+-        });
+-    });
+-
+-    it('errors when word is surrounded by non alphabet characters', async () => {
+-      let wordInPhrase = `_!${testBannedWordMessage}@_`;
+-      await expect(user.post('/groups/habitrpg/chat', { message: wordInPhrase}))
+-        .to.eventually.be.rejected.and.eql({
+-          code: 400,
+-          error: 'BadRequest',
+-          message: bannedWordErrorMessage,
+-        });
+-    });
+-
+-    it('checks error message has the banned words used', async () => {
+-      let randIndex = Math.floor(Math.random() * (bannedWords.length + 1));
+-      let testBannedWords = bannedWords.slice(randIndex, randIndex + 2).map((w) => w.replace(/\\/g, ''));
+-      let chatMessage = `Mixing ${testBannedWords[0]} and ${testBannedWords[1]} is bad for you.`;
+-      await expect(user.post('/groups/habitrpg/chat', { message: chatMessage}))
+-        .to.eventually.be.rejected
+-        .and.have.property('message')
+-        .that.includes(testBannedWords.join(', '));
+-    });
+-
+-    it('check all banned words are matched', async () => {
+-      let message = bannedWords.join(',').replace(/\\/g, '');
+-      let matches = getMatchesByWordArray(message, bannedWords);
+-      expect(matches.length).to.equal(bannedWords.length);
+-    });
+-
+-    it('does not error when bad word is suffix of a word', async () => {
+-      let wordAsSuffix = `prefix${testBannedWordMessage}`;
+-      let message = await user.post('/groups/habitrpg/chat', { message: wordAsSuffix});
+-
+-      expect(message.message.id).to.exist;
+-    });
+-
+-    it('does not error when bad word is prefix of a word', async () => {
+-      let wordAsPrefix = `${testBannedWordMessage}suffix`;
+-      let message = await user.post('/groups/habitrpg/chat', { message: wordAsPrefix});
+-
+-      expect(message.message.id).to.exist;
+-    });
+-
+-    it('does not error when sending a chat message containing a banned word to a party', async () => {
+-      let { group, members } = await createAndPopulateGroup({
+-        groupDetails: {
+-          name: 'Party',
+-          type: 'party',
+-          privacy: 'private',
+-        },
+-        members: 1,
+-      });
+-
+-      let message = await members[0].post(`/groups/${group._id}/chat`, { message: testBannedWordMessage});
+-
+-      expect(message.message.id).to.exist;
+-    });
+-
+-    it('does not error when sending a chat message containing a banned word to a public guild in which banned words are allowed', async () => {
+-      let { group, members } = await createAndPopulateGroup({
+-        groupDetails: {
+-          name: 'public guild',
+-          type: 'guild',
+-          privacy: 'public',
+-        },
+-        members: 1,
+-      });
+-
+-      guildsAllowingBannedWords[group._id] = true;
+-
+-      let message = await members[0].post(`/groups/${group._id}/chat`, { message: testBannedWordMessage});
+-
+-      expect(message.message.id).to.exist;
+-    });
+-
+-    it('does not error when sending a chat message containing a banned word to a private guild', async () => {
+-      let { group, members } = await createAndPopulateGroup({
+-        groupDetails: {
+-          name: 'private guild',
+-          type: 'guild',
+-          privacy: 'private',
+-        },
+-        members: 1,
+-      });
+-
+-      let message = await members[0].post(`/groups/${group._id}/chat`, { message: testBannedWordMessage});
+-
+-      expect(message.message.id).to.exist;
+-    });
+-  });
+-
+-  context('banned slur', () => {
+-    beforeEach(() => {
+-      sandbox.spy(email, 'sendTxn');
+-    });
+-
+-    afterEach(() => {
+-      sandbox.restore();
+-    });
+-
+-    it('errors and revokes privileges when chat message contains a banned slur', async () => {
+-      await expect(user.post(`/groups/${groupWithChat._id}/chat`, { message: testSlurMessage})).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: t('bannedSlurUsed'),
+-      });
+-
+-      // Email sent to mods
+-      await sleep(0.5);
+-      expect(email.sendTxn).to.be.calledOnce;
+-      expect(email.sendTxn.args[0][1]).to.eql('slur-report-to-mods');
+-
+-      // Chat privileges are revoked
+-      await expect(user.post(`/groups/${groupWithChat._id}/chat`, { message: testMessage})).to.eventually.be.rejected.and.eql({
+-        code: 401,
+-        error: 'NotAuthorized',
+-        message: t('chatPrivilegesRevoked'),
+-      });
+-
+-      // Restore chat privileges to continue testing
+-      user.flags.chatRevoked = false;
+-      await user.update({'flags.chatRevoked': false});
+-    });
+-
+-    it('does not allow slurs in private groups', async () => {
+-      let { group, members } = await createAndPopulateGroup({
+-        groupDetails: {
+-          name: 'Party',
+-          type: 'party',
+-          privacy: 'private',
+-        },
+-        members: 1,
+-      });
+-
+-      await expect(members[0].post(`/groups/${group._id}/chat`, { message: testSlurMessage})).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: t('bannedSlurUsed'),
+-      });
+-
+-      // Email sent to mods
+-      await sleep(0.5);
+-      expect(email.sendTxn).to.be.calledThrice;
+-      expect(email.sendTxn.args[2][1]).to.eql('slur-report-to-mods');
+-
+-      // Chat privileges are revoked
+-      await expect(members[0].post(`/groups/${groupWithChat._id}/chat`, { message: testMessage})).to.eventually.be.rejected.and.eql({
+-        code: 401,
+-        error: 'NotAuthorized',
+-        message: t('chatPrivilegesRevoked'),
+-      });
+-
+-      // Restore chat privileges to continue testing
+-      members[0].flags.chatRevoked = false;
+-      await members[0].update({'flags.chatRevoked': false});
+-    });
+-  });
+-
+   it('does not error when sending a message to a private guild with a user with revoked chat', async () => {
+     let { group, members } = await createAndPopulateGroup({
+       groupDetails: {
+diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
+index d90b51324..a3d44dd16 100644
+--- a/website/server/controllers/api-v3/chat.js
++++ b/website/server/controllers/api-v3/chat.js
+@@ -2,7 +2,6 @@ import { authWithHeaders } from '../../middlewares/auth';
+ import { model as Group } from '../../models/group';
+ import { model as User } from '../../models/user';
+ import {
+-  BadRequest,
+   NotFound,
+   NotAuthorized,
+ } from '../../libs/errors';
+@@ -12,10 +11,6 @@ import { getUserInfo, getGroupUrl, sendTxn } from '../../libs/email';
+ import { getAuthorEmailFromMessage } from '../../libs/chat';
+ import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
+ import nconf from 'nconf';
+-import bannedWords from '../../libs/bannedWords';
+-import guildsAllowingBannedWords from '../../libs/guildsAllowingBannedWords';
+-import { getMatchesByWordArray } from '../../libs/stringUtils';
+-import bannedSlurs from '../../libs/bannedSlurs';
+ 
+ const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
+   return { email, canSend: true };
+@@ -38,11 +33,6 @@ const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
+ 
+ let api = {};
+ 
+-function textContainsBannedSlur (message) {
+-  let bannedSlursMatched = getMatchesByWordArray(message, bannedSlurs);
+-  return bannedSlursMatched.length > 0;
+-}
+-
+ /**
+  * @api {get} /api/v3/groups/:groupId/chat Get chat messages from a group
+  * @apiName GetChat
+@@ -75,10 +65,6 @@ api.getChat = {
+   },
+ };
+ 
+-function getBannedWordsFromText (message) {
+-  return getMatchesByWordArray(message, bannedWords);
+-}
+-
+ /**
+  * @api {post} /api/v3/groups/:groupId/chat Post chat message to a group
+  * @apiName PostChat
+@@ -111,52 +97,11 @@ api.postChat = {
+ 
+     let group = await Group.getGroup({user, groupId});
+ 
+-    // Check message for banned slurs
+-    if (textContainsBannedSlur(req.body.message)) {
+-      let message = req.body.message;
+-      user.flags.chatRevoked = true;
+-      await user.save();
+-
+-      // Email the mods
+-      let authorEmail = getUserInfo(user, ['email']).email;
+-      let groupUrl = getGroupUrl(group);
+-
+-      let report =  [
+-        {name: 'MESSAGE_TIME', content: (new Date()).toString()},
+-        {name: 'MESSAGE_TEXT', content: message},
+-
+-        {name: 'AUTHOR_USERNAME', content: user.profile.name},
+-        {name: 'AUTHOR_UUID', content: user._id},
+-        {name: 'AUTHOR_EMAIL', content: authorEmail},
+-        {name: 'AUTHOR_MODAL_URL', content: `/static/front/#?memberId=${user._id}`},
+-
+-        {name: 'GROUP_NAME', content: group.name},
+-        {name: 'GROUP_TYPE', content: group.type},
+-        {name: 'GROUP_ID', content: group._id},
+-        {name: 'GROUP_URL', content: groupUrl},
+-      ];
+-
+-      sendTxn(FLAG_REPORT_EMAILS, 'slur-report-to-mods', report);
+-
+-      throw new BadRequest(res.t('bannedSlurUsed'));
+-    }
+-
+     if (!group) throw new NotFound(res.t('groupNotFound'));
+     if (group.privacy !== 'private' && user.flags.chatRevoked) {
+       throw new NotAuthorized(res.t('chatPrivilegesRevoked'));
+     }
+ 
+-    // prevent banned words being posted, except in private guilds/parties and in certain public guilds with specific topics
+-    if (group.privacy !== 'private' && !guildsAllowingBannedWords[group._id]) {
+-      let matchedBadWords = getBannedWordsFromText(req.body.message);
+-      if (matchedBadWords.length > 0) {
+-        // @TODO replace this split mechanism with something that works properly in translations
+-        let message = res.t('bannedWordUsed').split('.');
+-        message[0] += ` (${matchedBadWords.join(', ')})`;
+-        throw new BadRequest(message.join('.'));
+-      }
+-    }
+-
+     let lastClientMsg = req.query.previousMsg;
+     chatUpdated = lastClientMsg && group.chat && group.chat[0] && group.chat[0].id !== lastClientMsg ? true : false;
+ 

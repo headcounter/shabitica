@@ -145,6 +145,9 @@ stdenv.mkDerivation rec {
 
     # Remove "Promo Code" and "Subscriptions" in settings page.
     patches/remove-unneeded-settings.patch
+
+    # Don't censor bad words and slurs in chat messages.
+    patches/no-censorship.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -192,7 +195,10 @@ stdenv.mkDerivation rec {
     "website/server/libs/analyticsService.js"
     "website/server/libs/applePayments.js"
     "website/server/libs/aws.js"
+    "website/server/libs/bannedSlurs.js"
+    "website/server/libs/bannedWords.js"
     "website/server/libs/googlePayments.js"
+    "website/server/libs/guildsAllowingBannedWords.js"
     "website/server/libs/inAppPurchases.js"
     "website/server/libs/paypalPayments.js"
     "website/server/libs/pushNotifications.js"
@@ -221,6 +227,7 @@ stdenv.mkDerivation rec {
     "amz"
     "analytics"
     "apple"
+    "banned"
     "communityguidelines"
     "credit.\\?card"
     "facebook"
