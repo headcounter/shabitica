@@ -8,6 +8,26 @@ Date:   Sat Apr 7 01:42:11 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: remove-unneeded-settings.patch
 
+diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
+index 21b6693c1..474acc64e 100644
+--- a/website/client/components/header/userDropdown.vue
++++ b/website/client/components/header/userDropdown.vue
+@@ -16,15 +16,7 @@ menu-dropdown.item-user(:right="true")
+     a.dropdown-item(@click='showProfile("achievements")') {{ $t('achievements') }}
+     a.dropdown-item.dropdown-separated(@click='showProfile("profile")') {{ $t('profile') }}
+     router-link.dropdown-item(:to="{name: 'site'}") {{ $t('settings') }}
+-    router-link.dropdown-item.dropdown-separated(:to="{name: 'subscription'}") {{ $t('subscription') }}
+     a.nav-link.dropdown-item.dropdown-separated(@click.prevent='logout()') {{ $t('logout') }}
+-    li(v-if='!this.user.purchased.plan.customerId', @click='showBuyGemsModal("subscribe")')
+-      .dropdown-item.text-center
+-        h3.purple {{ $t('needMoreGems') }}
+-        span.small-text {{ $t('needMoreGemsInfo') }}
+-      img.float-left.align-self-end(src='~assets/images/gem-rain.png')
+-      button.btn.btn-primary.btn-lg.learn-button Learn More
+-      img.float-right.align-self-end(src='~assets/images/gold-rain.png')
+ </template>
+ 
+ <style lang='scss' scoped>
 diff --git a/website/client/components/settings/index.vue b/website/client/components/settings/index.vue
 index 68366e110..9f8b08f3f 100644
 --- a/website/client/components/settings/index.vue
