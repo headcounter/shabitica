@@ -1,0 +1,54 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Sat Apr 7 01:42:11 2018 +0200
+
+    Remove "Promo Code" + "Subscription" from settings
+    
+    With free subscriptions for all, we don't need these tabs.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: remove-unneeded-settings.patch
+
+diff --git a/website/client/components/settings/index.vue b/website/client/components/settings/index.vue
+index 68366e110..9f8b08f3f 100644
+--- a/website/client/components/settings/index.vue
++++ b/website/client/components/settings/index.vue
+@@ -4,8 +4,6 @@
+     router-link.nav-link(:to="{name: 'site'}", exact, :class="{'active': $route.name === 'site'}") {{ $t('site') }}
+     router-link.nav-link(:to="{name: 'api'}", :class="{'active': $route.name === 'api'}") {{ $t('API') }}
+     router-link.nav-link(:to="{name: 'dataExport'}", :class="{'active': $route.name === 'dataExport'}") {{ $t('dataExport') }}
+-    router-link.nav-link(:to="{name: 'promoCode'}", :class="{'active': $route.name === 'promoCode'}") {{ $t('promoCode') }}
+-    router-link.nav-link(:to="{name: 'subscription'}", :class="{'active': $route.name === 'subscription'}") {{ $t('subscription') }}
+     router-link.nav-link(:to="{name: 'notifications'}", :class="{'active': $route.name === 'notifications'}") {{ $t('notifications') }}
+ 
+   .col-12
+diff --git a/website/client/router.js b/website/client/router.js
+index 3bae954e9..ca7c202d9 100644
+--- a/website/client/router.js
++++ b/website/client/router.js
+@@ -32,9 +32,7 @@ const Settings = () => import(/* webpackChunkName: "settings" */'./components/se
+ const API = () => import(/* webpackChunkName: "settings" */'./components/settings/api');
+ const DataExport = () => import(/* webpackChunkName: "settings" */'./components/settings/dataExport');
+ const Notifications = () => import(/* webpackChunkName: "settings" */'./components/settings/notifications');
+-const PromoCode = () => import(/* webpackChunkName: "settings" */'./components/settings/promoCode');
+ const Site = () => import(/* webpackChunkName: "settings" */'./components/settings/site');
+-const Subscription = () => import(/* webpackChunkName: "settings" */'./components/settings/subscription');
+ 
+ // Hall
+ const HallPage = () => import(/* webpackChunkName: "hall" */'./components/hall/index');
+@@ -214,16 +212,6 @@ const router = new VueRouter({
+               path: 'data-export',
+               component: DataExport,
+             },
+-            {
+-              name: 'promoCode',
+-              path: 'promo-code',
+-              component: PromoCode,
+-            },
+-            {
+-              name: 'subscription',
+-              path: 'subscription',
+-              component: Subscription,
+-            },
+             {
+               name: 'notifications',
+               path: 'notifications',

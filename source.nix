@@ -142,6 +142,9 @@ stdenv.mkDerivation rec {
 
     # Remove Twitter reference and URL so our canary test passes.
     patches/no-twitter-in-news.patch
+
+    # Remove "Promo Code" and "Subscriptions" in settings page.
+    patches/remove-unneeded-settings.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
