@@ -266,10 +266,12 @@ stdenv.mkDerivation rec {
   # These are for changed function arguments, because we don't want to miss
   # these in future upstream updates. Use 'find-canaries.py' to find these.
   functionCanaries = [
+    "BuyArmoireOperation([^,]*,[^,)]*,"
+    "BuyHealthPotionOperation([^,]*,[^,)]*,"
     "BuyMarketGearOperation([^,]*,[^,)]*,"
     "buy([^,]*,[^,)]*,"
     "buyArmoire([^,]*,[^,)]*,"
-    "buyGems([^,]*,[^,)]*,"
+    "buyGear([^,]*,[^,)]*,"
     "buyGems([^,]*,[^,]*,[^,)]*,"
     "buyHealthPotion([^,]*,[^,)]*,"
     "buyMysterySet([^,]*,[^,)]*,"
@@ -277,8 +279,10 @@ stdenv.mkDerivation rec {
     "buySpecialSpell([^,]*,[^,)]*,"
     "changeClass([^,]*,[^,)]*,"
     "cron([^,]*,[^,]*,[^,]*,[^,]*,[^,]*,[^,)]*,"
+    "cronOverride([^,]*,[^,]*,[^,)]*,"
     "hourglassPurchase([^,]*,[^,)]*,"
     "openMysteryItem([^,]*,[^,)]*,"
+    "purchase([^,]*,[^,]*,[^,)]*,"
     "purchaseOp([^,]*,[^{,)]*,"
     "rebirth([^,]*,[^,]*,[^,)]*,"
     "releaseBoth([^,]*,[^,)]*,"
@@ -288,7 +292,7 @@ stdenv.mkDerivation rec {
     "revive([^,]*,[^,)]*,"
     "sleep([^,]*,[^,)]*,"
     "unlock([^,]*,[^,)]*,"
-    "updateGroupPlan([^)]"
+    "updateGroupPlan([^)]" # FIXME: Not detected yet by find-canaries.py
     "updateStats([^,]*,[^,)]*,"
   ];
 
