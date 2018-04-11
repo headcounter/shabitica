@@ -13,6 +13,30 @@ Date:   Tue Mar 27 05:37:09 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: subscriptions4all.patch
 
+diff --git a/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js b/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
+index 19e8deaf1..22bbafc22 100644
+--- a/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
++++ b/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
+@@ -114,7 +114,7 @@ describe('POST /challenges/:challengeId/winner/:winnerId', () => {
+       await expect(winningUser.sync()).to.eventually.have.property('balance', oldBalance + challenge.prize / 4);
+     });
+ 
+-    it('doesn\'t gives winner gems if group policy prevents it', async () => {
++    it('gives winner gems even if group policy prevents it', async () => {
+       let oldBalance = winningUser.balance;
+       let oldLeaderBalance = (await groupLeader.sync()).balance;
+ 
+@@ -130,8 +130,8 @@ describe('POST /challenges/:challengeId/winner/:winnerId', () => {
+ 
+       await sleep(0.5);
+ 
+-      await expect(winningUser.sync()).to.eventually.have.property('balance', oldBalance);
+-      await expect(groupLeader.sync()).to.eventually.have.property('balance', oldLeaderBalance + challenge.prize / 4);
++      await expect(winningUser.sync()).to.eventually.have.property('balance', oldBalance + challenge.prize / 4);
++      await expect(groupLeader.sync()).to.eventually.have.property('balance', oldLeaderBalance);
+     });
+ 
+     it('doesn\'t refund gems to group leader', async () => {
 diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
 index a5fc40cfe..bff380dad 100644
 --- a/test/api/v3/integration/user/DELETE-user.test.js
@@ -38,10 +62,18 @@ index a5fc40cfe..bff380dad 100644
  
      it('deletes the user\'s tasks', async () => {
 diff --git a/test/api/v3/integration/user/POST-user_purchase.test.js b/test/api/v3/integration/user/POST-user_purchase.test.js
-index b1d374925..b803a7643 100644
+index b1d374925..9160226c5 100644
 --- a/test/api/v3/integration/user/POST-user_purchase.test.js
 +++ b/test/api/v3/integration/user/POST-user_purchase.test.js
-@@ -17,15 +17,6 @@ describe('POST /user/purchase/:type/:key', () => {
+@@ -1,7 +1,6 @@
+ import {
+   generateUser,
+   createAndPopulateGroup,
+-  translate as t,
+ } from '../../../../helpers/api-integration/v3';
+ 
+ describe('POST /user/purchase/:type/:key', () => {
+@@ -17,15 +16,6 @@ describe('POST /user/purchase/:type/:key', () => {
  
    // More tests in common code unit tests
  
@@ -57,6 +89,33 @@ index b1d374925..b803a7643 100644
    it('purchases a gem item', async () => {
      await user.post(`/user/purchase/${type}/${key}`);
      await user.sync();
+@@ -69,7 +59,7 @@ describe('POST /user/purchase/:type/:key', () => {
+     expect(groupLeader.balance).to.equal(oldBalance + 0.25);
+   });
+ 
+-  it('cannot convert gold to gems if the group plan prevents it', async () => {
++  it('can convert gold to gems even if the group plan prevents it', async () => {
+     let { group, members } = await createAndPopulateGroup({
+       groupDetails: {
+         name: 'test',
+@@ -88,15 +78,10 @@ describe('POST /user/purchase/:type/:key', () => {
+       'purchased.plan.customerId': 'group-plan',
+       'stats.gp': 1000,
+     });
+-    await expect(members[0].post('/user/purchase/gems/gem'))
+-      .to.eventually.be.rejected.and.eql({
+-        code: 401,
+-        error: 'NotAuthorized',
+-        message: t('groupPolicyCannotGetGems'),
+-      });
++    await members[0].post('/user/purchase/gems/gem');
+ 
+     await members[0].sync();
+-    expect(members[0].balance).to.equal(oldBalance);
++    expect(members[0].balance).to.equal(oldBalance + 0.25);
+   });
+ 
+   describe('bulk purchasing', () => {
 diff --git a/test/api/v3/unit/libs/payments.test.js b/test/api/v3/unit/libs/payments.test.js
 index c46484a59..05ffc35aa 100644
 --- a/test/api/v3/unit/libs/payments.test.js
