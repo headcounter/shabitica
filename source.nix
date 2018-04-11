@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.36.0";
+  version = "4.37.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "06vfcwicndpqj6dhd1q7dv992018j7n9ml7y0lrgjs9wn393byfg";
+    sha256 = "0kj3myl8nf46sbxlnxiyvlvqryv8804mlhvhrvgm5v7myzig1iy7";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -139,9 +139,6 @@ stdenv.mkDerivation rec {
 
     # Fix up the one and only client:e2e test.
     patches/fix-client-e2e-test.patch
-
-    # Remove Twitter reference and URL so our canary test passes.
-    patches/no-twitter-in-news.patch
 
     # Remove "Promo Code" and "Subscriptions" in settings page.
     patches/remove-unneeded-settings.patch
@@ -350,6 +347,7 @@ stdenv.mkDerivation rec {
       | grep -v 'user/methods\.js:schema\.statics\.pushNotification' \
       | grep -v 'api-v3/groups.js:.*payments' \
       | grep -v 'libs/bannedSlurs.js://.*socialites' \
+      | grep -v 'news.js:.*Social.Media.Challenge' \
       || :)"
 
     if [ -n "$extServicesWithoutFalsePositives" ]; then
