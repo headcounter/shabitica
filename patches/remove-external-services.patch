@@ -227,7 +227,7 @@ index 3069c245f..e8ced52ac 100644
        await expect(members[0].post(`/groups/${groupWithChat._id}/chat`, { message: testMessage})).to.eventually.be.rejected.and.eql({
          code: 401,
 diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
-index 2a21a1d61..bff380dad 100644
+index ea9b79f92..a5fc40cfe 100644
 --- a/test/api/v3/integration/user/DELETE-user.test.js
 +++ b/test/api/v3/integration/user/DELETE-user.test.js
 @@ -17,8 +17,6 @@ import {
@@ -239,7 +239,7 @@ index 2a21a1d61..bff380dad 100644
  describe('DELETE /user', () => {
    let user;
    let password = 'password'; // from habitrpg/test/helpers/api-integration/v3/object-generators.js
-@@ -286,62 +284,4 @@ describe('DELETE /user', () => {
+@@ -289,62 +287,4 @@ describe('DELETE /user', () => {
        });
      });
    });
@@ -4741,7 +4741,7 @@ index bbe4a7910..d89c3e920 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 0ed9cdce4..34b3849a8 100644
+index ae62382f4..5ec7b56c3 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -1,6 +1,5 @@
@@ -4800,7 +4800,7 @@ index 0ed9cdce4..34b3849a8 100644
  
      req.checkBody({
        email: {
-@@ -160,19 +145,8 @@ api.registerLocal = {
+@@ -153,19 +138,8 @@ api.registerLocal = {
        },
      };
  
@@ -4822,7 +4822,7 @@ index 0ed9cdce4..34b3849a8 100644
  
      // we check for partyInvite for backward compatibility
      if (req.query.groupInvite || req.query.partyInvite) {
-@@ -196,17 +170,6 @@ api.registerLocal = {
+@@ -189,17 +163,6 @@ api.registerLocal = {
          if (!existingUser) sendTxnEmail(savedUser, 'welcome');
        });
  
@@ -4840,7 +4840,7 @@ index 0ed9cdce4..34b3849a8 100644
      return null;
    },
  };
-@@ -279,173 +242,10 @@ api.loginLocal = {
+@@ -272,173 +235,10 @@ api.loginLocal = {
        await user.save();
      }
  
@@ -5014,7 +5014,7 @@ index 0ed9cdce4..34b3849a8 100644
  /**
   * @api {put} /api/v3/user/auth/update-username Update username
   * @apiDescription Update the username of a local user
-@@ -699,33 +499,4 @@ api.resetPasswordSetNewOne = {
+@@ -692,33 +492,4 @@ api.resetPasswordSetNewOne = {
    },
  };
  
@@ -6738,3 +6738,20 @@ index 1f8712fef..e85f1e7cc 100644
    return await payments.cancelSubscription(options);
  };
  
+diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
+index 35c61bea8..7764c35d2 100644
+--- a/website/server/models/user/schema.js
++++ b/website/server/models/user/schema.js
+@@ -25,12 +25,6 @@ let schema = new Schema({
+ 
+   auth: {
+     blocked: Boolean,
+-    facebook: {type: Schema.Types.Mixed, default: () => {
+-      return {};
+-    }},
+-    google: {type: Schema.Types.Mixed, default: () => {
+-      return {};
+-    }},
+     local: {
+       email: {
+         type: String,

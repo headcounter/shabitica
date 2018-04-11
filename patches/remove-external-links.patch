@@ -129,10 +129,10 @@ index 801619aad..083ebbb4c 100644
    }
  }
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 51f8e2864..1aef16677 100644
+index 25e4c5a24..6bf0fff77 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
-@@ -116,7 +116,6 @@ let schema = new Schema({
+@@ -110,7 +110,6 @@ let schema = new Schema({
    },
  
    contributor: {

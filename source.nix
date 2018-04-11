@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
 
   patches = [
+    # Remove payment, analytics and other external services.
+    patches/remove-external-services.patch
+
     # Remove all unneeded dependencies (eg. to external services and payment)
     patches/strip-dependencies.patch
 
@@ -30,9 +33,6 @@ stdenv.mkDerivation rec {
 
     # Everybody gets a lifetime subscription.
     patches/subscriptions4all.patch
-
-    # Remove payment, analytics and other external services.
-    patches/remove-external-services.patch
 
     # Don't allow anonymous users to register, we only want to invite people.
     patches/invite-only.patch
@@ -353,16 +353,11 @@ stdenv.mkDerivation rec {
       --subst-var-by HABITICA_VERSION "$version"
 
     extServicesWithoutFalsePositives="$(echo "$extServices" \
-      | grep -v 'user/schema\.js:.*\(facebook\|google\)' \
-      | grep -v 'user/methods\.js:.*\<payments\>' \
-      | grep -v 'models/group\.js:.*\<payments\>' \
-      | grep -v 'settings/api\.vue:.*chrome\.google\.com/webstore' \
       | grep -v 'top-level/pages\.js:// All' \
       | grep -v 'api-v3/tasks\.js: *//.*pushNotif' \
       | grep -v 'user/schema\.js: *pushNotifications:' \
       | grep -v 'user/methods\.js:schema\.statics\.pushNotification' \
       | grep -v 'api-v3/groups.js:.*payments' \
-      | grep -v 'libs/bannedSlurs.js://.*socialites' \
       || :)"
 
     if [ -n "$extServicesWithoutFalsePositives" ]; then
