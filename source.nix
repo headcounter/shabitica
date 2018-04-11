@@ -148,6 +148,10 @@ stdenv.mkDerivation rec {
 
     # Remove everything about and around news.
     patches/remove-news.patch
+
+    # Do not set a timeout for the tests as we already have a timeout mechanism
+    # in Nix.
+    patches/mocha-no-timeout.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
