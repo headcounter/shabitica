@@ -145,6 +145,9 @@ stdenv.mkDerivation rec {
 
     # Don't censor bad words and slurs in chat messages.
     patches/no-censorship.patch
+
+    # Remove everything about and around news.
+    patches/remove-news.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -155,6 +158,8 @@ stdenv.mkDerivation rec {
     rm -r ${lib.escapeShellArg path}
   '') [
     "scripts/paypalBillingSetup.js"
+    "test/api/v3/integration/news/GET-news.test.js"
+    "test/api/v3/integration/news/POST-news_tell_me_later.test.js"
     "test/api/v3/integration/payments"
     "test/api/v3/integration/user/auth/DELETE-user_auth_social_network.test.js"
     "test/api/v3/integration/user/auth/POST-user_auth_pusher.test.js"
@@ -166,10 +171,12 @@ stdenv.mkDerivation rec {
     "test/api/v3/unit/libs/pushNotifications.js"
     "test/api/v3/unit/libs/slack.js"
     "test/api/v3/unit/middlewares/analytics.test.js"
+    "website/client/components/achievements/newStuff.vue"
     "website/client/components/auth/authForm.vue"
     "website/client/components/group-plans/createGroupModalPages.vue"
     "website/client/components/group-plans/groupPlanOverviewModal.vue"
     "website/client/components/groups/communityGuidelines.vue"
+    "website/client/components/header/notifications/newStuff.vue"
     "website/client/components/payments/amazonModal.vue"
     "website/client/components/payments/buyGemsModal.vue"
     "website/client/components/payments/sendGemsModal.vue"
@@ -177,6 +184,7 @@ stdenv.mkDerivation rec {
     "website/client/components/static/contact.vue"
     "website/client/components/static/groupPlans.vue"
     "website/client/components/static/merch.vue"
+    "website/client/components/static/newStuff.vue"
     "website/client/components/static/pressKit.vue"
     "website/client/libs/analytics.js"
     "website/client/libs/logging.js"
@@ -184,6 +192,7 @@ stdenv.mkDerivation rec {
     "website/client/libs/payments.js"
     "website/client/mixins/payments.js"
     "website/server/controllers/api-v3/iap.js"
+    "website/server/controllers/api-v3/news.js"
     "website/server/controllers/top-level/payments/amazon.js"
     "website/server/controllers/top-level/payments/iap.js"
     "website/server/controllers/top-level/payments/paypal.js"
@@ -218,6 +227,7 @@ stdenv.mkDerivation rec {
     "\\<apn"
     "\\<buygemsmodal\\>"
     "\\<merch\\>"
+    "\\<news\\>"
     "\\<payments\\>"
     "\\<sendgemsmodal\\>"
     "amazon"
@@ -237,11 +247,13 @@ stdenv.mkDerivation rec {
     "itunes"
     "kafka"
     "loggly"
+    "newstuff"
     "paypal"
     "play.*api"
     "play.*store"
     "press.\\?kit"
     "pushnotif"
+    "showbailey"
     "slack"
     "social"
     "stripe[^d]"
@@ -347,7 +359,6 @@ stdenv.mkDerivation rec {
       | grep -v 'user/methods\.js:schema\.statics\.pushNotification' \
       | grep -v 'api-v3/groups.js:.*payments' \
       | grep -v 'libs/bannedSlurs.js://.*socialites' \
-      | grep -v 'news.js:.*Social.Media.Challenge' \
       || :)"
 
     if [ -n "$extServicesWithoutFalsePositives" ]; then

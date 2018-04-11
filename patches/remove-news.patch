@@ -1,0 +1,214 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Apr 11 14:32:43 2018 +0200
+
+    Remove everyhing about and around news
+    
+    People can read the upstream news from their blog anyway and most of the
+    time those news are related to community activity that is not related to
+    a standalone instance.
+    
+    This will also make sure that we don't run into any more canaries
+    whenever upstream decides that they need to link to a Twitter URL or
+    announce a new Instagram account.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: remove-news.patch
+
+diff --git a/website/client/components/header/notifications/base.vue b/website/client/components/header/notifications/base.vue
+index fc6bcbaa6..9155977e4 100644
+--- a/website/client/components/header/notifications/base.vue
++++ b/website/client/components/header/notifications/base.vue
+@@ -4,7 +4,7 @@
+ )
+   .notification-icon.d-flex.justify-content-center.align-items-center(
+     v-if="hasIcon",
+-    :class="{'is-not-bailey': isNotBailey}",
++    :class="is-not-bailey",
+   )
+     slot(name="icon")
+   .notification-content
+@@ -131,9 +131,6 @@ export default {
+   },
+   computed: {
+     ...mapState({user: 'user.data'}),
+-    isNotBailey () {
+-      return this.notification.type !== 'NEW_STUFF';
+-    },
+   },
+   methods: {
+     ...mapActions({
+diff --git a/website/client/components/header/notificationsDropdown.vue b/website/client/components/header/notificationsDropdown.vue
+index c7aa8772d..c852b2b95 100644
+--- a/website/client/components/header/notificationsDropdown.vue
++++ b/website/client/components/header/notificationsDropdown.vue
+@@ -79,7 +79,6 @@ import MessageCount from './messageCount';
+ import successImage from 'assets/svg/success.svg';
+ 
+ // Notifications
+-import NEW_STUFF from './notifications/newStuff';
+ import GROUP_TASK_NEEDS_WORK from './notifications/groupTaskNeedsWork';
+ import GUILD_INVITATION from './notifications/guildInvitation';
+ import PARTY_INVITATION from './notifications/partyInvitation';
+@@ -99,7 +98,7 @@ export default {
+     MenuDropdown,
+     MessageCount,
+     // One component for each type
+-    NEW_STUFF, GROUP_TASK_NEEDS_WORK,
++    GROUP_TASK_NEEDS_WORK,
+     GUILD_INVITATION, PARTY_INVITATION, CHALLENGE_INVITATION,
+     QUEST_INVITATION, GROUP_TASK_APPROVAL, GROUP_TASK_APPROVED,
+     UNALLOCATED_STATS_POINTS, NEW_MYSTERY_ITEMS, CARD_RECEIVED,
+@@ -122,7 +121,7 @@ export default {
+       // listed in the order they should appear in the notifications panel.
+       // NOTE: Those not listed here won't be shown in the notification panel!
+       handledNotifications: [
+-        'NEW_STUFF', 'GROUP_TASK_NEEDS_WORK',
++        'GROUP_TASK_NEEDS_WORK',
+         'GUILD_INVITATION', 'PARTY_INVITATION', 'CHALLENGE_INVITATION',
+         'QUEST_INVITATION', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
+         'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
+diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
+index 58ceff56a..a5e0a2e56 100644
+--- a/website/client/components/notifications.vue
++++ b/website/client/components/notifications.vue
+@@ -95,7 +95,6 @@ import guide from 'client/mixins/guide';
+ 
+ import yesterdailyModal from './yesterdailyModal';
+ import welcomeModal from './achievements/welcome';
+-import newStuff from './achievements/newStuff';
+ import death from './achievements/death';
+ import lowHealth from './achievements/lowHealth';
+ import levelUp from './achievements/levelUp';
+@@ -129,7 +128,6 @@ export default {
+     joinedChallenge,
+     invitedFriend,
+     welcomeModal,
+-    newStuff,
+     death,
+     lowHealth,
+     levelUp,
+@@ -421,10 +419,6 @@ export default {
+     async handleUserNotifications (after) {
+       if (this.$store.state.isRunningYesterdailies) return;
+ 
+-      if (this.user.flags.newStuff) {
+-        this.$root.$emit('bv::show::modal', 'new-stuff');
+-      }
+-
+       if (!after || after.length === 0 || !Array.isArray(after)) return;
+ 
+       let notificationsToRead = [];
+diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
+index 29322418d..24dbd32fc 100644
+--- a/website/client/components/settings/site.vue
++++ b/website/client/components/settings/site.vue
+@@ -76,7 +76,6 @@
+ 
+         hr
+ 
+-        button.btn.btn-primary.mr-2.mb-2(@click='showBailey()', popover-trigger='mouseenter', popover-placement='right', :popover="$t('showBaileyPop')") {{ $t('showBailey') }}
+         button.btn.btn-primary.mr-2.mb-2(@click='openRestoreModal()', popover-trigger='mouseenter', popover-placement='right', :popover="$t('fixValPop')") {{ $t('fixVal') }}
+         button.btn.btn-primary.mb-2(v-if='user.preferences.disableClasses == true', @click='changeClassForUser(false)',
+           popover-trigger='mouseenter', popover-placement='right', :popover="$t('enableClassPop')") {{ $t('enableClass') }}
+@@ -282,9 +281,6 @@ export default {
+       // User.set({'flags.showTour':true});
+       // Guide.goto('intro', 0, true);
+     },
+-    showBailey () {
+-      this.$root.$emit('bv::show::modal', 'new-stuff');
+-    },
+     calculateNextCron () {
+       let nextCron = moment().hours(this.newDayStart).minutes(0).seconds(0).milliseconds(0);
+ 
+diff --git a/website/client/components/static/staticWrapper.vue b/website/client/components/static/staticWrapper.vue
+index e5dd03e02..a878ec5b7 100644
+--- a/website/client/components/static/staticWrapper.vue
++++ b/website/client/components/static/staticWrapper.vue
+@@ -1,14 +1,14 @@
+ <template lang="pug">
+ div
+-  static-header(v-if='showContentWrap', :class='{"home-header": ["home", "front"].indexOf($route.name) !== -1, "white-header": this.$route.name === "plans"}')
++  static-header(:class='{"home-header": ["home", "front"].indexOf($route.name) !== -1, "white-header": this.$route.name === "plans"}')
+ 
+   .static-wrapper
+     router-view
+ 
+-  div(:id='footerId', v-if='showContentWrap')
++  div(:id='footerId')
+     app-footer
+ 
+-  #bottom-wrap.purple-4(v-if='showContentWrap && footerId')
++  #bottom-wrap.purple-4(v-if='footerId')
+     #bottom-background
+       .seamless_mountains_demo_repeat
+       .midground_foreground_extended2
+@@ -166,9 +166,6 @@ export default {
+     StaticHeader,
+   },
+   computed: {
+-    showContentWrap () {
+-      return this.$route.name !== 'news';
+-    },
+     footerId () {
+       if (this.$route.name === 'plans') return;
+       return 'purple-footer';
+diff --git a/website/client/router.js b/website/client/router.js
+index ca7c202d9..0e7ccb5bf 100644
+--- a/website/client/router.js
++++ b/website/client/router.js
+@@ -15,7 +15,6 @@ const AppPage = () => import(/* webpackChunkName: "static" */'./components/stati
+ const ClearBrowserDataPage = () => import(/* webpackChunkName: "static" */'./components/static/clearBrowserData');
+ const FAQPage = () => import(/* webpackChunkName: "static" */'./components/static/faq');
+ const FeaturesPage = () => import(/* webpackChunkName: "static" */'./components/static/features');
+-const NewsPage = () => import(/* webpackChunkName: "static" */'./components/static/newStuff');
+ const OverviewPage = () => import(/* webpackChunkName: "static" */'./components/static/overview');
+ const PrivacyPage = () => import(/* webpackChunkName: "static" */'./components/static/privacy');
+ const TermsPage = () => import(/* webpackChunkName: "static" */'./components/static/terms');
+@@ -231,7 +230,6 @@ const router = new VueRouter({
+         { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
+         { name: 'home', path: 'home', component: HomePage, meta: {requiresLogin: false} },
+         { name: 'front', path: 'front', component: HomePage, meta: {requiresLogin: false} },
+-        { name: 'news', path: 'new-stuff', component: NewsPage, meta: {requiresLogin: false}},
+         { name: 'overview', path: 'overview', component: OverviewPage, meta: {requiresLogin: false}},
+         { name: 'privacy', path: 'privacy', component: PrivacyPage, meta: {requiresLogin: false}},
+         { name: 'terms', path: 'terms', component: TermsPage, meta: {requiresLogin: false}},
+diff --git a/website/client/store/actions/user.js b/website/client/store/actions/user.js
+index 809407a63..78c6799c9 100644
+--- a/website/client/store/actions/user.js
++++ b/website/client/store/actions/user.js
+@@ -123,11 +123,6 @@ export function openMysteryItem () {
+   return axios.post('/api/v3/user/open-mystery-item');
+ }
+ 
+-export function newStuffLater (store) {
+-  store.state.user.data.flags.newStuff = false;
+-  return axios.post('/api/v3/news/tell-me-later');
+-}
+-
+ export async function rebirth () {
+   let result = await axios.post('/api/v3/user/rebirth');
+ 
+diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
+index dfc8cc1bc..e0e3b1a21 100644
+--- a/website/server/controllers/api-v3/user.js
++++ b/website/server/controllers/api-v3/user.js
+@@ -184,7 +184,6 @@ let updatablePaths = [
+   'flags.welcomed',
+   'flags.cardReceived',
+   'flags.warnedLowHealth',
+-  'flags.newStuff',
+ 
+   'achievements',
+ 
+diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
+index 1aef16677..aa5920a98 100644
+--- a/website/server/models/user/schema.js
++++ b/website/server/models/user/schema.js
+@@ -202,7 +202,6 @@ let schema = new Schema({
+     },
+     dropsEnabled: {type: Boolean, default: false},
+     itemsEnabled: {type: Boolean, default: false},
+-    newStuff: {type: Boolean, default: false},
+     rewrite: {type: Boolean, default: true},
+     classSelected: {type: Boolean, default: false},
+     mathUpdates: Boolean,
