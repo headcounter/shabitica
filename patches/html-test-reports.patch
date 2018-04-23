@@ -54,7 +54,7 @@ index 000000000..347c750ab
 +  "mochaSimpleHtmlReporterReporterOptions": {"output": "test-report.html"}
 +}
 diff --git a/package.json b/package.json
-index 6e1d3e217..a8d859349 100644
+index d5365c464..664c39b09 100644
 --- a/package.json
 +++ b/package.json
 @@ -108,9 +108,9 @@
@@ -73,7 +73,7 @@ index 6e1d3e217..a8d859349 100644
 @@ -159,6 +159,8 @@
      "karma-webpack": "^3.0.0",
      "lcov-result-merger": "^2.0.0",
-     "mocha": "^5.0.4",
+     "mocha": "^5.0.5",
 +    "mocha-multi-reporters": "^1.1.7",
 +    "mocha-simple-html-reporter": "^1.1.0",
      "monk": "^6.0.5",

@@ -16,10 +16,10 @@ Date:   Fri Mar 30 02:41:52 2018 +0200
     Filename: no-limit-for-gold-to-gems.patch
 
 diff --git a/test/common/ops/buy/purchase.js b/test/common/ops/buy/purchase.js
-index 85658fd7d..69e5ca48a 100644
+index b5ea6f8b7..64bd15d34 100644
 --- a/test/common/ops/buy/purchase.js
 +++ b/test/common/ops/buy/purchase.js
-@@ -65,19 +65,6 @@ describe('shared.ops.purchase', () => {
+@@ -74,19 +74,6 @@ describe('shared.ops.purchase', () => {
        }
      });
  
@@ -150,7 +150,7 @@ index 017101540..8869b09c8 100644
      methods: {
        getClassName (classType) {
 diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index 20e7d28f7..2e2721f42 100644
+index 30de15a6a..9efa057bb 100644
 --- a/website/common/script/ops/buy/purchase.js
 +++ b/website/common/script/ops/buy/purchase.js
 @@ -16,8 +16,6 @@ import getItemInfo from '../../libs/getItemInfo';

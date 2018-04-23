@@ -10,10 +10,10 @@ Date:   Mon Apr 2 07:05:41 2018 +0200
     Filename: always-allow-delete.patch
 
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index b12587609..dfc8cc1bc 100644
+index 903d19efb..b3cae07cf 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -383,7 +383,6 @@ api.deleteUser = {
+@@ -388,7 +388,6 @@ api.deleteUser = {
    url: '/user',
    async handler (req, res) {
      let user = res.locals.user;
@@ -21,7 +21,7 @@ index b12587609..dfc8cc1bc 100644
  
      let password = req.body.password;
      if (!password) throw new BadRequest(res.t('missingPassword'));
-@@ -396,10 +395,6 @@ api.deleteUser = {
+@@ -401,10 +400,6 @@ api.deleteUser = {
      let feedback = req.body.feedback;
      if (feedback && feedback.length > 10000) throw new BadRequest(`Account deletion feedback is limited to 10,000 characters. For lengthy feedback, email ${TECH_ASSISTANCE_EMAIL}.`);
  

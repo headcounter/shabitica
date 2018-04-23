@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.37.0";
+  version = "4.38.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0kj3myl8nf46sbxlnxiyvlvqryv8804mlhvhrvgm5v7myzig1iy7";
+    sha256 = "1zfhrnxz240blq1a0zs2rg8hlmi88iyi1p54dv11yrglv1g69mxd";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -169,14 +169,18 @@ stdenv.mkDerivation rec {
     "test/api/v3/integration/user/auth/POST-user_auth_pusher.test.js"
     "test/api/v3/integration/user/auth/POST-user_auth_social.test.js"
     "test/api/v3/unit/libs/analyticsService.test.js"
-    "test/api/v3/unit/libs/applePayments.test.js"
-    "test/api/v3/unit/libs/googlePayments.test.js"
-    "test/api/v3/unit/libs/payments"
+    "test/api/v3/unit/libs/payments/amazon"
+    "test/api/v3/unit/libs/payments/apple.test.js"
+    "test/api/v3/unit/libs/payments/google.test.js"
+    "test/api/v3/unit/libs/payments/group-plans"
+    "test/api/v3/unit/libs/payments/paypal"
+    "test/api/v3/unit/libs/payments/stripe"
     "test/api/v3/unit/libs/pushNotifications.js"
     "test/api/v3/unit/libs/slack.js"
     "test/api/v3/unit/middlewares/analytics.test.js"
     "website/client/components/achievements/newStuff.vue"
     "website/client/components/auth/authForm.vue"
+    "website/client/components/bannedAccountModal.vue"
     "website/client/components/group-plans/createGroupModalPages.vue"
     "website/client/components/group-plans/groupPlanOverviewModal.vue"
     "website/client/components/groups/communityGuidelines.vue"
@@ -201,21 +205,21 @@ stdenv.mkDerivation rec {
     "website/server/controllers/top-level/payments/iap.js"
     "website/server/controllers/top-level/payments/paypal.js"
     "website/server/controllers/top-level/payments/stripe.js"
-    "website/server/libs/amazonPayments.js"
     "website/server/libs/analyticsService.js"
-    "website/server/libs/applePayments.js"
     "website/server/libs/aws.js"
     "website/server/libs/bannedSlurs.js"
     "website/server/libs/bannedWords.js"
-    "website/server/libs/googlePayments.js"
     "website/server/libs/guildsAllowingBannedWords.js"
     "website/server/libs/inAppPurchases.js"
-    "website/server/libs/paypalPayments.js"
+    "website/server/libs/payments/amazon.js"
+    "website/server/libs/payments/apple.js"
+    "website/server/libs/payments/google.js"
+    "website/server/libs/payments/paypal.js"
+    "website/server/libs/payments/stripe.js"
     "website/server/libs/pushNotifications.js"
     "website/server/libs/pusher.js"
     "website/server/libs/queue/index.js"
     "website/server/libs/slack.js"
-    "website/server/libs/stripePayments.js"
     "website/server/middlewares/analytics.js"
     "website/server/middlewares/static.js"
     "website/static/emails"

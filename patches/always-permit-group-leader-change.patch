@@ -14,7 +14,7 @@ Date:   Tue Mar 27 05:37:27 2018 +0200
     Filename: always-permit-group-leader-change.patch
 
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 19066c4a2..801619aad 100644
+index b31fd599d..de0926611 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -392,8 +392,6 @@ api.updateGroup = {
@@ -27,7 +27,7 @@ index 19066c4a2..801619aad 100644
  
      let savedGroup = await group.save();
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index fc7124c6c..5125827f5 100644
+index d6aa715d9..f86b67f54 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -14,7 +14,6 @@ import { groupChatReceivedWebhook } from '../libs/webhook';

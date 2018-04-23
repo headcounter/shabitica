@@ -19,7 +19,7 @@ Date:   Tue Mar 27 05:37:16 2018 +0200
     Filename: sendmail.patch
 
 diff --git a/config.json.example b/config.json.example
-index 3181d70c5..4b187a7ec 100644
+index 63df05213..bf97716b2 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -15,23 +15,9 @@
@@ -46,7 +46,7 @@ index 3181d70c5..4b187a7ec 100644
 -        "PASSWORD": "password"
 -    },
      "EMAILS" : {
-         "COMMUNITY_MANAGER_EMAIL" : "leslie@habitica.com",
+         "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
          "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
 diff --git a/test/api/v3/unit/libs/email.test.js b/test/api/v3/unit/libs/email.test.js
 index 7cf643df4..95be37ef4 100644

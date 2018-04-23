@@ -6,18 +6,20 @@ Date:   Sat Apr 7 03:03:48 2018 +0200
     There are banned words and slurs that aren't allowed in public chats,
     but our version isn't public, so no need to censor anything.
     
+    This also removes the banned user modal.
+    
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: no-censorship.patch
 
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index e8ced52ac..fa96b1c8e 100644
+index 199410f30..3c50e688e 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -11,19 +11,10 @@ import {
    TAVERN_ID,
  } from '../../../../../website/server/models/group';
  import { v4 as generateUUID } from 'uuid';
--import { getMatchesByWordArray, removePunctuationFromString } from '../../../../../website/server/libs/stringUtils';
+-import { getMatchesByWordArray } from '../../../../../website/server/libs/stringUtils';
 -import bannedWords from '../../../../../website/server/libs/bannedWords';
 -import guildsAllowingBannedWords from '../../../../../website/server/libs/guildsAllowingBannedWords';
 -import * as email from '../../../../../website/server/libs/email';
@@ -26,14 +28,14 @@ index e8ced52ac..fa96b1c8e 100644
    let user, groupWithChat, member, additionalMember;
    let testMessage = 'Test Message';
 -  let testBannedWordMessage = 'TESTPLACEHOLDERSWEARWORDHERE';
+-  let testBannedWordMessage1 = 'TESTPLACEHOLDERSWEARWORDHERE1';
 -  let testSlurMessage = 'message with TESTPLACEHOLDERSLURWORDHERE';
--  let bannedWordErrorMessage = t('bannedWordUsed').split('.');
--  bannedWordErrorMessage[0] += ` (${removePunctuationFromString(testBannedWordMessage.toLowerCase())})`;
--  bannedWordErrorMessage = bannedWordErrorMessage.join('.');
+-  let testSlurMessage1 = 'TESTPLACEHOLDERSLURWORDHERE1';
+-  let bannedWordErrorMessage = t('bannedWordUsed', {swearWordsUsed: testBannedWordMessage});
  
    before(async () => {
      let { group, groupLeader, members } = await createAndPopulateGroup({
-@@ -84,199 +75,6 @@ describe('POST /chat', () => {
+@@ -85,220 +76,6 @@ describe('POST /chat', () => {
      });
    });
  
@@ -85,9 +87,19 @@ index e8ced52ac..fa96b1c8e 100644
 -        });
 -    });
 -
--    it('checks error message has the banned words used', async () => {
--      let randIndex = Math.floor(Math.random() * (bannedWords.length + 1));
--      let testBannedWords = bannedWords.slice(randIndex, randIndex + 2).map((w) => w.replace(/\\/g, ''));
+-    it('errors when word is typed in mixed case', async () => {
+-      let substrLength = Math.floor(testBannedWordMessage.length / 2);
+-      let chatMessage = testBannedWordMessage.substring(0, substrLength).toLowerCase() + testBannedWordMessage.substring(substrLength).toUpperCase();
+-      await expect(user.post('/groups/habitrpg/chat', { message: chatMessage }))
+-        .to.eventually.be.rejected.and.eql({
+-          code: 400,
+-          error: 'BadRequest',
+-          message: t('bannedWordUsed', {swearWordsUsed: chatMessage}),
+-        });
+-    });
+-
+-    it('checks error message has all the banned words used, regardless of case', async () => {
+-      let testBannedWords = [testBannedWordMessage.toUpperCase(), testBannedWordMessage1.toLowerCase()];
 -      let chatMessage = `Mixing ${testBannedWords[0]} and ${testBannedWords[1]} is bad for you.`;
 -      await expect(user.post('/groups/habitrpg/chat', { message: chatMessage}))
 -        .to.eventually.be.rejected
@@ -228,13 +240,87 @@ index e8ced52ac..fa96b1c8e 100644
 -      members[0].flags.chatRevoked = false;
 -      await members[0].update({'flags.chatRevoked': false});
 -    });
+-
+-    it('errors when slur is typed in mixed case', async () => {
+-      let substrLength = Math.floor(testSlurMessage1.length / 2);
+-      let chatMessage = testSlurMessage1.substring(0, substrLength).toLowerCase() + testSlurMessage1.substring(substrLength).toUpperCase();
+-      await expect(user.post('/groups/habitrpg/chat', { message: chatMessage }))
+-        .to.eventually.be.rejected.and.eql({
+-          code: 400,
+-          error: 'BadRequest',
+-          message: t('bannedSlurUsed'),
+-        });
+-    });
 -  });
 -
    it('does not error when sending a message to a private guild with a user with revoked chat', async () => {
      let { group, members } = await createAndPopulateGroup({
        groupDetails: {
+diff --git a/website/client/app.vue b/website/client/app.vue
+index 86d715144..0d80839ee 100644
+--- a/website/client/app.vue
++++ b/website/client/app.vue
+@@ -9,7 +9,6 @@ div
+         h2 {{$t('tipTitle', {tipNumber: currentTipNumber})}}
+         p {{currentTip}}
+   #app(:class='{"casting-spell": castingSpell}')
+-    banned-account-modal
+     snackbars
+     router-view(v-if="!isUserLoggedIn || isStaticPage")
+     template(v-else)
+@@ -190,7 +189,6 @@ import notifications from 'client/mixins/notifications';
+ import spellsMixin from 'client/mixins/spells';
+ 
+ import svgClose from 'assets/svg/close.svg';
+-import bannedAccountModal from 'client/components/bannedAccountModal';
+ 
+ const COMMUNITY_MANAGER_EMAIL = process.env.EMAILS.COMMUNITY_MANAGER_EMAIL; // eslint-disable-line
+ 
+@@ -205,7 +203,6 @@ export default {
+     snackbars,
+     BuyModal,
+     SelectMembersModal,
+-    bannedAccountModal,
+   },
+   data () {
+     return {
+@@ -288,8 +285,6 @@ export default {
+       return response;
+     }, (error) => {
+       if (error.response.status >= 400) {
+-        this.checkForBannedUser(error);
+-
+         // Check for conditions to reset the user auth
+         const invalidUserMessage = [this.$t('invalidCredentials'), 'Missing authentication headers.'];
+         if (invalidUserMessage.indexOf(error.response.data) !== -1) {
+@@ -409,25 +404,6 @@ export default {
+     if (loadingScreen) document.body.removeChild(loadingScreen);
+   },
+   methods: {
+-    checkForBannedUser (error) {
+-      const AUTH_SETTINGS = localStorage.getItem('habit-mobile-settings');
+-      const parseSettings = JSON.parse(AUTH_SETTINGS);
+-      const errorMessage = error.response.data.message;
+-
+-      // Case where user is not logged in
+-      if (!parseSettings) {
+-        return;
+-      }
+-
+-      const bannedMessage = this.$t('accountSuspended', {
+-        communityManagerEmail: COMMUNITY_MANAGER_EMAIL,
+-        userId: parseSettings.auth.apiId,
+-      });
+-
+-      if (errorMessage !== bannedMessage) return;
+-
+-      this.$root.$emit('bv::show::modal', 'banned-account');
+-    },
+     initializeModalStack () {
+       // Manage modals
+       this.$root.$on('bv::show::modal', (modalId, data = {}) => {
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index d90b51324..a3d44dd16 100644
+index 34d225782..a3d44dd16 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -2,7 +2,6 @@ import { authWithHeaders } from '../../middlewares/auth';
@@ -279,7 +365,7 @@ index d90b51324..a3d44dd16 100644
  /**
   * @api {post} /api/v3/groups/:groupId/chat Post chat message to a group
   * @apiName PostChat
-@@ -111,52 +97,11 @@ api.postChat = {
+@@ -111,49 +97,11 @@ api.postChat = {
  
      let group = await Group.getGroup({user, groupId});
  
@@ -322,10 +408,7 @@ index d90b51324..a3d44dd16 100644
 -    if (group.privacy !== 'private' && !guildsAllowingBannedWords[group._id]) {
 -      let matchedBadWords = getBannedWordsFromText(req.body.message);
 -      if (matchedBadWords.length > 0) {
--        // @TODO replace this split mechanism with something that works properly in translations
--        let message = res.t('bannedWordUsed').split('.');
--        message[0] += ` (${matchedBadWords.join(', ')})`;
--        throw new BadRequest(message.join('.'));
+-        throw new BadRequest(res.t('bannedWordUsed', {swearWordsUsed: matchedBadWords.join(', ')}));
 -      }
 -    }
 -
