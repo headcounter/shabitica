@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub
+{ lib, fetchurl
 , libsass, libjpeg, optipng, gifsicle, pkgconfig, phantomjs2, systemd
 , chromedriver, chromium
 
@@ -20,22 +20,22 @@
   };
 
   main.node-sass = drv: let
+    # Thin is needed to be backwards-compatible with NixOS stable.
     newerSass = libsass.overrideAttrs (drv: rec {
       name = "libsass-${version}";
-      version = "3.5.0";
+      version = "3.5.3";
       patchPhase = "export LIBSASS_VERSION=${version}";
-      src = fetchFromGitHub {
-        owner = "sass";
-        repo = "libsass";
-        rev = version;
-        sha256 = "06ch6af7ivmx1f5l3z3dx3iqdiiwis1vcc1j4wdm10f6mlq11yxx";
+      src = fetchurl {
+        url = "https://github.com/sass/libsass/archive/${version}.tar.gz";
+        sha256 = "1lfdq2ahskf9yd0m71jlx3r4n6a0dhg4wxpnwbrvj2a23k7db7zi";
       };
     });
+    isOutdated = lib.versionOlder libsass.version newerSass.version;
   in {
     LIBSASS_EXT = "auto";
     nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ pkgconfig ];
     buildInputs = (drv.buildInputs or []) ++ [
-      (if lib.versionOlder libsass.version "3.5.0" then newerSass else libsass)
+      (if isOutdated then newerSass else libsass)
     ];
   };
 
