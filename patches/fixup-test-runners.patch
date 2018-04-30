@@ -103,7 +103,7 @@ index 4a38458d8..03d58ea5a 100644
    );
  
 diff --git a/package.json b/package.json
-index 5a194083a..d5365c464 100644
+index 8ee2928d9..9b22405df 100644
 --- a/package.json
 +++ b/package.json
 @@ -108,9 +108,9 @@

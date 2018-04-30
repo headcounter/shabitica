@@ -12,7 +12,7 @@ Date:   Sat Apr 7 03:03:48 2018 +0200
     Filename: no-censorship.patch
 
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index 199410f30..3c50e688e 100644
+index 8388d835b..2e3dccd4a 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -11,19 +11,10 @@ import {
@@ -320,12 +320,12 @@ index 86d715144..0d80839ee 100644
        // Manage modals
        this.$root.$on('bv::show::modal', (modalId, data = {}) => {
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 34d225782..a3d44dd16 100644
+index eec87083e..e2e5b3f8b 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
-@@ -2,7 +2,6 @@ import { authWithHeaders } from '../../middlewares/auth';
- import { model as Group } from '../../models/group';
+@@ -3,7 +3,6 @@ import { model as Group } from '../../models/group';
  import { model as User } from '../../models/user';
+ import { model as Chat } from '../../models/chat';
  import {
 -  BadRequest,
    NotFound,
@@ -354,7 +354,7 @@ index 34d225782..a3d44dd16 100644
  /**
   * @api {get} /api/v3/groups/:groupId/chat Get chat messages from a group
   * @apiName GetChat
-@@ -75,10 +65,6 @@ api.getChat = {
+@@ -77,10 +67,6 @@ api.getChat = {
    },
  };
  
@@ -365,7 +365,7 @@ index 34d225782..a3d44dd16 100644
  /**
   * @api {post} /api/v3/groups/:groupId/chat Post chat message to a group
   * @apiName PostChat
-@@ -111,49 +97,11 @@ api.postChat = {
+@@ -113,49 +99,11 @@ api.postChat = {
  
      let group = await Group.getGroup({user, groupId});
  
@@ -412,6 +412,6 @@ index 34d225782..a3d44dd16 100644
 -      }
 -    }
 -
-     let lastClientMsg = req.query.previousMsg;
+     const chatRes = await Group.toJSONCleanChat(group, user);
+     const lastClientMsg = req.query.previousMsg;
      chatUpdated = lastClientMsg && group.chat && group.chat[0] && group.chat[0].id !== lastClientMsg ? true : false;
- 

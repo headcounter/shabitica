@@ -150,7 +150,7 @@ index 42fe38c48..63df05213 100644
 +    }
  }
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index db73179ed..199410f30 100644
+index 194008bb4..8388d835b 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -15,10 +15,6 @@ import { getMatchesByWordArray } from '../../../../../website/server/libs/string
@@ -5403,11 +5403,11 @@ index 27b721f58..05406b4f0 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index df622ced5..9c0a71e9a 100644
+index 0c33bf2f6..90b43a72a 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -9,8 +9,6 @@ import {
- import _ from 'lodash';
+ } from '../../libs/errors';
  import { removeFromArray } from '../../libs/collectionManipulators';
  import { getUserInfo, getGroupUrl, sendTxn } from '../../libs/email';
 -import slack from '../../libs/slack';
@@ -5415,7 +5415,7 @@ index df622ced5..9c0a71e9a 100644
  import { getAuthorEmailFromMessage } from '../../libs/chat';
  import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
  import nconf from 'nconf';
-@@ -140,14 +138,6 @@ api.postChat = {
+@@ -142,14 +140,6 @@ api.postChat = {
  
        sendTxn(FLAG_REPORT_EMAILS, 'slur-report-to-mods', report);
  
@@ -5430,19 +5430,19 @@ index df622ced5..9c0a71e9a 100644
        throw new BadRequest(res.t('bannedSlurUsed'));
      }
  
-@@ -182,13 +172,6 @@ api.postChat = {
+@@ -184,13 +174,6 @@ api.postChat = {
  
-     let [savedGroup] = await Promise.all(toSave);
+     await Promise.all(toSave);
  
--    // realtime chat is only enabled for private groups (for now only for parties)
--    if (savedGroup.privacy === 'private' && savedGroup.type === 'party') {
+-    // @TODO: rethink if we want real-time
+-    if (group.privacy === 'private' && group.type === 'party') {
 -      // req.body.pusherSocketId is sent from official clients to identify the sender user's real time socket
 -      // see https://pusher.com/docs/server_api_guide/server_excluding_recipients
--      pusher.trigger(`presencegroup${savedGroup._id}`, 'newchat', newChatMessage, req.body.pusherSocketId);
+-      pusher.trigger(`presence-group-${group._id}`, 'new-chat', newChatMessage, req.body.pusherSocketId);
 -    }
 -
      if (chatUpdated) {
-       res.respond(200, {chat: Group.toJSONCleanChat(savedGroup, user).chat});
+       res.respond(200, {chat: chatRes.chat});
      } else {
 diff --git a/website/server/controllers/api-v3/coupon.js b/website/server/controllers/api-v3/coupon.js
 index 5fc0f4cbf..f92f7f279 100644
@@ -5458,7 +5458,7 @@ index 5fc0f4cbf..f92f7f279 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index f1264ca17..85bf0dac4 100644
+index 4a5459077..14ee52ab5 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5705,7 +5705,7 @@ index 61e0e3ec1..988ba2f92 100644
      res.respond(200, {});
    },
 diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
-index 7ae92b1b3..56036a65d 100644
+index 57e7dcaab..2a940a71d 100644
 --- a/website/server/controllers/api-v3/quests.js
 +++ b/website/server/controllers/api-v3/quests.js
 @@ -1,6 +1,5 @@
@@ -5897,7 +5897,7 @@ index 604e5c90c..e1f361f39 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks/groups.js b/website/server/controllers/api-v3/tasks/groups.js
-index 45eb8839d..5086ae281 100644
+index 5065ebc0c..9ab7554c3 100644
 --- a/website/server/controllers/api-v3/tasks/groups.js
 +++ b/website/server/controllers/api-v3/tasks/groups.js
 @@ -56,16 +56,6 @@ api.createGroupTasks = {
@@ -6267,17 +6267,17 @@ index 4c952caf7..c53937b22 100644
  if (CORES !== 0 && cluster.isMaster && (IS_DEV || IS_PROD)) {
    // Fork workers. If config.json has WEB_CONCURRENCY=x, use that - otherwise, use all cpus-1 (production)
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index fc2b61d88..4c1a76e33 100644
+index ef39eb951..7aa58ea8f 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
-@@ -7,7 +7,6 @@ import {
+@@ -6,7 +6,6 @@ import {
    NotFound,
  } from '../errors';
  import { getGroupUrl, sendTxn } from '../email';
 -import slack from '../slack';
  import { model as Group } from '../../models/group';
+ import { model as Chat } from '../../models/chat';
  
- const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
 @@ -57,14 +56,6 @@ export default class GroupChatReporter extends ChatReporter {
        {name: 'GROUP_URL', content: groupUrl},
        {name: 'REPORTER_COMMENT', content: userComment || ''},
@@ -6815,10 +6815,10 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index c46b3346e..6ef377c50 100644
+index 4ce14550f..94b79ae59 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
-@@ -20,16 +20,12 @@ import {
+@@ -21,16 +21,12 @@ import {
  import baseModel from '../libs/baseModel';
  import { sendTxn as sendTxnEmail } from '../libs/email';
  import nconf from 'nconf';
@@ -6832,10 +6832,10 @@ index c46b3346e..6ef377c50 100644
  } from './subscriptionPlan';
 -import amazonPayments from '../libs/payments/amazon';
 -import stripePayments from '../libs/payments/stripe';
+ import { getGroupChat } from '../libs/chat/group-chat';
  import { model as UserNotification } from './userNotification';
  
- const questScrolls = shared.content.quests;
-@@ -585,12 +581,6 @@ schema.methods.sendChat = function sendChat (message, user, metaData) {
+@@ -605,12 +601,6 @@ schema.methods.sendChat = function sendChat (message, user, metaData) {
      User.update(query, lastSeenUpdateAddNew, {multi: true}).exec();
    });
  
@@ -6845,10 +6845,10 @@ index c46b3346e..6ef377c50 100644
 -    pusher.trigger(`presence-group-${this._id}`, 'new-chat', newMessage);
 -  }
 -
-   return newMessage;
+   return newChatMessage;
  };
  
-@@ -686,7 +676,7 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -706,7 +696,7 @@ schema.methods.startQuest = async function startQuest (user) {
    // send notifications in the background without blocking
    User.find(
      { _id: { $in: nonUserQuestMembers } },
@@ -6857,7 +6857,7 @@ index c46b3346e..6ef377c50 100644
    ).exec().then((membersToNotify) => {
      let membersToEmail = _.filter(membersToNotify, (member) => {
        // send push notifications and filter users that disabled emails
-@@ -696,19 +686,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -716,19 +706,6 @@ schema.methods.startQuest = async function startQuest (user) {
      sendTxnEmail(membersToEmail, 'quest-started', [
        { name: 'PARTY_URL', content: '/party' },
      ]);
@@ -6875,9 +6875,9 @@ index c46b3346e..6ef377c50 100644
 -        });
 -    });
    });
-   this.sendChat(`\`Your quest, ${quest.text('en')}, has started.\``, null, {
+   const newMessage = this.sendChat(`\`Your quest, ${quest.text('en')}, has started.\``, null, {
      participatingMembers: this.getParticipatingQuestMembers().join(', '),
-@@ -1158,12 +1135,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1199,12 +1176,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      promises.push(User.update({_id: user._id}, {$pull: {guilds: group._id}}).exec());
    } else {
      promises.push(User.update({_id: user._id}, {$set: {party: {}}}).exec());
@@ -6890,7 +6890,7 @@ index c46b3346e..6ef377c50 100644
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  
-@@ -1420,7 +1391,7 @@ schema.methods.hasNotCancelled = function hasNotCancelled () {
+@@ -1461,7 +1432,7 @@ schema.methods.hasNotCancelled = function hasNotCancelled () {
    return this.isSubscribed() && !plan.dateTerminated;
  };
  
@@ -6899,7 +6899,7 @@ index c46b3346e..6ef377c50 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1429,12 +1400,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1470,12 +1441,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;

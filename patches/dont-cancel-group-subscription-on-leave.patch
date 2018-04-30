@@ -69,7 +69,7 @@ index 2afa2dcc0..59d84a958 100644
 -  });
  });
 diff --git a/test/api/v3/unit/models/group.test.js b/test/api/v3/unit/models/group.test.js
-index f0108bc89..796c65e51 100644
+index a094b8e42..6ed7430f7 100644
 --- a/test/api/v3/unit/models/group.test.js
 +++ b/test/api/v3/unit/models/group.test.js
 @@ -778,10 +778,13 @@ describe('Group Model', () => {
@@ -96,10 +96,10 @@ index f0108bc89..796c65e51 100644
          await party.leave(questLeader);
  
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index f86b67f54..9a8ca0578 100644
+index 05643226d..92e5593ff 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
-@@ -9,7 +9,6 @@ import { model as Challenge} from './challenge';
+@@ -10,7 +10,6 @@ import { model as Chat } from './chat';
  import * as Tasks from './task';
  import validator from 'validator';
  import { removeFromArray } from '../libs/collectionManipulators';
@@ -107,7 +107,7 @@ index f86b67f54..9a8ca0578 100644
  import { groupChatReceivedWebhook } from '../libs/webhook';
  import {
    InternalServerError,
-@@ -1128,10 +1127,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1169,10 +1168,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  

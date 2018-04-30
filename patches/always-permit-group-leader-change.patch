@@ -14,7 +14,7 @@ Date:   Tue Mar 27 05:37:27 2018 +0200
     Filename: always-permit-group-leader-change.patch
 
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index b31fd599d..de0926611 100644
+index cb52d9deb..1d6e96391 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -392,8 +392,6 @@ api.updateGroup = {
@@ -27,10 +27,10 @@ index b31fd599d..de0926611 100644
  
      let savedGroup = await group.save();
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index d6aa715d9..f86b67f54 100644
+index 9b8aae394..05643226d 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
-@@ -14,7 +14,6 @@ import { groupChatReceivedWebhook } from '../libs/webhook';
+@@ -15,7 +15,6 @@ import { groupChatReceivedWebhook } from '../libs/webhook';
  import {
    InternalServerError,
    BadRequest,
@@ -38,7 +38,7 @@ index d6aa715d9..f86b67f54 100644
  } from '../libs/errors';
  import baseModel from '../libs/baseModel';
  import { sendTxn as sendTxnEmail } from '../libs/email';
-@@ -1095,14 +1094,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1136,14 +1135,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
    let group = this;
    let update = {};
  

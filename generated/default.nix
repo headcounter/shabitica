@@ -45,7 +45,7 @@ in {
     monk = nodePackages."monk-^6.0.5";
     nightwatch = nodePackages."nightwatch-^0.9.20";
     "nightwatch-html-reporter" = nodePackages."nightwatch-html-reporter-^2.0.5";
-    puppeteer = nodePackages."puppeteer-^1.2.0";
+    puppeteer = nodePackages."puppeteer-^1.3.0";
     "require-again" = nodePackages."require-again-^2.0.0";
     "selenium-server" = nodePackages."selenium-server-^3.11.0";
     sinon = nodePackages."sinon-^4.5.0";
