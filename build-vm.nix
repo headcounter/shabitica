@@ -47,6 +47,7 @@ let
     habitica.hostName = "localhost";
     habitica.baseURL = "http://localhost:3000";
     habitica.config.ENABLE_CONSOLE_LOGS_IN_PROD = "true";
+    habitica.insecureDB = true;
 
     environment.systemPackages = [
       pkgs.htop pkgs.mongodb-tools
