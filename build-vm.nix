@@ -93,8 +93,31 @@ let
       sleep = lib.escapeShellArg "${pkgs.coreutils}/bin/sleep";
       nc = lib.escapeShellArg "${pkgs.netcat-openbsd}/bin/nc";
       ssh = lib.escapeShellArg "${pkgs.openssh}/bin/ssh";
+
+      connect = lib.concatMapStringsSep " " lib.escapeShellArg [
+        "${pkgs.openssh}/bin/ssh"
+        "-i" "${sshKeyPair}/key"
+        "-o" "UserKnownHostsFile=/dev/null"
+        "-o" "GlobalKnownHostsFile=/dev/null"
+        "-o" "StrictHostKeyChecking=no"
+        "-o" "ConnectionAttempts=10"
+        "-p" "3022"
+        "root@localhost"
+      ];
+
     in pkgs.writeScript "run-vm" ''
       #!${pkgs.stdenv.shell}
+
+      if [ "$1" = '--connect' ]; then
+        shift
+        exec ${connect} "$@"
+        exit 1
+      fi
+
+      if ${nc} -z 127.0.0.1 3022; then
+        echo "VM already running, use '--connect' to connect to it." >&2
+        exit 1
+      fi
 
       kill_everything() {
         retry=0
@@ -129,13 +152,7 @@ let
       waitport 3022
 
       set +e
-      ${ssh} \
-        -i ${lib.escapeShellArg "${sshKeyPair}/key"} \
-        -o UserKnownHostsFile=/dev/null \
-        -o GlobalKnownHostsFile=/dev/null \
-        -o StrictHostKeyChecking=no \
-        -o ConnectionAttempts=10 \
-        -p 3022 root@localhost
+      ${connect}
       retval=$?
       set -e
 
