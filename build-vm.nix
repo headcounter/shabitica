@@ -49,7 +49,7 @@ let
     habitica.config.ENABLE_CONSOLE_LOGS_IN_PROD = "true";
 
     environment.systemPackages = [
-      pkgs.htop
+      pkgs.htop pkgs.mongodb-tools
       (pkgs.mutt.overrideAttrs (attrs: {
         configureFlags = (attrs.configureFlags or []) ++ [
           "--with-domain=${config.networking.hostName}"
