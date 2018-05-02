@@ -25,6 +25,20 @@ let
 
     createHydraTestFailure = true;
 
+    # XXX: Fake time to start at 2017-12-12 because the tests fail whenever the
+    # current date exceeds the end of April 2018. Note that the 'start_at'
+    # variant (by prefixing the date with '@') didn't work for some reason, so
+    # instead let's just specify a relative time that represents the same
+    # value. Also, we need to specify full days because it seems that at some
+    # point the tests seem to be able to get the real system time.
+    postUnpack = ''
+      # This is a bit racy but we don't care as long as it's somewhere between
+      # May 2017 and May 2018.
+      secs="$(expr "$(date +%s)" - "$(date -d '2017-12-12 00:00:00' +%s)")"
+      export FAKETIME="-$secs"
+      export LD_PRELOAD="${pkgs.libfaketime}/lib/libfaketimeMT.so.1"
+    '';
+
     preConfigure = let
       mongoDbCfg = pkgs.writeText "mongodb.conf" (builtins.toJSON {
         net.bindIp = "/tmp/db.sock";
