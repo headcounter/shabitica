@@ -246,7 +246,6 @@ in {
           "/".index = "index.html";
           "/".tryFiles = "$uri $uri/ @backend";
 
-
           # This is ugly as hell and basically disables caching.
           # See https://github.com/NixOS/nixpkgs/issues/25485
           "/".extraConfig = ''
