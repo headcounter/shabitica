@@ -153,6 +153,11 @@ stdenv.mkDerivation rec {
     # in Nix.
     patches/mocha-no-timeout.patch
 
+    # This inserts a substitution variable we can use for specifying the
+    # migration file we want to run. The reason this is a patch is because we
+    # want to get a build failure if the implementation of the runner changes.
+    patches/migration-substvar.patch
+
     # Adds support systemd startup notifications.
     patches/systemd-notify.patch
   ];
