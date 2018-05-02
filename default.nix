@@ -3,6 +3,12 @@
 let
   cfg = config.habitica;
 
+  mongodb = pkgs.mongodb.overrideAttrs (drv: {
+    patches = (drv.patches or []) ++ [ patches/mongodb-systemd.patch ];
+    buildInputs = (drv.buildInputs or []) ++ [ pkgs.systemd ];
+    NIX_LDFLAGS = lib.toList (drv.NIX_LDFLAGS or []) ++ [ "-lsystemd" ];
+  });
+
   habitica = pkgs.callPackages ./habitica.nix {
     habiticaConfig = cfg.config;
   };
@@ -207,8 +213,9 @@ in {
             storage.dbPath = "/var/lib/habitica/db";
             processManagement.fork = false;
           });
-        in "${pkgs.mongodb}/bin/mongod --config ${mongoDbCfg}";
+        in "${mongodb}/bin/mongod --config ${mongoDbCfg}";
 
+        serviceConfig.Type = "notify";
         serviceConfig.User = "habitica-db";
         serviceConfig.Group = "habitica";
         serviceConfig.PrivateTmp = true;

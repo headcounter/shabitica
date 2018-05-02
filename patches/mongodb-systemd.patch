@@ -1,0 +1,50 @@
+commit 14674766074164a310a3768be8928f635e2adaca
+Author: aszlig <aszlig@nix.build>
+Date:   Wed May 2 06:17:55 2018 +0200
+
+    Add support for systemd notifications
+    
+    We want to make sure we don't run into race conditions where the
+    database is not yet available but there are already commands executed
+    against the database.
+    
+    Another way would be to have a shell script loop that continuously tries
+    to connect to the database and use it as a postStart script. This
+    however is clearly only a workaround and we want to do this properly.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+
+diff --git a/SConstruct b/SConstruct
+index 13149ab82b..ffc292a6d5 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -2757,6 +2757,8 @@ def doConfigure(myenv):
+     if use_system_version_of_library("snappy"):
+         conf.FindSysLibDep("snappy", ["snappy"])
+ 
++    conf.FindSysLibDep("systemd", ["systemd"])
++
+     if use_system_version_of_library("zlib"):
+         conf.FindSysLibDep("zlib", ["zdll" if conf.env.TargetOSIs('windows') else "z"])
+ 
+diff --git a/src/mongo/util/net/listen.cpp b/src/mongo/util/net/listen.cpp
+index d3fa5acbc8..1e9faa7564 100644
+--- a/src/mongo/util/net/listen.cpp
++++ b/src/mongo/util/net/listen.cpp
+@@ -51,6 +51,7 @@
+ #include "mongo/util/scopeguard.h"
+ 
+ #ifndef _WIN32
++#include <systemd/sd-daemon.h>
+ 
+ #ifndef __sun
+ #include <ifaddrs.h>
+@@ -279,6 +280,8 @@ void Listener::initAndListen() {
+         _readyCondition.notify_all();
+     }
+ 
++    sd_notify(0, "READY=1");
++
+     struct timeval maxSelectTime;
+     // The check against _finished allows us to actually stop the listener by signalling it through
+     // the _finished flag.
