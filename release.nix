@@ -5,7 +5,7 @@ let
   inherit (pkgs) lib;
 
   jobs = {
-    tests = import ./tests.nix { inherit nixpkgs pkgs; };
+    tests = import ./tests { inherit nixpkgs pkgs; };
 
     manual = let
       modules = import "${nixpkgs}/nixos/lib/eval-config.nix" {

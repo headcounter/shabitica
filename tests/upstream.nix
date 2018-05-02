@@ -1,9 +1,7 @@
-{ nixpkgs ? <nixpkgs>, pkgs ? import nixpkgs {} }:
+{ nixpkgs, pkgs, lib, ... }:
 
 let
-  inherit (pkgs) lib;
-
-  habitica = pkgs.callPackages ./habitica.nix {
+  habitica = pkgs.callPackages ../habitica.nix {
     habiticaConfig = rec {
       NODE_ENV = "test";
       SESSION_SECRET = "YOUR SECRET HERE";
@@ -48,22 +46,21 @@ let
 
   runTests = cat: lib.mapAttrs (name: mkTest "${cat}-${name}");
 
-  upstreamTests = lib.mapAttrs runTests {
-    basic = {
-      sanity.target = "sanity";
-      content.target = "content";
-      common.target = "common";
-    };
-
-    api = {
-      unit.target = "api-v3:unit";
-      unit.useDB = true;
-
-      integration.target = "api-v3:integration";
-      integration.useDB = true;
-    };
+in lib.mapAttrs runTests {
+  basic = {
+    sanity.target = "sanity";
+    content.target = "content";
+    common.target = "common";
   };
 
+  api = {
+    unit.target = "api-v3:unit";
+    unit.useDB = true;
+
+    integration.target = "api-v3:integration";
+    integration.useDB = true;
+  };
+} // {
   client.e2e = (import "${nixpkgs}/nixos/lib/testing.nix" {
     inherit (pkgs) system;
   }).runInMachine {
@@ -82,7 +79,7 @@ let
       '';
     };
     machine = {
-      imports = [ ./. ];
+      imports = [ ../. ];
       networking.firewall.enable = false;
       virtualisation.diskSize = 16384;
       virtualisation.memorySize = 1024;
@@ -106,45 +103,4 @@ let
       '';
     };
   };
-
-  nixos = import "${nixpkgs}/nixos/tests/make-test.nix" {
-    name = "habitica";
-
-    nodes.habitica = {
-      imports = [ ./. ];
-      networking.firewall.enable = false;
-      habitica.hostName = "habitica";
-      virtualisation.diskSize = 16384;
-      virtualisation.memorySize = 1024;
-    };
-
-    nodes.client = {};
-
-    testScript = let
-      mkPerlString = val: "'${lib.escape ["\\" "'"] val}'";
-      listToCommand = lib.concatMapStringsSep " " lib.escapeShellArg;
-      registerUser = username: let
-        data = builtins.toJSON {
-          inherit username;
-          email = "${username}@example.org";
-          password = "test";
-          confirmPassword = "test";
-        };
-        url = "http://habitica/api/v3/user/auth/local/register";
-      in mkPerlString (listToCommand [
-        "curl" "-f" "-H" "Content-Type: application/json" "-d" data url
-      ]);
-    in ''
-      startAll;
-
-      $habitica->waitForUnit('nginx.service');
-      $habitica->waitForOpenPort(80);
-
-      subtest "check if service only allows first user to register", sub {
-        $client->succeed(${registerUser "foo"});
-        $client->fail(${registerUser "bar"});
-      };
-    '';
-  };
-
-in upstreamTests // { inherit client nixos; }
+}
