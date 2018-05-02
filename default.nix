@@ -49,6 +49,18 @@ in {
       '';
     };
 
+    insecureDB = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      internal = true;
+      description = ''
+        This is only used for testing and not recommended in production. It
+        disables the networking namespace for MongoDB and binds to <systemitem
+        class="ipaddress">127.0.0.1</systemitem> as well, so local users can
+        read and write to the database at will.
+      '';
+    };
+
     staticPath = lib.mkOption {
       type = lib.types.path;
       default = habitica.client;
@@ -189,7 +201,8 @@ in {
 
         serviceConfig.ExecStart = let
           mongoDbCfg = pkgs.writeText "mongodb.conf" (builtins.toJSON {
-            net.bindIp = "/run/habitica/db.sock";
+            net.bindIp = "/run/habitica/db.sock"
+                       + lib.optionalString cfg.insecureDB ",127.0.0.1";
             net.unixDomainSocket.filePermissions = "0770";
             storage.dbPath = "/var/lib/habitica/db";
             processManagement.fork = false;
@@ -199,7 +212,7 @@ in {
         serviceConfig.User = "habitica-db";
         serviceConfig.Group = "habitica";
         serviceConfig.PrivateTmp = true;
-        serviceConfig.PrivateNetwork = true;
+        serviceConfig.PrivateNetwork = !cfg.insecureDB;
       };
 
       systemd.sockets.habitica = {
