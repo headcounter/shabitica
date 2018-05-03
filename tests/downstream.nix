@@ -31,8 +31,9 @@
     in ''
       startAll;
 
-      $habitica->waitForUnit('nginx.service');
+      $habitica->waitForUnit('habitica.service');
       $habitica->waitForOpenPort(80);
+      $client->waitForUnit('multi-user.target');
 
       subtest "check if service only allows first user to register", sub {
         $client->succeed(${registerUser "foo"});

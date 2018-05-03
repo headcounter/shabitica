@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub
-, libsass, libjpeg, optipng, gifsicle, pkgconfig, phantomjs2
+, libsass, libjpeg, optipng, gifsicle, pkgconfig, phantomjs2, systemd
 , chromedriver, chromium
 
 , habiticaConfig
@@ -43,6 +43,10 @@
     nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ phantomjs2 ];
     # XXX: For PhantomJS 2 with NixOS 17.09:
     QT_QPA_PLATFORM = "offscreen";
+  };
+
+  main.sd-notify = drv: {
+    buildInputs = (drv.buildInputs or []) ++ [ systemd ];
   };
 
   # XXX: This seems to be a caching issue in that process-nextick-args is

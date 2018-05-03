@@ -123,6 +123,7 @@ in {
     pug = nodePackages."pug-^2.0.3";
     rimraf = nodePackages."rimraf-^2.4.3";
     "sass-loader" = nodePackages."sass-loader-^7.0.0";
+    "sd-notify" = nodePackages."sd-notify-^2.3.0";
     shelljs = nodePackages."shelljs-^0.8.1";
     superagent = nodePackages."superagent-^3.4.3";
     "svg-inline-loader" = nodePackages."svg-inline-loader-^0.8.0";

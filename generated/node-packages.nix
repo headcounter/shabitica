@@ -19008,6 +19008,26 @@ in
     production = true;
     bypassCache = true;
   };
+  "sd-notify-^2.3.0" = nodeEnv.buildNodePackage {
+    name = "sd-notify";
+    packageName = "sd-notify";
+    version = "2.3.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/sd-notify/-/sd-notify-2.3.0.tgz";
+      sha512 = "16rajagr6174r2cmms5z9vg7ygx61lkdxk3959x132vgwsrfg75gx29vrvxllq5gc764snd7m1wn740y7nkwgs6g3bnyycm2j156l4r";
+    };
+    dependencies = [
+      sources."bindings-1.3.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "wrapper around sd_notify to help in using systemd as a node process manager";
+      homepage = "https://github.com/roryrjb/sd-notify#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+  };
   "winston-^2.4.1" = nodeEnv.buildNodePackage {
     name = "winston";
     packageName = "winston";

@@ -152,6 +152,9 @@ stdenv.mkDerivation rec {
     # Do not set a timeout for the tests as we already have a timeout mechanism
     # in Nix.
     patches/mocha-no-timeout.patch
+
+    # Adds support systemd startup notifications.
+    patches/systemd-notify.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

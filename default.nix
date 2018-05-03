@@ -236,6 +236,8 @@ in {
         wantedBy = [ "multi-user.target" ];
         after = [ "habitica-init.service" "habitica-db.service" ];
 
+        serviceConfig.Type = "notify";
+        serviceConfig.NotifyAccess = "all";
         serviceConfig.ExecStart = "${habitica.server}/bin/habitica-server";
         serviceConfig.User = "habitica";
         serviceConfig.Group = "habitica";
