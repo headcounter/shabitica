@@ -233,6 +233,7 @@ in {
 
       systemd.services.habitica = {
         description = "Habitica";
+        wantedBy = [ "multi-user.target" ];
         after = [ "habitica-init.service" "habitica-db.service" ];
 
         serviceConfig.ExecStart = "${habitica.server}/bin/habitica-server";
