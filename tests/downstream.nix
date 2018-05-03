@@ -2,7 +2,7 @@
 
 {
   allow-register-first = import "${nixpkgs}/nixos/tests/make-test.nix" {
-    name = "habitica";
+    name = "habitica-allow-register-first";
 
     nodes.habitica = {
       imports = [ ../. ];
