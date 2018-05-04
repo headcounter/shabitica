@@ -7,10 +7,10 @@ let
   };
 
   callTest = path: let
-    common = {
+    common = { config, lib, ... }: {
       imports = [ ../. ];
       networking.firewall.enable = false;
-      habitica.hostName = "habitica";
+      habitica.hostName = lib.mkDefault config.networking.hostName;
       virtualisation.diskSize = 16384;
       virtualisation.memorySize = 1024;
     };
