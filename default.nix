@@ -16,6 +16,8 @@ let
   hostIsFqdn = builtins.match ".+\\..+" cfg.hostName != null;
   isFqdnText = "builtins.match \".+\\\\..+\" config.habitica.hostName != null";
 
+  dbtools = pkgs.callPackage ./dbtools.nix {};
+
 in {
   options.habitica = {
     hostName = lib.mkOption {
@@ -139,6 +141,8 @@ in {
       };
 
       users.groups.habitica = {};
+
+      environment.systemPackages = [ dbtools ];
 
       systemd.services.habitica-statedir-init = {
         description = "Initialize Habitica";
