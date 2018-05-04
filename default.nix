@@ -241,6 +241,7 @@ in {
         after = [ "habitica-init.service" "habitica-db.service" ];
 
         serviceConfig.Type = "notify";
+        serviceConfig.TimeoutStartSec = "10min";
         serviceConfig.NotifyAccess = "all";
         serviceConfig.ExecStart = "${habitica.server}/bin/habitica-server";
         serviceConfig.User = "habitica";
