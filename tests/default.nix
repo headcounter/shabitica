@@ -32,7 +32,7 @@ let
         "curl" "-f" "-H" "Content-Type: application/json" "-d" data url
       ]);
     });
-  in import "${nixpkgs}/nixos/tests/make-test.nix" testFun;
+  in import "${nixpkgs}/nixos/tests/make-test.nix" testFun {};
 
 in {
   upstream = import ./upstream.nix args;
