@@ -8,4 +8,6 @@ rec {
   # XXX: No assertion yet, so make sure to keep both in par!
   archiveDateFormat = "%Y-%m-%dT%H:%M:%S";
   archiveExampleFilename = "2018-02-12T12:22:09.archive";
+
+  migrationMsg = "Running migration";
 }

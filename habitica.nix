@@ -65,6 +65,8 @@ let
     "name" "version" "nativeBuildInputs" "buildInputs"
   ]);
 
+  inherit (import ./docinfo.nix) migrationMsg;
+
 in rec {
   client = mkCommonBuild {
     name = "client";
@@ -153,7 +155,7 @@ in rec {
         --set NODE_PATH "$runtimeNodePath" \
         --run "cd '${server}/libexec/habitica'" \
         --run ${let
-          desc = "Running migration ${toString num} (${file})";
+          desc = "${migrationMsg} ${toString num} (${file})";
         in lib.escapeShellArg "echo ${lib.escapeShellArg desc} >&2"}
     '') (import ./migrations.nix));
 

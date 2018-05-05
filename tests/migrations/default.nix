@@ -5,32 +5,7 @@
 
   machine = { pkgs, ... }: {
     imports = [ common ];
-    habitica.insecureDB = true;
-    habitica.hostName = lib.mkForce "localhost";
-    systemd.services.habitica-reset-schema-version = {
-      description = "Reset Habitica Database Schema Version";
-      requiredBy = [ "habitica.service" ];
-      after = [ "habitica-statedir-init.service" ];
-      before = [ "habitica-db.service" ];
-      script = "rm /var/lib/habitica/db-version";
-      serviceConfig.Type = "oneshot";
-    };
-    systemd.services.habitica-prepopulate-db = {
-      description = "Prepopulate Habitica Database";
-      requiredBy = [ "habitica.service" ];
-      after = [ "habitica-db.service" "habitica-init.service" ];
-      before = [ "habitica.service" "habitica-db-update.service" ];
-
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
-      serviceConfig.User = "habitica";
-      serviceConfig.Group = "habitica";
-      serviceConfig.PrivateTmp = true;
-
-      script = ''
-        ${pkgs.mongodb-tools}/bin/mongorestore --db admin ${./fixture}
-      '';
-    };
+    habitica.hostName = "localhost";
 
     environment.systemPackages = let
       mainRunner = ''
@@ -105,8 +80,39 @@
       });
     '';
 
+    inherit (import ../../docinfo.nix) migrationMsg;
+
   in ''
-    startAll;
     $machine->waitForUnit('habitica.service');
-  '' + lib.concatMapStrings mkTest (import ../../migrations.nix);
+
+    $machine->nest('populate database with old version', sub {
+      $machine->stopJob('habitica.service');
+      $machine->succeed('habitica-db-shell --eval "db.dropDatabase()"');
+      $machine->succeed('habitica-db-restore --db admin ${./fixture}');
+      $machine->succeed('rm /var/lib/habitica/db-version');
+    });
+
+    $machine->nest('reboot to run migrations', sub {
+      $machine->shutdown;
+      $machine->waitForUnit('habitica.service');
+    });
+
+    ${lib.concatMapStrings mkTest (import ../../migrations.nix)}
+
+    $machine->nest('reboot machine to hopefully not run migrations', sub {
+      $machine->shutdown;
+      $machine->waitForUnit('habitica.service');
+    });
+
+    $machine->nest('verify that migrations were not applied again', sub {
+      # Note that we do not use $machine->fail, because this won't fail our
+      # whole test if there is an unrelated error. So instead we use positive
+      # matching with grep and use "wc -l" to check if the amount of matching
+      # lines is indeed zero.
+      $machine->succeed(
+        'test "$(journalctl -b -u habitica-db-update.service'.
+        ' | grep -F "${migrationMsg}" | wc -l)" -eq 0'
+      );
+    });
+  '';
 }
