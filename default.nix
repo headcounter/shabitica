@@ -20,6 +20,9 @@ let
 
   docInfo = import ./docinfo.nix;
 
+  migrations = import ./migrations.nix;
+  latestDbVersion = lib.length migrations;
+
 in {
   options.habitica = {
     hostName = lib.mkOption {
@@ -193,6 +196,8 @@ in {
           chmod 0710 /var/lib/habitica
           chown root:habitica /var/lib/habitica
 
+          echo ${toString latestDbVersion} > /var/lib/habitica/db-version
+
           chmod 0700 /var/lib/habitica/db
           chown habitica-db:habitica /var/lib/habitica/db
 
@@ -275,6 +280,57 @@ in {
           mkdir -p "$backupDir"
           archiveFile="$(date +${docInfo.archiveDateFormat}).archive"
           ${dbtools}/bin/habitica-db-dump --archive="$backupDir/$archiveFile"
+        '';
+      };
+
+      systemd.services.habitica-db-update = {
+        description = "Apply Habitica Database Updates";
+        requiredBy = [ "habitica.service" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "habitica-db.service" "habitica-init.service" ];
+        before = [ "habitica.service" ];
+
+        path = lib.singleton (pkgs.writeScriptBin "query-db-version" ''
+          #!${pkgs.stdenv.shell} -e
+          if [ ! -e /var/lib/habitica/db-version ]; then
+            current=0
+          else
+            declare -i current=$(< /var/lib/habitica/db-version)
+          fi
+          latest=${toString latestDbVersion}
+          case "$1" in
+            needs-update)
+              test $latest -ne $current;;
+            new-versions)
+              ${pkgs.coreutils}/bin/seq $(($current + 1)) $latest;;
+          esac
+        '');
+
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+        serviceConfig.EnvironmentFile = "/var/lib/habitica/secrets.env";
+        serviceConfig.User = "habitica";
+        serviceConfig.Group = "habitica";
+        serviceConfig.PrivateTmp = true;
+        serviceConfig.PrivateNetwork = true;
+        serviceConfig.PermissionsStartOnly = true;
+
+        preStart = ''
+          if query-db-version needs-update; then
+            systemctl start habitica-db-backup.service
+          fi
+        '';
+
+        script = ''
+          if query-db-version needs-update; then
+            for ver in $(query-db-version new-versions); do
+              ${habitica.migrator}/bin/migrate "$ver"
+            done
+          fi
+        '';
+
+        postStart = ''
+          echo ${toString latestDbVersion} > /var/lib/habitica/db-version
         '';
       };
 
