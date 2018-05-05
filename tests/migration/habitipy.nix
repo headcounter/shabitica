@@ -6,7 +6,7 @@
 #
 #   nix-build --no-out-link create-fixture.nix
 #
-{ buildPythonPackage, fetchFromGitHub
+{ buildPythonPackage, lib, fetchFromGitHub
 , plumbum, requests, aiohttp, responses, hypothesis
 }:
 
@@ -23,6 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ plumbum requests ];
 
+  doCheck = lib.versionAtLeast "0.5.0" responses.version;
   preCheck = "export HOME=\"$PWD\"";
   checkInputs = [ aiohttp responses hypothesis ];
 }
