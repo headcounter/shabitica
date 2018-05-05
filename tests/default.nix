@@ -14,7 +14,24 @@ let
       virtualisation.diskSize = 16384;
       virtualisation.memorySize = 1024;
     };
-    testFun = import path (args // { inherit common; });
+    testFun = import path (args // {
+      inherit common;
+
+      registerUser = username: hostname: let
+        inherit (args) lib;
+        mkPerlString = val: "'${lib.escape ["\\" "'"] val}'";
+        listToCommand = lib.concatMapStringsSep " " lib.escapeShellArg;
+        data = builtins.toJSON {
+          inherit username;
+          email = "${username}@example.org";
+          password = "test";
+          confirmPassword = "test";
+        };
+        url = "http://${hostname}/api/v3/user/auth/local/register";
+      in mkPerlString (listToCommand [
+        "curl" "-f" "-H" "Content-Type: application/json" "-d" data url
+      ]);
+    });
   in import "${nixpkgs}/nixos/tests/make-test.nix" testFun;
 
 in {
