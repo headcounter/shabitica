@@ -173,10 +173,10 @@ index ca7c202d9..0e7ccb5bf 100644
          { name: 'privacy', path: 'privacy', component: PrivacyPage, meta: {requiresLogin: false}},
          { name: 'terms', path: 'terms', component: TermsPage, meta: {requiresLogin: false}},
 diff --git a/website/client/store/actions/user.js b/website/client/store/actions/user.js
-index 145ff2a21..b9e62a469 100644
+index 7c44d90e7..d236ea397 100644
 --- a/website/client/store/actions/user.js
 +++ b/website/client/store/actions/user.js
-@@ -128,11 +128,6 @@ export function openMysteryItem () {
+@@ -137,11 +137,6 @@ export function openMysteryItem () {
    return axios.post('/api/v3/user/open-mystery-item');
  }
  
@@ -189,10 +189,10 @@ index 145ff2a21..b9e62a469 100644
    let result = await axios.post('/api/v3/user/rebirth');
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index b3cae07cf..34c275920 100644
+index 97f406bfd..817ff7c63 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -189,7 +189,6 @@ let updatablePaths = [
+@@ -192,7 +192,6 @@ let updatablePaths = [
    'flags.welcomed',
    'flags.cardReceived',
    'flags.warnedLowHealth',

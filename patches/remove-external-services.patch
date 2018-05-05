@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 42fe38c48..63df05213 100644
+index 1073ead7c..63df05213 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -4,16 +4,6 @@
@@ -60,7 +60,7 @@ index 42fe38c48..63df05213 100644
      "NODE_DB_URI":"mongodb://localhost/habitrpg",
      "TEST_DB_URI":"mongodb://localhost/habitrpg_test",
      "NODE_ENV":"development",
-@@ -31,87 +21,20 @@
+@@ -31,86 +21,20 @@
      "SMTP_HOST":"example.com",
      "SMTP_PORT": 587,
      "SMTP_TLS": true,
@@ -145,9 +145,7 @@ index 42fe38c48..63df05213 100644
 -      "CLOUDKARAFKA_USERNAME": "",
 -      "CLOUDKARAFKA_PASSWORD": "",
 -      "CLOUDKARAFKA_TOPIC_PREFIX": ""
--    },
--    "STACK_IMPACT_KEY": "aaaabbbbccccddddeeeeffffgggg111100002222"
-+    }
+     }
  }
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
 index 194008bb4..8388d835b 100644
@@ -1742,17 +1740,22 @@ index ab72d1f2b..4e751b750 100644
  
    it('adds equipment to inventory', () => {
 diff --git a/test/common/ops/buy/buyArmoire.js b/test/common/ops/buy/buyArmoire.js
-index b711bc342..a7fff84b3 100644
+index b711bc342..aa4ddd17d 100644
 --- a/test/common/ops/buy/buyArmoire.js
 +++ b/test/common/ops/buy/buyArmoire.js
-@@ -31,7 +31,6 @@ describe('shared.ops.buyArmoire', () => {
+@@ -31,10 +31,9 @@ describe('shared.ops.buyArmoire', () => {
    let YIELD_EQUIPMENT = 0.5;
    let YIELD_FOOD = 0.7;
    let YIELD_EXP = 0.9;
 -  let analytics = {track () {}};
  
-   function buyArmoire (_user, _req, _analytics) {
-     const buyOp = new BuyArmoireOperation(_user, _req, _analytics);
+-  function buyArmoire (_user, _req, _analytics) {
+-    const buyOp = new BuyArmoireOperation(_user, _req, _analytics);
++  function buyArmoire (_user, _req) {
++    const buyOp = new BuyArmoireOperation(_user, _req);
+ 
+     return buyOp.purchase();
+   }
 @@ -52,12 +51,10 @@ describe('shared.ops.buyArmoire', () => {
      user.items.food = {};
  
@@ -1783,18 +1786,77 @@ index b711bc342..a7fff84b3 100644
      });
    });
  });
+diff --git a/test/common/ops/buy/buyGem.js b/test/common/ops/buy/buyGem.js
+index fc3d00f70..4ae96a55b 100644
+--- a/test/common/ops/buy/buyGem.js
++++ b/test/common/ops/buy/buyGem.js
+@@ -1,6 +1,5 @@
+ /* eslint-disable camelcase */
+ 
+-import sinon from 'sinon'; // eslint-disable-line no-shadow
+ import {
+   generateUser,
+ } from '../../../helpers/common.helper';
+@@ -11,15 +10,14 @@ import i18n from '../../../../website/common/script/i18n';
+ import {BuyGemOperation} from '../../../../website/common/script/ops/buy/buyGem';
+ import planGemLimits from '../../../../website/common/script/libs/planGemLimits';
+ 
+-function buyGem (user, req, analytics) {
+-  let buyOp = new BuyGemOperation(user, req, analytics);
++function buyGem (user, req) {
++  let buyOp = new BuyGemOperation(user, req);
+ 
+   return buyOp.purchase();
+ }
+ 
+ describe('shared.ops.buyGem', () => {
+   let user;
+-  let analytics = {track () {}};
+   let goldPoints = 40;
+   let gemsBought = 40;
+   let userGemAmount = 10;
+@@ -35,23 +33,16 @@ describe('shared.ops.buyGem', () => {
+         },
+       },
+     });
+-
+-    sinon.stub(analytics, 'track');
+-  });
+-
+-  afterEach(() => {
+-    analytics.track.restore();
+   });
+ 
+   context('Gems', () => {
+     it('purchases gems', () => {
+-      let [, message] = buyGem(user, {params: {type: 'gems', key: 'gem'}}, analytics);
++      let [, message] = buyGem(user, {params: {type: 'gems', key: 'gem'}});
+ 
+       expect(message).to.equal(i18n.t('plusGem', {count: 1}));
+       expect(user.balance).to.equal(userGemAmount + 0.25);
+       expect(user.purchased.plan.gemsBought).to.equal(1);
+       expect(user.stats.gp).to.equal(goldPoints - planGemLimits.convRate);
+-      expect(analytics.track).to.be.calledOnce;
+     });
+ 
+     it('purchases gems with a different language than the default', () => {
 diff --git a/test/common/ops/buy/buyHealthPotion.js b/test/common/ops/buy/buyHealthPotion.js
-index 9f04c4d6b..36ec2072c 100644
+index 9f04c4d6b..01fcc829d 100644
 --- a/test/common/ops/buy/buyHealthPotion.js
 +++ b/test/common/ops/buy/buyHealthPotion.js
-@@ -10,7 +10,6 @@ import i18n from '../../../../website/common/script/i18n';
+@@ -10,10 +10,9 @@ import i18n from '../../../../website/common/script/i18n';
  
  describe('shared.ops.buyHealthPotion', () => {
    let user;
 -  let analytics = {track () {}};
  
-   function buyHealthPotion (_user, _req, _analytics) {
-     const buyOp = new BuyHealthPotionOperation(_user, _req, _analytics);
+-  function buyHealthPotion (_user, _req, _analytics) {
+-    const buyOp = new BuyHealthPotionOperation(_user, _req, _analytics);
++  function buyHealthPotion (_user, _req) {
++    const buyOp = new BuyHealthPotionOperation(_user, _req);
+ 
+     return buyOp.purchase();
+   }
 @@ -32,19 +31,13 @@ describe('shared.ops.buyHealthPotion', () => {
        },
        stats: { gp: 200 },
@@ -1910,18 +1972,22 @@ index 5334d3e67..61ec0c10f 100644
      });
    });
 diff --git a/test/common/ops/buy/buyQuest.js b/test/common/ops/buy/buyQuest.js
-index 390b65ee0..81cc34d01 100644
+index 390b65ee0..37c450702 100644
 --- a/test/common/ops/buy/buyQuest.js
 +++ b/test/common/ops/buy/buyQuest.js
-@@ -11,7 +11,6 @@ import i18n from '../../../../website/common/script/i18n';
+@@ -11,21 +11,15 @@ import i18n from '../../../../website/common/script/i18n';
  
  describe('shared.ops.buyQuest', () => {
    let user;
 -  let analytics = {track () {}};
  
-   function buyQuest (_user, _req, _analytics) {
-     const buyOp = new BuyQuestWithGoldOperation(_user, _req, _analytics);
-@@ -21,11 +20,6 @@ describe('shared.ops.buyQuest', () => {
+-  function buyQuest (_user, _req, _analytics) {
+-    const buyOp = new BuyQuestWithGoldOperation(_user, _req, _analytics);
++  function buyQuest (_user, _req) {
++    const buyOp = new BuyQuestWithGoldOperation(_user, _req);
+ 
+     return buyOp.purchase();
+   }
  
    beforeEach(() => {
      user = generateUser();
@@ -2043,13 +2109,13 @@ index 3684f7d41..e49a007ba 100644
  
      it('buys a mount', () => {
 diff --git a/test/common/ops/buy/purchase.js b/test/common/ops/buy/purchase.js
-index f8a6c903a..b5ea6f8b7 100644
+index 900011daa..7cddc485c 100644
 --- a/test/common/ops/buy/purchase.js
 +++ b/test/common/ops/buy/purchase.js
-@@ -18,19 +18,16 @@ describe('shared.ops.purchase', () => {
+@@ -16,19 +16,16 @@ describe('shared.ops.purchase', () => {
+   const SEASONAL_FOOD = 'Meat';
    let user;
    let goldPoints = 40;
-   let gemsBought = 40;
 -  let analytics = {track () {}};
  
    before(() => {
@@ -2066,22 +2132,7 @@ index f8a6c903a..b5ea6f8b7 100644
      pinnedGearUtils.removeItemByPath.restore();
    });
  
-@@ -186,13 +183,12 @@ describe('shared.ops.purchase', () => {
-     });
- 
-     it('purchases gems', () => {
--      let [, message] = purchase(user, {params: {type: 'gems', key: 'gem'}}, analytics);
-+      let [, message] = purchase(user, {params: {type: 'gems', key: 'gem'}});
- 
-       expect(message).to.equal(i18n.t('plusOneGem'));
-       expect(user.balance).to.equal(userGemAmount + 0.25);
-       expect(user.purchased.plan.gemsBought).to.equal(1);
-       expect(user.stats.gp).to.equal(goldPoints - planGemLimits.convRate);
--      expect(analytics.track).to.be.calledOnce;
-     });
- 
-     it('purchases gems with a different language than the default', () => {
-@@ -208,11 +204,10 @@ describe('shared.ops.purchase', () => {
+@@ -130,11 +127,10 @@ describe('shared.ops.purchase', () => {
        let type = 'eggs';
        let key = 'Wolf';
  
@@ -2462,7 +2513,7 @@ index de65914ea..ab38d5546 100644
      close () {
        this.$root.$emit('bv::hide::modal', 'won-challenge');
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index cdb8233d1..3c559ee1e 100644
+index baed4e411..8af845ee0 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -4,11 +4,6 @@
@@ -2477,16 +2528,16 @@ index cdb8233d1..3c559ee1e 100644
        .col-12.col-md-2
          h3 {{ $t('footerCompany') }}
          ul
-@@ -43,8 +38,6 @@
-             a(v-html='$t("communityExtensions")')
-           li
-             a(v-html='$t("communityForum")')
+@@ -41,8 +36,6 @@
+             a(href='https://trello.com/c/odmhIqyW/440-read-first-table-of-contents', target='_blank') {{ $t('requestFeature') }}
+           li(v-html='$t("communityExtensions")')
+           li(v-html='$t("communityForum")')
 -          li
 -            a(href='https://www.facebook.com/Habitica', target='_blank') {{ $t('communityFacebook') }}
            li
              a(href='https://www.reddit.com/r/habitrpg/', target='_blank') {{ $t('communityReddit') }}
        .col-12.col-md-6
-@@ -60,14 +53,6 @@
+@@ -58,14 +51,6 @@
                  a(href='http://habitica.wikia.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
                li
                  a(href='http://devs.habitica.com/', target='_blank') {{ $t('devBlog') }}
@@ -2501,7 +2552,7 @@ index cdb8233d1..3c559ee1e 100644
          .row
            .col-12.col-md-10 {{ $t('donateText3') }}
            .col-12.col-md-2
-@@ -169,37 +154,6 @@
+@@ -150,37 +135,6 @@
      margin-bottom: .5em;
    }
  
@@ -2539,18 +2590,19 @@ index cdb8233d1..3c559ee1e 100644
    .logo {
      width: 24px;
      height: 24px;
-@@ -233,42 +187,26 @@
-   }
+@@ -215,11 +169,6 @@
  </style>
  
--<style>
+ <style lang="scss">
 -  .facebook svg {
 -    width: 10px;
 -    margin: 0 auto;
 -  }
--</style>
 -
- <script>
+   footer {
+     &.expanded {
+       padding-left: 6em;
+@@ -244,31 +193,22 @@
  import axios from 'axios';
  import moment from 'moment';
  import { mapState } from 'client/libs/store';
@@ -2582,7 +2634,7 @@ index cdb8233d1..3c559ee1e 100644
          heart,
        }),
        debugMenuShown: false,
-@@ -367,12 +305,6 @@ export default {
+@@ -367,12 +307,6 @@ export default {
        this.$root.$emit('bv::show::modal', 'modify-inventory');
      },
      donate () {
@@ -2596,7 +2648,7 @@ index cdb8233d1..3c559ee1e 100644
      },
    },
 diff --git a/website/client/components/auth/registerLoginReset.vue b/website/client/components/auth/registerLoginReset.vue
-index dba5c28c6..bbb9af252 100644
+index 12a9dad12..bbb9af252 100644
 --- a/website/client/components/auth/registerLoginReset.vue
 +++ b/website/client/components/auth/registerLoginReset.vue
 @@ -13,15 +13,6 @@
@@ -2676,11 +2728,16 @@ index dba5c28c6..bbb9af252 100644
    watch: {
      $route: {
        handler () {
-@@ -427,33 +388,6 @@ export default {
+@@ -427,38 +388,6 @@ export default {
        // ALSO it's the only way to make sure language data is reloaded and correct for the logged in user
        window.location.href = redirectTo;
      },
+-    // @TODO: Abstract hello in to action or lib
 -    async socialAuth (network) {
+-      try {
+-        await hello(network).logout();
+-      } catch (e) {} // eslint-disable-line
+-
 -      const url = window.location.href;
 -
 -      let auth = await hello(network).login({
@@ -3551,11 +3608,11 @@ index 667172b64..68d62bd34 100644
  };
  </script>
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index 1e95ea76f..c62194c5c 100644
+index d51688366..a3426dedd 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -13,15 +13,6 @@
-             p.section-main {{$t('timeToGetThingsDone')}}
+             p.section-main {{$t('timeToGetThingsDone', {userCountInMillions})}}
            .col-12.col-sm-6.col-md-6.col-lg-6
              h3.text-center {{$t('singUpForFree')}}
 -            div.text-center
@@ -3718,7 +3775,7 @@ index 1e95ea76f..c62194c5c 100644
      computed: {
        emailValid () {
          if (this.email.length <= 3) return false;
-@@ -644,29 +540,8 @@
+@@ -644,35 +540,8 @@
          window.location.href = redirectTo;
        },
        playButtonClick () {
@@ -3730,7 +3787,13 @@ index 1e95ea76f..c62194c5c 100644
 -        });
          this.$router.push('/register');
        },
+-      // @TODO: Abstract hello in to action or lib
 -      async socialAuth (network) {
+-        try {
+-          await hello(network).logout();
+-        } catch (e) {} // eslint-disable-line
+-
+-
 -        const url = window.location.href;
 -
 -        let auth = await hello(network).login({
@@ -3762,7 +3825,7 @@ index 34ff15ca5..e5dd03e02 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index 885af0c0e..f8b39ed2d 100644
+index b64d7b7c7..ab831a8c9 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
 @@ -492,7 +492,6 @@ import moment from 'moment';
@@ -3773,7 +3836,7 @@ index 885af0c0e..f8b39ed2d 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import negativeIcon from 'assets/svg/negative.svg';
-@@ -703,7 +702,6 @@ export default {
+@@ -708,7 +707,6 @@ export default {
  
        if (task.group.approval.required) task.group.approval.requested = true;
  
@@ -4224,7 +4287,7 @@ index deaf0127b..26283710a 100644
      user.items.lastDrop.date = Number(new Date());
      user.items.lastDrop.count++;
 diff --git a/website/common/script/fns/updateStats.js b/website/common/script/fns/updateStats.js
-index 77d547341..0bd0218b6 100644
+index 0538ec380..f56af0b89 100644
 --- a/website/common/script/fns/updateStats.js
 +++ b/website/common/script/fns/updateStats.js
 @@ -6,7 +6,7 @@ import {
@@ -4236,7 +4299,7 @@ index 77d547341..0bd0218b6 100644
    let allocatedStatPoints;
    let totalStatPoints;
    let experienceToNextLevel;
-@@ -79,15 +79,6 @@ module.exports = function updateStats (user, stats, req = {}, analytics) {
+@@ -88,15 +88,6 @@ module.exports = function updateStats (user, stats, req = {}, analytics) {
          user.items.quests[k] = 0;
        user.items.quests[k]++;
        if (user.markModified) user.markModified('flags.levelDrops');
@@ -4273,7 +4336,7 @@ index 57eaa890c..5a9e61a0a 100644
    PARTY_LIMIT_MEMBERS,
  };
 diff --git a/website/common/script/ops/buy/abstractBuyOperation.js b/website/common/script/ops/buy/abstractBuyOperation.js
-index f4627e2d2..c51384481 100644
+index 9b0a2d9fe..eac44cfc8 100644
 --- a/website/common/script/ops/buy/abstractBuyOperation.js
 +++ b/website/common/script/ops/buy/abstractBuyOperation.js
 @@ -4,19 +4,16 @@ import {
@@ -4308,7 +4371,7 @@ index f4627e2d2..c51384481 100644
    purchase () {
      if (!this.multiplePurchaseAllowed() && this.quantity > 1) {
        throw new NotAuthorized(this.i18n('messageNotAbleToBuyInBulk'));
-@@ -67,33 +60,13 @@ export class AbstractBuyOperation {
+@@ -67,37 +60,13 @@ export class AbstractBuyOperation {
  
      let resultObj = this.executeChanges(this.user, this.item, this.req);
  
@@ -4318,6 +4381,10 @@ index f4627e2d2..c51384481 100644
 -
      return resultObj;
    }
+-
+-  analyticsLabel () {
+-    return 'acquire item';
+-  }
 -
 -  sendToAnalytics (additionalData = {}) {
 -    // spread-operator produces an "unexpected token" error
@@ -4332,7 +4399,7 @@ index f4627e2d2..c51384481 100644
 -      analyticsData.quantityPurchased = this.quantity;
 -    }
 -
--    this.analytics.track('acquire item', analyticsData);
+-    this.analytics.track(this.analyticsLabel(), analyticsData);
 -  }
  }
  
@@ -4344,14 +4411,14 @@ index f4627e2d2..c51384481 100644
    }
  
    getItemValue (item) {
-@@ -120,13 +93,4 @@ export class AbstractGoldItemOperation extends AbstractBuyOperation {
+@@ -128,13 +97,4 @@ export class AbstractGoldItemOperation extends AbstractBuyOperation {
  
-     user.stats.gp -= itemValue * quantity;
+     user.stats.gp -= itemValue * this.quantity;
    }
 -
 -  analyticsData () {
 -    return {
--      itemKey: this.item.key,
+-      itemKey: this.getIemKey(this.item),
 -      itemType: 'Market',
 -      acquireMethod: 'Gold',
 -      goldCost: this.getItemValue(this.item),
@@ -4359,10 +4426,10 @@ index f4627e2d2..c51384481 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index b8f56aab7..b90c7acbf 100644
+index f0ec31e5f..91d5a7826 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
-@@ -17,7 +17,7 @@ import hourglassPurchase from './hourglassPurchase';
+@@ -18,7 +18,7 @@ import {BuyGemOperation} from './buyGem';
  
  // @TODO: when we are sure buy is the only function used, let's move the buy files to a folder
  
@@ -4371,7 +4438,7 @@ index b8f56aab7..b90c7acbf 100644
    let key = get(req, 'params.key');
    if (!key) throw new BadRequest(i18n.t('missingKeyParam', req.language));
  
-@@ -31,16 +31,16 @@ module.exports = function buy (user, req = {}, analytics) {
+@@ -32,22 +32,22 @@ module.exports = function buy (user, req = {}, analytics) {
  
    switch (type) {
      case 'armoire': {
@@ -4391,10 +4458,17 @@ index b8f56aab7..b90c7acbf 100644
  
        buyRes = buyOp.purchase();
        break;
-@@ -52,23 +52,23 @@ module.exports = function buy (user, req = {}, analytics) {
+     }
+     case 'gems': {
+-      const buyOp = new BuyGemOperation(user, req, analytics);
++      const buyOp = new BuyGemOperation(user, req);
+ 
+       buyRes = buyOp.purchase();
+       break;
+@@ -58,23 +58,23 @@ module.exports = function buy (user, req = {}, analytics) {
+     case 'quests':
      case 'gear':
      case 'bundles':
-     case 'gems':
 -      buyRes = purchaseOp(user, req, analytics);
 +      buyRes = purchaseOp(user, req);
        break;
@@ -4443,6 +4517,36 @@ index 4d091a2c1..c3a6051f0 100644
 -  analyticsData () {
 -    let data = super.analyticsData();
 -    data.itemKey = 'Armoire';
+-    return data;
+-  }
+ }
+diff --git a/website/common/script/ops/buy/buyGem.js b/website/common/script/ops/buy/buyGem.js
+index 806b0cbc5..83f69606c 100644
+--- a/website/common/script/ops/buy/buyGem.js
++++ b/website/common/script/ops/buy/buyGem.js
+@@ -9,8 +9,8 @@ import get from 'lodash/get';
+ import planGemLimits from '../../libs/planGemLimits';
+ 
+ export class BuyGemOperation extends AbstractGoldItemOperation {
+-  constructor (user, req, analytics) {
+-    super(user, req, analytics);
++  constructor (user, req) {
++    super(user, req);
+   }
+ 
+   multiplePurchaseAllowed () {
+@@ -68,14 +68,4 @@ export class BuyGemOperation extends AbstractGoldItemOperation {
+       this.i18n('plusGem', {count: this.quantity}),
+     ];
+   }
+-
+-  analyticsLabel () {
+-    return 'purchase gems';
+-  }
+-
+-  analyticsData () {
+-    let data = super.analyticsData();
+-    data.itemKey = 'gem';
 -    return data;
 -  }
  }
@@ -4611,37 +4715,10 @@ index d9afc4b44..4f712db74 100644
      { items: user.items, purchasedPlanConsecutive: user.purchased.plan.consecutive },
      i18n.t('hourglassPurchase', req.language),
 diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index 22b0803ef..30de15a6a 100644
+index eb48ee72e..fd2a2f16b 100644
 --- a/website/common/script/ops/buy/purchase.js
 +++ b/website/common/script/ops/buy/purchase.js
-@@ -14,7 +14,7 @@ import {
- import { removeItemByPath } from '../pinnedGearUtils';
- import getItemInfo from '../../libs/getItemInfo';
- 
--function buyGems (user, analytics, req, key) {
-+function buyGems (user, req) {
-   let convRate = planGemLimits.convRate;
-   let convCap = planGemLimits.convCap;
-   convCap += user.purchased.plan.consecutive.gemCapExtra;
-@@ -39,17 +39,6 @@ function buyGems (user, analytics, req, key) {
-   user.purchased.plan.gemsBought++;
-   user.stats.gp -= convRate;
- 
--  if (analytics) {
--    analytics.track('purchase gems', {
--      uuid: user._id,
--      itemKey: key,
--      acquireMethod: 'Gold',
--      goldCost: convRate,
--      category: 'behavior',
--      headers: req.headers,
--    });
--  }
--
-   return [
-     pick(user, splitWhitespace('stats balance')),
-     i18n.t('plusOneGem', req.language),
-@@ -108,7 +97,7 @@ function purchaseItem (user, item, price, type, key) {
+@@ -65,7 +65,7 @@ function purchaseItem (user, item, price, type, key) {
  
  const acceptedTypes = ['eggs', 'hatchingPotions', 'food', 'quests', 'gear', 'bundles'];
  const singlePurchaseTypes = ['gear'];
@@ -4650,16 +4727,7 @@ index 22b0803ef..30de15a6a 100644
    let type = get(req.params, 'type');
    let key = get(req.params, 'key');
  
-@@ -126,7 +115,7 @@ module.exports = function purchase (user, req = {}, analytics) {
-   if (type === 'gems' && key === 'gem') {
-     let gemResponse;
-     for (let i = 0; i < quantity; i += 1) {
--      gemResponse = buyGems(user, analytics, req, key);
-+      gemResponse = buyGems(user, req);
-     }
-     return gemResponse;
-   }
-@@ -154,19 +143,6 @@ module.exports = function purchase (user, req = {}, analytics) {
+@@ -103,19 +103,6 @@ module.exports = function purchase (user, req = {}, analytics) {
      purchaseItem(user, item, price, type, key);
    }
  
@@ -5005,7 +5073,7 @@ index bbe4a7910..d89c3e920 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index ae62382f4..5ec7b56c3 100644
+index 3d69b05c8..56965773c 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -1,6 +1,5 @@
@@ -5047,7 +5115,7 @@ index ae62382f4..5ec7b56c3 100644
   * @apiName UserRegisterLocal
   * @apiGroup User
   *
-@@ -89,14 +74,14 @@ function hasBackupAuth (user, networkToRemove) {
+@@ -89,7 +74,7 @@ function hasBackupAuth (user, networkToRemove) {
   * @apiParam (Body) {String} password Password for the new user
   * @apiParam (Body) {String} confirmPassword Password confirmation
   *
@@ -5056,7 +5124,8 @@ index ae62382f4..5ec7b56c3 100644
   */
  api.registerLocal = {
    method: 'POST',
-   middlewares: [authWithHeaders(true)],
+@@ -98,7 +83,7 @@ api.registerLocal = {
+   })],
    url: '/user/auth/local/register',
    async handler (req, res) {
 -    let existingUser = res.locals.user; // If adding local auth to social user
@@ -5064,7 +5133,7 @@ index ae62382f4..5ec7b56c3 100644
  
      req.checkBody({
        email: {
-@@ -153,19 +138,8 @@ api.registerLocal = {
+@@ -155,19 +140,8 @@ api.registerLocal = {
        },
      };
  
@@ -5086,7 +5155,7 @@ index ae62382f4..5ec7b56c3 100644
  
      // we check for partyInvite for backward compatibility
      if (req.query.groupInvite || req.query.partyInvite) {
-@@ -189,17 +163,6 @@ api.registerLocal = {
+@@ -191,17 +165,6 @@ api.registerLocal = {
          if (!existingUser) sendTxnEmail(savedUser, 'welcome');
        });
  
@@ -5104,7 +5173,7 @@ index ae62382f4..5ec7b56c3 100644
      return null;
    },
  };
-@@ -272,173 +235,10 @@ api.loginLocal = {
+@@ -274,177 +237,10 @@ api.loginLocal = {
        await user.save();
      }
  
@@ -5135,7 +5204,9 @@ index ae62382f4..5ec7b56c3 100644
 -// Called as a callback by Facebook (or other social providers). Internal route
 -api.loginSocial = {
 -  method: 'POST',
--  middlewares: [authWithHeaders(true)],
+-  middlewares: [authWithHeaders({
+-    optional: true,
+-  })],
 -  url: '/user/auth/social', // this isn't the most appropriate url but must be the same as v2
 -  async handler (req, res) {
 -    let existingUser = res.locals.user;
@@ -5220,7 +5291,9 @@ index ae62382f4..5ec7b56c3 100644
 - */
 -api.pusherAuth = {
 -  method: 'POST',
--  middlewares: [authWithHeaders()],
+-  middlewares: [authWithHeaders({
+-    userFieldsToExclude: ['inbox'],
+-  })],
 -  url: '/user/auth/pusher',
 -  async handler (req, res) {
 -    let user = res.locals.user;
@@ -5278,7 +5351,7 @@ index ae62382f4..5ec7b56c3 100644
  /**
   * @api {put} /api/v3/user/auth/update-username Update username
   * @apiDescription Update the username of a local user
-@@ -692,33 +492,4 @@ api.resetPasswordSetNewOne = {
+@@ -704,35 +500,4 @@ api.resetPasswordSetNewOne = {
    },
  };
  
@@ -5293,7 +5366,9 @@ index ae62382f4..5ec7b56c3 100644
 -api.deleteSocial = {
 -  method: 'DELETE',
 -  url: '/user/auth/social/:network',
--  middlewares: [authWithHeaders()],
+-  middlewares: [authWithHeaders({
+-    userFieldsToExclude: ['inbox'],
+-  })],
 -  async handler (req, res) {
 -    let user = res.locals.user;
 -    let network = req.params.network;
@@ -5313,10 +5388,10 @@ index ae62382f4..5ec7b56c3 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 27b721f58..05406b4f0 100644
+index 46f39b022..05f1fb088 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
-@@ -201,16 +201,6 @@ api.createChallenge = {
+@@ -203,16 +203,6 @@ api.createChallenge = {
      };
      response.group = getChallengeGroupResponse(group);
  
@@ -5333,7 +5408,7 @@ index 27b721f58..05406b4f0 100644
      res.respond(201, response);
    },
  };
-@@ -260,16 +250,6 @@ api.joinChallenge = {
+@@ -264,16 +254,6 @@ api.joinChallenge = {
      let chalLeader = await User.findById(response.leader).select(nameFields).exec();
      response.leader = chalLeader ? chalLeader.toJSON({minimize: true}) : null;
  
@@ -5350,7 +5425,7 @@ index 27b721f58..05406b4f0 100644
      res.respond(200, response);
    },
  };
-@@ -307,16 +287,6 @@ api.leaveChallenge = {
+@@ -313,16 +293,6 @@ api.leaveChallenge = {
      // Unlink challenge's tasks from user's tasks and save the challenge
      await Promise.all([challenge.unlinkTasks(user, keep), challenge.save()]);
  
@@ -5367,7 +5442,7 @@ index 27b721f58..05406b4f0 100644
      res.respond(200, {});
    },
  };
-@@ -699,16 +669,6 @@ api.deleteChallenge = {
+@@ -725,16 +695,6 @@ api.deleteChallenge = {
      // Close channel in background, some ops are run in the background without `await`ing
      await challenge.closeChal({broken: 'CHALLENGE_DELETED'});
  
@@ -5384,7 +5459,7 @@ index 27b721f58..05406b4f0 100644
      res.respond(200, {});
    },
  };
-@@ -748,17 +708,6 @@ api.selectChallengeWinner = {
+@@ -776,17 +736,6 @@ api.selectChallengeWinner = {
      // Close channel in background, some ops are run in the background without `await`ing
      await challenge.closeChal({broken: 'CHALLENGE_CLOSED', winner});
  
@@ -5403,7 +5478,7 @@ index 27b721f58..05406b4f0 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 0c33bf2f6..90b43a72a 100644
+index d3381e918..5707ec88b 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -9,8 +9,6 @@ import {
@@ -5415,7 +5490,7 @@ index 0c33bf2f6..90b43a72a 100644
  import { getAuthorEmailFromMessage } from '../../libs/chat';
  import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
  import nconf from 'nconf';
-@@ -142,14 +140,6 @@ api.postChat = {
+@@ -146,14 +144,6 @@ api.postChat = {
  
        sendTxn(FLAG_REPORT_EMAILS, 'slur-report-to-mods', report);
  
@@ -5430,7 +5505,7 @@ index 0c33bf2f6..90b43a72a 100644
        throw new BadRequest(res.t('bannedSlurUsed'));
      }
  
-@@ -184,13 +174,6 @@ api.postChat = {
+@@ -188,13 +178,6 @@ api.postChat = {
  
      await Promise.all(toSave);
  
@@ -5445,7 +5520,7 @@ index 0c33bf2f6..90b43a72a 100644
        res.respond(200, {chat: chatRes.chat});
      } else {
 diff --git a/website/server/controllers/api-v3/coupon.js b/website/server/controllers/api-v3/coupon.js
-index 5fc0f4cbf..f92f7f279 100644
+index bec35182b..0f9893cfd 100644
 --- a/website/server/controllers/api-v3/coupon.js
 +++ b/website/server/controllers/api-v3/coupon.js
 @@ -56,7 +56,7 @@ api.getCoupons = {
@@ -5458,7 +5533,7 @@ index 5fc0f4cbf..f92f7f279 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 4a5459077..14ee52ab5 100644
+index 2a97fb6de..ad5364c72 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5475,7 +5550,7 @@ index 4a5459077..14ee52ab5 100644
  import apiMessages from '../../libs/apiMessages';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
-@@ -150,22 +144,6 @@ api.createGroup = {
+@@ -152,22 +146,6 @@ api.createGroup = {
        profile: {name: user.profile.name},
      };
  
@@ -5498,7 +5573,7 @@ index 4a5459077..14ee52ab5 100644
      res.respond(201, response); // do not remove chat flags data as we've just created the group
    },
  };
-@@ -198,54 +176,6 @@ api.createGroupPlan = {
+@@ -202,54 +180,6 @@ api.createGroupPlan = {
      let results = await Promise.all([user.save(), group.save()]);
      let savedGroup = results[1];
  
@@ -5553,7 +5628,7 @@ index 4a5459077..14ee52ab5 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -578,7 +508,6 @@ api.joinGroup = {
+@@ -590,7 +520,6 @@ api.joinGroup = {
      if (group.memberCount === 0) group.leader = user._id; // If new user is only member -> set as leader
  
      if (group.hasNotCancelled())  {
@@ -5561,7 +5636,7 @@ index 4a5459077..14ee52ab5 100644
        await group.updateGroupPlan();
      }
  
-@@ -631,22 +560,6 @@ api.joinGroup = {
+@@ -643,22 +572,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -5584,7 +5659,7 @@ index 4a5459077..14ee52ab5 100644
      res.respond(200, response);
    },
  };
-@@ -773,7 +686,7 @@ api.leaveGroup = {
+@@ -789,7 +702,7 @@ api.leaveGroup = {
      }
  
      await group.leave(user, req.query.keep, req.body.keepChallenges);
@@ -5593,7 +5668,7 @@ index 4a5459077..14ee52ab5 100644
      _removeMessagesFromMember(user, group._id);
      await user.save();
  
-@@ -782,11 +695,6 @@ api.leaveGroup = {
+@@ -798,11 +711,6 @@ api.leaveGroup = {
        user.guilds.splice(guildIndex, 1);
      }
  
@@ -5605,7 +5680,7 @@ index 4a5459077..14ee52ab5 100644
      res.respond(200, {});
    },
  };
-@@ -874,8 +782,7 @@ api.removeGroupMember = {
+@@ -892,8 +800,7 @@ api.removeGroupMember = {
      if (isInGroup) {
        group.memberCount -= 1;
        if (group.hasNotCancelled())  {
@@ -5615,7 +5690,7 @@ index 4a5459077..14ee52ab5 100644
        }
  
        if (group.quest && group.quest.leader === member._id) {
-@@ -891,12 +798,6 @@ api.removeGroupMember = {
+@@ -909,12 +816,6 @@ api.removeGroupMember = {
          removeFromArray(member.guilds, group._id);
        }
        if (isInGroup === 'party') {
@@ -5628,7 +5703,7 @@ index 4a5459077..14ee52ab5 100644
          member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
        }
  
-@@ -997,19 +898,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -1015,19 +916,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -5648,7 +5723,7 @@ index 4a5459077..14ee52ab5 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1025,8 +913,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1043,8 +931,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},
@@ -5658,7 +5733,7 @@ index 4a5459077..14ee52ab5 100644
      .select({_id: true, 'preferences.emailNotifications': true})
      .exec();
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index 61e0e3ec1..988ba2f92 100644
+index a09cda938..ed65fff1c 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,6 @@ import {
@@ -5669,7 +5744,7 @@ index 61e0e3ec1..988ba2f92 100644
  import { achievements } from '../../../../website/common/';
  
  let api = {};
-@@ -493,18 +492,6 @@ api.sendPrivateMessage = {
+@@ -501,18 +500,6 @@ api.sendPrivateMessage = {
          {name: 'SENDER', content: getUserInfo(sender, ['name']).name},
        ]);
      }
@@ -5688,7 +5763,7 @@ index 61e0e3ec1..988ba2f92 100644
  
      res.respond(200, {});
    },
-@@ -583,15 +570,6 @@ api.transferGems = {
+@@ -591,15 +578,6 @@ api.transferGems = {
          {name: 'X_GEMS_GIFTED', content: gemAmount},
        ]);
      }
@@ -5705,7 +5780,7 @@ index 61e0e3ec1..988ba2f92 100644
      res.respond(200, {});
    },
 diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
-index 57e7dcaab..2a940a71d 100644
+index b08585e89..183357074 100644
 --- a/website/server/controllers/api-v3/quests.js
 +++ b/website/server/controllers/api-v3/quests.js
 @@ -1,6 +1,5 @@
@@ -5723,7 +5798,7 @@ index 57e7dcaab..2a940a71d 100644
  
  const questScrolls = common.content.quests;
  
-@@ -78,7 +76,7 @@ api.inviteToQuest = {
+@@ -80,7 +78,7 @@ api.inviteToQuest = {
        'party._id': group._id,
        _id: {$ne: user._id},
      })
@@ -5732,7 +5807,7 @@ index 57e7dcaab..2a940a71d 100644
        .exec();
  
      group.markModified('quest');
-@@ -118,20 +116,6 @@ api.inviteToQuest = {
+@@ -120,20 +118,6 @@ api.inviteToQuest = {
      // send out invites
      let inviterVars = getUserInfo(user, ['name', 'email']);
      let membersToEmail = members.filter(member => {
@@ -5753,7 +5828,7 @@ index 57e7dcaab..2a940a71d 100644
        return member.preferences.emailNotifications.invitedQuest !== false;
      });
      sendTxnEmail(membersToEmail, `invite-${quest.boss ? 'boss' : 'collection'}-quest`, [
-@@ -139,17 +123,6 @@ api.inviteToQuest = {
+@@ -141,17 +125,6 @@ api.inviteToQuest = {
        {name: 'INVITER', content: inviterVars.name},
        {name: 'PARTY_URL', content: '/party'},
      ]);
@@ -5771,7 +5846,7 @@ index 57e7dcaab..2a940a71d 100644
    },
  };
  
-@@ -198,17 +171,6 @@ api.acceptQuest = {
+@@ -202,17 +175,6 @@ api.acceptQuest = {
      let savedGroup = await group.save();
  
      res.respond(200, savedGroup.quest);
@@ -5789,7 +5864,7 @@ index 57e7dcaab..2a940a71d 100644
    },
  };
  
-@@ -258,16 +220,6 @@ api.rejectQuest = {
+@@ -264,16 +226,6 @@ api.rejectQuest = {
      let savedGroup = await group.save();
  
      res.respond(200, savedGroup.quest);
@@ -5806,7 +5881,7 @@ index 57e7dcaab..2a940a71d 100644
    },
  };
  
-@@ -317,16 +269,6 @@ api.forceStart = {
+@@ -325,16 +277,6 @@ api.forceStart = {
      ]);
  
      res.respond(200, savedGroup.quest);
@@ -5824,7 +5899,7 @@ index 57e7dcaab..2a940a71d 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index 604e5c90c..e1f361f39 100644
+index e00b08251..c2ee1d679 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -22,7 +22,6 @@ import {
@@ -5849,7 +5924,7 @@ index 604e5c90c..e1f361f39 100644
 -        });
 -      }
 -
-       taskActivityWebhook.send(user.webhooks, {
+       taskActivityWebhook.send(user, {
          type: 'created',
          task,
 @@ -251,16 +240,6 @@ api.createChallengeTasks = {
@@ -5918,10 +5993,10 @@ index 5065ebc0c..9ab7554c3 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 389e27f70..f40dd4f37 100644
+index b1f51be84..78ee29951 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -15,12 +15,10 @@ import {
+@@ -18,12 +18,10 @@ import {
    getUserInfo,
    sendTxn as txnEmail,
  } from '../../libs/email';
@@ -5934,7 +6009,7 @@ index 389e27f70..f40dd4f37 100644
  
  /**
   * @apiDefine UserNotFound
-@@ -399,8 +397,6 @@ api.deleteUser = {
+@@ -402,8 +400,6 @@ api.deleteUser = {
      if (user.auth.local.hashed_password && user.auth.local.email) {
        let isValidPassword = await passwordUtils.compare(user, password);
        if (!isValidPassword) throw new NotAuthorized(res.t('wrongPassword'));
@@ -5943,7 +6018,7 @@ index 389e27f70..f40dd4f37 100644
      }
  
      let feedback = req.body.feedback;
-@@ -437,14 +433,6 @@ api.deleteUser = {
+@@ -440,14 +436,6 @@ api.deleteUser = {
        ]);
      }
  
@@ -5958,7 +6033,7 @@ index 389e27f70..f40dd4f37 100644
      res.respond(200, {});
    },
  };
-@@ -486,8 +474,6 @@ api.getUserAnonymized = {
+@@ -489,8 +477,6 @@ api.getUserAnonymized = {
      delete user.apiToken;
      if (user.auth) {
        delete user.auth.local;
@@ -5967,7 +6042,7 @@ index 389e27f70..f40dd4f37 100644
      }
      delete user.newMessages;
      delete user.profile;
-@@ -550,7 +536,7 @@ api.sleep = {
+@@ -553,7 +539,7 @@ api.sleep = {
    url: '/user/sleep',
    async handler (req, res) {
      let user = res.locals.user;
@@ -5976,7 +6051,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...sleepRes);
    },
-@@ -610,7 +596,7 @@ api.buy = {
+@@ -613,7 +599,7 @@ api.buy = {
      let quantity = 1;
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
@@ -5985,7 +6060,7 @@ index 389e27f70..f40dd4f37 100644
  
      await user.save();
      res.respond(200, ...buyRes);
-@@ -658,7 +644,7 @@ api.buyGear = {
+@@ -661,7 +647,7 @@ api.buyGear = {
    url: '/user/buy-gear/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -5994,7 +6069,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...buyGearRes);
    },
-@@ -700,7 +686,7 @@ api.buyArmoire = {
+@@ -703,7 +689,7 @@ api.buyArmoire = {
      let user = res.locals.user;
      req.type = 'armoire';
      req.params.key = 'armoire';
@@ -6003,7 +6078,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...buyArmoireResponse);
    },
-@@ -740,7 +726,7 @@ api.buyHealthPotion = {
+@@ -743,7 +729,7 @@ api.buyHealthPotion = {
      let user = res.locals.user;
      req.type = 'potion';
      req.params.key = 'potion';
@@ -6012,7 +6087,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...buyHealthPotionResponse);
    },
-@@ -781,7 +767,7 @@ api.buyMysterySet = {
+@@ -784,7 +770,7 @@ api.buyMysterySet = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'mystery';
@@ -6021,7 +6096,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...buyMysterySetRes);
    },
-@@ -822,7 +808,7 @@ api.buyQuest = {
+@@ -825,7 +811,7 @@ api.buyQuest = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'quest';
@@ -6030,7 +6105,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...buyQuestRes);
    },
-@@ -1012,7 +998,7 @@ api.changeClass = {
+@@ -1039,7 +1025,7 @@ api.changeClass = {
    url: '/user/change-class',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6039,7 +6114,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...changeClassRes);
    },
-@@ -1081,7 +1067,7 @@ api.purchase = {
+@@ -1108,7 +1094,7 @@ api.purchase = {
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
  
@@ -6048,7 +6123,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...purchaseRes);
    },
-@@ -1112,7 +1098,7 @@ api.userPurchaseHourglass = {
+@@ -1139,7 +1125,7 @@ api.userPurchaseHourglass = {
    url: '/user/purchase-hourglass/:type/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6057,7 +6132,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...purchaseHourglassRes);
    },
-@@ -1206,7 +1192,7 @@ api.userOpenMysteryItem = {
+@@ -1233,7 +1219,7 @@ api.userOpenMysteryItem = {
    url: '/user/open-mystery-item',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6066,7 +6141,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...openMysteryItemRes);
    },
-@@ -1238,7 +1224,7 @@ api.userReleasePets = {
+@@ -1265,7 +1251,7 @@ api.userReleasePets = {
    url: '/user/release-pets',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6075,7 +6150,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...releasePetsRes);
    },
-@@ -1287,7 +1273,7 @@ api.userReleaseBoth = {
+@@ -1314,7 +1300,7 @@ api.userReleaseBoth = {
    url: '/user/release-both',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6084,7 +6159,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...releaseBothRes);
    },
-@@ -1323,7 +1309,7 @@ api.userReleaseMounts = {
+@@ -1350,7 +1336,7 @@ api.userReleaseMounts = {
    url: '/user/release-mounts',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6093,7 +6168,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...releaseMountsRes);
    },
-@@ -1396,7 +1382,7 @@ api.userUnlock = {
+@@ -1423,7 +1409,7 @@ api.userUnlock = {
    url: '/user/unlock',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6102,7 +6177,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...unlockRes);
    },
-@@ -1422,7 +1408,7 @@ api.userRevive = {
+@@ -1449,7 +1435,7 @@ api.userRevive = {
    url: '/user/revive',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6111,7 +6186,7 @@ index 389e27f70..f40dd4f37 100644
      await user.save();
      res.respond(200, ...reviveRes);
    },
-@@ -1468,7 +1454,7 @@ api.userRebirth = {
+@@ -1495,7 +1481,7 @@ api.userRebirth = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      }).exec();
  
@@ -6120,7 +6195,7 @@ index 389e27f70..f40dd4f37 100644
  
      let toSave = tasks.map(task => task.save());
  
-@@ -1626,7 +1612,7 @@ api.userReroll = {
+@@ -1653,7 +1639,7 @@ api.userReroll = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      };
      let tasks = await Tasks.Task.find(query).exec();
@@ -6129,7 +6204,7 @@ index 389e27f70..f40dd4f37 100644
  
      let promises = tasks.map(task => task.save());
      promises.push(user.save());
-@@ -1677,12 +1663,6 @@ api.userReset = {
+@@ -1704,12 +1690,6 @@ api.userReset = {
        user.save(),
      ]);
  
@@ -6240,32 +6315,6 @@ index 7943355bb..cf1e614ff 100644
  /**
   * @api {get} /export/inbox.html Export user private messages as HTML document
   * @apiName ExportUserPrivateMessages
-diff --git a/website/server/index.js b/website/server/index.js
-index 4c952caf7..c53937b22 100644
---- a/website/server/index.js
-+++ b/website/server/index.js
-@@ -12,7 +12,6 @@ const setupNconf = require('./libs/setupNconf');
- setupNconf();
- 
- const nconf = require('nconf');
--const stackimpact = require('stackimpact');
- 
- const cluster = require('cluster');
- const logger = require('./libs/logger');
-@@ -21,13 +20,6 @@ const IS_PROD = nconf.get('IS_PROD');
- const IS_DEV = nconf.get('IS_DEV');
- const CORES = Number(nconf.get('WEB_CONCURRENCY')) || 0;
- 
--if (IS_PROD) {
--  stackimpact.start({
--    agentKey: nconf.get('STACK_IMPACT_KEY'),
--    appName: 'Habitica',
--  });
--}
--
- // Setup the cluster module
- if (CORES !== 0 && cluster.isMaster && (IS_DEV || IS_PROD)) {
-   // Fork workers. If config.json has WEB_CONCURRENCY=x, use that - otherwise, use all cpus-1 (production)
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
 index ef39eb951..7aa58ea8f 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
@@ -6397,7 +6446,7 @@ index 330f2d2ac..74a0c4a69 100644
    }
  
 diff --git a/website/server/libs/logger.js b/website/server/libs/logger.js
-index 67bc4df2a..21622d863 100644
+index 75d58c936..d5d95a634 100644
 --- a/website/server/libs/logger.js
 +++ b/website/server/libs/logger.js
 @@ -1,6 +1,5 @@
@@ -6815,10 +6864,10 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 4ce14550f..94b79ae59 100644
+index 8d98a1b1e..f3168e1f0 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
-@@ -21,16 +21,12 @@ import {
+@@ -24,16 +24,12 @@ import {
  import baseModel from '../libs/baseModel';
  import { sendTxn as sendTxnEmail } from '../libs/email';
  import nconf from 'nconf';
@@ -6835,7 +6884,7 @@ index 4ce14550f..94b79ae59 100644
  import { getGroupChat } from '../libs/chat/group-chat';
  import { model as UserNotification } from './userNotification';
  
-@@ -605,12 +601,6 @@ schema.methods.sendChat = function sendChat (message, user, metaData) {
+@@ -608,12 +604,6 @@ schema.methods.sendChat = function sendChat (message, user, metaData) {
      User.update(query, lastSeenUpdateAddNew, {multi: true}).exec();
    });
  
@@ -6848,36 +6897,41 @@ index 4ce14550f..94b79ae59 100644
    return newChatMessage;
  };
  
-@@ -706,7 +696,7 @@ schema.methods.startQuest = async function startQuest (user) {
-   // send notifications in the background without blocking
-   User.find(
-     { _id: { $in: nonUserQuestMembers } },
--    'party.quest items.quests auth.facebook auth.local preferences.emailNotifications preferences.pushNotifications pushDevices profile.name'
-+    'party.quest items.quests auth.local preferences.emailNotifications pushDevices profile.name'
-   ).exec().then((membersToNotify) => {
-     let membersToEmail = _.filter(membersToNotify, (member) => {
-       // send push notifications and filter users that disabled emails
-@@ -716,19 +706,6 @@ schema.methods.startQuest = async function startQuest (user) {
-     sendTxnEmail(membersToEmail, 'quest-started', [
-       { name: 'PARTY_URL', content: '/party' },
-     ]);
--    let membersToPush = _.filter(membersToNotify, (member) => {
+@@ -657,7 +647,7 @@ schema.methods.startQuest = async function startQuest (user) {
+   await User.find({
+     _id: {$in: Object.keys(this.quest.members)},
+   })
+-    .select('party.quest party._id items.quests auth preferences.emailNotifications preferences.pushNotifications pushDevices profile.name webhooks')
++    .select('party.quest party._id items.quests auth preferences.emailNotifications pushDevices profile.name webhooks')
+     .lean()
+     .exec()
+     .then(partyMembers => {
+@@ -721,8 +711,6 @@ schema.methods.startQuest = async function startQuest (user) {
+   await newMessage.save();
+ 
+   const membersToEmail = [];
+-  const pushTitle = quest.text();
+-  const pushMessage = `${shared.i18n.t('questStarted')}: ${quest.text()}`;
+ 
+   // send notifications and webhooks in the background without blocking
+   members.forEach(member => {
+@@ -731,15 +719,6 @@ schema.methods.startQuest = async function startQuest (user) {
+       if (member.preferences.emailNotifications.questStarted !== false) {
+         membersToEmail.push(member);
+       }
+-
 -      // send push notifications and filter users that disabled emails
--      return member.preferences.pushNotifications.questStarted !== false &&
--        member._id !== user._id;
--    });
--    _.each(membersToPush, (member) => {
--      sendPushNotification(member,
--        {
--          title: quest.text(),
--          message: `${shared.i18n.t('questStarted')}: ${quest.text()}`,
+-      if (member.preferences.pushNotifications.questStarted !== false) {
+-        sendPushNotification(member, {
+-          title: pushTitle,
+-          message: pushMessage,
 -          identifier: 'questStarted',
 -        });
--    });
-   });
-   const newMessage = this.sendChat(`\`Your quest, ${quest.text('en')}, has started.\``, null, {
-     participatingMembers: this.getParticipatingQuestMembers().join(', '),
-@@ -1199,12 +1176,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+-      }
+     }
+ 
+     // Send webhooks
+@@ -1242,12 +1221,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      promises.push(User.update({_id: user._id}, {$pull: {guilds: group._id}}).exec());
    } else {
      promises.push(User.update({_id: user._id}, {$set: {party: {}}}).exec());
@@ -6890,7 +6944,7 @@ index 4ce14550f..94b79ae59 100644
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  
-@@ -1461,7 +1432,7 @@ schema.methods.hasNotCancelled = function hasNotCancelled () {
+@@ -1504,7 +1477,7 @@ schema.methods.hasNotCancelled = function hasNotCancelled () {
    return this.isSubscribed() && !plan.dateTerminated;
  };
  
@@ -6899,7 +6953,7 @@ index 4ce14550f..94b79ae59 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1470,12 +1441,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1513,12 +1486,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;
@@ -6941,10 +6995,10 @@ index e3994c8e0..c6f8a4a17 100644
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
-index 81d4e8b06..53775b59f 100644
+index d2ce661b0..78e346ffb 100644
 --- a/website/server/models/user/hooks.js
 +++ b/website/server/models/user/hooks.js
-@@ -164,29 +164,11 @@ function _setUpNewUser (user) {
+@@ -167,29 +167,11 @@ function _setUpNewUser (user) {
    return _populateDefaultTasks(user, taskTypes);
  }
  

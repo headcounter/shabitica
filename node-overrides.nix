@@ -39,6 +39,12 @@
     ];
   };
 
+  main.bcrypt = drv: {
+    preRebuild = (drv.preRebuild or "") + ''
+      sed -i -e 's/--fallback-to-build/--build-from-source/g' package.json
+    '';
+  };
+
   main.pageres = drv: {
     nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ phantomjs2 ];
     # XXX: For PhantomJS 2 with NixOS 17.09:

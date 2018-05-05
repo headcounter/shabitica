@@ -13,7 +13,7 @@ Date:   Wed Mar 28 07:08:45 2018 +0200
     Filename: fix-server-common-import.patch
 
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index 988ba2f92..afa7c4c72 100644
+index ed65fff1c..43c631355 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,7 @@ import {

@@ -5,19 +5,32 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.40.0";
+  version = "4.41.5";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0xhmp318nww3dlfz7hx62c4gdhg5d2kxzg8and7l33mzs5773v51";
+    sha256 = "04y26g97rmydisz5900smcs8xgb4ab1wvdf3vwr9xn0jimippyff";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
 
   patches = [
+    # This is a revert of the following pull requests:
+    #
+    # https://github.com/HabitRPG/habitica/pull/10324
+    # https://github.com/HabitRPG/habitica/pull/10323
+    #
+    # The reason we apply it here is because a bunch of tests will fail without
+    # it.
+    (fetchpatch {
+      url = "https://github.com/HabitRPG/habitica/commit/"
+          + "f226b5da07abbeed15174f9ad3369e724ea9fdab.patch";
+      sha256 = "1h51xqpca89zqxy4gc9fh930wsg3fh9h5gf6z2hxnclss9myvnxq";
+    })
+
     # Remove payment, analytics and other external services.
     patches/remove-external-services.patch
 
@@ -283,11 +296,14 @@ stdenv.mkDerivation rec {
   # these in future upstream updates. Use 'find-canaries.py' to find these.
   functionCanaries = [
     "BuyArmoireOperation([^,]*,[^,)]*,"
+    "BuyGemOperation([^,]*,[^,)]*,"
     "BuyHealthPotionOperation([^,]*,[^,)]*,"
     "BuyMarketGearOperation([^,]*,[^,)]*,"
+    "BuyQuestWithGoldOperation([^,]*,[^,)]*,"
     "buy([^,]*,[^,)]*,"
     "buyArmoire([^,]*,[^,)]*,"
     "buyGear([^,]*,[^,)]*,"
+    "buyGem([^,]*,[^,]*,[^,)]*,"
     "buyGems([^,]*,[^,]*,[^,)]*,"
     "buyHealthPotion([^,]*,[^,)]*,"
     "buyMysterySet([^,]*,[^,)]*,"

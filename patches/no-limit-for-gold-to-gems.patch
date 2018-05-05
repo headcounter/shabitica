@@ -15,30 +15,30 @@ Date:   Fri Mar 30 02:41:52 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: no-limit-for-gold-to-gems.patch
 
-diff --git a/test/common/ops/buy/purchase.js b/test/common/ops/buy/purchase.js
-index b5ea6f8b7..64bd15d34 100644
---- a/test/common/ops/buy/purchase.js
-+++ b/test/common/ops/buy/purchase.js
-@@ -74,19 +74,6 @@ describe('shared.ops.purchase', () => {
-       }
-     });
+diff --git a/test/common/ops/buy/buyGem.js b/test/common/ops/buy/buyGem.js
+index 4ae96a55b..22b15739b 100644
+--- a/test/common/ops/buy/buyGem.js
++++ b/test/common/ops/buy/buyGem.js
+@@ -102,19 +102,6 @@ describe('shared.ops.buyGem', () => {
+         }
+       });
  
--    it('prevents user that have reached the conversion cap from buying gems', (done) => {
--      user.stats.gp = goldPoints;
--      user.purchased.plan.gemsBought = gemsBought;
+-      it('prevents user that have reached the conversion cap from buying gems', (done) => {
+-        user.stats.gp = goldPoints;
+-        user.purchased.plan.gemsBought = gemsBought;
 -
--      try {
--        purchase(user, {params: {type: 'gems', key: 'gem'}});
--      } catch (err) {
--        expect(err).to.be.an.instanceof(NotAuthorized);
--        expect(err.message).to.equal(i18n.t('reachedGoldToGemCap', {convCap: planGemLimits.convCap}));
--        done();
--      }
--    });
+-        try {
+-          buyGem(user, {params: {type: 'gems', key: 'gem'}});
+-        } catch (err) {
+-          expect(err).to.be.an.instanceof(NotAuthorized);
+-          expect(err.message).to.equal(i18n.t('reachedGoldToGemCap', {convCap: planGemLimits.convCap}));
+-          done();
+-        }
+-      });
 -
-     it('prevents user from buying an invalid quantity', (done) => {
-       user.stats.gp = goldPoints;
-       user.purchased.plan.gemsBought = gemsBought;
+       it('prevents user from buying an invalid quantity', (done) => {
+         user.stats.gp = goldPoints;
+         user.purchased.plan.gemsBought = gemsBought;
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
 index 0465becff..e1c78f7be 100644
 --- a/website/client/components/shops/buyModal.vue
@@ -149,27 +149,38 @@ index 017101540..8869b09c8 100644
      },
      methods: {
        getClassName (classType) {
-diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index 30de15a6a..9efa057bb 100644
---- a/website/common/script/ops/buy/purchase.js
-+++ b/website/common/script/ops/buy/purchase.js
-@@ -16,8 +16,6 @@ import getItemInfo from '../../libs/getItemInfo';
+diff --git a/website/common/script/ops/buy/buyGem.js b/website/common/script/ops/buy/buyGem.js
+index 83f69606c..0c41236b2 100644
+--- a/website/common/script/ops/buy/buyGem.js
++++ b/website/common/script/ops/buy/buyGem.js
+@@ -29,12 +29,6 @@ export class BuyGemOperation extends AbstractGoldItemOperation {
+     let key = this.key = get(req, 'params.key');
+     if (!key) throw new BadRequest(this.i18n('missingKeyParam'));
  
- function buyGems (user, req) {
-   let convRate = planGemLimits.convRate;
--  let convCap = planGemLimits.convCap;
--  convCap += user.purchased.plan.consecutive.gemCapExtra;
- 
-   // Some groups limit their members ability to obtain gems
-   // The check is async so it's done on the server (in server/controllers/api-v3/user#purchase)
-@@ -31,10 +29,6 @@ function buyGems (user, req) {
-     throw new NotAuthorized(i18n.t('messageNotEnoughGold', req.language));
+-    let convCap = planGemLimits.convCap;
+-    convCap += user.purchased.plan.consecutive.gemCapExtra;
+-
+-    // todo better name?
+-    this.convCap = convCap;
+-
+     this.canUserPurchase(user);
    }
  
--  if (user.purchased.plan.gemsBought >= convCap) {
--    throw new NotAuthorized(i18n.t('reachedGoldToGemCap', {convCap}, req.language));
--  }
+@@ -44,17 +38,6 @@ export class BuyGemOperation extends AbstractGoldItemOperation {
+     }
+ 
+     super.canUserPurchase(user, item);
 -
-   user.balance += 0.25;
-   user.purchased.plan.gemsBought++;
-   user.stats.gp -= convRate;
+-    if (user.purchased.plan.gemsBought >= this.convCap) {
+-      throw new NotAuthorized(this.i18n('reachedGoldToGemCap', {convCap: this.convCap}));
+-    }
+-
+-    if (user.purchased.plan.gemsBought + this.quantity >= this.convCap) {
+-      throw new NotAuthorized(this.i18n('reachedGoldToGemCapQuantity', {
+-        convCap: this.convCap,
+-        quantity: this.quantity,
+-      }));
+-    }
+   }
+ 
+   executeChanges (user, item) {

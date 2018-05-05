@@ -69,10 +69,10 @@ index 2afa2dcc0..59d84a958 100644
 -  });
  });
 diff --git a/test/api/v3/unit/models/group.test.js b/test/api/v3/unit/models/group.test.js
-index a094b8e42..6ed7430f7 100644
+index 39cba779b..c6d4f1054 100644
 --- a/test/api/v3/unit/models/group.test.js
 +++ b/test/api/v3/unit/models/group.test.js
-@@ -778,10 +778,13 @@ describe('Group Model', () => {
+@@ -782,10 +782,13 @@ describe('Group Model', () => {
        });
  
        it('deletes a private group when the last member leaves and a subscription is active', async () => {
@@ -87,7 +87,7 @@ index a094b8e42..6ed7430f7 100644
  
          party = await Group.findOne({_id: party._id});
          expect(party).to.not.exist;
-@@ -790,6 +793,7 @@ describe('Group Model', () => {
+@@ -794,6 +797,7 @@ describe('Group Model', () => {
        it('allows a leader to leave a group with an active subscription', async () => {
          party.memberCount = 2;
          party.purchased.plan.customerId = '110002222333';
@@ -96,7 +96,7 @@ index a094b8e42..6ed7430f7 100644
          await party.leave(questLeader);
  
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 05643226d..92e5593ff 100644
+index 38a316ce4..f424ea0f2 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -10,7 +10,6 @@ import { model as Chat } from './chat';
@@ -104,10 +104,10 @@ index 05643226d..92e5593ff 100644
  import validator from 'validator';
  import { removeFromArray } from '../libs/collectionManipulators';
 -import payments from '../libs/payments/payments';
- import { groupChatReceivedWebhook } from '../libs/webhook';
  import {
-   InternalServerError,
-@@ -1169,10 +1168,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+   groupChatReceivedWebhook,
+   questActivityWebhook,
+@@ -1214,10 +1213,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  

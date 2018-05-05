@@ -103,10 +103,10 @@ index 4a38458d8..03d58ea5a 100644
    );
  
 diff --git a/package.json b/package.json
-index 8ee2928d9..9b22405df 100644
+index 461f7fea2..e726c845b 100644
 --- a/package.json
 +++ b/package.json
-@@ -108,9 +108,9 @@
+@@ -107,9 +107,9 @@
      "test:api-v3:unit": "gulp test:api-v3:unit",
      "test:api-v3:integration": "gulp test:api-v3:integration",
      "test:api-v3:integration:separate-server": "NODE_ENV=test gulp test:api-v3:integration:separate-server",

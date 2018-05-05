@@ -225,10 +225,10 @@ index 00ea3f560..e3b75743c 100644
    });
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 5ec7b56c3..34b3849a8 100644
+index 56965773c..950516199 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
-@@ -133,6 +133,13 @@ api.registerLocal = {
+@@ -135,6 +135,13 @@ api.registerLocal = {
            passwordHashMethod: 'bcrypt',
          },
        },

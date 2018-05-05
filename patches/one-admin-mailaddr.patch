@@ -133,7 +133,7 @@ index cf04a520a..5bfbbd7ef 100644
  };
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 041376e39..ea05f41e7 100644
+index 8ee06fa87..879571de9 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -20,8 +20,8 @@ import { send as sendEmail } from '../../libs/email';
@@ -148,7 +148,7 @@ index 041376e39..ea05f41e7 100644
  const USERNAME_LENGTH_MAX = 20;
  
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 90b43a72a..eec87083e 100644
+index 5707ec88b..6d6489c30 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -17,7 +17,7 @@ import guildsAllowingBannedWords from '../../libs/guildsAllowingBannedWords';
@@ -161,7 +161,7 @@ index 90b43a72a..eec87083e 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 14ee52ab5..63b92f4fe 100644
+index ad5364c72..9718a8689 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,7 +22,7 @@ import common from '../../../common';
@@ -174,10 +174,10 @@ index 14ee52ab5..63b92f4fe 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index f40dd4f37..463308ffd 100644
+index 78ee29951..25527ae42 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -18,7 +18,7 @@ import {
+@@ -21,7 +21,7 @@ import {
  import nconf from 'nconf';
  import get from 'lodash/get';
  
@@ -202,7 +202,7 @@ index 7aa58ea8f..660df7ac4 100644
  });
  
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
-index 91c3c67ea..a1f775b44 100644
+index fde7cf592..eeb03417a 100644
 --- a/website/server/middlewares/auth.js
 +++ b/website/server/middlewares/auth.js
 @@ -7,7 +7,7 @@ import {

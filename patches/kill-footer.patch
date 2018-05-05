@@ -13,10 +13,10 @@ Date:   Tue Mar 27 05:37:21 2018 +0200
     Filename: kill-footer.patch
 
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index 3c559ee1e..5b35d07e3 100644
+index 8af845ee0..4d1b5658f 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
-@@ -2,103 +2,6 @@
+@@ -2,101 +2,6 @@
  .row.footer-row
    buy-gems-modal(v-if='user')
    //modify-inventory(v-if="isUserLoaded")
@@ -52,10 +52,8 @@ index 3c559ee1e..5b35d07e3 100644
 -            router-link(to='/groups/guild/a29da26b-37de-4a71-b0c6-48e72a900dac') {{ $t('reportBug') }}
 -          li
 -            a(href='https://trello.com/c/odmhIqyW/440-read-first-table-of-contents', target='_blank') {{ $t('requestFeature') }}
--          li
--            a(v-html='$t("communityExtensions")')
--          li
--            a(v-html='$t("communityForum")')
+-          li(v-html='$t("communityExtensions")')
+-          li(v-html='$t("communityForum")')
 -          li
 -            a(href='https://www.reddit.com/r/habitrpg/', target='_blank') {{ $t('communityReddit') }}
 -      .col-12.col-md-6
@@ -120,3 +118,31 @@ index 3c559ee1e..5b35d07e3 100644
  </template>
  
  <style lang="scss" scoped>
+@@ -168,27 +73,6 @@
+   }
+ </style>
+ 
+-<style lang="scss">
+-  footer {
+-    &.expanded {
+-      padding-left: 6em;
+-      padding-right: 6em;
+-      padding-top: 3em;
+-      background: #e1e0e3;
+-      color: #878190;
+-      min-height: 408px;
+-
+-      a {
+-        color: #878190;
+-      }
+-
+-      .logo {
+-        color: #c3c0c7;
+-      }
+-    }
+-  }
+-</style>
+-
+ <script>
+ import axios from 'axios';
+ import moment from 'moment';

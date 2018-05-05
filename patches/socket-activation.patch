@@ -10,10 +10,10 @@ Date:   Tue Mar 27 05:37:06 2018 +0200
     Filename: socket-activation.patch
 
 diff --git a/package.json b/package.json
-index 3ab149f2f..8ee2928d9 100644
+index 520d700c4..461f7fea2 100644
 --- a/package.json
 +++ b/package.json
-@@ -76,6 +76,7 @@
+@@ -75,6 +75,7 @@
      "svg-url-loader": "^2.3.2",
      "svgo": "^1.0.5",
      "svgo-loader": "^2.1.0",
@@ -22,7 +22,7 @@ index 3ab149f2f..8ee2928d9 100644
      "useragent": "^2.1.9",
      "uuid": "^3.0.1",
 diff --git a/website/server/server.js b/website/server/server.js
-index 5dee447b9..36382f0fe 100644
+index bf22c445e..ddb326905 100644
 --- a/website/server/server.js
 +++ b/website/server/server.js
 @@ -2,6 +2,7 @@ import nconf from 'nconf';
@@ -31,9 +31,9 @@ index 5dee447b9..36382f0fe 100644
  import http from 'http';
 +import systemdSocket from 'systemd-socket';
  
- // @TODO: May need to remove - testing
- import memwatch from 'memwatch-next';
-@@ -34,7 +35,7 @@ import './models/user';
+ try {
+   // @TODO: May need to remove - testing
+@@ -37,7 +38,7 @@ import './models/user';
  attachMiddlewares(app, server);
  
  server.on('request', app);
