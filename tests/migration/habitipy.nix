@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ plumbum requests ];
 
-  doCheck = lib.versionAtLeast "0.5.0" responses.version;
+  doCheck = lib.versionAtLeast "0.5.0" (lib.getVersion responses);
   preCheck = "export HOME=\"$PWD\"";
   checkInputs = [ aiohttp responses hypothesis ];
 }
