@@ -6,7 +6,6 @@
   machine = {
     imports = [ common ];
     habitica.hostName = "localhost";
-    habitica.backupInterval = "daily";
   };
 
   testScript = let
@@ -48,8 +47,6 @@
 
     $machine->waitForUnit('habitica.service');
 
-    $machine->succeed('systemctl list-timers | grep -q habitica-db-backup');
-
     my $curlAuthArgs;
 
     $machine->nest("add first user and get API token", sub {
@@ -67,21 +64,8 @@
       $taskId = pipeReadLine $taskdata, ${mkPerlStr (mkJQ ".data.id")};
     });
 
-    # The unit info before we're going to trigger it by forwarding time.
-    my $oldInfo = $machine->getUnitInfo('habitica-db-backup.service');
-
-    $machine->nest("trigger backup by fast-forwarding three days", sub {
-      $machine->succeed('date "$(date +%m%d%H%M%Y.%S -d tomorrow)"');
-    });
-
-    $machine->nest("wait until backup is done", sub {
-      my $oldStarted = $oldInfo->{ExecMainStartTimestampMonotonic};
-      Machine::retry sub {
-        my $info = $machine->getUnitInfo('habitica-db-backup.service');
-        return 0 unless $info->{ExecMainStartTimestampMonotonic} > $oldStarted;
-        return 1 if $info->{ActiveState} eq "inactive";
-        return 0;
-      };
+    $machine->nest("trigger backup", sub {
+      $machine->succeed('systemctl start habitica-db-backup.service');
     });
 
     $machine->nest("change todo text", sub {
