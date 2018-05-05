@@ -191,7 +191,7 @@ in {
         serviceConfig.RemainAfterExit = true;
         unitConfig.ConditionPathExists = "!/var/lib/habitica";
         script = ''
-          mkdir -p /var/lib/habitica/db /var/lib/habitica/data
+          mkdir -p /var/lib/habitica/db
 
           chmod 0710 /var/lib/habitica
           chown root:habitica /var/lib/habitica
@@ -200,9 +200,6 @@ in {
 
           chmod 0700 /var/lib/habitica/db
           chown habitica-db:habitica /var/lib/habitica/db
-
-          chmod 0700 /var/lib/habitica/data
-          chown habitica:habitica /var/lib/habitica/data
         '';
       };
 
