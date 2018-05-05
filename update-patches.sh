@@ -10,7 +10,13 @@ if ! grep -q 'name.*habitica' package.json 2> /dev/null; then
   exit 1
 fi
 
-for rev in $(git rev-list "$(git describe --abbrev=0)...HEAD"); do
+if [ -n "$1" ]; then
+  baseRev="$1"
+else
+  baseRev="$(git describe --abbrev=0)"
+fi
+
+for rev in $(git rev-list "$baseRev...HEAD"); do
   filename="$(git show -s --format='%(trailers:only)' "$rev" \
     | sed -ne 's/^Filename: *//p')"
   if [ -z "$filename" ]; then
