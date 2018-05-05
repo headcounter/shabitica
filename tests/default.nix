@@ -38,4 +38,5 @@ in {
   upstream = import ./upstream.nix args;
 
   allow-register-first = callTest ./allow-register-first.nix;
+  backup = callTest ./backup.nix;
 }

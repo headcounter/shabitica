@@ -18,6 +18,8 @@ let
 
   dbtools = pkgs.callPackage ./dbtools.nix {};
 
+  docInfo = import ./docinfo.nix;
+
 in {
   options.habitica = {
     hostName = lib.mkOption {
@@ -32,6 +34,40 @@ in {
       default = "root@localhost";
       example = "habitica-admin@example.org";
       description = "Email address of the administrator.";
+    };
+
+    backupInterval = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "daily";
+      description = ''
+        If this value is not <literal>null</literal>, create database backups
+        on the interval specified. The format is described in <citerefentry>
+          <refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum>
+        </citerefentry>, specifically the notes about
+        <literal>OnCalendar</literal>.
+
+        Otherwise if the value is <literal>null</literal>, you can still
+        trigger a database backup manually by issuing <command>systemctl start
+        habitica-db-backup.service</command>.
+
+        The database backups are stored in <option>backupDir</option>.
+      '';
+    };
+
+    backupDir = lib.mkOption {
+      type = lib.types.path;
+      default = "/var/backup/habitica";
+      description = let
+        inherit (docInfo) archiveExampleFilename;
+        exampleFile = "<replaceable>${archiveExampleFilename}</replaceable>";
+        examplePath = "<replaceable>backupDir</replaceable>/${exampleFile}";
+        cmd = docInfo.dbrestore + examplePath;
+      in ''
+        The path where backups are stored as MongoDB archives. To restore such
+        a backup, the command <command>${cmd}</command> can be used.
+      '';
     };
 
     senderMailAddress = lib.mkOption {
@@ -226,6 +262,22 @@ in {
         serviceConfig.PrivateNetwork = !cfg.insecureDB;
       };
 
+      systemd.services.habitica-db-backup = {
+        description = "Backup Habitica Database";
+        after = [ "habitica-db.service" ];
+
+        serviceConfig.Type = "oneshot";
+        serviceConfig.PrivateTmp = true;
+        serviceConfig.UMask = "0077";
+
+        script = ''
+          backupDir=${lib.escapeShellArg cfg.backupDir}
+          mkdir -p "$backupDir"
+          archiveFile="$(date +${docInfo.archiveDateFormat}).archive"
+          ${dbtools}/bin/habitica-db-dump --archive="$backupDir/$archiveFile"
+        '';
+      };
+
       systemd.sockets.habitica = {
         description = "Habitica Socket";
         wantedBy = [ "sockets.target" ];
@@ -283,6 +335,14 @@ in {
           "/apidoc".alias = cfg.apiDocPath;
           "/apidoc".index = "index.html";
         };
+      };
+    })
+    (lib.mkIf (cfg.backupInterval != null) {
+      systemd.timers.habitica-db-backup = {
+        description = "Backup Habitica Database";
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = cfg.backupInterval;
+        timerConfig.Persistent = true;
       };
     })
   ];
