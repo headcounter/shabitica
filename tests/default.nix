@@ -39,4 +39,5 @@ in {
 
   allow-register-first = callTest ./allow-register-first.nix;
   backup = callTest ./backup.nix;
+  migration = callTest ./migration;
 }
