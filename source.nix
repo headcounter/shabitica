@@ -31,6 +31,14 @@ stdenv.mkDerivation rec {
       sha256 = "1h51xqpca89zqxy4gc9fh930wsg3fh9h5gf6z2hxnclss9myvnxq";
     })
 
+    # Fixes https://github.com/HabitRPG/habitica/issues/10333.
+    # The issue was that spells were re-casting themselves twice.
+    (fetchpatch {
+      url = "https://github.com/HabitRPG/habitica/commit/"
+          + "c804cebe8dc959964763bae221820e4342ec32fa.patch";
+      sha256 = "1vzgknd3prs06sjj8qv85b2fnwqqmzkiskcjsl2a8z47p28l4mgw";
+    })
+
     # Remove payment, analytics and other external services.
     patches/remove-external-services.patch
 
