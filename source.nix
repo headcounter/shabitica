@@ -17,7 +17,12 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
 
-  patches = [
+  patches = let
+    fromUpstream = { rev, sha256 }: fetchpatch {
+      url = "https://github.com/HabitRPG/habitica/commit/${rev}.patch";
+      inherit sha256;
+    };
+  in [
     # This is a revert of the following pull requests:
     #
     # https://github.com/HabitRPG/habitica/pull/10324
@@ -25,17 +30,15 @@ stdenv.mkDerivation rec {
     #
     # The reason we apply it here is because a bunch of tests will fail without
     # it.
-    (fetchpatch {
-      url = "https://github.com/HabitRPG/habitica/commit/"
-          + "f226b5da07abbeed15174f9ad3369e724ea9fdab.patch";
+    (fromUpstream {
+      rev = "f226b5da07abbeed15174f9ad3369e724ea9fdab";
       sha256 = "1h51xqpca89zqxy4gc9fh930wsg3fh9h5gf6z2hxnclss9myvnxq";
     })
 
     # Fixes https://github.com/HabitRPG/habitica/issues/10333.
     # The issue was that spells were re-casting themselves twice.
-    (fetchpatch {
-      url = "https://github.com/HabitRPG/habitica/commit/"
-          + "c804cebe8dc959964763bae221820e4342ec32fa.patch";
+    (fromUpstream {
+      rev = "c804cebe8dc959964763bae221820e4342ec32fa";
       sha256 = "1vzgknd3prs06sjj8qv85b2fnwqqmzkiskcjsl2a8z47p28l4mgw";
     })
 
