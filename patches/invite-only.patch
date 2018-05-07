@@ -12,7 +12,7 @@ Date:   Tue Mar 27 05:37:13 2018 +0200
     Filename: invite-only.patch
 
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index a3426dedd..2293f5ac0 100644
+index a3426dedd..426d4d0e3 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -5,7 +5,7 @@
@@ -31,7 +31,7 @@ index a3426dedd..2293f5ac0 100644
 +      .container(v-if='!invited')
 +        img(src='~assets/images/home/home-main@3x.png', width='357px')
 +        h1 {{$t('motivateYourself')}}
-+        p.section-main {{$t('timeToGetThingsDone')}}
++        p.section-main {{$t('timeToGetThingsDone', {userCountInMillions})}}
 +        .col-12
 +          .spacer.svg-icon(v-html='icons.spacer')
  
