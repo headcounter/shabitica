@@ -2173,22 +2173,22 @@ let
         sha1 = "b534e7c734c4f81ec5fbe8aca2ad24354b962c6c";
       };
     };
-    "caniuse-db-1.0.30000833" = {
+    "caniuse-db-1.0.30000835" = {
       name = "caniuse-db";
       packageName = "caniuse-db";
-      version = "1.0.30000833";
+      version = "1.0.30000835";
       src = fetchurl {
-        url = "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000833.tgz";
-        sha1 = "2bd7be72a401658d2cbcb8f4d7600deebeb1c676";
+        url = "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000835.tgz";
+        sha1 = "6556931cdf035903d8655d6303f9501b5915fbe9";
       };
     };
-    "caniuse-lite-1.0.30000833" = {
+    "caniuse-lite-1.0.30000835" = {
       name = "caniuse-lite";
       packageName = "caniuse-lite";
-      version = "1.0.30000833";
+      version = "1.0.30000835";
       src = fetchurl {
-        url = "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30000833.tgz";
-        sha512 = "3bcxzc4hkkfa96idadqh0m9c0xjv80z68dz75bf1p8qkwgdwg3hlga9ihdkd76wsj80xlc032nl6nn4xl4lws6ww2hqjb0nxqm6x8xl";
+        url = "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30000835.tgz";
+        sha512 = "080sl04cn4hldxzc2pxqixdzpnz8jb9nv84svx22j0avi9lfk67lb74izx4rc8r8qagqb0zcaz55xb7gnnc0iwc1gq6fm9f1k01phzk";
       };
     };
     "capture-stack-trace-1.0.0" = {
@@ -3046,13 +3046,13 @@ let
         sha1 = "676f6eb3c39997c2ee1ac3a924fd6124748f578d";
       };
     };
-    "copy-props-2.0.2" = {
+    "copy-props-2.0.3" = {
       name = "copy-props";
       packageName = "copy-props";
-      version = "2.0.2";
+      version = "2.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/copy-props/-/copy-props-2.0.2.tgz";
-        sha512 = "3jgd57p618z2rjqmhxiq8bqjvhvw0y3aji792darshv4bwbxxf5wlwqmgghgyjinrqmpnmq2gzx4d0jbn4fkxi7fxiksrkqr09whvpx";
+        url = "https://registry.npmjs.org/copy-props/-/copy-props-2.0.3.tgz";
+        sha512 = "2dysrh1ym9cyp10w6z5v46z2ra2xp5wn4pp6c5wn16v63qndl185d37vk6zwfql6hyhql3l2rxmj3sndgfdmwnvshf59glfl25dg623";
       };
     };
     "core-js-2.5.5" = {
@@ -4081,13 +4081,13 @@ let
         sha1 = "cc872c168880ae3c7189762fd5ffc00896c9518a";
       };
     };
-    "ejs-2.5.9" = {
+    "ejs-2.6.1" = {
       name = "ejs";
       packageName = "ejs";
-      version = "2.5.9";
+      version = "2.6.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ejs/-/ejs-2.5.9.tgz";
-        sha512 = "00m9aq2v55kinakaswyfb0bqkq160lb0ny0sl5myx2zc0q5dy8q1f1kl4x7gijcpyjigpnv8kv3457nky2asq0vj0h12zaa61w8140q";
+        url = "https://registry.npmjs.org/ejs/-/ejs-2.6.1.tgz";
+        sha512 = "1fmnmnzqdy22hdbpsbnzvy4l78ii8ilzvg0hx1mw8zb3cqdnj2y3jxfji0ccy0vqs3af0ics2ll6bhf5g0r6ps8kr1b8zkhzc1vh76k";
       };
     };
     "electron-to-chromium-1.3.45" = {
@@ -6493,13 +6493,13 @@ let
         sha512 = "0jj1pdq3j9ak8cixn2kjp7ip8hf3xgnb85j4jr32yf9rry620v9072c0kk577mllfk1zl9wzs5ypwzbp7vbhf7j31d5rrqgwb0nldm1";
       };
     };
-    "iconv-lite-0.4.21" = {
+    "iconv-lite-0.4.22" = {
       name = "iconv-lite";
       packageName = "iconv-lite";
-      version = "0.4.21";
+      version = "0.4.22";
       src = fetchurl {
-        url = "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.21.tgz";
-        sha512 = "0myjcmxx7dn5liikg8d2zgwb433sk761dfxwwnszyam16rzv5dzva352jrvav7cnambn0ha8fzh6g6xhdhxsd20l5v1p65r6vvmazhj";
+        url = "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.22.tgz";
+        sha512 = "1fdqcacbfr3yxs5i2kj9kn06lgx2a9yfrdps0hsmw96p1slawiqp3qyfnqczp570wbbi5sr8valqyll05a5gzj3ahppnkl32waaf26l";
       };
     };
     "icss-replace-symbols-1.1.0" = {
@@ -9742,13 +9742,13 @@ let
         sha1 = "586db8101db30cb4438eb546737a41aad0cf13d5";
       };
     };
-    "nodemon-1.17.3" = {
+    "nodemon-1.17.4" = {
       name = "nodemon";
       packageName = "nodemon";
-      version = "1.17.3";
+      version = "1.17.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/nodemon/-/nodemon-1.17.3.tgz";
-        sha512 = "1i6m13ad9c1p8xilw0vjcgmj0nnk1y9b3lncx6kwljxw89hmk5z9vv8m452wfd5qg9bqf9r0b236d9vxbc3i2sx2flamfrr03xm42zh";
+        url = "https://registry.npmjs.org/nodemon/-/nodemon-1.17.4.tgz";
+        sha512 = "3bmxd7fd494gy4ddax3mihjz1iy484iakyssbhy87cc2kwbky9xkb8l47vphc3n858q9p9afxl57w0849i24amsdjhwbqh8vxhjy1v5";
       };
     };
     "nomnom-1.8.1" = {
@@ -15520,7 +15520,7 @@ in
       sources."glob-7.1.2"
       sources."graceful-fs-4.1.11"
       sources."has-color-0.1.7"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
       sources."isstream-0.1.2"
@@ -15735,7 +15735,7 @@ in
       sources."concat-stream-1.6.2"
       sources."convert-source-map-1.5.1"
       sources."copy-descriptor-0.1.1"
-      sources."copy-props-2.0.2"
+      sources."copy-props-2.0.3"
       sources."core-util-is-1.0.2"
       sources."d-1.0.0"
       sources."debug-2.6.9"
@@ -16090,7 +16090,7 @@ in
       sources."big.js-3.2.0"
       sources."browserslist-1.7.7"
       sources."caniuse-api-1.6.1"
-      sources."caniuse-db-1.0.30000833"
+      sources."caniuse-db-1.0.30000835"
       sources."chalk-1.1.3"
       sources."clap-1.2.3"
       sources."clone-1.0.4"
@@ -19161,7 +19161,7 @@ in
       sources."external-editor-2.2.0"
       sources."figures-2.0.0"
       sources."has-ansi-2.0.0"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."inquirer-3.0.6"
       sources."is-fullwidth-code-point-2.0.0"
       sources."is-promise-2.1.0"
@@ -19609,7 +19609,7 @@ in
     dependencies = [
       sources."ansi-styles-3.2.1"
       sources."browserslist-3.2.6"
-      sources."caniuse-lite-1.0.30000833"
+      sources."caniuse-lite-1.0.30000835"
       sources."chalk-2.4.1"
       sources."color-convert-1.9.1"
       sources."color-name-1.1.3"
@@ -20393,7 +20393,7 @@ in
       sources."nan-2.10.0"
       sources."nanomatch-1.2.9"
       sources."natives-1.1.3"
-      (sources."nodemon-1.17.3" // {
+      (sources."nodemon-1.17.4" // {
         dependencies = [
           sources."ansi-regex-3.0.0"
           sources."ansi-styles-3.2.1"
@@ -21678,7 +21678,7 @@ in
       sources."graceful-fs-4.1.11"
       sources."has-ansi-2.0.0"
       sources."has-flag-3.0.0"
-      sources."iconv-lite-0.4.21"
+      sources."iconv-lite-0.4.22"
       sources."ignore-3.3.8"
       sources."imurmurhash-0.1.4"
       sources."inflight-1.0.6"
@@ -22474,7 +22474,7 @@ in
       sources."destroy-1.0.4"
       sources."duplexer-0.1.1"
       sources."ee-first-1.1.1"
-      sources."ejs-2.5.9"
+      sources."ejs-2.6.1"
       sources."encodeurl-1.0.2"
       sources."escape-html-1.0.3"
       sources."escape-string-regexp-1.0.5"

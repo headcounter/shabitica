@@ -16,7 +16,7 @@ Date:   Thu Apr 5 07:56:12 2018 +0200
     Filename: nightwatch.patch
 
 diff --git a/package.json b/package.json
-index a7da9a7ec..76d53e84d 100644
+index 73fc68838..03af465b3 100644
 --- a/package.json
 +++ b/package.json
 @@ -162,6 +162,7 @@

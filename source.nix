@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.41.5";
+  version = "4.41.6";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "04y26g97rmydisz5900smcs8xgb4ab1wvdf3vwr9xn0jimippyff";
+    sha256 = "19bgpi3w2x8sfh8xs8kwpgndd2hf3142c0icrb2gpn1yzg8pgsay";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -23,25 +23,6 @@ stdenv.mkDerivation rec {
       inherit sha256;
     };
   in [
-    # This is a revert of the following pull requests:
-    #
-    # https://github.com/HabitRPG/habitica/pull/10324
-    # https://github.com/HabitRPG/habitica/pull/10323
-    #
-    # The reason we apply it here is because a bunch of tests will fail without
-    # it.
-    (fromUpstream {
-      rev = "f226b5da07abbeed15174f9ad3369e724ea9fdab";
-      sha256 = "1h51xqpca89zqxy4gc9fh930wsg3fh9h5gf6z2hxnclss9myvnxq";
-    })
-
-    # Fixes https://github.com/HabitRPG/habitica/issues/10333.
-    # The issue was that spells were re-casting themselves twice.
-    (fromUpstream {
-      rev = "c804cebe8dc959964763bae221820e4342ec32fa";
-      sha256 = "1vzgknd3prs06sjj8qv85b2fnwqqmzkiskcjsl2a8z47p28l4mgw";
-    })
-
     # Remove payment, analytics and other external services.
     patches/remove-external-services.patch
 
