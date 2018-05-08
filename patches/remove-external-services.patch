@@ -4287,7 +4287,7 @@ index deaf0127b..26283710a 100644
      user.items.lastDrop.date = Number(new Date());
      user.items.lastDrop.count++;
 diff --git a/website/common/script/fns/updateStats.js b/website/common/script/fns/updateStats.js
-index 0538ec380..f56af0b89 100644
+index cfe331015..6da0b50fe 100644
 --- a/website/common/script/fns/updateStats.js
 +++ b/website/common/script/fns/updateStats.js
 @@ -6,7 +6,7 @@ import {
@@ -4299,7 +4299,7 @@ index 0538ec380..f56af0b89 100644
    let allocatedStatPoints;
    let totalStatPoints;
    let experienceToNextLevel;
-@@ -88,15 +88,6 @@ module.exports = function updateStats (user, stats, req = {}, analytics) {
+@@ -89,15 +89,6 @@ module.exports = function updateStats (user, stats, req = {}, analytics) {
          user.items.quests[k] = 0;
        user.items.quests[k]++;
        if (user.markModified) user.markModified('flags.levelDrops');
@@ -4521,7 +4521,7 @@ index 4d091a2c1..c3a6051f0 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buyGem.js b/website/common/script/ops/buy/buyGem.js
-index 806b0cbc5..83f69606c 100644
+index 9655537d4..de1b9c6b6 100644
 --- a/website/common/script/ops/buy/buyGem.js
 +++ b/website/common/script/ops/buy/buyGem.js
 @@ -9,8 +9,8 @@ import get from 'lodash/get';

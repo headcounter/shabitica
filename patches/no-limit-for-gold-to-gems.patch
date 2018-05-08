@@ -150,7 +150,7 @@ index 017101540..8869b09c8 100644
      methods: {
        getClassName (classType) {
 diff --git a/website/common/script/ops/buy/buyGem.js b/website/common/script/ops/buy/buyGem.js
-index 83f69606c..0c41236b2 100644
+index de1b9c6b6..0c41236b2 100644
 --- a/website/common/script/ops/buy/buyGem.js
 +++ b/website/common/script/ops/buy/buyGem.js
 @@ -29,12 +29,6 @@ export class BuyGemOperation extends AbstractGoldItemOperation {
@@ -175,7 +175,7 @@ index 83f69606c..0c41236b2 100644
 -      throw new NotAuthorized(this.i18n('reachedGoldToGemCap', {convCap: this.convCap}));
 -    }
 -
--    if (user.purchased.plan.gemsBought + this.quantity >= this.convCap) {
+-    if (user.purchased.plan.gemsBought + this.quantity > this.convCap) {
 -      throw new NotAuthorized(this.i18n('reachedGoldToGemCapQuantity', {
 -        convCap: this.convCap,
 -        quantity: this.quantity,
