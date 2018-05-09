@@ -6995,10 +6995,10 @@ index e3994c8e0..c6f8a4a17 100644
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
-index d2ce661b0..78e346ffb 100644
+index 81d4e8b06..53775b59f 100644
 --- a/website/server/models/user/hooks.js
 +++ b/website/server/models/user/hooks.js
-@@ -167,29 +167,11 @@ function _setUpNewUser (user) {
+@@ -164,29 +164,11 @@ function _setUpNewUser (user) {
    return _populateDefaultTasks(user, taskTypes);
  }
  
