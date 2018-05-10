@@ -165,6 +165,10 @@ stdenv.mkDerivation rec {
 
     # Adds support systemd startup notifications.
     patches/systemd-notify.patch
+
+    # Strip markdown from group claim system messages
+    # https://github.com/HabitRPG/habitica/pull/10349
+    patches/group-claim-strip-markdown.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
