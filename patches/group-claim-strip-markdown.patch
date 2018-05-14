@@ -55,18 +55,18 @@ index 22029de3e..75e47c253 100644
      await user.post(`/tasks/${task._id}/assign/${member._id}`);
  
 diff --git a/website/server/controllers/api-v3/tasks/groups.js b/website/server/controllers/api-v3/tasks/groups.js
-index 9ab7554c3..c1b6c41c5 100644
+index a6076c9f0..0387ac204 100644
 --- a/website/server/controllers/api-v3/tasks/groups.js
 +++ b/website/server/controllers/api-v3/tasks/groups.js
-@@ -12,6 +12,7 @@ import {
-   getTasks,
+@@ -13,6 +13,7 @@ import {
    moveTask,
  } from '../../../libs/taskManager';
+ import apiError from '../../../libs/apiError';
 +import habiticaMarkdown from 'habitica-markdown';
  
  let requiredGroupFields = '_id leader tasksOrder name';
  let types = Tasks.tasksTypes.map(type => `${type}s`);
-@@ -189,7 +190,17 @@ api.assignTask = {
+@@ -198,7 +199,17 @@ api.assignTask = {
  
      // User is claiming the task
      if (user._id === assignedUserId) {

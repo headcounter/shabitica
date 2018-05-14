@@ -117,7 +117,7 @@ index cfd14c700..9f373bb87 100644
  
  <style lang='scss'>
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 4feec2b6e..2a1fc9aa8 100644
+index c3285e4bc..bfc475fd3 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -732,7 +732,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
@@ -129,7 +129,7 @@ index 4feec2b6e..2a1fc9aa8 100644
    }
  }
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 29534fb14..c3bdda3d4 100644
+index fc3d3d585..3b7313174 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -110,7 +110,6 @@ let schema = new Schema({

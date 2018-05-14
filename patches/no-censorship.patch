@@ -320,7 +320,7 @@ index 86d715144..0d80839ee 100644
        // Manage modals
        this.$root.$on('bv::show::modal', (modalId, data = {}) => {
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 6d6489c30..422c21e7f 100644
+index e4d6e7ef5..d3885bb7b 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -3,7 +3,6 @@ import { model as Group } from '../../models/group';
@@ -339,10 +339,10 @@ index 6d6489c30..422c21e7f 100644
 -import guildsAllowingBannedWords from '../../libs/guildsAllowingBannedWords';
 -import { getMatchesByWordArray } from '../../libs/stringUtils';
 -import bannedSlurs from '../../libs/bannedSlurs';
+ import apiError from '../../libs/apiError';
  
  const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
-   return { email, canSend: true };
-@@ -38,11 +33,6 @@ const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
+@@ -39,11 +34,6 @@ const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
  
  let api = {};
  
@@ -354,7 +354,7 @@ index 6d6489c30..422c21e7f 100644
  /**
   * @api {get} /api/v3/groups/:groupId/chat Get chat messages from a group
   * @apiName GetChat
-@@ -79,10 +69,6 @@ api.getChat = {
+@@ -80,10 +70,6 @@ api.getChat = {
    },
  };
  
@@ -365,7 +365,7 @@ index 6d6489c30..422c21e7f 100644
  /**
   * @api {post} /api/v3/groups/:groupId/chat Post chat message to a group
   * @apiName PostChat
-@@ -117,49 +103,11 @@ api.postChat = {
+@@ -118,49 +104,11 @@ api.postChat = {
  
      let group = await Group.getGroup({user, groupId});
  

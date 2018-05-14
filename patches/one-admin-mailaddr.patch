@@ -148,12 +148,12 @@ index 8ee06fa87..879571de9 100644
  const USERNAME_LENGTH_MAX = 20;
  
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 5707ec88b..6d6489c30 100644
+index fcae0a65f..e4d6e7ef5 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
-@@ -17,7 +17,7 @@ import guildsAllowingBannedWords from '../../libs/guildsAllowingBannedWords';
- import { getMatchesByWordArray } from '../../libs/stringUtils';
+@@ -18,7 +18,7 @@ import { getMatchesByWordArray } from '../../libs/stringUtils';
  import bannedSlurs from '../../libs/bannedSlurs';
+ import apiError from '../../libs/apiError';
  
 -const FLAG_REPORT_EMAILS = nconf.get('FLAG_REPORT_EMAIL').split(',').map((email) => {
 +const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
@@ -161,11 +161,11 @@ index 5707ec88b..6d6489c30 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index ad5364c72..9718a8689 100644
+index a25b6996e..34e1a78b2 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,7 +22,7 @@ import common from '../../../common';
- import apiMessages from '../../libs/apiMessages';
+ import apiError from '../../libs/apiError';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
 -const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
@@ -174,7 +174,7 @@ index ad5364c72..9718a8689 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 78ee29951..25527ae42 100644
+index da07cd8c7..f1b17edec 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -21,7 +21,7 @@ import {
@@ -187,12 +187,12 @@ index 78ee29951..25527ae42 100644
  /**
   * @apiDefine UserNotFound
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index 7aa58ea8f..660df7ac4 100644
+index 49b3f3d16..13e8fe8c0 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
-@@ -9,8 +9,8 @@ import { getGroupUrl, sendTxn } from '../email';
- import { model as Group } from '../../models/group';
+@@ -10,8 +10,8 @@ import { model as Group } from '../../models/group';
  import { model as Chat } from '../../models/chat';
+ import apiError from '../apiError';
  
 -const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
 -const FLAG_REPORT_EMAILS = nconf.get('FLAG_REPORT_EMAIL').split(',').map((email) => {

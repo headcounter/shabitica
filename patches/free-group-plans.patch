@@ -528,13 +528,13 @@ index b06fe97a4..db2d38cb6 100644
      },
      {
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 9718a8689..fb799c6b9 100644
+index 34e1a78b2..05a9774e2 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -20,6 +20,7 @@ import { sendTxn as sendTxnEmail } from '../../libs/email';
  import { encrypt } from '../../libs/encryption';
  import common from '../../../common';
- import apiMessages from '../../libs/apiMessages';
+ import apiError from '../../libs/apiError';
 +import payments from '../../libs/payments/payments';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;

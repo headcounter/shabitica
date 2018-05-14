@@ -196,6 +196,10 @@ in rec {
       indexData="$(sed -e 's/[\\'\''']/\\&/g' "${client}/index.html")"
       substituteInPlace website/server/libs/client.js \
         --subst-var-by CLIENT_INDEX_DATA "$indexData"
+
+      # Fix include path for common/errors:
+      sed -i -e '/import/s,/\.\.,,' \
+        website/common/script/libs/errorMessage.js
     '';
 
     nativeBuildInputs = [ makeWrapper ];
@@ -210,6 +214,7 @@ in rec {
       cp -rdT website/transpiled-babel "$out/libexec/habitica/server"
       cp -rdT website/common/transpiled-babel "$out/libexec/habitica/common"
       cp -rdT website/common/locales "$out/libexec/habitica/common/locales"
+      cp -rdT website/common/errors "$out/libexec/habitica/common/errors"
 
       makeWrapper \
         ${lib.escapeShellArg "${nodejs-8_x}/bin/node"} \

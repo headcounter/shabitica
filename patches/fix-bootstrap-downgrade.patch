@@ -1,0 +1,29 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Mon May 14 14:23:11 2018 +0200
+
+    Properly downgrade Bootstrap to version 4.1.0
+    
+    Using a caret ranges will still select Bootstrap version 4.1.1, because
+    it's only a minor update. We're not using package locks in our fork, so
+    let's set a fixed version.
+    
+    Once this patch no longer applies cleanly, we can look into the changes
+    and eventually drop it once upstream has fixed the issue with Bootstrap
+    4.1.1.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: fix-bootstrap-downgrade.patch
+
+diff --git a/package.json b/package.json
+index 4901e5e33..591443e94 100644
+--- a/package.json
++++ b/package.json
+@@ -23,7 +23,7 @@
+     "babel-runtime": "^6.11.6",
+     "bcrypt": "^2.0.0",
+     "body-parser": "^1.15.0",
+-    "bootstrap": "^4.1.0",
++    "bootstrap": "4.1.0",
+     "bootstrap-vue": "^2.0.0-rc.9",
+     "compression": "^1.7.2",
+     "cookie-session": "^1.2.0",

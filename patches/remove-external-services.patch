@@ -1576,7 +1576,7 @@ index ebfa2ac6e..7cf643df4 100644
        let attachEmail = requireAgain(pathToEmailLib);
        let getUserInfo = attachEmail.getUserInfo;
 diff --git a/test/api/v3/unit/libs/payments/payments.test.js b/test/api/v3/unit/libs/payments/payments.test.js
-index 85e6d9167..12fb07c1c 100644
+index d67c51afe..1788fe406 100644
 --- a/test/api/v3/unit/libs/payments/payments.test.js
 +++ b/test/api/v3/unit/libs/payments/payments.test.js
 @@ -2,8 +2,6 @@ import moment from 'moment';
@@ -1670,7 +1670,7 @@ index 85e6d9167..12fb07c1c 100644
      });
  
      context('Block subscription perks', () => {
-@@ -632,11 +576,6 @@ describe('payments/index', () => {
+@@ -641,11 +585,6 @@ describe('payments/index', () => {
          expect(user.sendMessage).to.be.calledWith(recipient, { receiverMsg: msg, senderMsg: msg });
        });
  
@@ -1703,10 +1703,10 @@ index 12209b1a8..1ea9d2e61 100644
        })
        .catch(done);
 diff --git a/test/common/ops/buy/buy.js b/test/common/ops/buy/buy.js
-index ab72d1f2b..4e751b750 100644
+index 975edacbd..aede96f8d 100644
 --- a/test/common/ops/buy/buy.js
 +++ b/test/common/ops/buy/buy.js
-@@ -11,7 +11,6 @@ import content from '../../../../website/common/script/content/index';
+@@ -12,7 +12,6 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
  
  describe('shared.ops.buy', () => {
    let user;
@@ -1714,7 +1714,7 @@ index ab72d1f2b..4e751b750 100644
  
    beforeEach(() => {
      user = generateUser({
-@@ -27,12 +26,6 @@ describe('shared.ops.buy', () => {
+@@ -28,12 +27,6 @@ describe('shared.ops.buy', () => {
        },
        stats: { gp: 200 },
      });
@@ -1727,7 +1727,7 @@ index ab72d1f2b..4e751b750 100644
    });
  
    it('returns error when key is not provided', (done) => {
-@@ -47,10 +40,8 @@ describe('shared.ops.buy', () => {
+@@ -48,10 +41,8 @@ describe('shared.ops.buy', () => {
  
    it('recovers 15 hp', () => {
      user.stats.hp = 30;
@@ -1879,12 +1879,12 @@ index 9f04c4d6b..01fcc829d 100644
  
      it('does not increase hp above 50', () => {
 diff --git a/test/common/ops/buy/buyMarketGear.js b/test/common/ops/buy/buyMarketGear.js
-index 48ce22ea1..03ae1884f 100644
+index 397297dd6..a45d47e53 100644
 --- a/test/common/ops/buy/buyMarketGear.js
 +++ b/test/common/ops/buy/buyMarketGear.js
-@@ -11,15 +11,14 @@ import {
- } from '../../../../website/common/script/libs/errors';
+@@ -12,15 +12,14 @@ import {
  import i18n from '../../../../website/common/script/i18n';
+ import errorMessage from '../../../../website/common/script/libs/errorMessage';
  
 -function buyGear (user, req, analytics) {
 -  let buyOp = new BuyMarketGearOperation(user, req, analytics);
@@ -1900,7 +1900,7 @@ index 48ce22ea1..03ae1884f 100644
  
    beforeEach(() => {
      user = generateUser({
-@@ -38,20 +37,18 @@ describe('shared.ops.buyMarketGear', () => {
+@@ -39,20 +38,18 @@ describe('shared.ops.buyMarketGear', () => {
  
      sinon.stub(shared, 'randomVal');
      sinon.stub(shared.fns, 'predictableRandom');
@@ -1922,7 +1922,7 @@ index 48ce22ea1..03ae1884f 100644
  
        expect(user.items.gear.owned).to.eql({
          weapon_warrior_0: true,
-@@ -64,7 +61,6 @@ describe('shared.ops.buyMarketGear', () => {
+@@ -65,7 +62,6 @@ describe('shared.ops.buyMarketGear', () => {
          eyewear_special_whiteTopFrame: true,
          eyewear_special_yellowTopFrame: true,
        });
@@ -1931,10 +1931,10 @@ index 48ce22ea1..03ae1884f 100644
  
      it('deducts gold from user', () => {
 diff --git a/test/common/ops/buy/buyMysterySet.js b/test/common/ops/buy/buyMysterySet.js
-index 5334d3e67..61ec0c10f 100644
+index dca60d748..9ef720f70 100644
 --- a/test/common/ops/buy/buyMysterySet.js
 +++ b/test/common/ops/buy/buyMysterySet.js
-@@ -13,7 +13,6 @@ import i18n from '../../../../website/common/script/i18n';
+@@ -14,7 +14,6 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
  
  describe('shared.ops.buyMysterySet', () => {
    let user;
@@ -1942,7 +1942,7 @@ index 5334d3e67..61ec0c10f 100644
  
    beforeEach(() => {
      user = generateUser({
-@@ -25,11 +24,6 @@ describe('shared.ops.buyMysterySet', () => {
+@@ -26,11 +25,6 @@ describe('shared.ops.buyMysterySet', () => {
          },
        },
      });
@@ -1954,7 +1954,7 @@ index 5334d3e67..61ec0c10f 100644
    });
  
    context('Mystery Sets', () => {
-@@ -79,7 +73,7 @@ describe('shared.ops.buyMysterySet', () => {
+@@ -80,7 +74,7 @@ describe('shared.ops.buyMysterySet', () => {
      context('successful purchases', () => {
        it('buys Steampunk Accessories Set', () => {
          user.purchased.plan.consecutive.trinkets = 1;
@@ -1963,7 +1963,7 @@ index 5334d3e67..61ec0c10f 100644
  
          expect(user.purchased.plan.consecutive.trinkets).to.eql(0);
          expect(user.items.gear.owned).to.have.property('weapon_warrior_0', true);
-@@ -87,7 +81,6 @@ describe('shared.ops.buyMysterySet', () => {
+@@ -88,7 +82,6 @@ describe('shared.ops.buyMysterySet', () => {
          expect(user.items.gear.owned).to.have.property('armor_mystery_301404', true);
          expect(user.items.gear.owned).to.have.property('head_mystery_301404', true);
          expect(user.items.gear.owned).to.have.property('eyewear_mystery_301404', true);
@@ -1972,10 +1972,10 @@ index 5334d3e67..61ec0c10f 100644
      });
    });
 diff --git a/test/common/ops/buy/buyQuest.js b/test/common/ops/buy/buyQuest.js
-index 390b65ee0..37c450702 100644
+index 4994e38af..aeb813d68 100644
 --- a/test/common/ops/buy/buyQuest.js
 +++ b/test/common/ops/buy/buyQuest.js
-@@ -11,21 +11,15 @@ import i18n from '../../../../website/common/script/i18n';
+@@ -12,21 +12,15 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
  
  describe('shared.ops.buyQuest', () => {
    let user;
@@ -1999,7 +1999,7 @@ index 390b65ee0..37c450702 100644
    });
  
    it('buys a Quest scroll', () => {
-@@ -34,12 +28,11 @@ describe('shared.ops.buyQuest', () => {
+@@ -35,12 +29,11 @@ describe('shared.ops.buyQuest', () => {
        params: {
          key: 'dilatoryDistress1',
        },
@@ -2013,7 +2013,7 @@ index 390b65ee0..37c450702 100644
    });
  
    it('buys a Quest scroll with the right quantity if a string is passed for quantity', () => {
-@@ -48,13 +41,13 @@ describe('shared.ops.buyQuest', () => {
+@@ -49,13 +42,13 @@ describe('shared.ops.buyQuest', () => {
        params: {
          key: 'dilatoryDistress1',
        },
@@ -2029,7 +2029,7 @@ index 390b65ee0..37c450702 100644
  
      expect(user.items.quests).to.eql({
        dilatoryDistress1: 4,
-@@ -69,7 +62,7 @@ describe('shared.ops.buyQuest', () => {
+@@ -70,7 +63,7 @@ describe('shared.ops.buyQuest', () => {
            key: 'dilatoryDistress1',
          },
          quantity: 'a',
@@ -2039,10 +2039,10 @@ index 390b65ee0..37c450702 100644
        expect(err).to.be.an.instanceof(BadRequest);
        expect(err.message).to.equal(i18n.t('invalidQuantity'));
 diff --git a/test/common/ops/buy/buySpecialSpell.js b/test/common/ops/buy/buySpecialSpell.js
-index 97aade05a..9010212c6 100644
+index bd4b0cf22..9ac101bf6 100644
 --- a/test/common/ops/buy/buySpecialSpell.js
 +++ b/test/common/ops/buy/buySpecialSpell.js
-@@ -12,15 +12,9 @@ import content from '../../../../website/common/script/content/index';
+@@ -13,15 +13,9 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
  
  describe('shared.ops.buySpecialSpell', () => {
    let user;
@@ -2058,7 +2058,7 @@ index 97aade05a..9010212c6 100644
    });
  
    it('throws an error if params.key is missing', (done) => {
-@@ -70,7 +64,7 @@ describe('shared.ops.buySpecialSpell', () => {
+@@ -71,7 +65,7 @@ describe('shared.ops.buySpecialSpell', () => {
        params: {
          key: 'thankyou',
        },
@@ -2067,7 +2067,7 @@ index 97aade05a..9010212c6 100644
  
      expect(user.stats.gp).to.equal(1);
      expect(user.items.special.thankyou).to.equal(1);
-@@ -81,6 +75,5 @@ describe('shared.ops.buySpecialSpell', () => {
+@@ -82,6 +76,5 @@ describe('shared.ops.buySpecialSpell', () => {
      expect(message).to.equal(i18n.t('messageBought', {
        itemText: item.text(),
      }));
@@ -2075,10 +2075,10 @@ index 97aade05a..9010212c6 100644
    });
  });
 diff --git a/test/common/ops/buy/hourglassPurchase.js b/test/common/ops/buy/hourglassPurchase.js
-index 3684f7d41..e49a007ba 100644
+index d1631fb27..ceb0cb7d2 100644
 --- a/test/common/ops/buy/hourglassPurchase.js
 +++ b/test/common/ops/buy/hourglassPurchase.js
-@@ -11,15 +11,9 @@ import {
+@@ -12,15 +12,9 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
  
  describe('common.ops.hourglassPurchase', () => {
    let user;
@@ -2094,7 +2094,7 @@ index 3684f7d41..e49a007ba 100644
    });
  
    context('failure conditions', () => {
-@@ -132,12 +126,11 @@ describe('common.ops.hourglassPurchase', () => {
+@@ -133,12 +127,11 @@ describe('common.ops.hourglassPurchase', () => {
      it('buys a pet', () => {
        user.purchased.plan.consecutive.trinkets = 2;
  
@@ -3161,7 +3161,7 @@ index 66bee4afe..456a968d1 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/index.vue b/website/client/components/header/index.vue
-index e679b2c5c..42a054a41 100644
+index fc65f7005..3bf7ff169 100644
 --- a/website/client/components/header/index.vue
 +++ b/website/client/components/header/index.vue
 @@ -34,26 +34,11 @@ div
@@ -3191,7 +3191,7 @@ index e679b2c5c..42a054a41 100644
    #app-header {
      margin-top: 56px;
      padding-left: 24px;
-@@ -145,12 +130,6 @@ export default {
+@@ -149,12 +134,6 @@ export default {
      ...mapActions({
        getPartyMembers: 'party:getMembers',
      }),
@@ -3232,10 +3232,10 @@ index 09400e80d..46d92df23 100644
      },
    },
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
-index 747c48a4b..21b6693c1 100644
+index 6d60e71e0..c3be63f96 100644
 --- a/website/client/components/header/userDropdown.vue
 +++ b/website/client/components/header/userDropdown.vue
-@@ -63,7 +63,6 @@ menu-dropdown.item-user(:right="true")
+@@ -67,7 +67,6 @@ menu-dropdown.item-user(:right="true")
  
  <script>
  import { mapState } from 'client/libs/store';
@@ -3243,7 +3243,7 @@ index 747c48a4b..21b6693c1 100644
  import userIcon from 'assets/svg/user.svg';
  import MenuDropdown from '../ui/customMenuDropdown';
  import axios from 'axios';
-@@ -105,14 +104,6 @@ export default {
+@@ -109,14 +108,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -4177,6 +4177,17 @@ index b47fce6de..4f33daf2a 100644
        user: asyncResourceFactory(),
        credentials: isUserLoggedIn ? {
          API_ID: AUTH_SETTINGS.auth.apiId,
+diff --git a/website/common/errors/apiErrorMessages.js b/website/common/errors/apiErrorMessages.js
+index 4857be3d5..6e96f87f3 100644
+--- a/website/common/errors/apiErrorMessages.js
++++ b/website/common/errors/apiErrorMessages.js
+@@ -20,6 +20,5 @@ module.exports = {
+ 
+   missingPaymentId: 'Missing "req.query.paymentId"',
+   missingCustomerId: 'Missing "req.query.customerId"',
+-  missingPaypalBlock: 'Missing "req.session.paypalBlock"',
+   missingSubKey: 'Missing "req.query.sub"',
+ };
 diff --git a/website/common/script/constants.js b/website/common/script/constants.js
 index 1bc330846..ff0e5f1d6 100644
 --- a/website/common/script/constants.js
@@ -4287,7 +4298,7 @@ index deaf0127b..26283710a 100644
      user.items.lastDrop.date = Number(new Date());
      user.items.lastDrop.count++;
 diff --git a/website/common/script/fns/updateStats.js b/website/common/script/fns/updateStats.js
-index cfe331015..6da0b50fe 100644
+index 65d466f1b..c0aa9d37e 100644
 --- a/website/common/script/fns/updateStats.js
 +++ b/website/common/script/fns/updateStats.js
 @@ -6,7 +6,7 @@ import {
@@ -4299,7 +4310,7 @@ index cfe331015..6da0b50fe 100644
    let allocatedStatPoints;
    let totalStatPoints;
    let experienceToNextLevel;
-@@ -89,15 +89,6 @@ module.exports = function updateStats (user, stats, req = {}, analytics) {
+@@ -88,15 +88,6 @@ module.exports = function updateStats (user, stats, req = {}, analytics) {
          user.items.quests[k] = 0;
        user.items.quests[k]++;
        if (user.markModified) user.markModified('flags.levelDrops');
@@ -4426,7 +4437,7 @@ index 9b0a2d9fe..eac44cfc8 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index f0ec31e5f..91d5a7826 100644
+index e3cb62bdc..1664eb347 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
 @@ -18,7 +18,7 @@ import {BuyGemOperation} from './buyGem';
@@ -4436,7 +4447,7 @@ index f0ec31e5f..91d5a7826 100644
 -module.exports = function buy (user, req = {}, analytics) {
 +module.exports = function buy (user, req = {}) {
    let key = get(req, 'params.key');
-   if (!key) throw new BadRequest(i18n.t('missingKeyParam', req.language));
+   if (!key) throw new BadRequest(errorMessage('missingKeyParam'));
  
 @@ -32,22 +32,22 @@ module.exports = function buy (user, req = {}, analytics) {
  
@@ -4577,11 +4588,11 @@ index cad055a97..5bd6cf4b5 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buyMarketGear.js b/website/common/script/ops/buy/buyMarketGear.js
-index 06fe881e4..7a1adc492 100644
+index 13408b18b..6b936c662 100644
 --- a/website/common/script/ops/buy/buyMarketGear.js
 +++ b/website/common/script/ops/buy/buyMarketGear.js
-@@ -15,8 +15,8 @@ import {removePinnedGearAddPossibleNewOnes} from '../pinnedGearUtils';
- import { AbstractGoldItemOperation } from './abstractBuyOperation';
+@@ -16,8 +16,8 @@ import { AbstractGoldItemOperation } from './abstractBuyOperation';
+ import errorMessage from '../../libs/errorMessage';
  
  export class BuyMarketGearOperation extends AbstractGoldItemOperation {
 -  constructor (user, req, analytics) {
@@ -4592,19 +4603,19 @@ index 06fe881e4..7a1adc492 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buyMysterySet.js b/website/common/script/ops/buy/buyMysterySet.js
-index 3a8b17a01..a6030275f 100644
+index 7e0bf0c83..0d4387ddb 100644
 --- a/website/common/script/ops/buy/buyMysterySet.js
 +++ b/website/common/script/ops/buy/buyMysterySet.js
-@@ -8,7 +8,7 @@ import {
-   NotFound,
+@@ -9,7 +9,7 @@ import {
  } from '../../libs/errors';
+ import errorMessage from '../../libs/errorMessage';
  
 -module.exports = function buyMysterySet (user, req = {}, analytics) {
 +module.exports = function buyMysterySet (user, req = {}) {
    let key = get(req, 'params.key');
-   if (!key) throw new BadRequest(i18n.t('missingKeyParam', req.language));
+   if (!key) throw new BadRequest(errorMessage('missingKeyParam'));
  
-@@ -25,16 +25,6 @@ module.exports = function buyMysterySet (user, req = {}, analytics) {
+@@ -26,16 +26,6 @@ module.exports = function buyMysterySet (user, req = {}, analytics) {
  
    each(mysterySet.items, item => {
      user.items.gear.owned[item.key] = true;
@@ -4622,11 +4633,11 @@ index 3a8b17a01..a6030275f 100644
  
    user.purchased.plan.consecutive.trinkets--;
 diff --git a/website/common/script/ops/buy/buyQuest.js b/website/common/script/ops/buy/buyQuest.js
-index e30513347..5bcf30fb9 100644
+index b7e9f783b..f02d3d022 100644
 --- a/website/common/script/ops/buy/buyQuest.js
 +++ b/website/common/script/ops/buy/buyQuest.js
-@@ -9,8 +9,8 @@ import get from 'lodash/get';
- import {AbstractGoldItemOperation} from './abstractBuyOperation';
+@@ -10,8 +10,8 @@ import {AbstractGoldItemOperation} from './abstractBuyOperation';
+ import errorMessage from '../../libs/errorMessage';
  
  export class BuyQuestWithGoldOperation extends AbstractGoldItemOperation {
 -  constructor (user, req, analytics) {
@@ -4636,7 +4647,7 @@ index e30513347..5bcf30fb9 100644
    }
  
    multiplePurchaseAllowed () {
-@@ -60,13 +60,4 @@ export class BuyQuestWithGoldOperation extends AbstractGoldItemOperation {
+@@ -61,13 +61,4 @@ export class BuyQuestWithGoldOperation extends AbstractGoldItemOperation {
        }),
      ];
    }
@@ -4651,19 +4662,19 @@ index e30513347..5bcf30fb9 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buySpecialSpell.js b/website/common/script/ops/buy/buySpecialSpell.js
-index d6a8492c8..9dd6e7130 100644
+index d63638acf..343a241ed 100644
 --- a/website/common/script/ops/buy/buySpecialSpell.js
 +++ b/website/common/script/ops/buy/buySpecialSpell.js
-@@ -9,7 +9,7 @@ import {
-   NotFound,
+@@ -10,7 +10,7 @@ import {
  } from '../../libs/errors';
+ import errorMessage from '../../libs/errorMessage';
  
 -module.exports = function buySpecialSpell (user, req = {}, analytics) {
 +module.exports = function buySpecialSpell (user, req = {}) {
    let key = get(req, 'params.key');
    let quantity = req.quantity || 1;
  
-@@ -25,19 +25,6 @@ module.exports = function buySpecialSpell (user, req = {}, analytics) {
+@@ -26,19 +26,6 @@ module.exports = function buySpecialSpell (user, req = {}, analytics) {
  
    user.items.special[key] += quantity;
  
@@ -4684,19 +4695,19 @@ index d6a8492c8..9dd6e7130 100644
      pick(user, splitWhitespace('items stats')),
      i18n.t('messageBought', {
 diff --git a/website/common/script/ops/buy/hourglassPurchase.js b/website/common/script/ops/buy/hourglassPurchase.js
-index d9afc4b44..4f712db74 100644
+index 5354ee20b..b08c0d2d5 100644
 --- a/website/common/script/ops/buy/hourglassPurchase.js
 +++ b/website/common/script/ops/buy/hourglassPurchase.js
-@@ -8,7 +8,7 @@ import {
-   NotAuthorized,
+@@ -9,7 +9,7 @@ import {
  } from '../../libs/errors';
+ import errorMessage from '../../libs/errorMessage';
  
 -module.exports = function purchaseHourglass (user, req = {}, analytics) {
 +module.exports = function purchaseHourglass (user, req = {}) {
    let key = get(req, 'params.key');
-   if (!key) throw new BadRequest(i18n.t('missingKeyParam', req.language));
+   if (!key) throw new BadRequest(errorMessage('missingKeyParam'));
  
-@@ -41,17 +41,6 @@ module.exports = function purchaseHourglass (user, req = {}, analytics) {
+@@ -42,17 +42,6 @@ module.exports = function purchaseHourglass (user, req = {}, analytics) {
      user.items.mounts[key] = true;
    }
  
@@ -5388,10 +5399,10 @@ index 3d69b05c8..56965773c 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 46f39b022..05f1fb088 100644
+index 3ad57642b..cd2931cc2 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
-@@ -203,16 +203,6 @@ api.createChallenge = {
+@@ -204,16 +204,6 @@ api.createChallenge = {
      };
      response.group = getChallengeGroupResponse(group);
  
@@ -5408,7 +5419,7 @@ index 46f39b022..05f1fb088 100644
      res.respond(201, response);
    },
  };
-@@ -264,16 +254,6 @@ api.joinChallenge = {
+@@ -265,16 +255,6 @@ api.joinChallenge = {
      let chalLeader = await User.findById(response.leader).select(nameFields).exec();
      response.leader = chalLeader ? chalLeader.toJSON({minimize: true}) : null;
  
@@ -5425,7 +5436,7 @@ index 46f39b022..05f1fb088 100644
      res.respond(200, response);
    },
  };
-@@ -313,16 +293,6 @@ api.leaveChallenge = {
+@@ -314,16 +294,6 @@ api.leaveChallenge = {
      // Unlink challenge's tasks from user's tasks and save the challenge
      await Promise.all([challenge.unlinkTasks(user, keep), challenge.save()]);
  
@@ -5442,7 +5453,7 @@ index 46f39b022..05f1fb088 100644
      res.respond(200, {});
    },
  };
-@@ -725,16 +695,6 @@ api.deleteChallenge = {
+@@ -726,16 +696,6 @@ api.deleteChallenge = {
      // Close channel in background, some ops are run in the background without `await`ing
      await challenge.closeChal({broken: 'CHALLENGE_DELETED'});
  
@@ -5459,7 +5470,7 @@ index 46f39b022..05f1fb088 100644
      res.respond(200, {});
    },
  };
-@@ -776,17 +736,6 @@ api.selectChallengeWinner = {
+@@ -777,17 +737,6 @@ api.selectChallengeWinner = {
      // Close channel in background, some ops are run in the background without `await`ing
      await challenge.closeChal({broken: 'CHALLENGE_CLOSED', winner});
  
@@ -5478,7 +5489,7 @@ index 46f39b022..05f1fb088 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index d3381e918..5707ec88b 100644
+index 34a3868ef..fcae0a65f 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -9,8 +9,6 @@ import {
@@ -5490,7 +5501,7 @@ index d3381e918..5707ec88b 100644
  import { getAuthorEmailFromMessage } from '../../libs/chat';
  import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
  import nconf from 'nconf';
-@@ -146,14 +144,6 @@ api.postChat = {
+@@ -147,14 +145,6 @@ api.postChat = {
  
        sendTxn(FLAG_REPORT_EMAILS, 'slur-report-to-mods', report);
  
@@ -5505,7 +5516,7 @@ index d3381e918..5707ec88b 100644
        throw new BadRequest(res.t('bannedSlurUsed'));
      }
  
-@@ -188,13 +178,6 @@ api.postChat = {
+@@ -189,13 +179,6 @@ api.postChat = {
  
      await Promise.all(toSave);
  
@@ -5520,10 +5531,10 @@ index d3381e918..5707ec88b 100644
        res.respond(200, {chat: chatRes.chat});
      } else {
 diff --git a/website/server/controllers/api-v3/coupon.js b/website/server/controllers/api-v3/coupon.js
-index bec35182b..0f9893cfd 100644
+index f18644306..dcae6acda 100644
 --- a/website/server/controllers/api-v3/coupon.js
 +++ b/website/server/controllers/api-v3/coupon.js
-@@ -56,7 +56,7 @@ api.getCoupons = {
+@@ -57,7 +57,7 @@ api.getCoupons = {
   * @apiGroup Coupon
   * @apiPermission sudo
   *
@@ -5533,7 +5544,7 @@ index bec35182b..0f9893cfd 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 2a97fb6de..ad5364c72 100644
+index 7e88d487b..a25b6996e 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5547,7 +5558,7 @@ index 2a97fb6de..ad5364c72 100644
 -import stripePayments from '../../libs/payments/stripe';
 -import amzLib from '../../libs/payments/amazon';
 -import shared from '../../../common';
- import apiMessages from '../../libs/apiMessages';
+ import apiError from '../../libs/apiError';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
 @@ -152,22 +146,6 @@ api.createGroup = {
@@ -5780,7 +5791,7 @@ index a09cda938..ed65fff1c 100644
      res.respond(200, {});
    },
 diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
-index b08585e89..183357074 100644
+index 0abf6c67c..6ed16d973 100644
 --- a/website/server/controllers/api-v3/quests.js
 +++ b/website/server/controllers/api-v3/quests.js
 @@ -1,6 +1,5 @@
@@ -5795,10 +5806,10 @@ index b08585e89..183357074 100644
  } from '../../libs/email';
  import common from '../../../common';
 -import { sendNotification as sendPushNotification } from '../../libs/pushNotifications';
+ import apiError from '../../libs/apiError';
  
  const questScrolls = common.content.quests;
- 
-@@ -80,7 +78,7 @@ api.inviteToQuest = {
+@@ -81,7 +79,7 @@ api.inviteToQuest = {
        'party._id': group._id,
        _id: {$ne: user._id},
      })
@@ -5807,7 +5818,7 @@ index b08585e89..183357074 100644
        .exec();
  
      group.markModified('quest');
-@@ -120,20 +118,6 @@ api.inviteToQuest = {
+@@ -121,20 +119,6 @@ api.inviteToQuest = {
      // send out invites
      let inviterVars = getUserInfo(user, ['name', 'email']);
      let membersToEmail = members.filter(member => {
@@ -5828,7 +5839,7 @@ index b08585e89..183357074 100644
        return member.preferences.emailNotifications.invitedQuest !== false;
      });
      sendTxnEmail(membersToEmail, `invite-${quest.boss ? 'boss' : 'collection'}-quest`, [
-@@ -141,17 +125,6 @@ api.inviteToQuest = {
+@@ -142,17 +126,6 @@ api.inviteToQuest = {
        {name: 'INVITER', content: inviterVars.name},
        {name: 'PARTY_URL', content: '/party'},
      ]);
@@ -5846,7 +5857,7 @@ index b08585e89..183357074 100644
    },
  };
  
-@@ -202,17 +175,6 @@ api.acceptQuest = {
+@@ -203,17 +176,6 @@ api.acceptQuest = {
      let savedGroup = await group.save();
  
      res.respond(200, savedGroup.quest);
@@ -5864,7 +5875,7 @@ index b08585e89..183357074 100644
    },
  };
  
-@@ -264,16 +226,6 @@ api.rejectQuest = {
+@@ -265,16 +227,6 @@ api.rejectQuest = {
      let savedGroup = await group.save();
  
      res.respond(200, savedGroup.quest);
@@ -5881,7 +5892,7 @@ index b08585e89..183357074 100644
    },
  };
  
-@@ -325,16 +277,6 @@ api.forceStart = {
+@@ -326,16 +278,6 @@ api.forceStart = {
      ]);
  
      res.respond(200, savedGroup.quest);
@@ -5899,7 +5910,7 @@ index b08585e89..183357074 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index e00b08251..c2ee1d679 100644
+index dd12bc70c..16702e308 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -22,7 +22,6 @@ import {
@@ -5907,10 +5918,10 @@ index e00b08251..c2ee1d679 100644
  import _ from 'lodash';
  import logger from '../../libs/logger';
 -import moment from 'moment';
+ import apiError from '../../libs/apiError';
  
  const MAX_SCORE_NOTES_LENGTH = 256;
- 
-@@ -166,16 +165,6 @@ api.createUserTasks = {
+@@ -169,16 +168,6 @@ api.createUserTasks = {
      res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
  
      tasks.forEach((task) => {
@@ -5927,7 +5938,7 @@ index e00b08251..c2ee1d679 100644
        taskActivityWebhook.send(user, {
          type: 'created',
          task,
-@@ -251,16 +240,6 @@ api.createChallengeTasks = {
+@@ -256,16 +245,6 @@ api.createChallengeTasks = {
  
      // If adding tasks to a challenge -> sync users
      if (challenge) challenge.addTasks(tasks);
@@ -5944,7 +5955,7 @@ index e00b08251..c2ee1d679 100644
    },
  };
  
-@@ -606,7 +585,7 @@ api.scoreTask = {
+@@ -621,7 +600,7 @@ api.scoreTask = {
  
      let [delta] = common.ops.scoreTask({task, user, direction}, req);
      // Drop system (don't run on the client, as it would only be discarded since ops are sent to the API, not the results)
@@ -5953,7 +5964,7 @@ index e00b08251..c2ee1d679 100644
  
      // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
      // TODO move to common code?
-@@ -675,17 +654,6 @@ api.scoreTask = {
+@@ -690,17 +669,6 @@ api.scoreTask = {
          logger.error(e);
        }
      }
@@ -5972,10 +5983,10 @@ index e00b08251..c2ee1d679 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks/groups.js b/website/server/controllers/api-v3/tasks/groups.js
-index 5065ebc0c..9ab7554c3 100644
+index bd68fe6d2..a6076c9f0 100644
 --- a/website/server/controllers/api-v3/tasks/groups.js
 +++ b/website/server/controllers/api-v3/tasks/groups.js
-@@ -56,16 +56,6 @@ api.createGroupTasks = {
+@@ -59,16 +59,6 @@ api.createGroupTasks = {
      let tasks = await createTasks(req, res, {user, group});
  
      res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
@@ -5993,7 +6004,7 @@ index 5065ebc0c..9ab7554c3 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index b1f51be84..78ee29951 100644
+index a51da7602..da07cd8c7 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -18,12 +18,10 @@ import {
@@ -6009,7 +6020,7 @@ index b1f51be84..78ee29951 100644
  
  /**
   * @apiDefine UserNotFound
-@@ -402,8 +400,6 @@ api.deleteUser = {
+@@ -406,8 +404,6 @@ api.deleteUser = {
      if (user.auth.local.hashed_password && user.auth.local.email) {
        let isValidPassword = await passwordUtils.compare(user, password);
        if (!isValidPassword) throw new NotAuthorized(res.t('wrongPassword'));
@@ -6018,7 +6029,7 @@ index b1f51be84..78ee29951 100644
      }
  
      let feedback = req.body.feedback;
-@@ -440,14 +436,6 @@ api.deleteUser = {
+@@ -444,14 +440,6 @@ api.deleteUser = {
        ]);
      }
  
@@ -6033,7 +6044,7 @@ index b1f51be84..78ee29951 100644
      res.respond(200, {});
    },
  };
-@@ -489,8 +477,6 @@ api.getUserAnonymized = {
+@@ -493,8 +481,6 @@ api.getUserAnonymized = {
      delete user.apiToken;
      if (user.auth) {
        delete user.auth.local;
@@ -6042,7 +6053,7 @@ index b1f51be84..78ee29951 100644
      }
      delete user.newMessages;
      delete user.profile;
-@@ -553,7 +539,7 @@ api.sleep = {
+@@ -559,7 +545,7 @@ api.sleep = {
    url: '/user/sleep',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6051,7 +6062,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...sleepRes);
    },
-@@ -613,7 +599,7 @@ api.buy = {
+@@ -621,7 +607,7 @@ api.buy = {
      let quantity = 1;
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
@@ -6060,7 +6071,7 @@ index b1f51be84..78ee29951 100644
  
      await user.save();
      res.respond(200, ...buyRes);
-@@ -661,7 +647,7 @@ api.buyGear = {
+@@ -671,7 +657,7 @@ api.buyGear = {
    url: '/user/buy-gear/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6069,7 +6080,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...buyGearRes);
    },
-@@ -703,7 +689,7 @@ api.buyArmoire = {
+@@ -715,7 +701,7 @@ api.buyArmoire = {
      let user = res.locals.user;
      req.type = 'armoire';
      req.params.key = 'armoire';
@@ -6078,7 +6089,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...buyArmoireResponse);
    },
-@@ -743,7 +729,7 @@ api.buyHealthPotion = {
+@@ -757,7 +743,7 @@ api.buyHealthPotion = {
      let user = res.locals.user;
      req.type = 'potion';
      req.params.key = 'potion';
@@ -6087,7 +6098,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...buyHealthPotionResponse);
    },
-@@ -784,7 +770,7 @@ api.buyMysterySet = {
+@@ -800,7 +786,7 @@ api.buyMysterySet = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'mystery';
@@ -6096,7 +6107,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...buyMysterySetRes);
    },
-@@ -825,7 +811,7 @@ api.buyQuest = {
+@@ -843,7 +829,7 @@ api.buyQuest = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'quest';
@@ -6105,7 +6116,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...buyQuestRes);
    },
-@@ -1039,7 +1025,7 @@ api.changeClass = {
+@@ -1067,7 +1053,7 @@ api.changeClass = {
    url: '/user/change-class',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6114,7 +6125,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...changeClassRes);
    },
-@@ -1108,7 +1094,7 @@ api.purchase = {
+@@ -1140,7 +1126,7 @@ api.purchase = {
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
  
@@ -6123,7 +6134,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...purchaseRes);
    },
-@@ -1139,7 +1125,7 @@ api.userPurchaseHourglass = {
+@@ -1173,7 +1159,7 @@ api.userPurchaseHourglass = {
    url: '/user/purchase-hourglass/:type/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6132,7 +6143,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...purchaseHourglassRes);
    },
-@@ -1233,7 +1219,7 @@ api.userOpenMysteryItem = {
+@@ -1271,7 +1257,7 @@ api.userOpenMysteryItem = {
    url: '/user/open-mystery-item',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6141,7 +6152,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...openMysteryItemRes);
    },
-@@ -1265,7 +1251,7 @@ api.userReleasePets = {
+@@ -1305,7 +1291,7 @@ api.userReleasePets = {
    url: '/user/release-pets',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6150,7 +6161,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...releasePetsRes);
    },
-@@ -1314,7 +1300,7 @@ api.userReleaseBoth = {
+@@ -1356,7 +1342,7 @@ api.userReleaseBoth = {
    url: '/user/release-both',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6159,7 +6170,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...releaseBothRes);
    },
-@@ -1350,7 +1336,7 @@ api.userReleaseMounts = {
+@@ -1394,7 +1380,7 @@ api.userReleaseMounts = {
    url: '/user/release-mounts',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6168,7 +6179,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...releaseMountsRes);
    },
-@@ -1423,7 +1409,7 @@ api.userUnlock = {
+@@ -1471,7 +1457,7 @@ api.userUnlock = {
    url: '/user/unlock',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6177,7 +6188,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...unlockRes);
    },
-@@ -1449,7 +1435,7 @@ api.userRevive = {
+@@ -1499,7 +1485,7 @@ api.userRevive = {
    url: '/user/revive',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6186,7 +6197,7 @@ index b1f51be84..78ee29951 100644
      await user.save();
      res.respond(200, ...reviveRes);
    },
-@@ -1495,7 +1481,7 @@ api.userRebirth = {
+@@ -1547,7 +1533,7 @@ api.userRebirth = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      }).exec();
  
@@ -6195,7 +6206,7 @@ index b1f51be84..78ee29951 100644
  
      let toSave = tasks.map(task => task.save());
  
-@@ -1653,7 +1639,7 @@ api.userReroll = {
+@@ -1707,7 +1693,7 @@ api.userReroll = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      };
      let tasks = await Tasks.Task.find(query).exec();
@@ -6204,7 +6215,7 @@ index b1f51be84..78ee29951 100644
  
      let promises = tasks.map(task => task.save());
      promises.push(user.save());
-@@ -1704,12 +1690,6 @@ api.userReset = {
+@@ -1760,12 +1746,6 @@ api.userReset = {
        user.save(),
      ]);
  
@@ -6316,7 +6327,7 @@ index 7943355bb..cf1e614ff 100644
   * @api {get} /export/inbox.html Export user private messages as HTML document
   * @apiName ExportUserPrivateMessages
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index ef39eb951..7aa58ea8f 100644
+index c34460741..49b3f3d16 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
 @@ -6,7 +6,6 @@ import {
@@ -6326,8 +6337,8 @@ index ef39eb951..7aa58ea8f 100644
 -import slack from '../slack';
  import { model as Group } from '../../models/group';
  import { model as Chat } from '../../models/chat';
- 
-@@ -57,14 +56,6 @@ export default class GroupChatReporter extends ChatReporter {
+ import apiError from '../apiError';
+@@ -58,14 +57,6 @@ export default class GroupChatReporter extends ChatReporter {
        {name: 'GROUP_URL', content: groupUrl},
        {name: 'REPORTER_COMMENT', content: userComment || ''},
      ]));
@@ -6469,44 +6480,88 @@ index 75d58c936..d5d95a634 100644
    }
  } else if (!IS_TEST || IS_TEST && ENABLE_LOGS_IN_TEST) { // Do not log anything when testing unless specified
    logger
-diff --git a/website/server/libs/payments/payments.js b/website/server/libs/payments/payments.js
-index ecc790c46..3798559a9 100644
---- a/website/server/libs/payments/payments.js
-+++ b/website/server/libs/payments/payments.js
-@@ -1,12 +1,9 @@
- import _ from 'lodash';
--import nconf from 'nconf';
+diff --git a/website/server/libs/payments/gems.js b/website/server/libs/payments/gems.js
+index 7e0bfa6c5..bdf754ed9 100644
+--- a/website/server/libs/payments/gems.js
++++ b/website/server/libs/payments/gems.js
+@@ -1,9 +1,7 @@
 -import analytics from '../analyticsService';
  import {
    getUserInfo,
    sendTxn as txnEmail,
  } from '../email';
- import moment from 'moment';
 -import { sendNotification as sendPushNotification } from '../pushNotifications';
  import shared from '../../../common';
+ 
+ function getGiftMessage (data, byUsername, gemAmount, language) {
+@@ -37,18 +35,6 @@ async function buyGemGift (data) {
+     ]);
+   }
+ 
+-  // Only send push notifications if sending to a user other than yourself
+-  if (data.gift.member._id !== data.user._id && data.gift.member.preferences.pushNotifications.giftedGems !== false) {
+-    sendPushNotification(
+-      data.gift.member,
+-      {
+-        title: shared.i18n.t('giftedGems', languages[1]),
+-        message: shared.i18n.t('giftedGemsInfo', {amount: gemAmount, name: byUsername}, languages[1]),
+-        identifier: 'giftedGems',
+-      }
+-    );
+-  }
+-
+   await data.gift.member.save();
+ }
+ 
+@@ -75,21 +61,10 @@ async function buyGems (data) {
+   updateUserBalance(data, amt);
+   data.user.purchased.txnCount++;
+ 
+-  if (!data.gift) txnEmail(data.user, 'donation');
+-
+-  analytics.trackPurchase({
+-    uuid: data.user._id,
+-    itemPurchased: 'Gems',
+-    sku: `${data.paymentMethod.toLowerCase()}-checkout`,
+-    purchaseType: 'checkout',
+-    paymentMethod: data.paymentMethod,
+-    quantity: 1,
+-    gift: Boolean(data.gift),
+-    purchaseValue: amt,
+-    headers: data.headers,
+-  });
+-
+-  if (data.gift) await buyGemGift(data);
++  if (data.gift)
++    await buyGemGift(data);
++  else
++    txnEmail(data.user, 'donation');
+ 
+   await data.user.save();
+ }
+diff --git a/website/server/libs/payments/groupPayments.js b/website/server/libs/payments/groupPayments.js
+index 539200fe5..94f1d71c1 100644
+--- a/website/server/libs/payments/groupPayments.js
++++ b/website/server/libs/payments/groupPayments.js
+@@ -1,4 +1,3 @@
+-import nconf from 'nconf';
+ import _ from 'lodash';
+ import moment from 'moment';
+ 
+@@ -8,11 +7,9 @@ import {
+   basicFields as basicGroupFields,
+ } from '../../models/group';
  import {
-   model as Group,
-@@ -17,9 +14,7 @@ import {
-   NotAuthorized,
-   NotFound,
- } from '../errors';
--import slack from '../slack';
+-  getUserInfo,
+   sendTxn as txnEmail,
+ } from '../email';
  
 -const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
  const JOINED_GROUP_PLAN = 'joined group plan';
  
- let api = {};
-@@ -28,8 +23,6 @@ api.constants = {
-   UNLIMITED_CUSTOMER_ID: 'habitrpg', // Users with the customerId have an unlimted free subscription
-   GROUP_PLAN_CUSTOMER_ID: 'group-plan',
-   GROUP_PLAN_PAYMENT_METHOD: 'Group Plan',
--  GOOGLE_PAYMENT_METHOD: 'Google',
--  IOS_PAYMENT_METHOD: 'Apple',
- };
- 
- function revealMysteryItems (user) {
-@@ -89,8 +82,6 @@ api.addSubscriptionToGroupUsers = async function addSubscriptionToGroupUsers (gr
- api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
+ function _dateDiff (earlyDate, lateDate) {
+@@ -53,8 +50,6 @@ async function addSubscriptionToGroupUsers (group) {
+ async function addSubToGroupUser (member, group) {
    // These EMAIL_TEMPLATE constants are used to pass strings into templates that are
    // stored externally and so their values must not be changed.
 -  const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GOOGLE = 'Google_subscription';
@@ -6514,7 +6569,7 @@ index ecc790c46..3798559a9 100644
    const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GROUP_PLAN = 'group_plan_free_subscription';
    const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_LIFETIME_FREE = 'lifetime_free_subscription';
    const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_NORMAL = 'normal_subscription';
-@@ -100,7 +91,6 @@ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
+@@ -64,7 +59,6 @@ async function addSubToGroupUser (member, group) {
    // When changing customerIdsToIgnore or paymentMethodsToIgnore, the code blocks below for
    // the `group-member-join` email template will probably need to be changed.
    let customerIdsToIgnore = [this.constants.GROUP_PLAN_CUSTOMER_ID, this.constants.UNLIMITED_CUSTOMER_ID];
@@ -6522,7 +6577,7 @@ index ecc790c46..3798559a9 100644
    let previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_NONE;
    let leader = await User.findById(group.leader).exec();
  
-@@ -135,29 +125,12 @@ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
+@@ -99,29 +93,12 @@ async function addSubToGroupUser (member, group) {
    let memberPlan = member.purchased.plan;
    if (member.isSubscribed()) {
      let customerHasCancelledGroupPlan = memberPlan.customerId === this.constants.GROUP_PLAN_CUSTOMER_ID && !member.hasNotCancelled();
@@ -6554,7 +6609,41 @@ index ecc790c46..3798559a9 100644
          previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_LIFETIME_FREE;
        } else if (memberPlan.customerId === this.constants.GROUP_PLAN_CUSTOMER_ID) {
          previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GROUP_PLAN;
-@@ -278,9 +251,6 @@ api.createSubscription = async function createSubscription (data) {
+diff --git a/website/server/libs/payments/payments.js b/website/server/libs/payments/payments.js
+index da3e189d7..57b9a64b0 100644
+--- a/website/server/libs/payments/payments.js
++++ b/website/server/libs/payments/payments.js
+@@ -18,8 +18,6 @@ api.constants = {
+   UNLIMITED_CUSTOMER_ID: 'habitrpg', // Users with the customerId have an unlimted free subscription
+   GROUP_PLAN_CUSTOMER_ID: 'group-plan',
+   GROUP_PLAN_PAYMENT_METHOD: 'Group Plan',
+-  GOOGLE_PAYMENT_METHOD: 'Google',
+-  IOS_PAYMENT_METHOD: 'Apple',
+ };
+ 
+ api.addSubscriptionToGroupUsers = addSubscriptionToGroupUsers;
+diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
+index 43f7b1857..dd800b6fe 100644
+--- a/website/server/libs/payments/subscriptions.js
++++ b/website/server/libs/payments/subscriptions.js
+@@ -1,8 +1,6 @@
+ import _ from 'lodash';
+ import moment from 'moment';
+ 
+-import analytics from '../analyticsService';
+-import slack from '../slack';
+ import {
+   getUserInfo,
+   sendTxn as txnEmail,
+@@ -16,7 +14,6 @@ import {
+   NotFound,
+ } from '../errors';
+ import shared from '../../../common';
+-import { sendNotification as sendPushNotification } from '../pushNotifications';
+ 
+ // @TODO: Abstract to shared/constant
+ const JOINED_GROUP_PLAN = 'joined group plan';
+@@ -54,9 +51,6 @@ async function createSubscription (data) {
    let today = new Date();
    let plan;
    let group;
@@ -6564,7 +6653,7 @@ index ecc790c46..3798559a9 100644
    let emailType = 'subscription-begins';
  
    //  If we are buying a group subscription
-@@ -297,10 +267,7 @@ api.createSubscription = async function createSubscription (data) {
+@@ -73,10 +67,7 @@ async function createSubscription (data) {
      }
  
      recipient = group;
@@ -6575,7 +6664,7 @@ index ecc790c46..3798559a9 100644
      recipient.purchased.plan.quantity = data.sub.quantity;
  
      await this.addSubscriptionToGroupUsers(group);
-@@ -332,9 +299,7 @@ api.createSubscription = async function createSubscription (data) {
+@@ -108,9 +99,7 @@ async function createSubscription (data) {
        paymentMethod: data.paymentMethod,
        extraMonths: Number(plan.extraMonths) + _dateDiff(today, plan.dateTerminated),
        dateTerminated: null,
@@ -6586,7 +6675,7 @@ index ecc790c46..3798559a9 100644
        nextPaymentProcessing: data.nextPaymentProcessing,
        nextBillingDate: data.nextBillingDate,
        additionalData: data.additionalData,
-@@ -370,19 +335,6 @@ api.createSubscription = async function createSubscription (data) {
+@@ -146,19 +135,6 @@ async function createSubscription (data) {
      txnEmail(data.user, emailType);
    }
  
@@ -6606,7 +6695,7 @@ index ecc790c46..3798559a9 100644
    if (!group) data.user.purchased.txnCount++;
  
    if (data.gift) {
-@@ -417,19 +369,6 @@ api.createSubscription = async function createSubscription (data) {
+@@ -193,19 +169,6 @@ async function createSubscription (data) {
          {name: 'X_MONTHS_SUBSCRIPTION', content: months},
        ]);
      }
@@ -6626,7 +6715,7 @@ index ecc790c46..3798559a9 100644
    }
  
    if (group) {
-@@ -439,30 +378,12 @@ api.createSubscription = async function createSubscription (data) {
+@@ -215,30 +178,12 @@ async function createSubscription (data) {
    }
  
    if (data.gift) await data.gift.member.save();
@@ -6646,10 +6735,10 @@ index ecc790c46..3798559a9 100644
 -    months: group ? 1 : months,
 -    groupId,
 -  });
- };
+ }
  
  // Cancels a subscription or group plan, setting termination to happen later
- api.cancelSubscription = async function cancelSubscription (data) {
+ async function cancelSubscription (data) {
    let plan;
    let group;
 -  let cancelType = 'unsubscribe';
@@ -6657,7 +6746,7 @@ index ecc790c46..3798559a9 100644
    let emailType;
    let emailMergeData = [];
    let sendEmail = true;
-@@ -524,20 +445,6 @@ api.cancelSubscription = async function cancelSubscription (data) {
+@@ -300,20 +245,6 @@ async function cancelSubscription (data) {
    }
  
    if (sendEmail) txnEmail(data.user, emailType, emailMergeData);
@@ -6675,48 +6764,9 @@ index ecc790c46..3798559a9 100644
 -    paymentMethod: data.paymentMethod,
 -    headers: data.headers,
 -  });
- };
+ }
  
- api.buyGems = async function buyGems (data) {
-@@ -549,18 +456,6 @@ api.buyGems = async function buyGems (data) {
- 
-   if (!data.gift) txnEmail(data.user, 'donation');
- 
--  analytics.trackPurchase({
--    uuid: data.user._id,
--    itemPurchased: 'Gems',
--    sku: `${data.paymentMethod.toLowerCase()}-checkout`,
--    purchaseType: 'checkout',
--    paymentMethod: data.paymentMethod,
--    quantity: 1,
--    gift: Boolean(data.gift),
--    purchaseValue: amt,
--    headers: data.headers,
--  });
--
-   if (data.gift) {
-     let byUsername = getUserInfo(data.user, ['name']).name;
-     let gemAmount = data.gift.gems.amount || 20;
-@@ -595,19 +490,6 @@ api.buyGems = async function buyGems (data) {
-       ]);
-     }
- 
--    if (data.gift.member._id !== data.user._id) { // Only send push notifications if sending to a user other than yourself
--      if (data.gift.member.preferences.pushNotifications.giftedGems !== false) {
--        sendPushNotification(
--          data.gift.member,
--          {
--            title: shared.i18n.t('giftedGems', languages[1]),
--            message: shared.i18n.t('giftedGemsInfo', {amount: gemAmount, name: byUsername}, languages[1]),
--            identifier: 'giftedGems',
--          }
--        );
--      }
--    }
--
-     await data.gift.member.save();
-   }
- 
+ module.exports = {
 diff --git a/website/server/libs/setupPassport.js b/website/server/libs/setupPassport.js
 index 4c0861a1f..51d872942 100644
 --- a/website/server/libs/setupPassport.js
@@ -6995,10 +7045,10 @@ index e3994c8e0..c6f8a4a17 100644
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
-index 81d4e8b06..53775b59f 100644
+index f4b2b6341..727396234 100644
 --- a/website/server/models/user/hooks.js
 +++ b/website/server/models/user/hooks.js
-@@ -164,29 +164,11 @@ function _setUpNewUser (user) {
+@@ -171,29 +171,11 @@ function _setUpNewUser (user) {
    return _populateDefaultTasks(user, taskTypes);
  }
  
@@ -7072,7 +7122,7 @@ index c9e77427a..3556880fe 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 98e4f7331..d54993dad 100644
+index d1ac96b7f..f223cc209 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -25,12 +25,6 @@ let schema = new Schema({

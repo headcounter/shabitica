@@ -13,15 +13,15 @@ Date:   Tue Apr 3 05:09:43 2018 +0200
     Filename: html-test-reports.patch
 
 diff --git a/gulp/gulp-tests.js b/gulp/gulp-tests.js
-index 03d58ea5a..fb6f5765e 100644
+index d2b451cb0..cf2dfa494 100644
 --- a/gulp/gulp-tests.js
 +++ b/gulp/gulp-tests.js
 @@ -170,7 +170,7 @@ gulp.task('test:content:safe', gulp.series('test:prepare:build', (cb) => {
  
  gulp.task('test:api-v3:unit', (done) => {
    let runner = exec(
--    testBin('istanbul cover --dir coverage/api-v3-unit --report lcovonly mocha -- test/api/v3/unit --recursive --require ./test/helpers/start-server'),
-+    testBin('istanbul cover --dir coverage/api-v3-unit --report lcovonly mocha -- test/api/v3/unit --reporter mocha-multi-reporters --reporter-options configFile=mocha-reporters.json --recursive --require ./test/helpers/start-server'),
+-    testBin('istanbul cover --dir coverage/api-v3-unit mocha -- test/api/v3/unit --recursive --require ./test/helpers/start-server'),
++    testBin('istanbul cover --dir coverage/api-v3-unit mocha -- test/api/v3/unit --reporter mocha-multi-reporters --reporter-options configFile=mocha-reporters.json --recursive --require ./test/helpers/start-server'),
      CONTENT_OPTIONS,
      (err) => {
        if (err) {
@@ -54,7 +54,7 @@ index 000000000..347c750ab
 +  "mochaSimpleHtmlReporterReporterOptions": {"output": "test-report.html"}
 +}
 diff --git a/package.json b/package.json
-index 61d6753a9..673f40cc6 100644
+index 8b110c56e..a4b2fe3d4 100644
 --- a/package.json
 +++ b/package.json
 @@ -107,9 +107,9 @@
@@ -76,6 +76,6 @@ index 61d6753a9..673f40cc6 100644
      "mocha": "^5.1.1",
 +    "mocha-multi-reporters": "^1.1.7",
 +    "mocha-simple-html-reporter": "^1.1.0",
-     "monk": "^6.0.5",
+     "monk": "^6.0.6",
      "nightwatch": "^0.9.21",
-     "puppeteer": "^1.3.0",
+     "puppeteer": "^1.4.0",

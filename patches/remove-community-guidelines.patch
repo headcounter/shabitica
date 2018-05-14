@@ -145,10 +145,10 @@ index ea2ed6c92..c5f8fab3c 100644
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
          { name: 'groupPlans', path: 'group-plans', component: GroupPlansPage, meta: {requiresLogin: false}},
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 25527ae42..effe7b423 100644
+index f1b17edec..6b0368588 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -189,7 +189,6 @@ let updatablePaths = [
+@@ -193,7 +193,6 @@ let updatablePaths = [
    'flags.showTour',
    'flags.tour',
    'flags.tutorial',
@@ -157,7 +157,7 @@ index 25527ae42..effe7b423 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 9d8a9f09e..29534fb14 100644
+index 3806f5aaa..fc3d3d585 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -216,7 +216,6 @@ let schema = new Schema({

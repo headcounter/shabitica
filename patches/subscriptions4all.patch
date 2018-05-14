@@ -117,7 +117,7 @@ index b1d374925..9160226c5 100644
  
    describe('bulk purchasing', () => {
 diff --git a/test/api/v3/unit/libs/payments/payments.test.js b/test/api/v3/unit/libs/payments/payments.test.js
-index 12fb07c1c..09b59085a 100644
+index 1788fe406..e6e3aab66 100644
 --- a/test/api/v3/unit/libs/payments/payments.test.js
 +++ b/test/api/v3/unit/libs/payments/payments.test.js
 @@ -425,83 +425,6 @@ describe('payments/index', () => {
@@ -242,20 +242,20 @@ index 56965773c..950516199 100644
        preferences: {
          language: req.language,
        },
-diff --git a/website/server/libs/payments/payments.js b/website/server/libs/payments/payments.js
-index 3798559a9..2487fbaf3 100644
---- a/website/server/libs/payments/payments.js
-+++ b/website/server/libs/payments/payments.js
-@@ -15,8 +15,6 @@ import {
-   NotFound,
- } from '../errors';
+diff --git a/website/server/libs/payments/groupPayments.js b/website/server/libs/payments/groupPayments.js
+index 94f1d71c1..3df10cf9f 100644
+--- a/website/server/libs/payments/groupPayments.js
++++ b/website/server/libs/payments/groupPayments.js
+@@ -10,8 +10,6 @@ import {
+   sendTxn as txnEmail,
+ } from '../email';
  
 -const JOINED_GROUP_PLAN = 'joined group plan';
 -
- let api = {};
+ function _dateDiff (earlyDate, lateDate) {
+   if (!earlyDate || !lateDate || moment(lateDate).isBefore(earlyDate)) return 0;
  
- api.constants = {
-@@ -84,7 +82,6 @@ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
+@@ -52,7 +50,6 @@ async function addSubToGroupUser (member, group) {
    // stored externally and so their values must not be changed.
    const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GROUP_PLAN = 'group_plan_free_subscription';
    const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_LIFETIME_FREE = 'lifetime_free_subscription';
@@ -263,7 +263,7 @@ index 3798559a9..2487fbaf3 100644
    const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_UNKNOWN = 'unknown_type_of_subscription';
    const EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_NONE = 'no_subscription';
  
-@@ -147,11 +144,6 @@ api.addSubToGroupUser = async function addSubToGroupUser (member, group) {
+@@ -115,11 +112,6 @@ async function addSubToGroupUser (member, group) {
        return;
      }
  
@@ -275,7 +275,21 @@ index 3798559a9..2487fbaf3 100644
      let today = new Date();
      plan = member.purchased.plan.toObject();
      let extraMonths = Number(plan.extraMonths);
-@@ -408,12 +400,7 @@ api.cancelSubscription = async function cancelSubscription (data) {
+diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
+index dd800b6fe..7fa43e535 100644
+--- a/website/server/libs/payments/subscriptions.js
++++ b/website/server/libs/payments/subscriptions.js
+@@ -15,9 +15,6 @@ import {
+ } from '../errors';
+ import shared from '../../../common';
+ 
+-// @TODO: Abstract to shared/constant
+-const JOINED_GROUP_PLAN = 'joined group plan';
+-
+ function revealMysteryItems (user) {
+   const pushedItems = [];
+ 
+@@ -208,12 +205,7 @@ async function cancelSubscription (data) {
  
      await this.cancelGroupUsersSubscription(group);
    } else {

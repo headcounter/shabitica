@@ -18,7 +18,7 @@ Date:   Mon Apr 2 09:23:06 2018 +0200
     Filename: fixup-test-runners.patch
 
 diff --git a/gulp/gulp-tests.js b/gulp/gulp-tests.js
-index 4a38458d8..03d58ea5a 100644
+index d805765b8..d2b451cb0 100644
 --- a/gulp/gulp-tests.js
 +++ b/gulp/gulp-tests.js
 @@ -17,7 +17,7 @@ const TEST_DB_URI       = nconf.get('TEST_DB_URI');
@@ -76,8 +76,8 @@ index 4a38458d8..03d58ea5a 100644
  
  gulp.task('test:api-v3:unit', (done) => {
    let runner = exec(
--    testBin('node_modules/.bin/istanbul cover --dir coverage/api-v3-unit --report lcovonly node_modules/mocha/bin/_mocha -- test/api/v3/unit --recursive --require ./test/helpers/start-server'),
-+    testBin('istanbul cover --dir coverage/api-v3-unit --report lcovonly mocha -- test/api/v3/unit --recursive --require ./test/helpers/start-server'),
+-    testBin('node_modules/.bin/istanbul cover --dir coverage/api-v3-unit node_modules/mocha/bin/_mocha -- test/api/v3/unit --recursive --require ./test/helpers/start-server'),
++    testBin('istanbul cover --dir coverage/api-v3-unit mocha -- test/api/v3/unit --recursive --require ./test/helpers/start-server'),
 +    CONTENT_OPTIONS,
      (err) => {
        if (err) {
@@ -103,7 +103,7 @@ index 4a38458d8..03d58ea5a 100644
    );
  
 diff --git a/package.json b/package.json
-index 7f4885ce9..61d6753a9 100644
+index 2d6dbfb96..8b110c56e 100644
 --- a/package.json
 +++ b/package.json
 @@ -107,9 +107,9 @@
