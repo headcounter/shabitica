@@ -15,7 +15,7 @@ Date:   Mon May 14 14:23:11 2018 +0200
     Filename: fix-bootstrap-downgrade.patch
 
 diff --git a/package.json b/package.json
-index 4901e5e33..591443e94 100644
+index 3b468f309..14ddf87d5 100644
 --- a/package.json
 +++ b/package.json
 @@ -23,7 +23,7 @@
