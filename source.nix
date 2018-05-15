@@ -172,6 +172,10 @@ stdenv.mkDerivation rec {
 
     # Makes sure that we use Bootstrap version 4.1.0
     patches/fix-bootstrap-downgrade.patch
+
+    # Don't use src="" in media elements (fixes annoying errors)
+    # https://github.com/HabitRPG/habitica/pull/10364
+    patches/no-empty-src-in-media-element.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
