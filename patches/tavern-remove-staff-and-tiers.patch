@@ -10,23 +10,16 @@ Date:   Sat Mar 31 01:16:24 2018 +0200
     Filename: tavern-remove-staff-and-tiers.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 72c2b0b0d..085c7bb02 100644
+index 4192fdddc..fb1dde984 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
-@@ -102,24 +102,6 @@
+@@ -100,16 +100,6 @@
+           li(v-once) {{ $t('sleepBullet4') }}
+         button.btn.btn-secondary.pause-button(v-if='!user.preferences.sleep', @click='toggleSleep()', v-once) {{ $t('pauseDailies') }}
          button.btn.btn-secondary.pause-button(v-if='user.preferences.sleep', @click='toggleSleep()', v-once) {{ $t('unpauseDailies') }}
- 
-     .below-header-sections
--      .section-header
+-    .px-3
+-      sidebar-section(:title="$t('staffAndModerators')")
 -        .row
--          .col-10
--            h3(v-once) {{ $t('staffAndModerators') }}
--          .col-2
--            .toggle-up(@click="sections.staff = !sections.staff", v-if="sections.staff")
--              .svg-icon(v-html="icons.upIcon")
--            .toggle-down(@click="sections.staff = !sections.staff", v-if="!sections.staff")
--              .svg-icon(v-html="icons.downIcon")
--        .section.row(v-if="sections.staff")
 -          .col-4.staff(v-for='user in staff', :class='{staff: user.type === "Staff", moderator: user.type === "Moderator", bailey: user.name === "It\'s Bailey"}')
 -            div
 -              a.title(@click="viewStaffProfile(user.uuid)") {{user.name}}
@@ -34,25 +27,16 @@ index 72c2b0b0d..085c7bb02 100644
 -              .svg-icon.mod-icon(v-html="icons.tierMod", v-if='user.type === "Moderator" && user.name !== "It\'s Bailey"')
 -              .svg-icon.npc-icon(v-html="icons.tierNPC", v-if='user.name === "It\'s Bailey"')
 -            .type {{user.type}}
+ 
+       sidebar-section(:title="$t('helpfulLinks')")
+         ul
+@@ -121,42 +111,6 @@
+             a(href='http://habitica.wikia.com/wiki/Habitica_Wiki', v-once) {{ $t('wiki') }}
+           li
+             a(href='https://oldgods.net/habitrpg/habitrpg_user_data_display.html', v-once) {{ $t('dataDisplayTool') }}
 -
-       .section-header
-         .row
-           .col-10
-@@ -140,50 +122,6 @@
-               a(href='http://habitica.wikia.com/wiki/Habitica_Wiki', v-once) {{ $t('wiki') }}
-             li
-               a(href='https://oldgods.net/habitrpg/habitrpg_user_data_display.html', v-once) {{ $t('dataDisplayTool') }}
--
--      .section-header
+-      sidebar-section(:title="$t('playerTiers')")
 -        .row
--          .col-10
--            h3(v-once) {{ $t('playerTiers') }}
--          .col-2
--            .toggle-up(@click="sections.playerTiers = !sections.playerTiers", v-if="sections.playerTiers")
--              .svg-icon(v-html="icons.upIcon")
--            .toggle-down(@click="sections.playerTiers = !sections.playerTiers", v-if="!sections.playerTiers")
--              .svg-icon(v-html="icons.downIcon")
--        .section.row(v-if="sections.playerTiers")
 -          .col-12
 -            p(v-once) {{ $t('playerTiersDesc') }}
 -            ul.tier-list
@@ -89,7 +73,7 @@ index 72c2b0b0d..085c7bb02 100644
  </template>
  
  <style lang='scss' scoped>
-@@ -277,26 +215,6 @@
+@@ -266,26 +220,6 @@
      margin-left: .5em;
    }
  
@@ -116,7 +100,7 @@ index 72c2b0b0d..085c7bb02 100644
    .boss-icon {
      width: 16px;
      margin-top: .1em;
-@@ -307,88 +225,6 @@
+@@ -296,88 +230,6 @@
      width: 48px;
    }
  
@@ -205,9 +189,9 @@ index 72c2b0b0d..085c7bb02 100644
    .boss-section {
      padding: 1.75em;
    }
-@@ -520,17 +356,6 @@ import rageIcon from 'assets/svg/rage.svg';
+@@ -508,17 +360,6 @@ import questBackground from 'assets/svg/quest-background-border.svg';
+ import rageIcon from 'assets/svg/rage.svg';
  import swordIcon from 'assets/svg/sword.svg';
- import upIcon from 'assets/svg/up.svg';
  
 -import tier1 from 'assets/svg/tier-1.svg';
 -import tier2 from 'assets/svg/tier-2.svg';
@@ -223,7 +207,7 @@ index 72c2b0b0d..085c7bb02 100644
  import quests from 'common/script/content/quests';
  
  export default {
-@@ -553,124 +378,15 @@ export default {
+@@ -541,16 +382,6 @@ export default {
          questBackground,
          rageIcon,
          swordIcon,
@@ -237,15 +221,11 @@ index 72c2b0b0d..085c7bb02 100644
 -        tierMod,
 -        tierNPC,
 -        tierStaff,
-         upIcon,
        }),
-       group: {
-         chat: [],
-       },
+       chat: {
+         submitDisable: false,
+@@ -562,103 +393,6 @@ export default {
        sections: {
--        staff: true,
-         helpfulLinks: true,
--        playerTiers: true,
          worldBoss: true,
        },
 -      staff: [
@@ -348,7 +328,7 @@ index 72c2b0b0d..085c7bb02 100644
        newMessage: '',
        coords: {
          TOP: 0,
-@@ -766,14 +482,6 @@ export default {
+@@ -776,14 +510,6 @@ export default {
          this.$root.$emit('bv::show::modal', 'world-boss-rage');
        }
      },

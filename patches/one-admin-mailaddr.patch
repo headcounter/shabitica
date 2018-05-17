@@ -174,7 +174,7 @@ index a25b6996e..34e1a78b2 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index da07cd8c7..f1b17edec 100644
+index ad9c8942e..51ec44871 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -21,7 +21,7 @@ import {

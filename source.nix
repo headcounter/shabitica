@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.42.4";
+  version = "4.42.5";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0lzrjcgvf9mx00nmsygf0vn41drd65wsxyywcvshdgd5awrnxgjv";
+    sha256 = "1163j69j9fbixr463czcmkqjyj05iylmkhilgqfw04330cj3gvhh";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -165,13 +165,6 @@ stdenv.mkDerivation rec {
 
     # Adds support systemd startup notifications.
     patches/systemd-notify.patch
-
-    # Strip markdown from group claim system messages
-    # https://github.com/HabitRPG/habitica/pull/10349
-    patches/group-claim-strip-markdown.patch
-
-    # Makes sure that we use Bootstrap version 4.1.0
-    patches/fix-bootstrap-downgrade.patch
 
     # Don't use src="" in media elements (fixes annoying errors)
     # https://github.com/HabitRPG/habitica/pull/10364

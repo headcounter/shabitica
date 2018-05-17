@@ -6,13 +6,13 @@ let
   nodePackages = import ./all-deps.nix { inherit pkgs system; };
 in {
   dev = {
-    "@vue/test-utils" = nodePackages."@vue/test-utils-^1.0.0-beta.15";
+    "@vue/test-utils" = nodePackages."@vue/test-utils-^1.0.0-beta.16";
     "babel-plugin-istanbul" = nodePackages."babel-plugin-istanbul-^4.1.6";
     "babel-plugin-syntax-object-rest-spread" = nodePackages."babel-plugin-syntax-object-rest-spread-^6.13.0";
     chai = nodePackages."chai-^4.1.2";
     "chai-as-promised" = nodePackages."chai-as-promised-^7.1.1";
     chalk = nodePackages."chalk-^2.4.1";
-    chromedriver = nodePackages."chromedriver-^2.38.2";
+    chromedriver = nodePackages."chromedriver-^2.38.3";
     "connect-history-api-fallback" = nodePackages."connect-history-api-fallback-^1.1.0";
     coveralls = nodePackages."coveralls-^3.0.1";
     "cross-spawn" = nodePackages."cross-spawn-^6.0.5";
@@ -51,15 +51,15 @@ in {
     sinon = nodePackages."sinon-^4.5.0";
     "sinon-chai" = nodePackages."sinon-chai-^3.0.0";
     "sinon-stub-promise" = nodePackages."sinon-stub-promise-^4.0.0";
-    "webpack-bundle-analyzer" = nodePackages."webpack-bundle-analyzer-^2.11.2";
+    "webpack-bundle-analyzer" = nodePackages."webpack-bundle-analyzer-^2.12.0";
     "webpack-dev-middleware" = nodePackages."webpack-dev-middleware-^2.0.5";
-    "webpack-hot-middleware" = nodePackages."webpack-hot-middleware-^2.22.1";
+    "webpack-hot-middleware" = nodePackages."webpack-hot-middleware-^2.22.2";
   };
   extra."google-fonts-offline" = nodePackages."google-fonts-offline";
   main = {
     accepts = nodePackages."accepts-^1.3.5";
     apidoc = nodePackages."apidoc-^0.17.5";
-    autoprefixer = nodePackages."autoprefixer-^8.4.1";
+    autoprefixer = nodePackages."autoprefixer-^8.5.0";
     axios = nodePackages."axios-^0.18.0";
     "axios-progress-bar" = nodePackages."axios-progress-bar-^1.2.0";
     "babel-core" = nodePackages."babel-core-^6.26.3";
@@ -75,8 +75,8 @@ in {
     "babel-register" = nodePackages."babel-register-^6.6.0";
     "babel-runtime" = nodePackages."babel-runtime-^6.11.6";
     bcrypt = nodePackages."bcrypt-^2.0.0";
-    "body-parser" = nodePackages."body-parser-^1.15.0";
-    bootstrap = nodePackages."bootstrap-4.1.0";
+    "body-parser" = nodePackages."body-parser-^1.18.3";
+    bootstrap = nodePackages."bootstrap-^4.1.1";
     "bootstrap-vue" = nodePackages."bootstrap-vue-^2.0.0-rc.9";
     compression = nodePackages."compression-^1.7.2";
     "cookie-session" = nodePackages."cookie-session-^1.2.0";
@@ -108,7 +108,7 @@ in {
     "method-override" = nodePackages."method-override-^2.3.5";
     moment = nodePackages."moment-^2.22.1";
     "moment-recur" = nodePackages."moment-recur-^1.0.7";
-    mongoose = nodePackages."mongoose-^5.0.17";
+    mongoose = nodePackages."mongoose-^5.1.1";
     morgan = nodePackages."morgan-^1.7.0";
     nconf = nodePackages."nconf-^0.10.0";
     "node-sass" = nodePackages."node-sass-^4.9.0";
@@ -143,7 +143,7 @@ in {
     "vue-template-compiler" = nodePackages."vue-template-compiler-^2.5.16";
     vuedraggable = nodePackages."vuedraggable-^2.15.0";
     "vuejs-datepicker" = nodePackages."vuejs-datepicker-git://github.com/habitrpg/vuejs-datepicker.git#5d237615463a84a23dd6f3f77c6ab577d68593ec";
-    webpack = nodePackages."webpack-^3.11.0";
+    webpack = nodePackages."webpack-^3.12.0";
     "webpack-merge" = nodePackages."webpack-merge-^4.0.0";
     winston = nodePackages."winston-^2.4.2";
     xml2js = nodePackages."xml2js-^0.4.4";

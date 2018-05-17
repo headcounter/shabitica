@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:02 2018 +0200
     Filename: strip-dependencies.patch
 
 diff --git a/package.json b/package.json
-index abf905cce..3d6871d8a 100644
+index c8c031035..5542e8693 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,13 +4,9 @@
-   "version": "4.42.4",
+   "version": "4.42.5",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@slack/client": "^3.8.1",
@@ -22,8 +22,8 @@ index abf905cce..3d6871d8a 100644
 -    "amazon-payments": "^0.2.7",
 -    "amplitude": "^3.5.0",
      "apidoc": "^0.17.5",
-     "autoprefixer": "^8.4.1",
--    "aws-sdk": "^2.230.1",
+     "autoprefixer": "^8.5.0",
+-    "aws-sdk": "^2.239.1",
      "axios": "^0.18.0",
      "axios-progress-bar": "^1.2.0",
      "babel-core": "^6.26.3",
@@ -34,12 +34,12 @@ index abf905cce..3d6871d8a 100644
 -    "hellojs": "^1.15.1",
      "html-webpack-plugin": "^3.2.0",
      "image-size": "^0.6.2",
--    "in-app-purchase": "^1.9.3",
+-    "in-app-purchase": "^1.9.4",
      "intro.js": "^2.9.3",
      "jquery": ">=3.0.0",
      "js2xmlparser": "^3.0.0",
 @@ -64,32 +58,23 @@
-     "mongoose": "^5.0.17",
+     "mongoose": "^5.1.1",
      "morgan": "^1.7.0",
      "nconf": "^0.10.0",
 -    "node-gcm": "^0.14.4",
@@ -72,7 +72,7 @@ index abf905cce..3d6871d8a 100644
      "useragent": "^2.1.9",
      "uuid": "^3.0.1",
 @@ -106,7 +91,6 @@
-     "webpack": "^3.11.0",
+     "webpack": "^3.12.0",
      "webpack-merge": "^4.0.0",
      "winston": "^2.4.2",
 -    "winston-loggly-bulk": "^2.0.2",
@@ -80,7 +80,7 @@ index abf905cce..3d6871d8a 100644
    },
    "private": true,
 @@ -186,7 +170,6 @@
-     "webpack-hot-middleware": "^2.22.1"
+     "webpack-hot-middleware": "^2.22.2"
    },
    "optionalDependencies": {
 -    "memwatch-next": "^0.3.0",

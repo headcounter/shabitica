@@ -27,10 +27,10 @@ index be680634c..1bb17be30 100644
          .svg-icon(v-html="icons.delete")
          | {{$t('delete')}}
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index 647d4ad5b..c9125d840 100644
+index ccc18b13e..802ede722 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
-@@ -37,7 +37,6 @@
+@@ -39,7 +39,6 @@
              button.btn.btn-secondary.float-left(v-once, @click='reverseChat()') {{ $t('reverseChat') }}
            .col-6.chat-send-actions
              button.btn.btn-secondary.send-chat.float-right(v-once, @click='sendMessage()') {{ $t('send') }}
@@ -38,23 +38,23 @@ index 647d4ad5b..c9125d840 100644
          .row(v-if='showNoNotificationsMessage')
            .col-12.no-notifications
              | {{$t('groupNoNotifications')}}
-@@ -332,7 +331,6 @@ import groupChallenges from '../challenges/groupChallenges';
+@@ -276,7 +275,6 @@ import groupChallenges from '../challenges/groupChallenges';
  import groupGemsModal from 'client/components/groups/groupGemsModal';
  import questSidebarSection from 'client/components/groups/questSidebarSection';
  import markdownDirective from 'client/directives/markdown';
 -import communityGuidelines from './communityGuidelines';
+ import sidebarSection from '../sidebarSection';
+ import userLink from '../userLink';
  
- import deleteIcon from 'assets/svg/delete.svg';
- import copyIcon from 'assets/svg/copy.svg';
-@@ -363,7 +361,6 @@ export default {
+@@ -306,7 +304,6 @@ export default {
      questDetailsModal,
      groupGemsModal,
      questSidebarSection,
 -    communityGuidelines,
+     sidebarSection,
+     userLink,
    },
-   directives: {
-     markdown: markdownDirective,
-@@ -473,9 +470,6 @@ export default {
+@@ -413,9 +410,6 @@ export default {
      },
    },
    methods: {
@@ -65,20 +65,20 @@ index 647d4ad5b..c9125d840 100644
        if (this.isParty) {
          this.searchId = 'party';
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 63ac66241..695bbc973 100644
+index abb1dc80a..e4a74446f 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -12,7 +12,7 @@
          h3(v-once) {{ $t('tavernChat') }}
  
          .row
--          textarea(:placeholder="$t('tavernCommunityGuidelinesPlaceholder')", v-model='newMessage', :class='{"user-entry": newMessage}', @keydown='updateCarretPosition', @keyup.ctrl.enter='sendMessage()')
-+          textarea(v-model='newMessage', :class='{"user-entry": newMessage}', @keydown='updateCarretPosition', @keyup.ctrl.enter='sendMessage()')
+-          textarea(:placeholder="$t('tavernCommunityGuidelinesPlaceholder')", v-model='newMessage', :class='{"user-entry": newMessage}', @keydown='updateCarretPosition', @keyup.ctrl.enter='sendMessageShortcut()', @paste='disableMessageSendShortcut()')
++          textarea(v-model='newMessage', :class='{"user-entry": newMessage}', @keydown='updateCarretPosition', @keyup.ctrl.enter='sendMessageShortcut()', @paste='disableMessageSendShortcut()')
            autocomplete(:text='newMessage', v-on:select="selectedAutocomplete", :coords='coords', :chat='group.chat')
  
-         .row
+         .row.chat-actions
 @@ -22,8 +22,6 @@
-           .col-6
+           .col-6.chat-send-actions
              button.btn.btn-secondary.send-chat.float-right(v-once, @click='sendMessage()') {{ $t('send') }}
  
 -        community-guidelines
@@ -86,31 +86,31 @@ index 63ac66241..695bbc973 100644
          .row
            .hr.col-12
            chat-message(:chat.sync='group.chat', :group-id='group._id', :group-name='group.name')
-@@ -133,8 +131,6 @@
-               .svg-icon(v-html="icons.downIcon")
-         .section.row(v-if="sections.helpfulLinks")
-           ul
--            li
--             router-link(to='/static/community-guidelines', v-once) {{ $t('communityGuidelinesLink') }}
-             li
-               router-link(to="/groups/guild/f2db2a7f-13c5-454d-b3ee-ea1f5089e601") {{ $t('lookingForGroup') }}
-             li
-@@ -519,7 +515,6 @@ import { mapState } from 'client/libs/store';
+@@ -115,8 +113,6 @@
+ 
+       sidebar-section(:title="$t('helpfulLinks')")
+         ul
+-          li
+-           router-link(to='/static/community-guidelines', v-once) {{ $t('communityGuidelinesLink') }}
+           li
+             router-link(to="/groups/guild/f2db2a7f-13c5-454d-b3ee-ea1f5089e601") {{ $t('lookingForGroup') }}
+           li
+@@ -509,7 +505,6 @@ import { mapState } from 'client/libs/store';
  import { TAVERN_ID } from '../../../common/script/constants';
  import chatMessage from '../chat/chatMessages';
  import autocomplete from '../chat/autoComplete';
 -import communityGuidelines from './communityGuidelines';
  import worldBossInfoModal from '../world-boss/worldBossInfoModal';
  import worldBossRageModal from '../world-boss/worldBossRageModal';
- 
-@@ -551,7 +546,6 @@ export default {
+ import sidebarSection from '../sidebarSection';
+@@ -540,7 +535,6 @@ export default {
    components: {
      chatMessage,
      autocomplete,
 -    communityGuidelines,
      worldBossInfoModal,
      worldBossRageModal,
-   },
+     sidebarSection,
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
 index bfb40a095..4ce444ce0 100644
 --- a/website/client/components/userMenu/profile.vue
@@ -145,7 +145,7 @@ index ea2ed6c92..c5f8fab3c 100644
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
          { name: 'groupPlans', path: 'group-plans', component: GroupPlansPage, meta: {requiresLogin: false}},
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index f1b17edec..6b0368588 100644
+index 51ec44871..cdf5651b8 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -193,7 +193,6 @@ let updatablePaths = [

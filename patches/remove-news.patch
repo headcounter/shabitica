@@ -189,7 +189,7 @@ index 4edea0983..8a29f2e22 100644
    let result = await axios.post('/api/v3/user/rebirth');
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 011d175f0..f9e40b627 100644
+index ccc49cb63..76ea9329a 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -196,7 +196,6 @@ let updatablePaths = [

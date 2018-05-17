@@ -2894,10 +2894,10 @@ index 74beb78f0..e81c274b2 100644
        this.$router.push('/party');
      },
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index ff5372f73..647d4ad5b 100644
+index 3f61a5033..ccc18b13e 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
-@@ -321,7 +321,6 @@ import extend from 'lodash/extend';
+@@ -265,7 +265,6 @@ import extend from 'lodash/extend';
  import groupUtilities from 'client/mixins/groupsUtilities';
  import styleHelper from 'client/mixins/styleHelper';
  import { mapState } from 'client/libs/store';
@@ -2905,7 +2905,7 @@ index ff5372f73..647d4ad5b 100644
  import membersModal from './membersModal';
  import startQuestModal from './startQuestModal';
  import questDetailsModal from './questDetailsModal';
-@@ -633,13 +632,6 @@ export default {
+@@ -595,13 +594,6 @@ export default {
        await this.$store.dispatch('guilds:join', {groupId: this.group._id, type: 'guild'});
      },
      clickLeave () {
@@ -2919,7 +2919,7 @@ index ff5372f73..647d4ad5b 100644
        // @TODO: Get challenges and ask to keep or remove
        if (!confirm('Are you sure you want to leave?')) return;
        let keep = true;
-@@ -656,7 +648,6 @@ export default {
+@@ -618,7 +610,6 @@ export default {
  
        if (this.isParty) {
          data.type = 'party';
@@ -2927,7 +2927,7 @@ index ff5372f73..647d4ad5b 100644
          this.$store.state.partyMembers = [];
        }
  
-@@ -671,13 +662,6 @@ export default {
+@@ -633,13 +624,6 @@ export default {
        this.$router.push('/group-plans');
      },
      clickStartQuest () {
@@ -3205,10 +3205,10 @@ index fc65f7005..3bf7ff169 100644
        if (this.expandedMember === memberId) {
          this.expandedMember = null;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 09400e80d..46d92df23 100644
+index 22800b5dc..14e83c2b4 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -284,7 +284,6 @@ div
+@@ -293,7 +293,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -3216,7 +3216,7 @@ index 09400e80d..46d92df23 100644
  import { goToModForm } from 'client/libs/modform';
  
  import gemIcon from 'assets/svg/gem.svg';
-@@ -354,14 +353,6 @@ export default {
+@@ -370,14 +369,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -3825,7 +3825,7 @@ index 34ff15ca5..e5dd03e02 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index b64d7b7c7..ab831a8c9 100644
+index 1a2f055dc..e45c9a9a9 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
 @@ -492,7 +492,6 @@ import moment from 'moment';
@@ -6004,7 +6004,7 @@ index bd68fe6d2..a6076c9f0 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index a51da7602..da07cd8c7 100644
+index e987721c1..ad9c8942e 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -18,12 +18,10 @@ import {

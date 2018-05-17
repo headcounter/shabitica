@@ -13,19 +13,19 @@ Date:   Fri Mar 30 19:32:26 2018 +0200
     Filename: remove-contact-form.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 3ea95eed7..63ac66241 100644
+index 670e1deda..abb1dc80a 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
-@@ -133,8 +133,6 @@
-               .svg-icon(v-html="icons.downIcon")
-         .section.row(v-if="sections.helpfulLinks")
-           ul
--            li
--              a(href='', @click.prevent='modForm()') {{ $t('contactForm') }}
-             li
-              router-link(to='/static/community-guidelines', v-once) {{ $t('communityGuidelinesLink') }}
-             li
-@@ -517,7 +515,6 @@
+@@ -115,8 +115,6 @@
+ 
+       sidebar-section(:title="$t('helpfulLinks')")
+         ul
+-          li
+-            a(href='', @click.prevent='modForm()') {{ $t('contactForm') }}
+           li
+            router-link(to='/static/community-guidelines', v-once) {{ $t('communityGuidelinesLink') }}
+           li
+@@ -507,7 +505,6 @@
  <script>
  import debounce from 'lodash/debounce';
  import { mapState } from 'client/libs/store';
@@ -33,7 +33,7 @@ index 3ea95eed7..63ac66241 100644
  
  import { TAVERN_ID } from '../../../common/script/constants';
  import chatMessage from '../chat/chatMessages';
-@@ -707,9 +704,6 @@ export default {
+@@ -696,9 +693,6 @@ export default {
      this.group = await this.$store.dispatch('guilds:getGroup', {groupId: TAVERN_ID});
    },
    methods: {
@@ -44,7 +44,7 @@ index 3ea95eed7..63ac66241 100644
      getCoord (e, text) {
        let carPos = text.selectionEnd;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 46d92df23..a3fda203c 100644
+index 14e83c2b4..e7d5b81b4 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -55,7 +55,6 @@ div
@@ -55,7 +55,7 @@ index 46d92df23..a3fda203c 100644
        .user-menu.d-flex.align-items-center
          .item-with-icon(v-if="userHourglasses > 0")
            .top-menu-icon.svg-icon(v-html="icons.hourglasses", v-b-tooltip.hover.bottom="$t('mysticHourglassesTooltip')")
-@@ -284,7 +283,6 @@ div
+@@ -293,7 +292,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -63,7 +63,7 @@ index 46d92df23..a3fda203c 100644
  
  import gemIcon from 'assets/svg/gem.svg';
  import goldIcon from 'assets/svg/gold.svg';
-@@ -332,9 +330,6 @@ export default {
+@@ -348,9 +346,6 @@ export default {
      this.getUserGroupPlans();
    },
    methods: {
