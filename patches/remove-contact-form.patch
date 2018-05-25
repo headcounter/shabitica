@@ -13,10 +13,10 @@ Date:   Fri Mar 30 19:32:26 2018 +0200
     Filename: remove-contact-form.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 670e1deda..abb1dc80a 100644
+index eb4d3634d..08bb0a384 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
-@@ -115,8 +115,6 @@
+@@ -101,8 +101,6 @@
  
        sidebar-section(:title="$t('helpfulLinks')")
          ul
@@ -25,37 +25,29 @@ index 670e1deda..abb1dc80a 100644
            li
             router-link(to='/static/community-guidelines', v-once) {{ $t('communityGuidelinesLink') }}
            li
-@@ -507,7 +505,6 @@
+@@ -429,7 +427,6 @@
+ 
  <script>
- import debounce from 'lodash/debounce';
  import { mapState } from 'client/libs/store';
 -import { goToModForm } from 'client/libs/modform';
  
  import { TAVERN_ID } from '../../../common/script/constants';
- import chatMessage from '../chat/chatMessages';
-@@ -696,9 +693,6 @@ export default {
+ import worldBossInfoModal from '../world-boss/worldBossInfoModal';
+@@ -511,9 +508,6 @@ export default {
      this.group = await this.$store.dispatch('guilds:getGroup', {groupId: TAVERN_ID});
    },
    methods: {
 -    modForm () {
 -      goToModForm(this.user);
 -    },
-     // https://medium.com/@_jh3y/how-to-where-s-the-caret-getting-the-xy-position-of-the-caret-a24ba372990a
-     getCoord (e, text) {
-       let carPos = text.selectionEnd;
+     toggleSleep () {
+       this.$store.dispatch('user:sleep');
+     },
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 14e83c2b4..e7d5b81b4 100644
+index 73f5c9a05..e3f03876d 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -55,7 +55,6 @@ div
-             a.dropdown-item(href="https://trello.com/c/odmhIqyW/440-read-first-table-of-contents", target='_blank') {{ $t('requestAF') }}
-             a.dropdown-item(href="http://habitica.wikia.com/wiki/Contributing_to_Habitica", target='_blank') {{ $t('contributing') }}
-             a.dropdown-item(href="http://habitica.wikia.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
--            a.dropdown-item(@click='modForm()') {{ $t('contactForm') }}
-       .user-menu.d-flex.align-items-center
-         .item-with-icon(v-if="userHourglasses > 0")
-           .top-menu-icon.svg-icon(v-html="icons.hourglasses", v-b-tooltip.hover.bottom="$t('mysticHourglassesTooltip')")
-@@ -293,7 +292,6 @@ div
+@@ -333,7 +333,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -63,7 +55,7 @@ index 14e83c2b4..e7d5b81b4 100644
  
  import gemIcon from 'assets/svg/gem.svg';
  import goldIcon from 'assets/svg/gold.svg';
-@@ -348,9 +346,6 @@ export default {
+@@ -388,9 +387,6 @@ export default {
      this.getUserGroupPlans();
    },
    methods: {

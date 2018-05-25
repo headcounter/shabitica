@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.42.6";
+  version = "4.43.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0gsy10lcvyz1a3cyin2qlmk9wys23gzpzx0xl95f616qzbcr9y8m";
+    sha256 = "1509lzxikkgs30a5vkdabfmparnngf2z9qq2j0y0gdhfpkgqzgwz";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -31,10 +31,6 @@ stdenv.mkDerivation rec {
 
     # Support systemd socket activation.
     patches/socket-activation.patch
-
-    # Fix infinite redirection occuring whenever the BASE_URL contains a port
-    # number.
-    patches/redirect-fix-port.patch
 
     # Everybody gets a lifetime subscription.
     patches/subscriptions4all.patch
@@ -165,10 +161,6 @@ stdenv.mkDerivation rec {
 
     # Adds support systemd startup notifications.
     patches/systemd-notify.patch
-
-    # Don't use src="" in media elements (fixes annoying errors)
-    # https://github.com/HabitRPG/habitica/pull/10364
-    patches/no-empty-src-in-media-element.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -215,6 +207,7 @@ stdenv.mkDerivation rec {
     "website/client/libs/logging.js"
     "website/client/libs/modform.js"
     "website/client/libs/payments.js"
+    "website/client/libs/staffList.js"
     "website/client/mixins/payments.js"
     "website/server/controllers/api-v3/iap.js"
     "website/server/controllers/api-v3/news.js"
@@ -232,6 +225,7 @@ stdenv.mkDerivation rec {
     "website/server/libs/payments/apple.js"
     "website/server/libs/payments/google.js"
     "website/server/libs/payments/paypal.js"
+    "website/server/libs/payments/stripe"
     "website/server/libs/payments/stripe.js"
     "website/server/libs/pushNotifications.js"
     "website/server/libs/pusher.js"

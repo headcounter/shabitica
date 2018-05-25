@@ -13,10 +13,10 @@ Date:   Sat Mar 31 00:52:13 2018 +0200
     Filename: remove-external-links.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index e4a74446f..4192fdddc 100644
+index d38eca6d3..569dacecb 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
-@@ -114,23 +114,13 @@
+@@ -101,23 +101,13 @@
        sidebar-section(:title="$t('helpfulLinks')")
          ul
            li
@@ -57,19 +57,19 @@ index 010ed7ec6..3efc605f5 100644
              textarea.form-control(cols=5, :placeholder="$t('contributions')", v-model='hero.contributor.contributions')
              //include ../../shared/formattiv-help
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index e7d5b81b4..25a4dbe6a 100644
+index e3f03876d..f33cef2a4 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -50,9 +50,6 @@ div
-           .dropdown-menu
-             router-link.dropdown-item(:to="{name: 'faq'}") {{ $t('faq') }}
-             router-link.dropdown-item(:to="{name: 'overview'}") {{ $t('overview') }}
--            router-link.dropdown-item(to="/groups/guild/a29da26b-37de-4a71-b0c6-48e72a900dac") {{ $t('reportBug') }}
--            router-link.dropdown-item(to="/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a") {{ $t('askAQuestion') }}
+@@ -51,9 +51,6 @@ div
+           .topbar-dropdown
+             router-link.topbar-dropdown-item.dropdown-item(:to="{name: 'faq'}") {{ $t('faq') }}
+             router-link.topbar-dropdown-item.dropdown-item(:to="{name: 'overview'}") {{ $t('overview') }}
+-            router-link.topbar-dropdown-item.dropdown-item(to="/groups/guild/a29da26b-37de-4a71-b0c6-48e72a900dac") {{ $t('reportBug') }}
+-            router-link.topbar-dropdown-item.dropdown-item(to="/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a") {{ $t('askAQuestion') }}
 -            a.dropdown-item(href="https://trello.com/c/odmhIqyW/440-read-first-table-of-contents", target='_blank') {{ $t('requestAF') }}
              a.dropdown-item(href="http://habitica.wikia.com/wiki/Contributing_to_Habitica", target='_blank') {{ $t('contributing') }}
              a.dropdown-item(href="http://habitica.wikia.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
-       .user-menu.d-flex.align-items-center
+       .currency-tray.form-inline
 diff --git a/website/client/components/static/faq.vue b/website/client/components/static/faq.vue
 index a26e1260c..f55c3624f 100644
 --- a/website/client/components/static/faq.vue

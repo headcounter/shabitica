@@ -99,7 +99,7 @@ index 58ceff56a..a5e0a2e56 100644
  
        let notificationsToRead = [];
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index eb9e36888..423ffae8e 100644
+index dd94e00d4..551af932f 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -76,7 +76,6 @@

@@ -257,7 +257,7 @@ index 8388d835b..2e3dccd4a 100644
      let { group, members } = await createAndPopulateGroup({
        groupDetails: {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 86d715144..0d80839ee 100644
+index 302923acb..2726acfb8 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -268,7 +268,7 @@ index 86d715144..0d80839ee 100644
      snackbars
      router-view(v-if="!isUserLoggedIn || isStaticPage")
      template(v-else)
-@@ -190,7 +189,6 @@ import notifications from 'client/mixins/notifications';
+@@ -188,7 +187,6 @@ import notifications from 'client/mixins/notifications';
  import spellsMixin from 'client/mixins/spells';
  
  import svgClose from 'assets/svg/close.svg';
@@ -276,7 +276,7 @@ index 86d715144..0d80839ee 100644
  
  const COMMUNITY_MANAGER_EMAIL = process.env.EMAILS.COMMUNITY_MANAGER_EMAIL; // eslint-disable-line
  
-@@ -205,7 +203,6 @@ export default {
+@@ -203,7 +201,6 @@ export default {
      snackbars,
      BuyModal,
      SelectMembersModal,
@@ -284,7 +284,7 @@ index 86d715144..0d80839ee 100644
    },
    data () {
      return {
-@@ -288,8 +285,6 @@ export default {
+@@ -296,8 +293,6 @@ export default {
        return response;
      }, (error) => {
        if (error.response.status >= 400) {
@@ -293,7 +293,7 @@ index 86d715144..0d80839ee 100644
          // Check for conditions to reset the user auth
          const invalidUserMessage = [this.$t('invalidCredentials'), 'Missing authentication headers.'];
          if (invalidUserMessage.indexOf(error.response.data) !== -1) {
-@@ -409,25 +404,6 @@ export default {
+@@ -417,25 +412,6 @@ export default {
      if (loadingScreen) document.body.removeChild(loadingScreen);
    },
    methods: {

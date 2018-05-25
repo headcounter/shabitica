@@ -96,7 +96,7 @@ index 39cba779b..c6d4f1054 100644
          await party.leave(questLeader);
  
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 38a316ce4..f424ea0f2 100644
+index 4dd5f3104..3161f9ad9 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -10,7 +10,6 @@ import { model as Chat } from './chat';
@@ -107,7 +107,7 @@ index 38a316ce4..f424ea0f2 100644
  import {
    groupChatReceivedWebhook,
    questActivityWebhook,
-@@ -1214,10 +1213,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1218,10 +1217,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  

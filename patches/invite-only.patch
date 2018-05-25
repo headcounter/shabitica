@@ -12,7 +12,7 @@ Date:   Tue Mar 27 05:37:13 2018 +0200
     Filename: invite-only.patch
 
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index a3426dedd..426d4d0e3 100644
+index 152e34bf1..41e38d950 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -5,7 +5,7 @@
@@ -22,7 +22,7 @@ index a3426dedd..426d4d0e3 100644
 -      .container
 +      .container(v-if='invited')
          .row
-           .col-12.col-sm-6.col-md-6.col-lg-6
+           .col-12.col-md-6.col-lg-6
              img(src='~assets/images/home/home-main@3x.png', width='357px')
 @@ -23,6 +23,12 @@
                button.sign-up(@click="register()") {{$t('signup')}}
@@ -37,7 +37,7 @@ index a3426dedd..426d4d0e3 100644
  
      #gamify-life.purple-2
        .container-fluid
-@@ -499,6 +505,17 @@
+@@ -502,6 +508,17 @@
          if (this.passwordConfirm.length <= 3) return false;
          return this.passwordConfirm !== this.password;
        },
