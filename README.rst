@@ -1,6 +1,6 @@
-*******************
-Habitica Standalone
-*******************
+********************************
+Shabitica - Self-hosted Habitica
+********************************
 
 This is a fork of `Habitica`_, a habit tracker which treats your goals like a
 Role Playing Game.

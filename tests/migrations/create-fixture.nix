@@ -12,7 +12,7 @@ let
   # version in our standalone fork that needs migration.
   habiticaRev = "3686bb79a9e988207ef0d98f72f904b8f9516e68";
   habitica = fetchTarball {
-    url = "https://github.com/headcounter/habitica-standalone/archive/"
+    url = "https://github.com/headcounter/shabitica/archive/"
         + "${habiticaRev}.tar.gz";
     sha256 = "1dq8babnj5dfkjgnfirw989frkss7z4vb7pjxkk1xw96g4b72pas";
   };
