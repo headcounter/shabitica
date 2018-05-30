@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.43.1";
+  version = "4.44.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1509lzxikkgs30a5vkdabfmparnngf2z9qq2j0y0gdhfpkgqzgwz";
+    sha256 = "001vakqqg53aaac68c5ippxflqwbjrdykl5vrgm3mrpsypa8l4ip";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -161,6 +161,12 @@ stdenv.mkDerivation rec {
 
     # Adds support systemd startup notifications.
     patches/systemd-notify.patch
+
+    # Fixes new content and linting errors.
+    (fromUpstream {
+      rev = "97b99c05503663ebca612741e29fbeb3efded510";
+      sha256 = "13fam5hsy1xf5nga3sacaqnrzb5480fk6azifidkrb5hsa7bbkp2";
+    })
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

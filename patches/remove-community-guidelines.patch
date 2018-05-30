@@ -135,7 +135,7 @@ index 51ec44871..cdf5651b8 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 3806f5aaa..fc3d3d585 100644
+index aeb11535c..71aa2c5ac 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -216,7 +216,6 @@ let schema = new Schema({

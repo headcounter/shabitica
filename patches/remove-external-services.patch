@@ -6724,10 +6724,10 @@ index 43f7b1857..dd800b6fe 100644
  
  module.exports = {
 diff --git a/website/server/libs/setupPassport.js b/website/server/libs/setupPassport.js
-index 4c0861a1f..51d872942 100644
+index 5d3484eee..51d872942 100644
 --- a/website/server/libs/setupPassport.js
 +++ b/website/server/libs/setupPassport.js
-@@ -1,28 +1,9 @@
+@@ -1,29 +1,9 @@
  import passport from 'passport';
 -import nconf from 'nconf';
 -import { Strategy as FacebookStrategy } from 'passport-facebook';
@@ -6750,6 +6750,7 @@ index 4c0861a1f..51d872942 100644
 -passport.use(new FacebookStrategy({
 -  clientID: nconf.get('FACEBOOK_KEY'),
 -  clientSecret: nconf.get('FACEBOOK_SECRET'),
+-  profileFields: ['email'],
 -  // callbackURL: nconf.get("BASE_URL") + "/auth/facebook/callback"
 -}, (accessToken, refreshToken, profile, done) => done(null, profile)));
 -
@@ -7078,7 +7079,7 @@ index c9e77427a..3556880fe 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index d1ac96b7f..f223cc209 100644
+index 56a0d7e82..46825dc95 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -25,12 +25,6 @@ let schema = new Schema({
