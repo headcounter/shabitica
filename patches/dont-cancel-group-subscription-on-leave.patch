@@ -10,7 +10,7 @@ Date:   Mon Apr 2 04:50:12 2018 +0200
     Filename: dont-cancel-group-subscription-on-leave.patch
 
 diff --git a/test/api/v3/integration/groups/POST-groups_groupId_leave.js b/test/api/v3/integration/groups/POST-groups_groupId_leave.js
-index 2afa2dcc0..59d84a958 100644
+index fd19052a1..3e7d251d7 100644
 --- a/test/api/v3/integration/groups/POST-groups_groupId_leave.js
 +++ b/test/api/v3/integration/groups/POST-groups_groupId_leave.js
 @@ -10,8 +10,6 @@ import { v4 as generateUUID } from 'uuid';
@@ -22,7 +22,7 @@ index 2afa2dcc0..59d84a958 100644
  
  describe('POST /groups/:groupId/leave', () => {
    let typesOfGroups = {
-@@ -274,45 +272,4 @@ describe('POST /groups/:groupId/leave', () => {
+@@ -275,45 +273,4 @@ describe('POST /groups/:groupId/leave', () => {
        expect(userWithNonExistentParty.party).to.eql({});
      });
    });

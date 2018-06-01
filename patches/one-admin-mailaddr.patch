@@ -73,7 +73,7 @@ index 7b5c602e4..1daf622cd 100644
      });
  
 diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
-index bff380dad..e1425a306 100644
+index 1694349e5..a7785fd49 100644
 --- a/test/api/v3/integration/user/DELETE-user.test.js
 +++ b/test/api/v3/integration/user/DELETE-user.test.js
 @@ -63,11 +63,7 @@ describe('DELETE /user', () => {
@@ -174,10 +174,10 @@ index a25b6996e..34e1a78b2 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index ad9c8942e..51ec44871 100644
+index 9c208db6d..41e08100a 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -21,7 +21,7 @@ import {
+@@ -24,7 +24,7 @@ import {
  import nconf from 'nconf';
  import get from 'lodash/get';
  

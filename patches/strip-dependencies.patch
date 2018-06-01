@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:02 2018 +0200
     Filename: strip-dependencies.patch
 
 diff --git a/package.json b/package.json
-index 3ecdbe5ad..96e977ff3 100644
+index f197386f4..a292c772c 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,13 +4,9 @@
-   "version": "4.44.0",
+   "version": "4.44.2",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@slack/client": "^3.8.1",
@@ -39,7 +39,7 @@ index 3ecdbe5ad..96e977ff3 100644
      "jquery": ">=3.0.0",
      "js2xmlparser": "^3.0.0",
 @@ -64,32 +58,23 @@
-     "mongoose": "^5.1.1",
+     "mongoose": "^5.1.2",
      "morgan": "^1.7.0",
      "nconf": "^0.10.0",
 -    "node-gcm": "^0.14.4",

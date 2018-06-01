@@ -225,7 +225,7 @@ index 194008bb4..8388d835b 100644
        await expect(members[0].post(`/groups/${groupWithChat._id}/chat`, { message: testMessage})).to.eventually.be.rejected.and.eql({
          code: 401,
 diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
-index ea9b79f92..a5fc40cfe 100644
+index 2fbe493d4..1e70c3486 100644
 --- a/test/api/v3/integration/user/DELETE-user.test.js
 +++ b/test/api/v3/integration/user/DELETE-user.test.js
 @@ -17,8 +17,6 @@ import {
@@ -237,7 +237,7 @@ index ea9b79f92..a5fc40cfe 100644
  describe('DELETE /user', () => {
    let user;
    let password = 'password'; // from habitrpg/test/helpers/api-integration/v3/object-generators.js
-@@ -289,62 +287,4 @@ describe('DELETE /user', () => {
+@@ -290,62 +288,4 @@ describe('DELETE /user', () => {
        });
      });
    });
@@ -1550,10 +1550,10 @@ index 30149a1f6..08ccd55b9 100644
        expect(user.items.food.Saddle).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
 diff --git a/test/api/v3/unit/libs/email.test.js b/test/api/v3/unit/libs/email.test.js
-index ebfa2ac6e..7cf643df4 100644
+index 8ad0ae684..057f198b0 100644
 --- a/test/api/v3/unit/libs/email.test.js
 +++ b/test/api/v3/unit/libs/email.test.js
-@@ -91,21 +91,6 @@ describe('emails', () => {
+@@ -90,21 +90,6 @@ describe('emails', () => {
        expect(data).to.have.property('canSend', true);
      });
  
@@ -1566,7 +1566,7 @@ index ebfa2ac6e..7cf643df4 100644
 -
 -      let data = getUserInfo(user, ['name', 'email', '_id', 'canSend']);
 -
--      expect(data).to.have.property('name', user.auth.facebook.displayName);
+-      expect(data).to.have.property('name', user.profile.name);
 -      expect(data).to.have.property('email', user.auth.facebook.emails[0].value);
 -      expect(data).to.have.property('_id', user._id);
 -      expect(data).to.have.property('canSend', true);
@@ -1703,7 +1703,7 @@ index 12209b1a8..1ea9d2e61 100644
        })
        .catch(done);
 diff --git a/test/common/ops/buy/buy.js b/test/common/ops/buy/buy.js
-index 975edacbd..aede96f8d 100644
+index 478a2cae8..f743f02c6 100644
 --- a/test/common/ops/buy/buy.js
 +++ b/test/common/ops/buy/buy.js
 @@ -12,7 +12,6 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
@@ -1879,7 +1879,7 @@ index 9f04c4d6b..01fcc829d 100644
  
      it('does not increase hp above 50', () => {
 diff --git a/test/common/ops/buy/buyMarketGear.js b/test/common/ops/buy/buyMarketGear.js
-index 397297dd6..a45d47e53 100644
+index 444579e78..04f9c208d 100644
 --- a/test/common/ops/buy/buyMarketGear.js
 +++ b/test/common/ops/buy/buyMarketGear.js
 @@ -12,15 +12,14 @@ import {
@@ -1922,9 +1922,9 @@ index 397297dd6..a45d47e53 100644
  
        expect(user.items.gear.owned).to.eql({
          weapon_warrior_0: true,
-@@ -65,7 +62,6 @@ describe('shared.ops.buyMarketGear', () => {
-         eyewear_special_whiteTopFrame: true,
-         eyewear_special_yellowTopFrame: true,
+@@ -72,7 +69,6 @@ describe('shared.ops.buyMarketGear', () => {
+         headAccessory_special_whiteHeadband: true,
+         headAccessory_special_yellowHeadband: true,
        });
 -      expect(analytics.track).to.be.calledOnce;
      });
@@ -1972,7 +1972,7 @@ index dca60d748..9ef720f70 100644
      });
    });
 diff --git a/test/common/ops/buy/buyQuest.js b/test/common/ops/buy/buyQuest.js
-index 4994e38af..aeb813d68 100644
+index 4554b9832..06d5bf80d 100644
 --- a/test/common/ops/buy/buyQuest.js
 +++ b/test/common/ops/buy/buyQuest.js
 @@ -12,21 +12,15 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
@@ -2211,7 +2211,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 8471bb1ad..302923acb 100644
+index 1cc5d88f3..1f30ae7b1 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,7 +10,6 @@ div
@@ -2243,7 +2243,7 @@ index 8471bb1ad..302923acb 100644
      bannedAccountModal,
    },
    data () {
-@@ -381,11 +376,6 @@ export default {
+@@ -391,11 +386,6 @@ export default {
        document.title = title;
      });
  
@@ -2255,7 +2255,7 @@ index 8471bb1ad..302923acb 100644
      if (this.isUserLoggedIn && !this.isStaticPage) {
        // Load the user and the user tasks
        Promise.all([
-@@ -393,8 +383,6 @@ export default {
+@@ -403,8 +393,6 @@ export default {
          this.$store.dispatch('tasks:fetchUserTasks'),
        ]).then(() => {
          this.$store.state.isUserLoaded = true;
@@ -2264,7 +2264,7 @@ index 8471bb1ad..302923acb 100644
  
          this.hideLoadingScreen();
  
-@@ -406,8 +394,6 @@ export default {
+@@ -416,8 +404,6 @@ export default {
          }
  
          this.$nextTick(() => {
@@ -2273,7 +2273,7 @@ index 8471bb1ad..302923acb 100644
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -456,8 +442,6 @@ export default {
+@@ -466,8 +452,6 @@ export default {
          if (data.fromRoot) return;
          const modalStack = this.$store.state.modalStack;
  
@@ -2282,7 +2282,7 @@ index 8471bb1ad..302923acb 100644
          // Add new modal to the stack
          const prev = modalStack[modalStack.length - 1];
          const prevId = prev ? prev.modalId : undefined;
-@@ -512,18 +496,6 @@ export default {
+@@ -522,18 +506,6 @@ export default {
  
        return true;
      },
@@ -2947,10 +2947,10 @@ index 28436ff08..c332435de 100644
          return quest > 0;
        });
 diff --git a/website/client/components/groups/groupFormModal.vue b/website/client/components/groups/groupFormModal.vue
-index 3ff0d4127..d719f2c7d 100644
+index 39d495542..2718f32e3 100644
 --- a/website/client/components/groups/groupFormModal.vue
 +++ b/website/client/components/groups/groupFormModal.vue
-@@ -363,13 +363,6 @@ export default {
+@@ -365,13 +365,6 @@ export default {
          alert(this.$t('notEnoughGems'));
          return;
          // @TODO return $rootScope.openModal('buyGems', {track:"Gems > Gems > Create Group"});
@@ -3210,10 +3210,10 @@ index 5e032622a..4af4f4007 100644
        if (this.expandedMember === memberId) {
          this.expandedMember = null;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index dab97c434..73f5c9a05 100644
+index a3ec986e2..b325c213b 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -333,7 +333,6 @@ div
+@@ -334,7 +334,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -3221,7 +3221,7 @@ index dab97c434..73f5c9a05 100644
  import { goToModForm } from 'client/libs/modform';
  
  import gemIcon from 'assets/svg/gem.svg';
-@@ -410,14 +409,6 @@ export default {
+@@ -411,14 +410,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -3527,10 +3527,10 @@ index e086f99f5..501203d6a 100644
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index f9fca3908..0465becff 100644
+index fee961570..1326dea81 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
-@@ -256,7 +256,6 @@
+@@ -257,7 +257,6 @@
  </style>
  
  <script>
@@ -3538,7 +3538,7 @@ index f9fca3908..0465becff 100644
    import spellsMixin from 'client/mixins/spells';
    import planGemLimits from 'common/script/libs/planGemLimits';
  
-@@ -397,14 +396,6 @@
+@@ -398,14 +397,6 @@
          this.hideDialog();
        },
        purchaseGems () {
@@ -3829,7 +3829,7 @@ index 34ff15ca5..e5dd03e02 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index 1a2f055dc..e45c9a9a9 100644
+index 50c684fb1..c1da9f841 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
 @@ -492,7 +492,6 @@ import moment from 'moment';
@@ -3840,7 +3840,7 @@ index 1a2f055dc..e45c9a9a9 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import negativeIcon from 'assets/svg/negative.svg';
-@@ -708,7 +707,6 @@ export default {
+@@ -709,7 +708,6 @@ export default {
  
        if (task.group.approval.required) task.group.approval.requested = true;
  
@@ -4441,7 +4441,7 @@ index 9b0a2d9fe..eac44cfc8 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index 9bcee0706..7982b6a60 100644
+index 413ca79e7..3ae2af1e0 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
 @@ -18,7 +18,7 @@ import {BuyGemOperation} from './buyGem';
@@ -4640,7 +4640,7 @@ index 7e0bf0c83..0d4387ddb 100644
  
    user.purchased.plan.consecutive.trinkets--;
 diff --git a/website/common/script/ops/buy/buyQuest.js b/website/common/script/ops/buy/buyQuest.js
-index 1fd60949f..c96747228 100644
+index acc0b8894..983d17a6c 100644
 --- a/website/common/script/ops/buy/buyQuest.js
 +++ b/website/common/script/ops/buy/buyQuest.js
 @@ -10,8 +10,8 @@ import {AbstractGoldItemOperation} from './abstractBuyOperation';
@@ -5040,7 +5040,7 @@ index bbe4a7910..d89c3e920 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 3d69b05c8..56965773c 100644
+index 62b3009c2..56965773c 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -1,6 +1,5 @@
@@ -5140,7 +5140,7 @@ index 3d69b05c8..56965773c 100644
      return null;
    },
  };
-@@ -274,177 +237,10 @@ api.loginLocal = {
+@@ -274,183 +237,10 @@ api.loginLocal = {
        await user.save();
      }
  
@@ -5197,7 +5197,13 @@ index 3d69b05c8..56965773c 100644
 -    } else { // Create new user
 -      user = {
 -        auth: {
--          [network]: profile,
+-          [network]: {
+-            id: profile.id,
+-            emails: profile.emails,
+-          },
+-        },
+-        profile: {
+-          name: profile.displayName || profile.name || profile.username,
 -        },
 -        preferences: {
 -          language: req.language,
@@ -5318,7 +5324,7 @@ index 3d69b05c8..56965773c 100644
  /**
   * @api {put} /api/v3/user/auth/update-username Update username
   * @apiDescription Update the username of a local user
-@@ -704,35 +500,4 @@ api.resetPasswordSetNewOne = {
+@@ -710,35 +500,4 @@ api.resetPasswordSetNewOne = {
    },
  };
  
@@ -5700,7 +5706,7 @@ index 7e88d487b..a25b6996e 100644
      .select({_id: true, 'preferences.emailNotifications': true})
      .exec();
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index a09cda938..ed65fff1c 100644
+index 421e2cf4b..9e0588ab0 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,6 @@ import {
@@ -5711,7 +5717,7 @@ index a09cda938..ed65fff1c 100644
  import { achievements } from '../../../../website/common/';
  
  let api = {};
-@@ -501,18 +500,6 @@ api.sendPrivateMessage = {
+@@ -497,18 +496,6 @@ api.sendPrivateMessage = {
          {name: 'SENDER', content: getUserInfo(sender, ['name']).name},
        ]);
      }
@@ -5730,7 +5736,7 @@ index a09cda938..ed65fff1c 100644
  
      res.respond(200, {});
    },
-@@ -591,15 +578,6 @@ api.transferGems = {
+@@ -587,15 +574,6 @@ api.transferGems = {
          {name: 'X_GEMS_GIFTED', content: gemAmount},
        ]);
      }
@@ -5747,7 +5753,7 @@ index a09cda938..ed65fff1c 100644
      res.respond(200, {});
    },
 diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
-index 0abf6c67c..6ed16d973 100644
+index b579cc386..6ed16d973 100644
 --- a/website/server/controllers/api-v3/quests.js
 +++ b/website/server/controllers/api-v3/quests.js
 @@ -1,6 +1,5 @@
@@ -5769,7 +5775,7 @@ index 0abf6c67c..6ed16d973 100644
        'party._id': group._id,
        _id: {$ne: user._id},
      })
--      .select('auth.facebook auth.local preferences.emailNotifications profile.name pushDevices')
+-      .select('auth.facebook auth.google auth.local preferences.emailNotifications profile.name pushDevices')
 +      .select('auth.local preferences.emailNotifications profile.name pushDevices')
        .exec();
  
@@ -5960,10 +5966,10 @@ index bd68fe6d2..a6076c9f0 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index e987721c1..ad9c8942e 100644
+index 83b27e727..9c208db6d 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -18,12 +18,10 @@ import {
+@@ -21,12 +21,10 @@ import {
    getUserInfo,
    sendTxn as txnEmail,
  } from '../../libs/email';
@@ -5976,7 +5982,7 @@ index e987721c1..ad9c8942e 100644
  
  /**
   * @apiDefine UserNotFound
-@@ -406,8 +404,6 @@ api.deleteUser = {
+@@ -409,8 +407,6 @@ api.deleteUser = {
      if (user.auth.local.hashed_password && user.auth.local.email) {
        let isValidPassword = await passwordUtils.compare(user, password);
        if (!isValidPassword) throw new NotAuthorized(res.t('wrongPassword'));
@@ -5985,7 +5991,7 @@ index e987721c1..ad9c8942e 100644
      }
  
      let feedback = req.body.feedback;
-@@ -444,14 +440,6 @@ api.deleteUser = {
+@@ -447,14 +443,6 @@ api.deleteUser = {
        ]);
      }
  
@@ -6000,7 +6006,7 @@ index e987721c1..ad9c8942e 100644
      res.respond(200, {});
    },
  };
-@@ -493,8 +481,6 @@ api.getUserAnonymized = {
+@@ -496,8 +484,6 @@ api.getUserAnonymized = {
      delete user.apiToken;
      if (user.auth) {
        delete user.auth.local;
@@ -6009,7 +6015,7 @@ index e987721c1..ad9c8942e 100644
      }
      delete user.newMessages;
      delete user.profile;
-@@ -559,7 +545,7 @@ api.sleep = {
+@@ -562,7 +548,7 @@ api.sleep = {
    url: '/user/sleep',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6018,7 +6024,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...sleepRes);
    },
-@@ -621,7 +607,7 @@ api.buy = {
+@@ -624,7 +610,7 @@ api.buy = {
      let quantity = 1;
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
@@ -6027,7 +6033,7 @@ index e987721c1..ad9c8942e 100644
  
      await user.save();
      res.respond(200, ...buyRes);
-@@ -671,7 +657,7 @@ api.buyGear = {
+@@ -674,7 +660,7 @@ api.buyGear = {
    url: '/user/buy-gear/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6036,7 +6042,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...buyGearRes);
    },
-@@ -715,7 +701,7 @@ api.buyArmoire = {
+@@ -718,7 +704,7 @@ api.buyArmoire = {
      let user = res.locals.user;
      req.type = 'armoire';
      req.params.key = 'armoire';
@@ -6045,7 +6051,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...buyArmoireResponse);
    },
-@@ -757,7 +743,7 @@ api.buyHealthPotion = {
+@@ -760,7 +746,7 @@ api.buyHealthPotion = {
      let user = res.locals.user;
      req.type = 'potion';
      req.params.key = 'potion';
@@ -6054,7 +6060,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...buyHealthPotionResponse);
    },
-@@ -800,7 +786,7 @@ api.buyMysterySet = {
+@@ -803,7 +789,7 @@ api.buyMysterySet = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'mystery';
@@ -6063,7 +6069,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...buyMysterySetRes);
    },
-@@ -843,7 +829,7 @@ api.buyQuest = {
+@@ -848,7 +834,7 @@ api.buyQuest = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'quest';
@@ -6072,7 +6078,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...buyQuestRes);
    },
-@@ -1067,7 +1053,7 @@ api.changeClass = {
+@@ -1072,7 +1058,7 @@ api.changeClass = {
    url: '/user/change-class',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6081,7 +6087,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...changeClassRes);
    },
-@@ -1140,7 +1126,7 @@ api.purchase = {
+@@ -1145,7 +1131,7 @@ api.purchase = {
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
  
@@ -6090,7 +6096,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...purchaseRes);
    },
-@@ -1173,7 +1159,7 @@ api.userPurchaseHourglass = {
+@@ -1178,7 +1164,7 @@ api.userPurchaseHourglass = {
    url: '/user/purchase-hourglass/:type/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6099,7 +6105,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...purchaseHourglassRes);
    },
-@@ -1271,7 +1257,7 @@ api.userOpenMysteryItem = {
+@@ -1276,7 +1262,7 @@ api.userOpenMysteryItem = {
    url: '/user/open-mystery-item',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6108,7 +6114,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...openMysteryItemRes);
    },
-@@ -1305,7 +1291,7 @@ api.userReleasePets = {
+@@ -1310,7 +1296,7 @@ api.userReleasePets = {
    url: '/user/release-pets',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6117,7 +6123,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...releasePetsRes);
    },
-@@ -1356,7 +1342,7 @@ api.userReleaseBoth = {
+@@ -1361,7 +1347,7 @@ api.userReleaseBoth = {
    url: '/user/release-both',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6126,7 +6132,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...releaseBothRes);
    },
-@@ -1394,7 +1380,7 @@ api.userReleaseMounts = {
+@@ -1399,7 +1385,7 @@ api.userReleaseMounts = {
    url: '/user/release-mounts',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6135,7 +6141,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...releaseMountsRes);
    },
-@@ -1471,7 +1457,7 @@ api.userUnlock = {
+@@ -1476,7 +1462,7 @@ api.userUnlock = {
    url: '/user/unlock',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6144,7 +6150,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...unlockRes);
    },
-@@ -1499,7 +1485,7 @@ api.userRevive = {
+@@ -1504,7 +1490,7 @@ api.userRevive = {
    url: '/user/revive',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6153,7 +6159,7 @@ index e987721c1..ad9c8942e 100644
      await user.save();
      res.respond(200, ...reviveRes);
    },
-@@ -1547,7 +1533,7 @@ api.userRebirth = {
+@@ -1552,7 +1538,7 @@ api.userRebirth = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      }).exec();
  
@@ -6162,7 +6168,7 @@ index e987721c1..ad9c8942e 100644
  
      let toSave = tasks.map(task => task.save());
  
-@@ -1707,7 +1693,7 @@ api.userReroll = {
+@@ -1712,7 +1698,7 @@ api.userReroll = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      };
      let tasks = await Tasks.Task.find(query).exec();
@@ -6171,7 +6177,7 @@ index e987721c1..ad9c8942e 100644
  
      let promises = tasks.map(task => task.save());
      promises.push(user.save());
-@@ -1760,12 +1746,6 @@ api.userReset = {
+@@ -1765,12 +1751,6 @@ api.userReset = {
        user.save(),
      ]);
  
@@ -6379,7 +6385,7 @@ index c98ecf929..aa6e84a81 100644
    return _progress;
  }
 diff --git a/website/server/libs/email.js b/website/server/libs/email.js
-index 330f2d2ac..74a0c4a69 100644
+index 62d8feabc..744c29af7 100644
 --- a/website/server/libs/email.js
 +++ b/website/server/libs/email.js
 @@ -4,7 +4,6 @@ import { TAVERN_ID } from '../models/group';
@@ -6390,16 +6396,7 @@ index 330f2d2ac..74a0c4a69 100644
  
  const IS_PROD = nconf.get('IS_PROD');
  const EMAIL_SERVER = {
-@@ -39,8 +38,6 @@ export function getUserInfo (user, fields = []) {
-     if (!info.name) {
-       if (user.auth.local && user.auth.local.username) {
-         info.name = user.auth.local.username;
--      } else if (user.auth.facebook) {
--        info.name = user.auth.facebook.displayName || user.auth.facebook.username;
-       }
-     }
-   }
-@@ -48,12 +45,6 @@ export function getUserInfo (user, fields = []) {
+@@ -40,12 +39,6 @@ export function getUserInfo (user, fields = []) {
    if (fields.indexOf('email') !== -1) {
      if (user.auth.local && user.auth.local.email) {
        info.email = user.auth.local.email;
@@ -6831,7 +6828,7 @@ index 1829c41af..132948e0b 100644
  
  const topLevelRouter = express.Router(); // eslint-disable-line new-cap
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
-index 6d16d3b7e..a8a5b22f1 100644
+index a094814fe..0bc407526 100644
 --- a/website/server/models/challenge.js
 +++ b/website/server/models/challenge.js
 @@ -10,7 +10,6 @@ import {
@@ -7001,43 +6998,8 @@ index e3994c8e0..c6f8a4a17 100644
    consecutive: {
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
-diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
-index f4b2b6341..727396234 100644
---- a/website/server/models/user/hooks.js
-+++ b/website/server/models/user/hooks.js
-@@ -171,29 +171,11 @@ function _setUpNewUser (user) {
-   return _populateDefaultTasks(user, taskTypes);
- }
- 
--function _getFacebookName (fb) {
--  if (!fb) {
--    return;
--  }
--  let possibleName = fb.displayName || fb.name || fb.username;
--
--  if (possibleName) {
--    return possibleName;
--  }
--
--  if (fb.first_name && fb.last_name) {
--    return `${fb.first_name} ${fb.last_name}`;
--  }
--}
--
- function _setProfileName (user) {
--  let google = user.auth.google;
--
-   let localUsername = user.auth.local && user.auth.local.username;
--  let googleUsername = google && google.displayName;
-   let anonymous = 'profile name not found';
- 
--  return localUsername || _getFacebookName(user.auth.facebook) || googleUsername || anonymous;
-+  return localUsername || anonymous;
- }
- 
- schema.pre('validate', function preValidateUser (next) {
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index c9e77427a..3556880fe 100644
+index 80e0f385c..336a17044 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -11,9 +11,6 @@ import { defaults, map, flatten, flow, compact, uniq, partialRight } from 'lodas
@@ -7050,7 +7012,7 @@ index c9e77427a..3556880fe 100644
  
  const daysSince = common.daysSince;
  
-@@ -190,7 +187,7 @@ schema.methods.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -200,7 +197,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
   * @param  options
   * @param  options.user  The user object who is purchasing
   * @param  options.groupId  The id of the group purchasing a subscription
@@ -7059,7 +7021,7 @@ index c9e77427a..3556880fe 100644
   * @param  options.cancellationReason  A text string to control sending an email
   *
   * @return a Promise from api.cancelSubscription()
-@@ -201,18 +198,7 @@ schema.methods.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -211,18 +208,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
  // In summary, currently is is best practice to use this method to cancel a user subscription, rather than calling the
  // payment helper.
  schema.methods.cancelSubscription = async function cancelSubscription (options = {}) {
@@ -7079,7 +7041,7 @@ index c9e77427a..3556880fe 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 56a0d7e82..46825dc95 100644
+index c459d9d79..034b79d39 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -25,12 +25,6 @@ let schema = new Schema({

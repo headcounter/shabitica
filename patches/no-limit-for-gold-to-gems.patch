@@ -40,10 +40,10 @@ index 4ae96a55b..22b15739b 100644
          user.stats.gp = goldPoints;
          user.purchased.plan.gemsBought = gemsBought;
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 0465becff..e1c78f7be 100644
+index 1326dea81..c04eb6738 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
-@@ -55,13 +55,6 @@
+@@ -56,13 +56,6 @@
              span.svg-icon.inline.icon-32(aria-hidden="true", v-html="icons[getPriceClass()]")
              span.cost(:class="getPriceClass()") {{ item.value }}
  
@@ -57,7 +57,7 @@ index 0465becff..e1c78f7be 100644
          button.btn.btn-primary(
            @click="purchaseGems()",
            v-if="getPriceClass() === 'gems' && !this.enoughCurrency(getPriceClass(), item.value * selectedAmountToBuy)"
-@@ -70,7 +63,6 @@
+@@ -71,7 +64,6 @@
          button.btn.btn-primary(
            @click="buyItem()",
            v-else,
@@ -65,7 +65,7 @@ index 0465becff..e1c78f7be 100644
            :class="{'notEnough': !preventHealthPotion || !this.enoughCurrency(getPriceClass(), item.value * selectedAmountToBuy)}"
          ) {{ $t('buyNow') }}
  
-@@ -248,16 +240,11 @@
+@@ -249,16 +241,11 @@
  
        margin: 10px 0 24px;
      }
@@ -82,7 +82,7 @@ index 0465becff..e1c78f7be 100644
  
    import svgClose from 'assets/svg/close.svg';
    import svgGold from 'assets/svg/gold.svg';
-@@ -346,14 +333,6 @@
+@@ -347,14 +334,6 @@
        limitedString () {
          return this.$t('limitedOffer', {date: moment(seasonalShopConfig.dateRange.end).format('LL')});
        },

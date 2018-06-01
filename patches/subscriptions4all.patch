@@ -14,10 +14,10 @@ Date:   Tue Mar 27 05:37:09 2018 +0200
     Filename: subscriptions4all.patch
 
 diff --git a/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js b/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
-index 19e8deaf1..22bbafc22 100644
+index 43187b9c6..5b722d55c 100644
 --- a/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
 +++ b/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
-@@ -114,7 +114,7 @@ describe('POST /challenges/:challengeId/winner/:winnerId', () => {
+@@ -115,7 +115,7 @@ describe('POST /challenges/:challengeId/winner/:winnerId', () => {
        await expect(winningUser.sync()).to.eventually.have.property('balance', oldBalance + challenge.prize / 4);
      });
  
@@ -26,7 +26,7 @@ index 19e8deaf1..22bbafc22 100644
        let oldBalance = winningUser.balance;
        let oldLeaderBalance = (await groupLeader.sync()).balance;
  
-@@ -130,8 +130,8 @@ describe('POST /challenges/:challengeId/winner/:winnerId', () => {
+@@ -131,8 +131,8 @@ describe('POST /challenges/:challengeId/winner/:winnerId', () => {
  
        await sleep(0.5);
  
@@ -38,7 +38,7 @@ index 19e8deaf1..22bbafc22 100644
  
      it('doesn\'t refund gems to group leader', async () => {
 diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
-index a5fc40cfe..bff380dad 100644
+index 1e70c3486..1694349e5 100644
 --- a/test/api/v3/integration/user/DELETE-user.test.js
 +++ b/test/api/v3/integration/user/DELETE-user.test.js
 @@ -70,16 +70,13 @@ describe('DELETE /user', () => {
@@ -205,10 +205,10 @@ index 1788fe406..e6e3aab66 100644
      beforeEach(() => {
        data = {
 diff --git a/test/api/v3/unit/models/user.test.js b/test/api/v3/unit/models/user.test.js
-index 00ea3f560..e3b75743c 100644
+index 2a3e7e6ad..6bf9dbaad 100644
 --- a/test/api/v3/unit/models/user.test.js
 +++ b/test/api/v3/unit/models/user.test.js
-@@ -264,13 +264,13 @@ describe('User Model', () => {
+@@ -299,13 +299,13 @@ describe('User Model', () => {
        expect(await user.canGetGems()).to.equal(true);
      });
  
@@ -304,7 +304,7 @@ index dd800b6fe..7fa43e535 100644
  
    let now = moment();
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 3556880fe..f570322cc 100644
+index 336a17044..b0d705dfa 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -10,7 +10,6 @@ import {
@@ -315,8 +315,8 @@ index 3556880fe..f570322cc 100644
  
  const daysSince = common.daysSince;
  
-@@ -181,27 +180,6 @@ schema.methods.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
-   return statsObject;
+@@ -191,27 +190,6 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+   return userStatsJSON;
  };
  
 -/**
@@ -343,7 +343,7 @@ index 3556880fe..f570322cc 100644
  schema.methods.daysUserHasMissed = function daysUserHasMissed (now, req = {}) {
    // If the user's timezone has changed (due to travel or daylight savings),
    // cron can be triggered twice in one day, so we check for that and use
-@@ -307,18 +285,7 @@ async function getUserGroupData (user) {
+@@ -317,18 +295,7 @@ async function getUserGroupData (user) {
  // User is allowed to buy gems if no group has `leaderOnly.getGems` === true or if
  // its the group leader
  schema.methods.canGetGems = async function canObtainGems () {

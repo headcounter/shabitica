@@ -131,7 +131,7 @@ index c3285e4bc..bfc475fd3 100644
    }
  }
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 71aa2c5ac..f526e90bb 100644
+index dbd36e00f..ea540d6df 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -110,7 +110,6 @@ let schema = new Schema({

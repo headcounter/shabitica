@@ -10,7 +10,7 @@ Date:   Tue Mar 27 05:37:06 2018 +0200
     Filename: socket-activation.patch
 
 diff --git a/package.json b/package.json
-index 96e977ff3..00ab92478 100644
+index a292c772c..fa6d20103 100644
 --- a/package.json
 +++ b/package.json
 @@ -75,6 +75,7 @@
@@ -22,7 +22,7 @@ index 96e977ff3..00ab92478 100644
      "useragent": "^2.1.9",
      "uuid": "^3.0.1",
 diff --git a/website/server/server.js b/website/server/server.js
-index bf22c445e..ddb326905 100644
+index f33192903..834becb87 100644
 --- a/website/server/server.js
 +++ b/website/server/server.js
 @@ -2,6 +2,7 @@ import nconf from 'nconf';

@@ -10,7 +10,7 @@ Date:   Thu May 3 06:29:02 2018 +0200
     Filename: systemd-notify.patch
 
 diff --git a/package.json b/package.json
-index 9562828f5..5e7718601 100644
+index 8f1fa6c6b..fa26c46da 100644
 --- a/package.json
 +++ b/package.json
 @@ -69,6 +69,7 @@
@@ -22,7 +22,7 @@ index 9562828f5..5e7718601 100644
      "superagent": "^3.8.3",
      "svg-inline-loader": "^0.8.0",
 diff --git a/website/server/server.js b/website/server/server.js
-index ddb326905..e082fb869 100644
+index 834becb87..1dea4727d 100644
 --- a/website/server/server.js
 +++ b/website/server/server.js
 @@ -3,6 +3,7 @@ import logger from './libs/logger';

@@ -49,10 +49,10 @@ index 63df05213..bf97716b2 100644
          "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
          "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
 diff --git a/test/api/v3/unit/libs/email.test.js b/test/api/v3/unit/libs/email.test.js
-index 7cf643df4..95be37ef4 100644
+index 057f198b0..a8f17af5b 100644
 --- a/test/api/v3/unit/libs/email.test.js
 +++ b/test/api/v3/unit/libs/email.test.js
-@@ -134,7 +134,7 @@ describe('emails', () => {
+@@ -132,7 +132,7 @@ describe('emails', () => {
        sandbox.restore();
      });
  
@@ -61,7 +61,7 @@ index 7cf643df4..95be37ef4 100644
        sandbox.stub(nconf, 'get').withArgs('IS_PROD').returns(true);
        let attachEmail = requireAgain(pathToEmailLib);
        let sendTxnEmail = attachEmail.sendTxn;
-@@ -172,7 +172,7 @@ describe('emails', () => {
+@@ -170,7 +170,7 @@ describe('emails', () => {
        expect(got.post).not.to.be.called;
      });
  
@@ -70,7 +70,7 @@ index 7cf643df4..95be37ef4 100644
        sandbox.stub(nconf, 'get').withArgs('IS_PROD').returns(true);
        let attachEmail = requireAgain(pathToEmailLib);
        let sendTxnEmail = attachEmail.sendTxn;
-@@ -191,7 +191,7 @@ describe('emails', () => {
+@@ -189,7 +189,7 @@ describe('emails', () => {
        }));
      });
  
@@ -80,7 +80,7 @@ index 7cf643df4..95be37ef4 100644
        let attachEmail = requireAgain(pathToEmailLib);
        let sendTxnEmail = attachEmail.sendTxn;
 diff --git a/website/server/libs/email.js b/website/server/libs/email.js
-index 74a0c4a69..31a31d443 100644
+index 744c29af7..96bea6d72 100644
 --- a/website/server/libs/email.js
 +++ b/website/server/libs/email.js
 @@ -2,25 +2,15 @@ import nodemailer from 'nodemailer';
@@ -113,7 +113,7 @@ index 74a0c4a69..31a31d443 100644
  });
  
  // Send email directly from the server using the smtpTransporter,
-@@ -141,23 +131,67 @@ export function sendTxn (mailingInfoArray, emailType, variables, personalVariabl
+@@ -135,23 +125,67 @@ export function sendTxn (mailingInfoArray, emailType, variables, personalVariabl
    }
  
    if (IS_PROD && mailingInfoArray.length > 0) {

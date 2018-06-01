@@ -257,7 +257,7 @@ index 8388d835b..2e3dccd4a 100644
      let { group, members } = await createAndPopulateGroup({
        groupDetails: {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 302923acb..2726acfb8 100644
+index 1f30ae7b1..1209fb46b 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -290,10 +290,10 @@ index 302923acb..2726acfb8 100644
        if (error.response.status >= 400) {
 -        this.checkForBannedUser(error);
 -
-         // Check for conditions to reset the user auth
-         const invalidUserMessage = [this.$t('invalidCredentials'), 'Missing authentication headers.'];
-         if (invalidUserMessage.indexOf(error.response.data) !== -1) {
-@@ -417,25 +412,6 @@ export default {
+         // Don't show errors from getting user details. These users have delete their account,
+         // but their chat message still exists.
+         let configExists = Boolean(error.response) && Boolean(error.response.config);
+@@ -427,25 +422,6 @@ export default {
      if (loadingScreen) document.body.removeChild(loadingScreen);
    },
    methods: {
