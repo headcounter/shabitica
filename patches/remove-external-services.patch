@@ -1576,7 +1576,7 @@ index 8ad0ae684..057f198b0 100644
        let attachEmail = requireAgain(pathToEmailLib);
        let getUserInfo = attachEmail.getUserInfo;
 diff --git a/test/api/v3/unit/libs/payments/payments.test.js b/test/api/v3/unit/libs/payments/payments.test.js
-index d67c51afe..1788fe406 100644
+index 41a080c57..0eab180cc 100644
 --- a/test/api/v3/unit/libs/payments/payments.test.js
 +++ b/test/api/v3/unit/libs/payments/payments.test.js
 @@ -2,8 +2,6 @@ import moment from 'moment';
@@ -1671,7 +1671,7 @@ index d67c51afe..1788fe406 100644
  
      context('Block subscription perks', () => {
 @@ -641,11 +585,6 @@ describe('payments/index', () => {
-         expect(user.sendMessage).to.be.calledWith(recipient, { receiverMsg: msg, senderMsg: msg });
+         expect(user.sendMessage).to.be.calledWith(recipient, { receiverMsg: msg, senderMsg: msg, save: false });
        });
  
 -      it('sends a push notification if user did not gift to self', async () => {
@@ -1683,7 +1683,7 @@ index d67c51afe..1788fe406 100644
          // TODO using english for both users because other languages are not loaded
          // for api.buyGems
 diff --git a/test/api/v3/unit/middlewares/cronMiddleware.js b/test/api/v3/unit/middlewares/cronMiddleware.js
-index 12209b1a8..1ea9d2e61 100644
+index f973bfe36..8215e1d9f 100644
 --- a/test/api/v3/unit/middlewares/cronMiddleware.js
 +++ b/test/api/v3/unit/middlewares/cronMiddleware.js
 @@ -9,7 +9,6 @@ import moment from 'moment';
@@ -5361,7 +5361,7 @@ index 62b3009c2..56965773c 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 3ad57642b..cd2931cc2 100644
+index 0f36e6387..7b62ef47d 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -204,16 +204,6 @@ api.createChallenge = {
@@ -5400,7 +5400,7 @@ index 3ad57642b..cd2931cc2 100644
  };
 @@ -314,16 +294,6 @@ api.leaveChallenge = {
      // Unlink challenge's tasks from user's tasks and save the challenge
-     await Promise.all([challenge.unlinkTasks(user, keep), challenge.save()]);
+     await challenge.unlinkTasks(user, keep);
  
 -    res.analytics.track('challenge leave', {
 -      uuid: user._id,
@@ -6434,7 +6434,7 @@ index 75d58c936..d5d95a634 100644
  } else if (!IS_TEST || IS_TEST && ENABLE_LOGS_IN_TEST) { // Do not log anything when testing unless specified
    logger
 diff --git a/website/server/libs/payments/gems.js b/website/server/libs/payments/gems.js
-index 7e0bfa6c5..bdf754ed9 100644
+index 35d18cc70..400bf08e6 100644
 --- a/website/server/libs/payments/gems.js
 +++ b/website/server/libs/payments/gems.js
 @@ -1,9 +1,7 @@
@@ -6576,7 +6576,7 @@ index da3e189d7..57b9a64b0 100644
  
  api.addSubscriptionToGroupUsers = addSubscriptionToGroupUsers;
 diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
-index 43f7b1857..dd800b6fe 100644
+index 82e9a30d7..4da6587e5 100644
 --- a/website/server/libs/payments/subscriptions.js
 +++ b/website/server/libs/payments/subscriptions.js
 @@ -1,8 +1,6 @@
@@ -6648,7 +6648,7 @@ index 43f7b1857..dd800b6fe 100644
    if (!group) data.user.purchased.txnCount++;
  
    if (data.gift) {
-@@ -193,19 +169,6 @@ async function createSubscription (data) {
+@@ -193,48 +169,17 @@ async function createSubscription (data) {
          {name: 'X_MONTHS_SUBSCRIPTION', content: months},
        ]);
      }
@@ -6667,10 +6667,8 @@ index 43f7b1857..dd800b6fe 100644
 -    }
    }
  
-   if (group) {
-@@ -215,30 +178,12 @@ async function createSubscription (data) {
-   }
- 
+   if (group) await group.save();
+   if (data.user && data.user.isModified()) await data.user.save();
    if (data.gift) await data.gift.member.save();
 -
 -  slack.sendSubscriptionNotification({
@@ -6699,7 +6697,7 @@ index 43f7b1857..dd800b6fe 100644
    let emailType;
    let emailMergeData = [];
    let sendEmail = true;
-@@ -300,20 +245,6 @@ async function cancelSubscription (data) {
+@@ -296,20 +241,6 @@ async function cancelSubscription (data) {
    }
  
    if (sendEmail) txnEmail(data.user, emailType, emailMergeData);
@@ -6999,7 +6997,7 @@ index e3994c8e0..c6f8a4a17 100644
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 80e0f385c..336a17044 100644
+index 0ca9d43a1..9226da287 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -11,9 +11,6 @@ import { defaults, map, flatten, flow, compact, uniq, partialRight } from 'lodas
@@ -7012,7 +7010,7 @@ index 80e0f385c..336a17044 100644
  
  const daysSince = common.daysSince;
  
-@@ -200,7 +197,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -203,7 +200,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
   * @param  options
   * @param  options.user  The user object who is purchasing
   * @param  options.groupId  The id of the group purchasing a subscription
@@ -7021,7 +7019,7 @@ index 80e0f385c..336a17044 100644
   * @param  options.cancellationReason  A text string to control sending an email
   *
   * @return a Promise from api.cancelSubscription()
-@@ -211,18 +208,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -214,18 +211,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
  // In summary, currently is is best practice to use this method to cancel a user subscription, rather than calling the
  // payment helper.
  schema.methods.cancelSubscription = async function cancelSubscription (options = {}) {
