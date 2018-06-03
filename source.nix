@@ -161,6 +161,10 @@ stdenv.mkDerivation rec {
 
     # Adds support systemd startup notifications.
     patches/systemd-notify.patch
+
+    # Fix tests that don't work during the first two days of a month.
+    # Upstream commit 3e29b958e3225f9a8fdb2f2b8fe865ef46c86532.
+    patches/cron-test-fix.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
