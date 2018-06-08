@@ -10,7 +10,7 @@ Date:   Tue Mar 27 05:37:06 2018 +0200
     Filename: socket-activation.patch
 
 diff --git a/package.json b/package.json
-index 64f1a3623..472baa100 100644
+index 50b6f0719..b9f8e3a8d 100644
 --- a/package.json
 +++ b/package.json
 @@ -75,6 +75,7 @@
@@ -18,9 +18,9 @@ index 64f1a3623..472baa100 100644
      "svgo": "^1.0.5",
      "svgo-loader": "^2.1.0",
 +    "systemd-socket": "^0.0.0",
+     "update": "^0.7.4",
+     "upgrade": "^1.1.0",
      "url-loader": "^1.0.0",
-     "useragent": "^2.1.9",
-     "uuid": "^3.0.1",
 diff --git a/website/server/server.js b/website/server/server.js
 index f33192903..834becb87 100644
 --- a/website/server/server.js

@@ -108,7 +108,7 @@ in {
     "method-override" = nodePackages."method-override-^2.3.5";
     moment = nodePackages."moment-^2.22.1";
     "moment-recur" = nodePackages."moment-recur-^1.0.7";
-    mongoose = nodePackages."mongoose-^5.1.1";
+    mongoose = nodePackages."mongoose-^5.1.2";
     morgan = nodePackages."morgan-^1.7.0";
     nconf = nodePackages."nconf-^0.10.0";
     "node-sass" = nodePackages."node-sass-^4.9.0";
@@ -130,6 +130,8 @@ in {
     svgo = nodePackages."svgo-^1.0.5";
     "svgo-loader" = nodePackages."svgo-loader-^2.1.0";
     "systemd-socket" = nodePackages."systemd-socket-^0.0.0";
+    update = nodePackages."update-^0.7.4";
+    upgrade = nodePackages."upgrade-^1.1.0";
     "url-loader" = nodePackages."url-loader-^1.0.0";
     useragent = nodePackages."useragent-^2.1.9";
     uuid = nodePackages."uuid-^3.0.1";

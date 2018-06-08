@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.44.3";
+  version = "4.45.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0cmwk7cp4x6m2i420vn4y048sfcgnr56cymcqaclj43mp8szd9qm";
+    sha256 = "1m1d9308pwxw73xh6lh35c151ydrw9f25nn999wqxf0il8pxzfxq";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -161,10 +161,6 @@ stdenv.mkDerivation rec {
 
     # Adds support systemd startup notifications.
     patches/systemd-notify.patch
-
-    # Fix tests that don't work during the first two days of a month.
-    # Upstream commit 3e29b958e3225f9a8fdb2f2b8fe865ef46c86532.
-    patches/cron-test-fix.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

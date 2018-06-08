@@ -13,7 +13,7 @@ Date:   Tue Mar 27 05:37:21 2018 +0200
     Filename: kill-footer.patch
 
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index 8af845ee0..4d1b5658f 100644
+index c954b966c..d27944768 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -2,101 +2,6 @@
@@ -118,11 +118,11 @@ index 8af845ee0..4d1b5658f 100644
  </template>
  
  <style lang="scss" scoped>
-@@ -168,27 +73,6 @@
+@@ -177,25 +82,6 @@
+   .heart svg {
+     margin-top: .1em;
    }
- </style>
- 
--<style lang="scss">
+-
 -  footer {
 -    &.expanded {
 -      padding-left: 6em;
@@ -141,8 +141,6 @@ index 8af845ee0..4d1b5658f 100644
 -      }
 -    }
 -  }
--</style>
--
+ </style>
+ 
  <script>
- import axios from 'axios';
- import moment from 'moment';
