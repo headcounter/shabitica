@@ -2209,7 +2209,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 1cc5d88f3..1f30ae7b1 100644
+index dcea0ea55..9c6e06115 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,7 +10,6 @@ div
@@ -2518,7 +2518,7 @@ index de65914ea..ab38d5546 100644
      close () {
        this.$root.$emit('bv::hide::modal', 'won-challenge');
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index e7d85d3a7..c954b966c 100644
+index 8d9db98af..ed3a8ad87 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -4,11 +4,6 @@
@@ -2555,8 +2555,8 @@ index e7d85d3a7..c954b966c 100644
 -            a.social-circle(href='https://www.facebook.com/Habitica', target='_blank')
 -              .social-icon.facebook.svg-icon(v-html='icons.facebook')
          .row
-           .col-12.col-md-10 {{ $t('donateText3') }}
-           .col-12.col-md-2
+           .col-12.col-md-8 {{ $t('donateText3') }}
+           .col-12.col-md-4
 @@ -150,32 +135,6 @@
      margin-bottom: .5em;
    }
@@ -2766,7 +2766,7 @@ index 1016bf07c..bbb9af252 100644
        if (this.registering) {
          this.register();
 diff --git a/website/client/components/challenges/challengeModal.vue b/website/client/components/challenges/challengeModal.vue
-index bcfc54d95..96f4fa9e3 100644
+index 0b4637505..2231b0148 100644
 --- a/website/client/components/challenges/challengeModal.vue
 +++ b/website/client/components/challenges/challengeModal.vue
 @@ -54,8 +54,6 @@
@@ -2892,10 +2892,10 @@ index 74beb78f0..e81c274b2 100644
        this.$router.push('/party');
      },
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index 28436ff08..c332435de 100644
+index 738d732f7..03dc4e91e 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
-@@ -255,7 +255,6 @@ import extend from 'lodash/extend';
+@@ -259,7 +259,6 @@ import extend from 'lodash/extend';
  import groupUtilities from 'client/mixins/groupsUtilities';
  import styleHelper from 'client/mixins/styleHelper';
  import { mapState } from 'client/libs/store';
@@ -2903,7 +2903,7 @@ index 28436ff08..c332435de 100644
  import membersModal from './membersModal';
  import startQuestModal from './startQuestModal';
  import questDetailsModal from './questDetailsModal';
-@@ -500,13 +499,6 @@ export default {
+@@ -504,13 +503,6 @@ export default {
        await this.$store.dispatch('guilds:join', {groupId: this.group._id, type: 'guild'});
      },
      clickLeave () {
@@ -2917,7 +2917,7 @@ index 28436ff08..c332435de 100644
        // @TODO: Get challenges and ask to keep or remove
        if (!confirm('Are you sure you want to leave?')) return;
        let keep = true;
-@@ -523,7 +515,6 @@ export default {
+@@ -527,7 +519,6 @@ export default {
  
        if (this.isParty) {
          data.type = 'party';
@@ -2925,7 +2925,7 @@ index 28436ff08..c332435de 100644
          this.$store.state.partyMembers = [];
        }
  
-@@ -538,13 +529,6 @@ export default {
+@@ -542,13 +533,6 @@ export default {
        this.$router.push('/group-plans');
      },
      clickStartQuest () {

@@ -13,7 +13,7 @@ Date:   Tue Mar 27 05:37:21 2018 +0200
     Filename: kill-footer.patch
 
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index c954b966c..d27944768 100644
+index ed3a8ad87..d27944768 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -2,101 +2,6 @@
@@ -70,8 +70,8 @@ index c954b966c..d27944768 100644
 -              li
 -                a(href='http://devs.habitica.com/', target='_blank') {{ $t('devBlog') }}
 -        .row
--          .col-12.col-md-10 {{ $t('donateText3') }}
--          .col-12.col-md-2
+-          .col-12.col-md-8 {{ $t('donateText3') }}
+-          .col-12.col-md-4
 -            button.btn.btn-contribute(@click="donate()", v-if="user")
 -              .svg-icon.heart(v-html="icons.heart")
 -              .text {{ $t('companyDonate') }}

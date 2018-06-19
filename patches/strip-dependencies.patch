@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:02 2018 +0200
     Filename: strip-dependencies.patch
 
 diff --git a/package.json b/package.json
-index fe58c81d8..a3a2de7b4 100644
+index 64cf00d04..180e9b92c 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,13 +4,9 @@
-   "version": "4.46.1",
+   "version": "4.46.2",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@slack/client": "^3.8.1",
