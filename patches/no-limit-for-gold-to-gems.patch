@@ -98,7 +98,7 @@ index 1326dea81..c04eb6738 100644
          return !this.enoughCurrency(this.getPriceClass(), this.item.value * this.selectedAmountToBuy);
        },
 diff --git a/website/client/components/shops/market/index.vue b/website/client/components/shops/market/index.vue
-index 017101540..8869b09c8 100644
+index c075987fe..c69ba6b87 100644
 --- a/website/client/components/shops/market/index.vue
 +++ b/website/client/components/shops/market/index.vue
 @@ -145,7 +145,6 @@

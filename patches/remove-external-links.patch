@@ -119,10 +119,10 @@ index cfd14c700..9f373bb87 100644
  
  <style lang='scss'>
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index c3285e4bc..bfc475fd3 100644
+index 4d9a767a3..86b384ae1 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -732,7 +732,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
+@@ -733,7 +733,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
        {name: 'GROUP_NAME', content: group.name},
        {name: 'MESSAGE', content: message},
        {name: 'GUILDS_LINK', content: '/groups/discovery'},

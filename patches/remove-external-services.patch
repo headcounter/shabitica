@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 1073ead7c..63df05213 100644
+index 0feacd118..63df05213 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -4,16 +4,6 @@
@@ -60,7 +60,7 @@ index 1073ead7c..63df05213 100644
      "NODE_DB_URI":"mongodb://localhost/habitrpg",
      "TEST_DB_URI":"mongodb://localhost/habitrpg_test",
      "NODE_ENV":"development",
-@@ -31,86 +21,20 @@
+@@ -31,87 +21,20 @@
      "SMTP_HOST":"example.com",
      "SMTP_PORT": 587,
      "SMTP_TLS": true,
@@ -145,7 +145,9 @@ index 1073ead7c..63df05213 100644
 -      "CLOUDKARAFKA_USERNAME": "",
 -      "CLOUDKARAFKA_PASSWORD": "",
 -      "CLOUDKARAFKA_TOPIC_PREFIX": ""
-     }
+-    },
+-    "MIGRATION_CONNECT_STRING": "mongodb://localhost:27017/habitrpg?auto_reconnect=true"
++    }
  }
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
 index 194008bb4..8388d835b 100644
@@ -2209,7 +2211,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index dcea0ea55..9c6e06115 100644
+index fab697541..b1285bb0a 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,7 +10,6 @@ div
@@ -5499,7 +5501,7 @@ index f18644306..dcae6acda 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 7e88d487b..a25b6996e 100644
+index b5f4ab5d8..15cf520d0 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5539,7 +5541,7 @@ index 7e88d487b..a25b6996e 100644
      res.respond(201, response); // do not remove chat flags data as we've just created the group
    },
  };
-@@ -202,54 +180,6 @@ api.createGroupPlan = {
+@@ -203,54 +181,6 @@ api.createGroupPlan = {
      let results = await Promise.all([user.save(), group.save()]);
      let savedGroup = results[1];
  
@@ -5594,7 +5596,7 @@ index 7e88d487b..a25b6996e 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -590,7 +520,6 @@ api.joinGroup = {
+@@ -591,7 +521,6 @@ api.joinGroup = {
      if (group.memberCount === 0) group.leader = user._id; // If new user is only member -> set as leader
  
      if (group.hasNotCancelled())  {
@@ -5602,7 +5604,7 @@ index 7e88d487b..a25b6996e 100644
        await group.updateGroupPlan();
      }
  
-@@ -643,22 +572,6 @@ api.joinGroup = {
+@@ -644,22 +573,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -5625,7 +5627,7 @@ index 7e88d487b..a25b6996e 100644
      res.respond(200, response);
    },
  };
-@@ -789,7 +702,7 @@ api.leaveGroup = {
+@@ -790,7 +703,7 @@ api.leaveGroup = {
      }
  
      await group.leave(user, req.query.keep, req.body.keepChallenges);
@@ -5634,7 +5636,7 @@ index 7e88d487b..a25b6996e 100644
      _removeMessagesFromMember(user, group._id);
      await user.save();
  
-@@ -798,11 +711,6 @@ api.leaveGroup = {
+@@ -799,11 +712,6 @@ api.leaveGroup = {
        user.guilds.splice(guildIndex, 1);
      }
  
@@ -5646,7 +5648,7 @@ index 7e88d487b..a25b6996e 100644
      res.respond(200, {});
    },
  };
-@@ -892,8 +800,7 @@ api.removeGroupMember = {
+@@ -893,8 +801,7 @@ api.removeGroupMember = {
      if (isInGroup) {
        group.memberCount -= 1;
        if (group.hasNotCancelled())  {
@@ -5656,7 +5658,7 @@ index 7e88d487b..a25b6996e 100644
        }
  
        if (group.quest && group.quest.leader === member._id) {
-@@ -909,12 +816,6 @@ api.removeGroupMember = {
+@@ -910,12 +817,6 @@ api.removeGroupMember = {
          removeFromArray(member.guilds, group._id);
        }
        if (isInGroup === 'party') {
@@ -5669,7 +5671,7 @@ index 7e88d487b..a25b6996e 100644
          member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
        }
  
-@@ -1015,19 +916,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -1016,19 +917,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -5689,7 +5691,7 @@ index 7e88d487b..a25b6996e 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1043,8 +931,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1044,8 +932,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},

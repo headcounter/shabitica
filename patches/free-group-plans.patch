@@ -528,7 +528,7 @@ index b06fe97a4..db2d38cb6 100644
      },
      {
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 34e1a78b2..05a9774e2 100644
+index 808183e0d..ca5dee01b 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -20,6 +20,7 @@ import { sendTxn as sendTxnEmail } from '../../libs/email';
@@ -548,7 +548,7 @@ index 34e1a78b2..05a9774e2 100644
      let validationErrors = req.validationErrors();
      if (validationErrors) throw validationErrors;
  
-@@ -178,6 +177,18 @@ api.createGroupPlan = {
+@@ -179,6 +178,18 @@ api.createGroupPlan = {
      user.guilds.push(group._id);
  
      let results = await Promise.all([user.save(), group.save()]);
