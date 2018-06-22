@@ -55,10 +55,10 @@ index 2ba54afb4..e4c1414b9 100644
      },
      data () {
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index 03dc4e91e..f00fdf61d 100644
+index d85d715bf..6075b9022 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
-@@ -391,9 +391,6 @@ export default {
+@@ -388,9 +388,6 @@ export default {
      },
    },
    methods: {

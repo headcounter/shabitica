@@ -13,19 +13,19 @@ Date:   Tue Apr 3 05:09:43 2018 +0200
     Filename: html-test-reports.patch
 
 diff --git a/gulp/gulp-tests.js b/gulp/gulp-tests.js
-index d2b451cb0..cf2dfa494 100644
+index 7a9168374..72b3c5199 100644
 --- a/gulp/gulp-tests.js
 +++ b/gulp/gulp-tests.js
 @@ -170,7 +170,7 @@ gulp.task('test:content:safe', gulp.series('test:prepare:build', (cb) => {
  
- gulp.task('test:api-v3:unit', (done) => {
+ gulp.task('test:api:unit', (done) => {
    let runner = exec(
--    testBin('istanbul cover --dir coverage/api-v3-unit mocha -- test/api/v3/unit --recursive --require ./test/helpers/start-server'),
-+    testBin('istanbul cover --dir coverage/api-v3-unit mocha -- test/api/v3/unit --reporter mocha-multi-reporters --reporter-options configFile=mocha-reporters.json --recursive --require ./test/helpers/start-server'),
+-    testBin('istanbul cover --dir coverage/api-unit mocha -- test/api/unit --recursive --require ./test/helpers/start-server'),
++    testBin('istanbul cover --dir coverage/api-unit mocha -- test/api/unit --reporter mocha-multi-reporters --reporter-options configFile=mocha-reporters.json --recursive --require ./test/helpers/start-server'),
      CONTENT_OPTIONS,
      (err) => {
        if (err) {
-@@ -189,7 +189,7 @@ gulp.task('test:api-v3:unit:watch', () => {
+@@ -189,7 +189,7 @@ gulp.task('test:api:unit:watch', () => {
  
  gulp.task('test:api-v3:integration', (done) => {
    let runner = exec(
@@ -43,6 +43,15 @@ index d2b451cb0..cf2dfa494 100644
      CONTENT_OPTIONS,
      (err) => done(err)
    );
+@@ -221,7 +221,7 @@ gulp.task('test:api-v3:integration:separate-server', (done) => {
+ 
+ gulp.task('test:api-v4:integration', (done) => {
+   let runner = exec(
+-    testBin('istanbul cover --dir coverage/api-v4-integration --report lcovonly mocha -- test/api/v4 --recursive --require ./test/helpers/start-server'),
++    testBin('istanbul cover --dir coverage/api-v4-integration --report lcovonly mocha -- test/api/v4 --reporter mocha-multi-reporters --reporter-options configFile=mocha-reporters.json --recursive --require ./test/helpers/start-server'),
+     CONTENT_OPTIONS,
+     (err) => {
+       if (err) {
 diff --git a/mocha-reporters.json b/mocha-reporters.json
 new file mode 100644
 index 000000000..347c750ab
@@ -54,13 +63,13 @@ index 000000000..347c750ab
 +  "mochaSimpleHtmlReporterReporterOptions": {"output": "test-report.html"}
 +}
 diff --git a/package.json b/package.json
-index 523692a14..d8450b49b 100644
+index 2bb90492a..85d6f9359 100644
 --- a/package.json
 +++ b/package.json
-@@ -109,9 +109,9 @@
-     "test:api-v3:unit": "gulp test:api-v3:unit",
-     "test:api-v3:integration": "gulp test:api-v3:integration",
+@@ -111,9 +111,9 @@
      "test:api-v3:integration:separate-server": "NODE_ENV=test gulp test:api-v3:integration:separate-server",
+     "test:api-v4:integration": "gulp test:api-v4:integration",
+     "test:api-v4:integration:separate-server": "NODE_ENV=test gulp test:api-v4:integration:separate-server",
 -    "test:sanity": "istanbul cover --dir coverage/sanity --report lcovonly mocha -- test/sanity --recursive",
 -    "test:common": "istanbul cover --dir coverage/common --report lcovonly mocha -- test/common --recursive",
 -    "test:content": "istanbul cover --dir coverage/content --report lcovonly mocha -- test/content --recursive",
@@ -70,7 +79,7 @@ index 523692a14..d8450b49b 100644
      "test:nodemon": "gulp test:nodemon",
      "coverage": "COVERAGE=true mocha --require register-handlers.js --reporter html-cov > coverage.html; open coverage.html",
      "sprites": "gulp sprites:compile",
-@@ -160,6 +160,8 @@
+@@ -162,6 +162,8 @@
      "karma-webpack": "^3.0.0",
      "lcov-result-merger": "^2.0.0",
      "mocha": "^5.1.1",

@@ -54,11 +54,14 @@ in lib.mapAttrs runTests {
   };
 
   api = {
-    unit.target = "api-v3:unit";
+    unit.target = "api:unit";
     unit.useDB = true;
 
-    integration.target = "api-v3:integration";
-    integration.useDB = true;
+    integration-v3.target = "api-v3:integration";
+    integration-v3.useDB = true;
+
+    integration-v4.target = "api-v4:integration";
+    integration-v4.useDB = true;
   };
 } // {
   client.e2e = (import "${nixpkgs}/nixos/lib/testing.nix" {

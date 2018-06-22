@@ -12,7 +12,7 @@ Date:   Sat Apr 7 03:03:48 2018 +0200
     Filename: no-censorship.patch
 
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index 8388d835b..2e3dccd4a 100644
+index 278388365..e62cf0d09 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -11,19 +11,10 @@ import {

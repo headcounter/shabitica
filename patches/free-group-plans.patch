@@ -13,93 +13,20 @@ Date:   Tue Mar 27 05:37:23 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: free-group-plans.patch
 
-diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index 1daf622cd..b74c1e3c0 100644
---- a/test/api/v3/integration/groups/POST-groups_invite.test.js
-+++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
-@@ -1,14 +1,11 @@
- import {
-   generateUser,
--  generateGroup,
-   translate as t,
- } from '../../../../helpers/api-v3-integration.helper';
- import { v4 as generateUUID } from 'uuid';
--import nconf from 'nconf';
- 
- const INVITES_LIMIT = 100;
- const PARTY_LIMIT_MEMBERS = 30;
--const MAX_EMAIL_INVITES_BY_USER = 200;
- 
- describe('Post /groups/:groupId/invite', () => {
-   let inviter;
-@@ -236,27 +233,6 @@ describe('Post /groups/:groupId/invite', () => {
-         });
-     });
- 
--    it('returns an error when a user has sent the max number of email invites', async () => {
--      let inviterWithMax = await generateUser({
--        invitesSent: MAX_EMAIL_INVITES_BY_USER,
--        balance: 4,
--      });
--      let tmpGroup = await inviterWithMax.post('/groups', {
--        name: groupName,
--        type: 'guild',
--      });
--
--      await expect(inviterWithMax.post(`/groups/${tmpGroup._id}/invite`, {
--        emails: [testInvite],
--        inviter: 'inviter name',
--      }))
--        .to.eventually.be.rejected.and.eql({
--          code: 401,
--          error: 'NotAuthorized',
--          message: t('inviteLimitReached', {techAssistanceEmail: nconf.get('ADMIN_EMAIL')}),
--        });
--    });
--
-     it('invites a user to a group by email', async () => {
-       let res = await inviter.post(`/groups/${group._id}/invite`, {
-         emails: [testInvite],
-@@ -325,25 +301,6 @@ describe('Post /groups/:groupId/invite', () => {
-       expect(invitedUser.invitations.guilds[0].id).to.equal(group._id);
-       expect(invite).to.exist;
-     });
--
--    it('invites marks invite with cancelled plan', async () => {
--      let cancelledPlanGroup = await generateGroup(inviter, {
--        type: 'guild',
--        name: generateUUID(),
--      });
--      await cancelledPlanGroup.createCancelledSubscription();
--
--      let newUser = await generateUser();
--      let invite = await inviter.post(`/groups/${cancelledPlanGroup._id}/invite`, {
--        uuids: [newUser._id],
--        emails: [{name: 'test', email: 'test@habitica.com'}],
--      });
--      let invitedUser = await newUser.get('/user');
--
--      expect(invitedUser.invitations.guilds[0].id).to.equal(cancelledPlanGroup._id);
--      expect(invitedUser.invitations.guilds[0].cancelledPlan).to.be.true;
--      expect(invite).to.exist;
--    });
-   });
- 
-   describe('guild invites', () => {
-diff --git a/test/api/v3/unit/models/group.test.js b/test/api/v3/unit/models/group.test.js
-index 82547341a..39cba779b 100644
---- a/test/api/v3/unit/models/group.test.js
-+++ b/test/api/v3/unit/models/group.test.js
+diff --git a/test/api/unit/models/group.test.js b/test/api/unit/models/group.test.js
+index 3b5a05372..eccc26adf 100644
+--- a/test/api/unit/models/group.test.js
++++ b/test/api/unit/models/group.test.js
 @@ -1,4 +1,3 @@
 -import moment from 'moment';
  import { v4 as generateUUID } from 'uuid';
  import validator from 'validator';
- import { sleep } from '../../../../helpers/api-unit.helper';
+ import { sleep } from '../../../helpers/api-unit.helper';
 @@ -17,7 +16,6 @@ import {
- } from '../../../../../website/server/libs/webhook';
- import * as email from '../../../../../website/server/libs/email';
- import { TAVERN_ID } from '../../../../../website/common/script/';
--import shared from '../../../../../website/common';
+ } from '../../../../website/server/libs/webhook';
+ import * as email from '../../../../website/server/libs/email';
+ import { TAVERN_ID } from '../../../../website/common/script/';
+-import shared from '../../../../website/common';
  
  describe('Group Model', () => {
    let party, questLeader, participatingMember, nonParticipatingMember, undecidedMember;
@@ -198,6 +125,79 @@ index 82547341a..39cba779b 100644
      });
    });
  });
+diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
+index 190b64aaa..cac8423a3 100644
+--- a/test/api/v3/integration/groups/POST-groups_invite.test.js
++++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
+@@ -1,14 +1,11 @@
+ import {
+   generateUser,
+-  generateGroup,
+   translate as t,
+ } from '../../../../helpers/api-integration/v3';
+ import { v4 as generateUUID } from 'uuid';
+-import nconf from 'nconf';
+ 
+ const INVITES_LIMIT = 100;
+ const PARTY_LIMIT_MEMBERS = 30;
+-const MAX_EMAIL_INVITES_BY_USER = 200;
+ 
+ describe('Post /groups/:groupId/invite', () => {
+   let inviter;
+@@ -236,27 +233,6 @@ describe('Post /groups/:groupId/invite', () => {
+         });
+     });
+ 
+-    it('returns an error when a user has sent the max number of email invites', async () => {
+-      let inviterWithMax = await generateUser({
+-        invitesSent: MAX_EMAIL_INVITES_BY_USER,
+-        balance: 4,
+-      });
+-      let tmpGroup = await inviterWithMax.post('/groups', {
+-        name: groupName,
+-        type: 'guild',
+-      });
+-
+-      await expect(inviterWithMax.post(`/groups/${tmpGroup._id}/invite`, {
+-        emails: [testInvite],
+-        inviter: 'inviter name',
+-      }))
+-        .to.eventually.be.rejected.and.eql({
+-          code: 401,
+-          error: 'NotAuthorized',
+-          message: t('inviteLimitReached', {techAssistanceEmail: nconf.get('ADMIN_EMAIL')}),
+-        });
+-    });
+-
+     it('invites a user to a group by email', async () => {
+       let res = await inviter.post(`/groups/${group._id}/invite`, {
+         emails: [testInvite],
+@@ -325,25 +301,6 @@ describe('Post /groups/:groupId/invite', () => {
+       expect(invitedUser.invitations.guilds[0].id).to.equal(group._id);
+       expect(invite).to.exist;
+     });
+-
+-    it('invites marks invite with cancelled plan', async () => {
+-      let cancelledPlanGroup = await generateGroup(inviter, {
+-        type: 'guild',
+-        name: generateUUID(),
+-      });
+-      await cancelledPlanGroup.createCancelledSubscription();
+-
+-      let newUser = await generateUser();
+-      let invite = await inviter.post(`/groups/${cancelledPlanGroup._id}/invite`, {
+-        uuids: [newUser._id],
+-        emails: [{name: 'test', email: 'test@habitica.com'}],
+-      });
+-      let invitedUser = await newUser.get('/user');
+-
+-      expect(invitedUser.invitations.guilds[0].id).to.equal(cancelledPlanGroup._id);
+-      expect(invitedUser.invitations.guilds[0].cancelledPlan).to.be.true;
+-      expect(invite).to.exist;
+-    });
+   });
+ 
+   describe('guild invites', () => {
 diff --git a/website/client/components/group-plans/index.vue b/website/client/components/group-plans/index.vue
 index 7674d4b6f..82c2825f4 100644
 --- a/website/client/components/group-plans/index.vue

@@ -35,13 +35,13 @@ index bf97716b2..7f562276f 100644
 +    "MAIL_FROM": "unconfigured@example.com"
  }
 diff --git a/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js b/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
-index 35a287884..db4c5f7dd 100644
+index 89e5b133b..f3009fae9 100644
 --- a/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
 +++ b/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
 @@ -3,7 +3,6 @@ import {
    generateUser,
    translate as t,
- } from '../../../../helpers/api-v3-integration.helper';
+ } from '../../../../helpers/api-integration/v3';
 -import config from '../../../../../config.json';
  import { v4 as generateUUID } from 'uuid';
  
@@ -60,7 +60,7 @@ index 35a287884..db4c5f7dd 100644
        // expect(messages[0].id).to.eql(skillMsg.id);
        // expect(messages[0].flagCount).to.eql(0);
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index 7b5c602e4..1daf622cd 100644
+index 31f996429..190b64aaa 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
 @@ -253,7 +253,7 @@ describe('Post /groups/:groupId/invite', () => {
@@ -103,7 +103,7 @@ index dc47eead7..4c75d1733 100644
    });
  
 diff --git a/test/api/v3/integration/user/auth/PUT-user_update_email.test.js b/test/api/v3/integration/user/auth/PUT-user_update_email.test.js
-index d61a71c13..86f93f2d7 100644
+index c3f306843..d8470644a 100644
 --- a/test/api/v3/integration/user/auth/PUT-user_update_email.test.js
 +++ b/test/api/v3/integration/user/auth/PUT-user_update_email.test.js
 @@ -71,7 +71,7 @@ describe('PUT /user/auth/update-email', () => {

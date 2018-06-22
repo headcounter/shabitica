@@ -149,241 +149,15 @@ index 0feacd118..63df05213 100644
 -    "MIGRATION_CONNECT_STRING": "mongodb://localhost:27017/habitrpg?auto_reconnect=true"
 +    }
  }
-diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index 194008bb4..8388d835b 100644
---- a/test/api/v3/integration/chat/POST-chat.test.js
-+++ b/test/api/v3/integration/chat/POST-chat.test.js
-@@ -15,10 +15,6 @@ import { getMatchesByWordArray } from '../../../../../website/server/libs/string
- import bannedWords from '../../../../../website/server/libs/bannedWords';
- import guildsAllowingBannedWords from '../../../../../website/server/libs/guildsAllowingBannedWords';
- import * as email from '../../../../../website/server/libs/email';
--import { IncomingWebhook } from '@slack/client';
--import nconf from 'nconf';
--
--const BASE_URL = nconf.get('BASE_URL');
- 
- describe('POST /chat', () => {
-   let user, groupWithChat, member, additionalMember;
-@@ -228,7 +224,6 @@ describe('POST /chat', () => {
-   context('banned slur', () => {
-     beforeEach(() => {
-       sandbox.spy(email, 'sendTxn');
--      sandbox.stub(IncomingWebhook.prototype, 'send');
-     });
- 
-     afterEach(() => {
-@@ -247,26 +242,6 @@ describe('POST /chat', () => {
-       expect(email.sendTxn).to.be.calledOnce;
-       expect(email.sendTxn.args[0][1]).to.eql('slur-report-to-mods');
- 
--      // Slack message to mods
--      expect(IncomingWebhook.prototype.send).to.be.calledOnce;
--      /* eslint-disable camelcase */
--      expect(IncomingWebhook.prototype.send).to.be.calledWith({
--        text: `${user.profile.name} (${user.id}) tried to post a slur`,
--        attachments: [{
--          fallback: 'Slur Message',
--          color: 'danger',
--          author_name: `${user.profile.name} - ${user.auth.local.email} - ${user._id}`,
--          title: 'Slur in Test Guild',
--          title_link: `${BASE_URL}/groups/guild/${groupWithChat.id}`,
--          text: testSlurMessage,
--          // footer: sandbox.match(/<.*?groupId=group-id&chatId=chat-id\|Flag this message>/),
--          mrkdwn_in: [
--            'text',
--          ],
--        }],
--      });
--      /* eslint-enable camelcase */
--
-       // Chat privileges are revoked
-       await expect(user.post(`/groups/${groupWithChat._id}/chat`, { message: testMessage})).to.eventually.be.rejected.and.eql({
-         code: 401,
-@@ -300,26 +275,6 @@ describe('POST /chat', () => {
-       expect(email.sendTxn).to.be.calledThrice;
-       expect(email.sendTxn.args[2][1]).to.eql('slur-report-to-mods');
- 
--      // Slack message to mods
--      expect(IncomingWebhook.prototype.send).to.be.calledOnce;
--      /* eslint-disable camelcase */
--      expect(IncomingWebhook.prototype.send).to.be.calledWith({
--        text: `${members[0].profile.name} (${members[0].id}) tried to post a slur`,
--        attachments: [{
--          fallback: 'Slur Message',
--          color: 'danger',
--          author_name: `${members[0].profile.name} - ${members[0].auth.local.email} - ${members[0]._id}`,
--          title: 'Slur in Party - (private party)',
--          title_link: undefined,
--          text: testSlurMessage,
--          // footer: sandbox.match(/<.*?groupId=group-id&chatId=chat-id\|Flag this message>/),
--          mrkdwn_in: [
--            'text',
--          ],
--        }],
--      });
--      /* eslint-enable camelcase */
--
-       // Chat privileges are revoked
-       await expect(members[0].post(`/groups/${groupWithChat._id}/chat`, { message: testMessage})).to.eventually.be.rejected.and.eql({
-         code: 401,
-diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
-index 2fbe493d4..1e70c3486 100644
---- a/test/api/v3/integration/user/DELETE-user.test.js
-+++ b/test/api/v3/integration/user/DELETE-user.test.js
-@@ -17,8 +17,6 @@ import {
- } from '../../../../../website/server/libs/password';
- import * as email from '../../../../../website/server/libs/email';
- 
--const DELETE_CONFIRMATION = 'DELETE';
--
- describe('DELETE /user', () => {
-   let user;
-   let password = 'password'; // from habitrpg/test/helpers/api-integration/v3/object-generators.js
-@@ -290,62 +288,4 @@ describe('DELETE /user', () => {
-       });
-     });
-   });
--
--  context('user with Facebook auth', async () => {
--    beforeEach(async () => {
--      user = await generateUser({
--        auth: {
--          facebook: {
--            id: 'facebook-id',
--          },
--        },
--      });
--    });
--
--    it('returns an error if confirmation phrase is wrong', async () => {
--      await expect(user.del('/user', {
--        password: 'just-do-it',
--      })).to.eventually.be.rejected.and.eql({
--        code: 401,
--        error: 'NotAuthorized',
--        message: t('incorrectDeletePhrase', {magicWord: 'DELETE'}),
--      });
--    });
--
--    it('returns an error if confirmation phrase is not supplied', async () => {
--      await expect(user.del('/user', {
--        password: '',
--      })).to.eventually.be.rejected.and.eql({
--        code: 400,
--        error: 'BadRequest',
--        message: t('missingPassword'),
--      });
--    });
--
--    it('deletes a Facebook user', async () => {
--      await user.del('/user', {
--        password: DELETE_CONFIRMATION,
--      });
--      await expect(checkExistence('users', user._id)).to.eventually.eql(false);
--    });
--  });
--
--  context('user with Google auth', async () => {
--    beforeEach(async () => {
--      user = await generateUser({
--        auth: {
--          google: {
--            id: 'google-id',
--          },
--        },
--      });
--    });
--
--    it('deletes a Google user', async () => {
--      await user.del('/user', {
--        password: DELETE_CONFIRMATION,
--      });
--      await expect(checkExistence('users', user._id)).to.eventually.eql(false);
--    });
--  });
- });
-diff --git a/test/api/v3/integration/user/POST-user_sleep.test.js b/test/api/v3/integration/user/POST-user_sleep.test.js
-index 292b77e9d..0e9773150 100644
---- a/test/api/v3/integration/user/POST-user_sleep.test.js
-+++ b/test/api/v3/integration/user/POST-user_sleep.test.js
-@@ -1,7 +1,6 @@
- import {
-   generateUser,
- } from '../../../../helpers/api-integration/v3';
--import { mockAnalyticsService as analytics } from '../../../../../website/server/libs/analyticsService';
- 
- describe('POST /user/sleep', () => {
-   let user;
-@@ -23,15 +22,4 @@ describe('POST /user/sleep', () => {
-     await user.sync();
-     expect(user.preferences.sleep).to.be.false;
-   });
--
--  it('sends sleep status to analytics service', async () => {
--    sandbox.spy(analytics, 'track');
--
--    await user.post('/user/sleep');
--    await user.sync();
--    expect(analytics.track).to.be.calledOnce;
--    expect(analytics.track).to.be.calledWith('sleep', sandbox.match.has('status', user.preferences.sleep));
--
--    sandbox.restore();
--  });
- });
-diff --git a/test/api/v3/integration/user/auth/POST-register_local.test.js b/test/api/v3/integration/user/auth/POST-register_local.test.js
-index 643ef3d9c..6bc46c2d5 100644
---- a/test/api/v3/integration/user/auth/POST-register_local.test.js
-+++ b/test/api/v3/integration/user/auth/POST-register_local.test.js
-@@ -423,40 +423,6 @@ describe('POST /user/auth/local/register', () => {
-     });
-   });
- 
--  context('attach to facebook user', () => {
--    let user;
--    let email = 'some@email.net';
--    let username = 'some-username';
--    let password = 'some-password';
--    beforeEach(async () => {
--      user = await generateUser();
--    });
--    it('checks onlySocialAttachLocal', async () => {
--      await expect(user.post('/user/auth/local/register', {
--        email,
--        username,
--        password,
--        confirmPassword: password,
--      })).to.eventually.be.rejected.and.eql({
--        code: 401,
--        error: 'NotAuthorized',
--        message: t('onlySocialAttachLocal'),
--      });
--    });
--    it('succeeds', async () => {
--      await user.update({ 'auth.facebook.id': 'some-fb-id', 'auth.local': { ok: true } });
--      await user.post('/user/auth/local/register', {
--        username,
--        email,
--        password,
--        confirmPassword: password,
--      });
--      await user.sync();
--      expect(user.auth.local.username).to.eql(username);
--      expect(user.auth.local.email).to.eql(email);
--    });
--  });
--
-   context('login is already taken', () => {
-     let username, email, api;
- 
-diff --git a/test/api/v3/unit/libs/cron.test.js b/test/api/v3/unit/libs/cron.test.js
-index b5b16af5f..46c836a44 100644
---- a/test/api/v3/unit/libs/cron.test.js
-+++ b/test/api/v3/unit/libs/cron.test.js
-@@ -6,7 +6,6 @@ import { recoverCron, cron } from '../../../../../website/server/libs/cron';
- import { model as User } from '../../../../../website/server/models/user';
- import * as Tasks from '../../../../../website/server/models/task';
- import common from '../../../../../website/common';
--import analytics from '../../../../../website/server/libs/analyticsService';
+diff --git a/test/api/unit/libs/cron.test.js b/test/api/unit/libs/cron.test.js
+index a0136056f..839225128 100644
+--- a/test/api/unit/libs/cron.test.js
++++ b/test/api/unit/libs/cron.test.js
+@@ -6,7 +6,6 @@ import { recoverCron, cron } from '../../../../website/server/libs/cron';
+ import { model as User } from '../../../../website/server/models/user';
+ import * as Tasks from '../../../../website/server/models/task';
+ import common from '../../../../website/common';
+-import analytics from '../../../../website/server/libs/analyticsService';
  
  // const scoreTask = common.ops.scoreTask;
  
@@ -1549,10 +1323,10 @@ index b5b16af5f..46c836a44 100644
        expect(user.loginIncentives).to.eql(50);
        expect(user.items.food.Saddle).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-diff --git a/test/api/v3/unit/libs/email.test.js b/test/api/v3/unit/libs/email.test.js
-index 8ad0ae684..057f198b0 100644
---- a/test/api/v3/unit/libs/email.test.js
-+++ b/test/api/v3/unit/libs/email.test.js
+diff --git a/test/api/unit/libs/email.test.js b/test/api/unit/libs/email.test.js
+index fe2fafd08..23989fbf3 100644
+--- a/test/api/unit/libs/email.test.js
++++ b/test/api/unit/libs/email.test.js
 @@ -90,21 +90,6 @@ describe('emails', () => {
        expect(data).to.have.property('canSend', true);
      });
@@ -1575,18 +1349,18 @@ index 8ad0ae684..057f198b0 100644
      it('has fallbacks for missing data', () => {
        let attachEmail = requireAgain(pathToEmailLib);
        let getUserInfo = attachEmail.getUserInfo;
-diff --git a/test/api/v3/unit/libs/payments/payments.test.js b/test/api/v3/unit/libs/payments/payments.test.js
-index 41a080c57..0eab180cc 100644
---- a/test/api/v3/unit/libs/payments/payments.test.js
-+++ b/test/api/v3/unit/libs/payments/payments.test.js
+diff --git a/test/api/unit/libs/payments/payments.test.js b/test/api/unit/libs/payments/payments.test.js
+index c63bd8982..a7f5b5bed 100644
+--- a/test/api/unit/libs/payments/payments.test.js
++++ b/test/api/unit/libs/payments/payments.test.js
 @@ -2,8 +2,6 @@ import moment from 'moment';
  
- import * as sender from '../../../../../../website/server/libs/email';
- import * as api from '../../../../../../website/server/libs/payments/payments';
--import analytics from '../../../../../../website/server/libs/analyticsService';
--import notifications from '../../../../../../website/server/libs/pushNotifications';
- import { model as User } from '../../../../../../website/server/models/user';
- import { translate as t } from '../../../../../helpers/api-v3-integration.helper';
+ import * as sender from '../../../../../website/server/libs/email';
+ import * as api from '../../../../../website/server/libs/payments/payments';
+-import analytics from '../../../../../website/server/libs/analyticsService';
+-import notifications from '../../../../../website/server/libs/pushNotifications';
+ import { model as User } from '../../../../../website/server/models/user';
+ import { translate as t } from '../../../../helpers/api-integration/v3';
  import {
 @@ -28,9 +26,6 @@ describe('payments/index', () => {
  
@@ -1682,16 +1456,16 @@ index 41a080c57..0eab180cc 100644
        it('sends gem donation message in each participant\'s language', async () => {
          // TODO using english for both users because other languages are not loaded
          // for api.buyGems
-diff --git a/test/api/v3/unit/middlewares/cronMiddleware.js b/test/api/v3/unit/middlewares/cronMiddleware.js
-index f973bfe36..8215e1d9f 100644
---- a/test/api/v3/unit/middlewares/cronMiddleware.js
-+++ b/test/api/v3/unit/middlewares/cronMiddleware.js
+diff --git a/test/api/unit/middlewares/cronMiddleware.js b/test/api/unit/middlewares/cronMiddleware.js
+index 28d4135e2..2deb85228 100644
+--- a/test/api/unit/middlewares/cronMiddleware.js
++++ b/test/api/unit/middlewares/cronMiddleware.js
 @@ -9,7 +9,6 @@ import moment from 'moment';
- import { model as User } from '../../../../../website/server/models/user';
- import { model as Group } from '../../../../../website/server/models/group';
- import * as Tasks from '../../../../../website/server/models/task';
--import analyticsService from '../../../../../website/server/libs/analyticsService';
- import * as cronLib from '../../../../../website/server/libs/cron';
+ import { model as User } from '../../../../website/server/models/user';
+ import { model as Group } from '../../../../website/server/models/group';
+ import * as Tasks from '../../../../website/server/models/task';
+-import analyticsService from '../../../../website/server/libs/analyticsService';
+ import * as cronLib from '../../../../website/server/libs/cron';
  import { v4 as generateUUID } from 'uuid';
  
 @@ -38,7 +37,6 @@ describe('cron middleware', () => {
@@ -1702,6 +1476,232 @@ index f973bfe36..8215e1d9f 100644
          done();
        })
        .catch(done);
+diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
+index 6a675aab9..278388365 100644
+--- a/test/api/v3/integration/chat/POST-chat.test.js
++++ b/test/api/v3/integration/chat/POST-chat.test.js
+@@ -15,10 +15,6 @@ import { getMatchesByWordArray } from '../../../../../website/server/libs/string
+ import bannedWords from '../../../../../website/server/libs/bannedWords';
+ import guildsAllowingBannedWords from '../../../../../website/server/libs/guildsAllowingBannedWords';
+ import * as email from '../../../../../website/server/libs/email';
+-import { IncomingWebhook } from '@slack/client';
+-import nconf from 'nconf';
+-
+-const BASE_URL = nconf.get('BASE_URL');
+ 
+ describe('POST /chat', () => {
+   let user, groupWithChat, member, additionalMember;
+@@ -228,7 +224,6 @@ describe('POST /chat', () => {
+   context('banned slur', () => {
+     beforeEach(() => {
+       sandbox.spy(email, 'sendTxn');
+-      sandbox.stub(IncomingWebhook.prototype, 'send');
+     });
+ 
+     afterEach(() => {
+@@ -247,26 +242,6 @@ describe('POST /chat', () => {
+       expect(email.sendTxn).to.be.calledOnce;
+       expect(email.sendTxn.args[0][1]).to.eql('slur-report-to-mods');
+ 
+-      // Slack message to mods
+-      expect(IncomingWebhook.prototype.send).to.be.calledOnce;
+-      /* eslint-disable camelcase */
+-      expect(IncomingWebhook.prototype.send).to.be.calledWith({
+-        text: `${user.profile.name} (${user.id}) tried to post a slur`,
+-        attachments: [{
+-          fallback: 'Slur Message',
+-          color: 'danger',
+-          author_name: `${user.profile.name} - ${user.auth.local.email} - ${user._id}`,
+-          title: 'Slur in Test Guild',
+-          title_link: `${BASE_URL}/groups/guild/${groupWithChat.id}`,
+-          text: testSlurMessage,
+-          // footer: sandbox.match(/<.*?groupId=group-id&chatId=chat-id\|Flag this message>/),
+-          mrkdwn_in: [
+-            'text',
+-          ],
+-        }],
+-      });
+-      /* eslint-enable camelcase */
+-
+       // Chat privileges are revoked
+       await expect(user.post(`/groups/${groupWithChat._id}/chat`, { message: testMessage})).to.eventually.be.rejected.and.eql({
+         code: 401,
+@@ -300,26 +275,6 @@ describe('POST /chat', () => {
+       expect(email.sendTxn).to.be.calledThrice;
+       expect(email.sendTxn.args[2][1]).to.eql('slur-report-to-mods');
+ 
+-      // Slack message to mods
+-      expect(IncomingWebhook.prototype.send).to.be.calledOnce;
+-      /* eslint-disable camelcase */
+-      expect(IncomingWebhook.prototype.send).to.be.calledWith({
+-        text: `${members[0].profile.name} (${members[0].id}) tried to post a slur`,
+-        attachments: [{
+-          fallback: 'Slur Message',
+-          color: 'danger',
+-          author_name: `${members[0].profile.name} - ${members[0].auth.local.email} - ${members[0]._id}`,
+-          title: 'Slur in Party - (private party)',
+-          title_link: undefined,
+-          text: testSlurMessage,
+-          // footer: sandbox.match(/<.*?groupId=group-id&chatId=chat-id\|Flag this message>/),
+-          mrkdwn_in: [
+-            'text',
+-          ],
+-        }],
+-      });
+-      /* eslint-enable camelcase */
+-
+       // Chat privileges are revoked
+       await expect(members[0].post(`/groups/${groupWithChat._id}/chat`, { message: testMessage})).to.eventually.be.rejected.and.eql({
+         code: 401,
+diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
+index 2fbe493d4..1e70c3486 100644
+--- a/test/api/v3/integration/user/DELETE-user.test.js
++++ b/test/api/v3/integration/user/DELETE-user.test.js
+@@ -17,8 +17,6 @@ import {
+ } from '../../../../../website/server/libs/password';
+ import * as email from '../../../../../website/server/libs/email';
+ 
+-const DELETE_CONFIRMATION = 'DELETE';
+-
+ describe('DELETE /user', () => {
+   let user;
+   let password = 'password'; // from habitrpg/test/helpers/api-integration/v3/object-generators.js
+@@ -290,62 +288,4 @@ describe('DELETE /user', () => {
+       });
+     });
+   });
+-
+-  context('user with Facebook auth', async () => {
+-    beforeEach(async () => {
+-      user = await generateUser({
+-        auth: {
+-          facebook: {
+-            id: 'facebook-id',
+-          },
+-        },
+-      });
+-    });
+-
+-    it('returns an error if confirmation phrase is wrong', async () => {
+-      await expect(user.del('/user', {
+-        password: 'just-do-it',
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 401,
+-        error: 'NotAuthorized',
+-        message: t('incorrectDeletePhrase', {magicWord: 'DELETE'}),
+-      });
+-    });
+-
+-    it('returns an error if confirmation phrase is not supplied', async () => {
+-      await expect(user.del('/user', {
+-        password: '',
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: t('missingPassword'),
+-      });
+-    });
+-
+-    it('deletes a Facebook user', async () => {
+-      await user.del('/user', {
+-        password: DELETE_CONFIRMATION,
+-      });
+-      await expect(checkExistence('users', user._id)).to.eventually.eql(false);
+-    });
+-  });
+-
+-  context('user with Google auth', async () => {
+-    beforeEach(async () => {
+-      user = await generateUser({
+-        auth: {
+-          google: {
+-            id: 'google-id',
+-          },
+-        },
+-      });
+-    });
+-
+-    it('deletes a Google user', async () => {
+-      await user.del('/user', {
+-        password: DELETE_CONFIRMATION,
+-      });
+-      await expect(checkExistence('users', user._id)).to.eventually.eql(false);
+-    });
+-  });
+ });
+diff --git a/test/api/v3/integration/user/POST-user_sleep.test.js b/test/api/v3/integration/user/POST-user_sleep.test.js
+index 292b77e9d..0e9773150 100644
+--- a/test/api/v3/integration/user/POST-user_sleep.test.js
++++ b/test/api/v3/integration/user/POST-user_sleep.test.js
+@@ -1,7 +1,6 @@
+ import {
+   generateUser,
+ } from '../../../../helpers/api-integration/v3';
+-import { mockAnalyticsService as analytics } from '../../../../../website/server/libs/analyticsService';
+ 
+ describe('POST /user/sleep', () => {
+   let user;
+@@ -23,15 +22,4 @@ describe('POST /user/sleep', () => {
+     await user.sync();
+     expect(user.preferences.sleep).to.be.false;
+   });
+-
+-  it('sends sleep status to analytics service', async () => {
+-    sandbox.spy(analytics, 'track');
+-
+-    await user.post('/user/sleep');
+-    await user.sync();
+-    expect(analytics.track).to.be.calledOnce;
+-    expect(analytics.track).to.be.calledWith('sleep', sandbox.match.has('status', user.preferences.sleep));
+-
+-    sandbox.restore();
+-  });
+ });
+diff --git a/test/api/v3/integration/user/auth/POST-register_local.test.js b/test/api/v3/integration/user/auth/POST-register_local.test.js
+index 643ef3d9c..6bc46c2d5 100644
+--- a/test/api/v3/integration/user/auth/POST-register_local.test.js
++++ b/test/api/v3/integration/user/auth/POST-register_local.test.js
+@@ -423,40 +423,6 @@ describe('POST /user/auth/local/register', () => {
+     });
+   });
+ 
+-  context('attach to facebook user', () => {
+-    let user;
+-    let email = 'some@email.net';
+-    let username = 'some-username';
+-    let password = 'some-password';
+-    beforeEach(async () => {
+-      user = await generateUser();
+-    });
+-    it('checks onlySocialAttachLocal', async () => {
+-      await expect(user.post('/user/auth/local/register', {
+-        email,
+-        username,
+-        password,
+-        confirmPassword: password,
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 401,
+-        error: 'NotAuthorized',
+-        message: t('onlySocialAttachLocal'),
+-      });
+-    });
+-    it('succeeds', async () => {
+-      await user.update({ 'auth.facebook.id': 'some-fb-id', 'auth.local': { ok: true } });
+-      await user.post('/user/auth/local/register', {
+-        username,
+-        email,
+-        password,
+-        confirmPassword: password,
+-      });
+-      await user.sync();
+-      expect(user.auth.local.username).to.eql(username);
+-      expect(user.auth.local.email).to.eql(email);
+-    });
+-  });
+-
+   context('login is already taken', () => {
+     let username, email, api;
+ 
 diff --git a/test/common/ops/buy/buy.js b/test/common/ops/buy/buy.js
 index 478a2cae8..f743f02c6 100644
 --- a/test/common/ops/buy/buy.js
@@ -2894,10 +2894,10 @@ index 74beb78f0..e81c274b2 100644
        this.$router.push('/party');
      },
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index 738d732f7..03dc4e91e 100644
+index 018b93e06..d85d715bf 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
-@@ -259,7 +259,6 @@ import extend from 'lodash/extend';
+@@ -258,7 +258,6 @@ import extend from 'lodash/extend';
  import groupUtilities from 'client/mixins/groupsUtilities';
  import styleHelper from 'client/mixins/styleHelper';
  import { mapState } from 'client/libs/store';
@@ -2905,7 +2905,7 @@ index 738d732f7..03dc4e91e 100644
  import membersModal from './membersModal';
  import startQuestModal from './startQuestModal';
  import questDetailsModal from './questDetailsModal';
-@@ -504,13 +503,6 @@ export default {
+@@ -501,13 +500,6 @@ export default {
        await this.$store.dispatch('guilds:join', {groupId: this.group._id, type: 'guild'});
      },
      clickLeave () {
@@ -2919,7 +2919,7 @@ index 738d732f7..03dc4e91e 100644
        // @TODO: Get challenges and ask to keep or remove
        if (!confirm('Are you sure you want to leave?')) return;
        let keep = true;
-@@ -527,7 +519,6 @@ export default {
+@@ -524,7 +516,6 @@ export default {
  
        if (this.isParty) {
          data.type = 'party';
@@ -2927,7 +2927,7 @@ index 738d732f7..03dc4e91e 100644
          this.$store.state.partyMembers = [];
        }
  
-@@ -542,13 +533,6 @@ export default {
+@@ -539,13 +530,6 @@ export default {
        this.$router.push('/group-plans');
      },
      clickStartQuest () {
@@ -3161,13 +3161,13 @@ index 66bee4afe..456a968d1 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/index.vue b/website/client/components/header/index.vue
-index 5e032622a..4af4f4007 100644
+index 4fa0e750c..87264d954 100644
 --- a/website/client/components/header/index.vue
 +++ b/website/client/components/header/index.vue
-@@ -34,26 +34,11 @@ div
+@@ -35,26 +35,11 @@ div
          span.small-text(v-html="$t('inviteFriendsParty')")
          br
-         button.btn.btn-primary(@click='openPartyModal()') {{ partyMembers && partyMembers.length > 1 ? $t('startAParty') : $t('inviteFriends') }}
+         button.btn.btn-primary(@click='createOrInviteParty()') {{ user.party._id ? $t('inviteFriends') : $t('startAParty') }}
 -  a.useMobileApp(v-if="isAndroidMobile()", v-once, href="https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica") {{ $t('useMobileApps') }}
 -  a.useMobileApp(v-if="isIOSMobile()", v-once, href="https://itunes.apple.com/us/app/habitica-gamified-task-manager/id994882113?mt=8") {{ $t('useMobileApps') }}
  </template>
@@ -3191,7 +3191,7 @@ index 5e032622a..4af4f4007 100644
    #app-header {
      padding-left: 24px;
      padding-top: 9px;
-@@ -148,12 +133,6 @@ export default {
+@@ -155,12 +140,6 @@ export default {
      ...mapActions({
        getPartyMembers: 'party:getMembers',
      }),
@@ -6748,11 +6748,30 @@ index b8ce77498..51d872942 100644
 -  clientID: nconf.get('GOOGLE_CLIENT_ID'),
 -  clientSecret: nconf.get('GOOGLE_CLIENT_SECRET'),
 -}, (accessToken, refreshToken, profile, done) => done(null, profile)));
+diff --git a/website/server/middlewares/appRoutes.js b/website/server/middlewares/appRoutes.js
+index f735771ce..b0a379043 100644
+--- a/website/server/middlewares/appRoutes.js
++++ b/website/server/middlewares/appRoutes.js
+@@ -1,6 +1,5 @@
+ import express from 'express';
+ import expressValidator from 'express-validator';
+-import analytics from './analytics';
+ import setupBody from './setupBody';
+ import routes from '../libs/routes';
+ import path from 'path';
+@@ -16,7 +15,6 @@ app.set('view engine', 'pug');
+ app.set('views', `${__dirname}/../../views`);
+ 
+ app.use(expressValidator());
+-app.use(analytics);
+ app.use(setupBody);
+ 
+ const topLevelRouter = express.Router(); // eslint-disable-line new-cap
 diff --git a/website/server/middlewares/cron.js b/website/server/middlewares/cron.js
-index 750cf1ab8..dda2d04cd 100644
+index 15a66b02b..315f1fa44 100644
 --- a/website/server/middlewares/cron.js
 +++ b/website/server/middlewares/cron.js
-@@ -47,7 +47,6 @@ async function cronAsync (req, res) {
+@@ -54,7 +54,6 @@ async function cronAsync (req, res) {
    let user = res.locals.user;
    if (!user) return null; // User might not be available when authentication is not mandatory
  
@@ -6760,7 +6779,7 @@ index 750cf1ab8..dda2d04cd 100644
    let now = new Date();
  
    try {
-@@ -73,7 +72,7 @@ async function cronAsync (req, res) {
+@@ -83,7 +82,7 @@ async function cronAsync (req, res) {
      tasks.forEach(task => tasksByType[`${task.type}s`].push(task));
  
      // Run cron
@@ -6801,25 +6820,6 @@ index adf74bcbd..67f63b364 100644
    '/export',
    '/email',
    '/qr-code',
-diff --git a/website/server/middlewares/v3.js b/website/server/middlewares/v3.js
-index 1829c41af..132948e0b 100644
---- a/website/server/middlewares/v3.js
-+++ b/website/server/middlewares/v3.js
-@@ -1,6 +1,5 @@
- import express from 'express';
- import expressValidator from 'express-validator';
--import analytics from './analytics';
- import setupBody from './setupBody';
- import routes from '../libs/routes';
- import path from 'path';
-@@ -15,7 +14,6 @@ v3app.set('view engine', 'pug');
- v3app.set('views', `${__dirname}/../../views`);
- 
- v3app.use(expressValidator());
--v3app.use(analytics);
- v3app.use(setupBody);
- 
- const topLevelRouter = express.Router(); // eslint-disable-line new-cap
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
 index a094814fe..0bc407526 100644
 --- a/website/server/models/challenge.js

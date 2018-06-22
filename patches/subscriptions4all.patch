@@ -13,8 +13,116 @@ Date:   Tue Mar 27 05:37:09 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: subscriptions4all.patch
 
+diff --git a/test/api/unit/libs/payments/payments.test.js b/test/api/unit/libs/payments/payments.test.js
+index a7f5b5bed..648e90122 100644
+--- a/test/api/unit/libs/payments/payments.test.js
++++ b/test/api/unit/libs/payments/payments.test.js
+@@ -425,83 +425,6 @@ describe('payments/index', () => {
+     });
+   });
+ 
+-  describe('#cancelSubscription', () => {
+-    beforeEach(() => {
+-      data = { user };
+-    });
+-
+-    context('Canceling a subscription for self', () => {
+-      it('adds a month termination date by default', async () => {
+-        await api.cancelSubscription(data);
+-
+-        let now = new Date();
+-        let daysTillTermination = moment(user.purchased.plan.dateTerminated).diff(now, 'days');
+-
+-        expect(daysTillTermination).to.be.within(29, 30); // 1 month +/- 1 days
+-      });
+-
+-      it('adds extraMonths to dateTerminated value', async () => {
+-        user.purchased.plan.extraMonths = 2;
+-
+-        await api.cancelSubscription(data);
+-
+-        let now = new Date();
+-        let daysTillTermination = moment(user.purchased.plan.dateTerminated).diff(now, 'days');
+-
+-        expect(daysTillTermination).to.be.within(89, 90); // 3 months +/- 1 days
+-      });
+-
+-      it('handles extra month fractions', async () => {
+-        user.purchased.plan.extraMonths = 0.3;
+-
+-        await api.cancelSubscription(data);
+-
+-        let now = new Date();
+-        let daysTillTermination = moment(user.purchased.plan.dateTerminated).diff(now, 'days');
+-
+-        expect(daysTillTermination).to.be.within(38, 39); // should be about 1 month + 1/3 month
+-      });
+-
+-      it('terminates at next billing date if it exists', async () => {
+-        data.nextBill = moment().add({ days: 15 });
+-
+-        await api.cancelSubscription(data);
+-
+-        let now = new Date();
+-        let daysTillTermination = moment(user.purchased.plan.dateTerminated).diff(now, 'days');
+-
+-        expect(daysTillTermination).to.be.within(13, 15);
+-      });
+-
+-      it('terminates at next billing date even if dateUpdated is prior to now', async () => {
+-        data.nextBill = moment().add({ days: 15 });
+-        data.user.purchased.plan.dateUpdated = moment().subtract({ days: 10 });
+-
+-        await api.cancelSubscription(data);
+-
+-        let now = new Date();
+-        let daysTillTermination = moment(user.purchased.plan.dateTerminated).diff(now, 'days');
+-
+-        expect(daysTillTermination).to.be.within(13, 15);
+-      });
+-
+-      it('resets plan.extraMonths', async () => {
+-        user.purchased.plan.extraMonths = 5;
+-
+-        await api.cancelSubscription(data);
+-
+-        expect(user.purchased.plan.extraMonths).to.eql(0);
+-      });
+-
+-      it('sends an email', async () => {
+-        await api.cancelSubscription(data);
+-
+-        expect(sender.sendTxn).to.be.calledOnce;
+-        expect(sender.sendTxn).to.be.calledWith(user, 'cancel-subscription');
+-      });
+-    });
+-  });
+-
+   describe('#buyGems', () => {
+     beforeEach(() => {
+       data = {
+diff --git a/test/api/unit/models/user.test.js b/test/api/unit/models/user.test.js
+index 825dee32c..602756165 100644
+--- a/test/api/unit/models/user.test.js
++++ b/test/api/unit/models/user.test.js
+@@ -299,13 +299,13 @@ describe('User Model', () => {
+       expect(await user.canGetGems()).to.equal(true);
+     });
+ 
+-    it('returns false if user is part of a group with a subscription and canGetGems: false', async () => {
++    it('returns true even if user is part of a group with a subscription and canGetGems: false', async () => {
+       user.guilds.push(group._id);
+       user.purchased.plan.customerId = 'group-plan';
+       group.purchased.plan.customerId = 123;
+       group.leaderOnly.getGems = true;
+       await group.save();
+-      expect(await user.canGetGems()).to.equal(false);
++      expect(await user.canGetGems()).to.equal(true);
+     });
+   });
+ 
 diff --git a/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js b/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
-index 43187b9c6..5b722d55c 100644
+index 41c655b88..76dd85651 100644
 --- a/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
 +++ b/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
 @@ -115,7 +115,7 @@ describe('POST /challenges/:challengeId/winner/:winnerId', () => {
@@ -116,114 +224,6 @@ index b1d374925..9160226c5 100644
    });
  
    describe('bulk purchasing', () => {
-diff --git a/test/api/v3/unit/libs/payments/payments.test.js b/test/api/v3/unit/libs/payments/payments.test.js
-index 0eab180cc..d60992e2f 100644
---- a/test/api/v3/unit/libs/payments/payments.test.js
-+++ b/test/api/v3/unit/libs/payments/payments.test.js
-@@ -425,83 +425,6 @@ describe('payments/index', () => {
-     });
-   });
- 
--  describe('#cancelSubscription', () => {
--    beforeEach(() => {
--      data = { user };
--    });
--
--    context('Canceling a subscription for self', () => {
--      it('adds a month termination date by default', async () => {
--        await api.cancelSubscription(data);
--
--        let now = new Date();
--        let daysTillTermination = moment(user.purchased.plan.dateTerminated).diff(now, 'days');
--
--        expect(daysTillTermination).to.be.within(29, 30); // 1 month +/- 1 days
--      });
--
--      it('adds extraMonths to dateTerminated value', async () => {
--        user.purchased.plan.extraMonths = 2;
--
--        await api.cancelSubscription(data);
--
--        let now = new Date();
--        let daysTillTermination = moment(user.purchased.plan.dateTerminated).diff(now, 'days');
--
--        expect(daysTillTermination).to.be.within(89, 90); // 3 months +/- 1 days
--      });
--
--      it('handles extra month fractions', async () => {
--        user.purchased.plan.extraMonths = 0.3;
--
--        await api.cancelSubscription(data);
--
--        let now = new Date();
--        let daysTillTermination = moment(user.purchased.plan.dateTerminated).diff(now, 'days');
--
--        expect(daysTillTermination).to.be.within(38, 39); // should be about 1 month + 1/3 month
--      });
--
--      it('terminates at next billing date if it exists', async () => {
--        data.nextBill = moment().add({ days: 15 });
--
--        await api.cancelSubscription(data);
--
--        let now = new Date();
--        let daysTillTermination = moment(user.purchased.plan.dateTerminated).diff(now, 'days');
--
--        expect(daysTillTermination).to.be.within(13, 15);
--      });
--
--      it('terminates at next billing date even if dateUpdated is prior to now', async () => {
--        data.nextBill = moment().add({ days: 15 });
--        data.user.purchased.plan.dateUpdated = moment().subtract({ days: 10 });
--
--        await api.cancelSubscription(data);
--
--        let now = new Date();
--        let daysTillTermination = moment(user.purchased.plan.dateTerminated).diff(now, 'days');
--
--        expect(daysTillTermination).to.be.within(13, 15);
--      });
--
--      it('resets plan.extraMonths', async () => {
--        user.purchased.plan.extraMonths = 5;
--
--        await api.cancelSubscription(data);
--
--        expect(user.purchased.plan.extraMonths).to.eql(0);
--      });
--
--      it('sends an email', async () => {
--        await api.cancelSubscription(data);
--
--        expect(sender.sendTxn).to.be.calledOnce;
--        expect(sender.sendTxn).to.be.calledWith(user, 'cancel-subscription');
--      });
--    });
--  });
--
-   describe('#buyGems', () => {
-     beforeEach(() => {
-       data = {
-diff --git a/test/api/v3/unit/models/user.test.js b/test/api/v3/unit/models/user.test.js
-index 2a3e7e6ad..6bf9dbaad 100644
---- a/test/api/v3/unit/models/user.test.js
-+++ b/test/api/v3/unit/models/user.test.js
-@@ -299,13 +299,13 @@ describe('User Model', () => {
-       expect(await user.canGetGems()).to.equal(true);
-     });
- 
--    it('returns false if user is part of a group with a subscription and canGetGems: false', async () => {
-+    it('returns true even if user is part of a group with a subscription and canGetGems: false', async () => {
-       user.guilds.push(group._id);
-       user.purchased.plan.customerId = 'group-plan';
-       group.purchased.plan.customerId = 123;
-       group.leaderOnly.getGems = true;
-       await group.save();
--      expect(await user.canGetGems()).to.equal(false);
-+      expect(await user.canGetGems()).to.equal(true);
-     });
-   });
- 
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
 index 56965773c..950516199 100644
 --- a/website/server/controllers/api-v3/auth.js

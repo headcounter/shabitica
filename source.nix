@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.47.0";
+  version = "4.48.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "08ipzc2hxwldv53vghpawsq031gw1iw6id47l4hhhy3kp9g5pyzz";
+    sha256 = "1ilac5a5hgldqz82qqmk7y0di8kx7qm7wg2snwxpa1vbbvnyc1w8";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -171,22 +171,22 @@ stdenv.mkDerivation rec {
     rm -r ${lib.escapeShellArg path}
   '') [
     "scripts/paypalBillingSetup.js"
+    "test/api/unit/libs/analyticsService.test.js"
+    "test/api/unit/libs/payments/amazon"
+    "test/api/unit/libs/payments/apple.test.js"
+    "test/api/unit/libs/payments/google.test.js"
+    "test/api/unit/libs/payments/group-plans"
+    "test/api/unit/libs/payments/paypal"
+    "test/api/unit/libs/payments/stripe"
+    "test/api/unit/libs/pushNotifications.js"
+    "test/api/unit/libs/slack.js"
+    "test/api/unit/middlewares/analytics.test.js"
     "test/api/v3/integration/news/GET-news.test.js"
     "test/api/v3/integration/news/POST-news_tell_me_later.test.js"
     "test/api/v3/integration/payments"
     "test/api/v3/integration/user/auth/DELETE-user_auth_social_network.test.js"
     "test/api/v3/integration/user/auth/POST-user_auth_pusher.test.js"
     "test/api/v3/integration/user/auth/POST-user_auth_social.test.js"
-    "test/api/v3/unit/libs/analyticsService.test.js"
-    "test/api/v3/unit/libs/payments/amazon"
-    "test/api/v3/unit/libs/payments/apple.test.js"
-    "test/api/v3/unit/libs/payments/google.test.js"
-    "test/api/v3/unit/libs/payments/group-plans"
-    "test/api/v3/unit/libs/payments/paypal"
-    "test/api/v3/unit/libs/payments/stripe"
-    "test/api/v3/unit/libs/pushNotifications.js"
-    "test/api/v3/unit/libs/slack.js"
-    "test/api/v3/unit/middlewares/analytics.test.js"
     "website/client/components/achievements/newStuff.vue"
     "website/client/components/auth/authForm.vue"
     "website/client/components/bannedAccountModal.vue"

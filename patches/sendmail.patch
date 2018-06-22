@@ -48,10 +48,10 @@ index 63df05213..bf97716b2 100644
      "EMAILS" : {
          "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
          "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
-diff --git a/test/api/v3/unit/libs/email.test.js b/test/api/v3/unit/libs/email.test.js
-index 057f198b0..a8f17af5b 100644
---- a/test/api/v3/unit/libs/email.test.js
-+++ b/test/api/v3/unit/libs/email.test.js
+diff --git a/test/api/unit/libs/email.test.js b/test/api/unit/libs/email.test.js
+index 23989fbf3..1bf8e362a 100644
+--- a/test/api/unit/libs/email.test.js
++++ b/test/api/unit/libs/email.test.js
 @@ -132,7 +132,7 @@ describe('emails', () => {
        sandbox.restore();
      });

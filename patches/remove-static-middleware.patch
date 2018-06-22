@@ -11,7 +11,7 @@ Date:   Wed Mar 28 08:26:40 2018 +0200
     Filename: remove-static-middleware.patch
 
 diff --git a/website/server/middlewares/index.js b/website/server/middlewares/index.js
-index 501a8c354..48a1e3f7d 100644
+index 9c9318cb6..c61dac982 100644
 --- a/website/server/middlewares/index.js
 +++ b/website/server/middlewares/index.js
 @@ -6,7 +6,6 @@ import nconf from 'nconf';
@@ -25,7 +25,7 @@ index 501a8c354..48a1e3f7d 100644
 @@ -90,7 +89,6 @@ module.exports = function attachMiddlewares (app, server) {
    app.use('/api/v2', v2);
    app.use('/api/v1', v1);
-   app.use(v3); // the main app, also setup top-level routes
+   app.use(appRoutes); // the main app, also setup top-level routes
 -  staticMiddleware(app);
  
    app.use(notFoundHandler);

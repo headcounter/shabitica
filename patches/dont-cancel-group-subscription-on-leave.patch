@@ -9,8 +9,35 @@ Date:   Mon Apr 2 04:50:12 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: dont-cancel-group-subscription-on-leave.patch
 
+diff --git a/test/api/unit/models/group.test.js b/test/api/unit/models/group.test.js
+index eccc26adf..43677327a 100644
+--- a/test/api/unit/models/group.test.js
++++ b/test/api/unit/models/group.test.js
+@@ -782,10 +782,13 @@ describe('Group Model', () => {
+       });
+ 
+       it('deletes a private group when the last member leaves and a subscription is active', async () => {
+-        party.memberCount = 1;
+         party.purchased.plan.customerId = '110002222333';
++        await party.save();
+ 
+         await party.leave(participatingMember);
++        await party.leave(questLeader);
++        await party.leave(nonParticipatingMember);
++        await party.leave(undecidedMember);
+ 
+         party = await Group.findOne({_id: party._id});
+         expect(party).to.not.exist;
+@@ -794,6 +797,7 @@ describe('Group Model', () => {
+       it('allows a leader to leave a group with an active subscription', async () => {
+         party.memberCount = 2;
+         party.purchased.plan.customerId = '110002222333';
++        await party.save();
+ 
+         await party.leave(questLeader);
+ 
 diff --git a/test/api/v3/integration/groups/POST-groups_groupId_leave.js b/test/api/v3/integration/groups/POST-groups_groupId_leave.js
-index fd19052a1..3e7d251d7 100644
+index eab444222..9eb8e166b 100644
 --- a/test/api/v3/integration/groups/POST-groups_groupId_leave.js
 +++ b/test/api/v3/integration/groups/POST-groups_groupId_leave.js
 @@ -10,8 +10,6 @@ import { v4 as generateUUID } from 'uuid';
@@ -68,33 +95,6 @@ index fd19052a1..3e7d251d7 100644
 -    });
 -  });
  });
-diff --git a/test/api/v3/unit/models/group.test.js b/test/api/v3/unit/models/group.test.js
-index 39cba779b..c6d4f1054 100644
---- a/test/api/v3/unit/models/group.test.js
-+++ b/test/api/v3/unit/models/group.test.js
-@@ -782,10 +782,13 @@ describe('Group Model', () => {
-       });
- 
-       it('deletes a private group when the last member leaves and a subscription is active', async () => {
--        party.memberCount = 1;
-         party.purchased.plan.customerId = '110002222333';
-+        await party.save();
- 
-         await party.leave(participatingMember);
-+        await party.leave(questLeader);
-+        await party.leave(nonParticipatingMember);
-+        await party.leave(undecidedMember);
- 
-         party = await Group.findOne({_id: party._id});
-         expect(party).to.not.exist;
-@@ -794,6 +797,7 @@ describe('Group Model', () => {
-       it('allows a leader to leave a group with an active subscription', async () => {
-         party.memberCount = 2;
-         party.purchased.plan.customerId = '110002222333';
-+        await party.save();
- 
-         await party.leave(questLeader);
- 
 diff --git a/website/server/models/group.js b/website/server/models/group.js
 index 4dd5f3104..3161f9ad9 100644
 --- a/website/server/models/group.js

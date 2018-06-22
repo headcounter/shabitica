@@ -10,7 +10,7 @@ Date:   Thu May 3 06:29:02 2018 +0200
     Filename: systemd-notify.patch
 
 diff --git a/package.json b/package.json
-index 14e708d63..a2c8778c7 100644
+index b715975ba..a7562a632 100644
 --- a/package.json
 +++ b/package.json
 @@ -69,6 +69,7 @@
