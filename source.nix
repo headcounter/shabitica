@@ -161,6 +161,9 @@ stdenv.mkDerivation rec {
 
     # Adds support systemd startup notifications.
     patches/systemd-notify.patch
+
+    # Allow to purchase gems using gold via the gem icon in the menu.
+    patches/buy-gems-via-menu.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

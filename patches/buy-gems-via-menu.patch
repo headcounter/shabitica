@@ -1,0 +1,51 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Sat Jun 23 14:25:29 2018 +0200
+
+    Allow to purchase gems using gold from menu
+    
+    The icon was already there so far but instead of getting to the
+    buyModal, it instead showed a modal to purchase gems for real money.
+    
+    All of our subscriptions are free so we instead reuse the same icon to
+    purchase gems using gold.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: buy-gems-via-menu.patch
+
+diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
+index 67f5631f9..138380147 100644
+--- a/website/client/components/header/menu.vue
++++ b/website/client/components/header/menu.vue
+@@ -58,7 +58,7 @@ div
+           .top-menu-icon.svg-icon(v-html="icons.hourglasses", v-b-tooltip.hover.bottom="$t('mysticHourglassesTooltip')")
+           span {{ userHourglasses }}
+         .item-with-icon
+-          .top-menu-icon.svg-icon.gem(v-html="icons.gem", @click='showBuyGemsModal("gems")', v-b-tooltip.hover.bottom="$t('gems')")
++          .top-menu-icon.svg-icon.gem(v-html="icons.gem", @click='showBuyGemsModal', v-b-tooltip.hover.bottom="$t('gems')")
+           span {{userGems}}
+         .item-with-icon.gold
+           .top-menu-icon.svg-icon(v-html="icons.gold", v-b-tooltip.hover.bottom="$t('gold')")
+@@ -343,6 +343,8 @@ import creatorIntro from '../creatorIntro';
+ import profile from '../userMenu/profile';
+ import userDropdown from './userDropdown';
+ 
++import getItemInfo from 'common/script/libs/getItemInfo';
++
+ export default {
+   components: {
+     userDropdown,
+@@ -400,11 +402,10 @@ export default {
+     openPartyModal () {
+       this.$root.$emit('bv::show::modal', 'create-party-modal');
+     },
+-    showBuyGemsModal (startingPage) {
+-      this.$store.state.gemModalOptions.startingPage = startingPage;
+-      this.$root.$emit('bv::show::modal', 'buy-gems', {alreadyTracked: true});
++    showBuyGemsModal () {
++      let gemItem = getItemInfo(this.user, 'gem');
++      this.$root.$emit('buyModal::showItem', gemItem);
+     },
+-
+   },
+ };
+ </script>
