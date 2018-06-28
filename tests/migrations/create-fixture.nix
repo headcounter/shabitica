@@ -34,7 +34,17 @@ in runInMachine {
 
     populate = ''
       import json
+      import socket
+      import struct
       from habitipy import Habitipy
+
+      def timewarp(secs):
+        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        sock.connect('/run/timewarp.sock')
+        sock.sendall(struct.pack('Q', secs))
+        if sock.recv(1) == bytes([0]):
+          raise Exception("Unable to forward time by {} seconds.".format(secs))
+        sock.close()
 
       first = Habitipy({
         'url': 'http://localhost',
@@ -96,5 +106,51 @@ in runInMachine {
     boot.postBootCommands = ''
       ${pkgs.coreutils}/bin/date -s '2018-01-01 12:00:00'
     '';
+
+    systemd.sockets.timewarp = {
+      description = "Time Warp Socket";
+      wantedBy = [ "sockets.target" ];
+      socketConfig.ListenStream = "/run/timewarp.sock";
+    };
+
+    systemd.services."timewarp" = {
+      description = "Time Warp Service";
+      serviceConfig.Type = "oneshot";
+      serviceConfig.ExecStart = let
+        script = pkgs.writeText "timewarp.py" ''
+          import socket
+          import struct
+          import subprocess
+          import sys
+          import time
+
+          sock = socket.fromfd(3, socket.AF_UNIX, socket.SOCK_STREAM)
+
+          def warp_by(secs):
+            previous = time.time()
+            cmd = ["date", "-s", "now + {} seconds".format(secs)]
+            subprocess.check_call(cmd, stdout=subprocess.DEVNULL)
+            now = time.time()
+            assert previous + secs <= now
+
+          try:
+            while True:
+              conn = sock.accept()[0]
+              reply = conn.recv(8)
+              secs = struct.unpack('Q', reply)[0]
+              sys.stderr.write("Warping time by {} seconds.".format(secs))
+              try:
+                warp_by(secs)
+                conn.send(bytes([1]))
+              except:
+                conn.send(bytes([0]))
+                raise
+              finally:
+                conn.close()
+          finally:
+            sock.close()
+        '';
+      in "${pkgs.python3.interpreter} ${script}";
+    };
   };
 }
