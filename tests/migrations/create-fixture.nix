@@ -92,5 +92,9 @@ in runInMachine {
     habitica.insecureDB = true;
     virtualisation.diskSize = 16384;
     virtualisation.memorySize = 1024;
+
+    boot.postBootCommands = ''
+      ${pkgs.coreutils}/bin/date -s '2018-01-01 12:00:00'
+    '';
   };
 }
