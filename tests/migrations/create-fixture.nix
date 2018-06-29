@@ -52,7 +52,7 @@ in runInMachine {
         'password': "",
       })
 
-      newuser = first.user.auth.local.register.post(
+      newuser_foo = first.user.auth.local.register.post(
         username='foo',
         email='foo@example.org',
         password='snakeoil',
@@ -61,9 +61,41 @@ in runInMachine {
 
       foo = Habitipy({
         'url': 'http://localhost',
-        'login': newuser['id'],
-        'password': newuser['apiToken'],
+        'login': newuser_foo['id'],
+        'password': newuser_foo['apiToken'],
       })
+
+      newuser_bar = first.user.auth.local.register.post(
+        username='bar',
+        email='bar@example.org',
+        password='snakeoil',
+        confirmPassword='snakeoil',
+      )
+
+      bar = Habitipy({
+        'url': 'http://localhost',
+        'login': newuser_bar['id'],
+        'password': newuser_bar['apiToken'],
+      })
+
+      reply = foo.tasks.user.post(
+        type='habit',
+        text='Test Habit',
+        priority=2,
+        up=True,
+        down=True,
+      )
+
+      habit_id = reply['id']
+
+      foo.tasks[habit_id].score['up'].post()
+      foo.tasks[habit_id].score['up'].post()
+      foo.tasks[habit_id].score['up'].post()
+      foo.tasks[habit_id].score['down'].post()
+
+      timewarp(86400)
+
+      foo.tasks[habit_id].score['up'].post()
 
       reply = foo.groups.post(
         name='Testparty',
@@ -78,13 +110,53 @@ in runInMachine {
         previousMsg="",
       )
 
+      reply = foo.challenges.post(
+        group=party_id,
+        name="Test a Challenge",
+        shortName="testchallenge",
+      )
+
+      challenge_id = reply['id']
+
+      reply = foo.tasks.challenge[challenge_id].post(
+        type='habit',
+        text='Test Challenge Habit',
+        priority=2,
+        up=True,
+        down=True,
+      )
+
+      challenge_habit_id = reply['id']
+
+      foo.groups[party_id].invite.post(uuids=[newuser_bar['id']])
+
+      bar.groups[party_id].join.post()
+
+      bar.challenges[challenge_id].join.post()
+
+      challenge_bar_habit_id = bar.tasks.user.get(type='habits')[0]['id']
+
+      bar.tasks[challenge_bar_habit_id].score['down'].post()
+
+      timewarp(86100)
+
+      bar.tasks[challenge_bar_habit_id].score['up'].post()
+
       with open('spec.json', 'w') as fp:
         json.dump({
           'foo': {
-            'apiUser': newuser['id'],
-            'apiToken': newuser['apiToken'],
+            'apiUser': newuser_foo['id'],
+            'apiToken': newuser_foo['apiToken'],
             'partyId': party_id,
+            'habitId': habit_id,
+            'challengeId': challenge_id,
+            'challengeHabitId': challenge_habit_id,
           },
+          'bar': {
+            'apiUser': newuser_bar['id'],
+            'apiToken': newuser_bar['apiToken'],
+            'challengeUserHabitId': challenge_bar_habit_id,
+          }
         }, fp)
     '';
 
@@ -100,6 +172,7 @@ in runInMachine {
     imports = [ habitica ];
     networking.firewall.enable = false;
     habitica.insecureDB = true;
+    habitica.config.INVITE_ONLY = 0;
     virtualisation.diskSize = 16384;
     virtualisation.memorySize = 1024;
 
