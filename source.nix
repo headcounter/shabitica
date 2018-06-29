@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.49.1";
+  version = "4.50.3";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0m2bcrl01w3hzbnz18wpk6y2bdr2gh1kqinnyx8g8vcdjmnjd6v1";
+    sha256 = "0sa5y363vpvsxndd0pkkzvmaj5wydafl8bm89dhlxy7z24c4dbds";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -168,6 +168,10 @@ stdenv.mkDerivation rec {
     # The connection string of these migrations is hardcoded, so let's re-use
     # the info from Mongoose.
     patches/fix-connection-info-for-task-history-migration.patch
+
+    # Don't handle anything from Spritely specially (which also removes all
+    # references to Spritely, see the canary below).
+    patches/remove-spritely.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -282,6 +286,7 @@ stdenv.mkDerivation rec {
     "showbailey"
     "slack"
     "social"
+    "spritely"
     "stripe[^d]"
     "transifex"
     "trello"

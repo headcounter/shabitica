@@ -2211,7 +2211,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 2c747c5f5..e1dc614e3 100644
+index 462f661a7..60437b8d6 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,7 +10,6 @@ div
@@ -5501,7 +5501,7 @@ index f18644306..dcae6acda 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index cb1960893..cbe5bbf58 100644
+index 9f8d3c2fa..b296e9fec 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5596,15 +5596,15 @@ index cb1960893..cbe5bbf58 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -591,7 +521,6 @@ api.joinGroup = {
-     if (group.memberCount === 0) group.leader = user._id; // If new user is only member -> set as leader
+@@ -592,7 +522,6 @@ api.joinGroup = {
+     if (!group.hasNotCancelled() && group.memberCount === 0) group.leader = user._id; // If new user is only member -> set as leader
  
      if (group.hasNotCancelled())  {
 -      await payments.addSubToGroupUser(user, group);
        await group.updateGroupPlan();
      }
  
-@@ -644,22 +573,6 @@ api.joinGroup = {
+@@ -645,22 +574,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -5627,7 +5627,7 @@ index cb1960893..cbe5bbf58 100644
      res.respond(200, response);
    },
  };
-@@ -790,7 +703,7 @@ api.leaveGroup = {
+@@ -791,7 +704,7 @@ api.leaveGroup = {
      }
  
      await group.leave(user, req.query.keep, req.body.keepChallenges);
@@ -5636,7 +5636,7 @@ index cb1960893..cbe5bbf58 100644
      _removeMessagesFromMember(user, group._id);
      await user.save();
  
-@@ -799,11 +712,6 @@ api.leaveGroup = {
+@@ -800,11 +713,6 @@ api.leaveGroup = {
        user.guilds.splice(guildIndex, 1);
      }
  
@@ -5648,7 +5648,7 @@ index cb1960893..cbe5bbf58 100644
      res.respond(200, {});
    },
  };
-@@ -893,8 +801,7 @@ api.removeGroupMember = {
+@@ -894,8 +802,7 @@ api.removeGroupMember = {
      if (isInGroup) {
        group.memberCount -= 1;
        if (group.hasNotCancelled())  {
@@ -5658,7 +5658,7 @@ index cb1960893..cbe5bbf58 100644
        }
  
        if (group.quest && group.quest.leader === member._id) {
-@@ -910,12 +817,6 @@ api.removeGroupMember = {
+@@ -911,12 +818,6 @@ api.removeGroupMember = {
          removeFromArray(member.guilds, group._id);
        }
        if (isInGroup === 'party') {
@@ -5671,7 +5671,7 @@ index cb1960893..cbe5bbf58 100644
          member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
        }
  
-@@ -1016,19 +917,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -1017,19 +918,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -5691,7 +5691,7 @@ index cb1960893..cbe5bbf58 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1044,8 +932,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1045,8 +933,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},

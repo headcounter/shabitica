@@ -161,7 +161,7 @@ index fcae0a65f..e4d6e7ef5 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index cbe5bbf58..39acf4f02 100644
+index b296e9fec..445cc8fa9 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,7 +22,7 @@ import common from '../../../common';

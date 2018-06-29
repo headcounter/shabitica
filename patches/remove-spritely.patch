@@ -1,0 +1,47 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Fri Jun 29 23:09:04 2018 +0200
+
+    Remove login path for Spritely
+    
+    This reverts commit 81ffcf9c1b623a56200d4678aeefa034c9676d7b.
+    
+    I don't know what Spritely is all about, but even if it's just for
+    handling incoming requests, let's remove it for now along with a canary
+    to make sure this doesn't spread in future updates.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: remove-spritely.patch
+
+diff --git a/website/client/components/settings/api.vue b/website/client/components/settings/api.vue
+index d16102431..d9abca8c0 100644
+--- a/website/client/components/settings/api.vue
++++ b/website/client/components/settings/api.vue
+@@ -85,12 +85,6 @@ export default {
+       showApiToken: false,
+     };
+   },
+-  mounted () {
+-    window.addEventListener('message', this.receiveMessage, false);
+-  },
+-  destroy () {
+-    window.removeEventListener('message', this.receiveMessage);
+-  },
+   computed: {
+     ...mapState({user: 'user.data', credentials: 'credentials'}),
+     apiToken () {
+@@ -98,15 +92,6 @@ export default {
+     },
+   },
+   methods: {
+-    receiveMessage (eventFrom) {
+-      if (event.origin !== 'https://www.spritely.app') return;
+-
+-      const creds = {
+-        userId: this.user._id,
+-        apiToken: this.credentials.API_TOKEN,
+-      };
+-      eventFrom.source.postMessage(creds, event.origin);
+-    },
+     async addWebhook (url) {
+       let webhookInfo = {
+         id: uuid(),
