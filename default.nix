@@ -284,7 +284,10 @@ in {
         description = "Apply Habitica Database Updates";
         requiredBy = [ "habitica.service" ];
         wantedBy = [ "multi-user.target" ];
-        after = [ "habitica-db.service" "habitica-init.service" ];
+        after = [
+          "habitica-db-backup.service" "habitica-db.service"
+          "habitica-init.service"
+        ];
         before = [ "habitica.service" ];
 
         path = lib.singleton (pkgs.writeScriptBin "query-db-version" ''
