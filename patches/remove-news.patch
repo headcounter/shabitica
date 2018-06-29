@@ -68,7 +68,7 @@ index c7aa8772d..c852b2b95 100644
          'QUEST_INVITATION', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
          'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
 diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
-index 58ceff56a..a5e0a2e56 100644
+index 04540cae9..6b46012a1 100644
 --- a/website/client/components/notifications.vue
 +++ b/website/client/components/notifications.vue
 @@ -95,7 +95,6 @@ import guide from 'client/mixins/guide';
@@ -99,7 +99,7 @@ index 58ceff56a..a5e0a2e56 100644
  
        let notificationsToRead = [];
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index dd94e00d4..551af932f 100644
+index 8a0a7ccb5..53f0a392f 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -76,7 +76,6 @@
@@ -173,20 +173,20 @@ index ca7c202d9..0e7ccb5bf 100644
          { name: 'privacy', path: 'privacy', component: PrivacyPage, meta: {requiresLogin: false}},
          { name: 'terms', path: 'terms', component: TermsPage, meta: {requiresLogin: false}},
 diff --git a/website/client/store/actions/user.js b/website/client/store/actions/user.js
-index f8b74cadc..f50f39c5b 100644
+index d87fd8862..640f45648 100644
 --- a/website/client/store/actions/user.js
 +++ b/website/client/store/actions/user.js
 @@ -131,11 +131,6 @@ export function openMysteryItem () {
-   return axios.post('/api/v3/user/open-mystery-item');
+   return axios.post('/api/v4/user/open-mystery-item');
  }
  
 -export function newStuffLater (store) {
 -  store.state.user.data.flags.newStuff = false;
--  return axios.post('/api/v3/news/tell-me-later');
+-  return axios.post('/api/v4/news/tell-me-later');
 -}
 -
  export async function rebirth () {
-   let result = await axios.post('/api/v3/user/rebirth');
+   let result = await axios.post('/api/v4/user/rebirth');
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
 index 7ea6082d3..12308979e 100644
@@ -201,7 +201,7 @@ index 7ea6082d3..12308979e 100644
    'achievements',
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index ea540d6df..fae0b2647 100644
+index d985e58f6..18e714fb0 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -196,7 +196,6 @@ let schema = new Schema({

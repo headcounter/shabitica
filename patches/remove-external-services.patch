@@ -2153,10 +2153,10 @@ index 900011daa..7cddc485c 100644
  
      it('purchases hatchingPotions', () => {
 diff --git a/webpack/config/index.js b/webpack/config/index.js
-index ff54852be..c57519537 100644
+index 463e6f302..deadd58b0 100644
 --- a/webpack/config/index.js
 +++ b/webpack/config/index.js
-@@ -46,18 +46,6 @@ module.exports = {
+@@ -50,18 +50,6 @@ module.exports = {
          target: DEV_BASE_URL,
          changeOrigin: true,
        },
@@ -2211,7 +2211,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index fab697541..b1285bb0a 100644
+index 2c747c5f5..e1dc614e3 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,7 +10,6 @@ div
@@ -2520,7 +2520,7 @@ index de65914ea..ab38d5546 100644
      close () {
        this.$root.$emit('bv::hide::modal', 'won-challenge');
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index 8d9db98af..ed3a8ad87 100644
+index e101c5457..be87ab840 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -4,11 +4,6 @@
@@ -2650,7 +2650,7 @@ index 8d9db98af..ed3a8ad87 100644
      },
    },
 diff --git a/website/client/components/auth/registerLoginReset.vue b/website/client/components/auth/registerLoginReset.vue
-index 1016bf07c..bbb9af252 100644
+index c0385221e..8d15c31f2 100644
 --- a/website/client/components/auth/registerLoginReset.vue
 +++ b/website/client/components/auth/registerLoginReset.vue
 @@ -13,15 +13,6 @@
@@ -3232,7 +3232,7 @@ index 7e72975a0..31df3f29c 100644
      },
  
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
-index 6d60e71e0..c3be63f96 100644
+index 788197c37..ec24b1933 100644
 --- a/website/client/components/header/userDropdown.vue
 +++ b/website/client/components/header/userDropdown.vue
 @@ -67,7 +67,6 @@ menu-dropdown.item-user(:right="true")
@@ -3259,7 +3259,7 @@ index 6d60e71e0..c3be63f96 100644
      },
      logout () {
 diff --git a/website/client/components/settings/deleteModal.vue b/website/client/components/settings/deleteModal.vue
-index 24a9d6fac..248ebadc9 100644
+index e52e4989f..8993ecab2 100644
 --- a/website/client/components/settings/deleteModal.vue
 +++ b/website/client/components/settings/deleteModal.vue
 @@ -15,17 +15,6 @@
@@ -3318,7 +3318,7 @@ index b92f6de0e..fc0b22c24 100644
  </template>
  
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index dfd25f4f6..dd94e00d4 100644
+index 66b7efe19..8a0a7ccb5 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -109,12 +109,6 @@
@@ -3400,7 +3400,7 @@ index dfd25f4f6..dd94e00d4 100644
        this.$root.$emit('bv::show::modal', 'delete');
      },
 -    async deleteSocialAuth (network) {
--      await axios.delete(`/api/v3/user/auth/social/${network.key}`);
+-      await axios.delete(`/api/v4/user/auth/social/${network.key}`);
 -      this.text(this.$t('detachedSocial', {network: network.name}));
 -    },
 -    async socialAuth (network) {
@@ -3416,7 +3416,7 @@ index dfd25f4f6..dd94e00d4 100644
        if (confirmationNeeded && !confirm(this.$t('changeClassConfirmCost'))) return;
        try {
 diff --git a/website/client/components/settings/subscription.vue b/website/client/components/settings/subscription.vue
-index e086f99f5..501203d6a 100644
+index c71ef673d..aa0512292 100644
 --- a/website/client/components/settings/subscription.vue
 +++ b/website/client/components/settings/subscription.vue
 @@ -36,9 +36,6 @@
@@ -3511,13 +3511,13 @@ index e086f99f5..501203d6a 100644
 -      });
 -    },
      async applyCoupon (coupon) {
--      const response = await axios.post(`/api/v3/coupons/validate/${coupon}`);
+-      const response = await axios.post(`/api/v4/coupons/validate/${coupon}`);
 -
 -      if (!response.data.data.valid) return;
 -
 -      this.text('Coupon applied!');
 -      this.subscription.key = 'google_6mo';
-+      await axios.post(`/api/v3/coupons/validate/${coupon}`);
++      await axios.post(`/api/v4/coupons/validate/${coupon}`);
      },
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
@@ -3824,7 +3824,7 @@ index 34ff15ca5..e5dd03e02 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index a0b20754b..b208c13ad 100644
+index cc63b911c..d6877ca53 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
 @@ -500,7 +500,6 @@ import moment from 'moment';
@@ -3840,11 +3840,11 @@ index a0b20754b..b208c13ad 100644
        if (task.group.approval.required) task.group.approval.requested = true;
  
 -      Analytics.updateUser();
-       const response = await axios.post(`/api/v3/tasks/${task._id}/score/${direction}`);
+       const response = await axios.post(`/api/v4/tasks/${task._id}/score/${direction}`);
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
        const crit = tmp.crit;
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 0d6aa3b1c..bfb40a095 100644
+index aa35641b5..8a0b02a73 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -75,14 +75,12 @@ div
@@ -3895,7 +3895,7 @@ index 0d6aa3b1c..bfb40a095 100644
      profileStats,
    },
 diff --git a/website/client/index.html b/website/client/index.html
-index f4fc23215..9271fce67 100644
+index 3ce5bf4e4..a1c28b030 100644
 --- a/website/client/index.html
 +++ b/website/client/index.html
 @@ -6,7 +6,7 @@
@@ -3913,7 +3913,7 @@ index f4fc23215..9271fce67 100644
  
 -    <script type="text/javascript" src="//cloudfront.loggly.com/js/loggly.tracker-latest.min.js" async></script>
      <!-- Translations -->
-     <script type='text/javascript' src='/api/v3/i18n/browser-script'></script>
+     <script type='text/javascript' src='/api/v4/i18n/browser-script'></script>
    </body>
 diff --git a/website/client/main.js b/website/client/main.js
 index 7e86bb5d3..5180aded1 100644
@@ -4031,7 +4031,7 @@ index 05c41e65c..b06fe97a4 100644
  });
  
 diff --git a/website/client/store/actions/auth.js b/website/client/store/actions/auth.js
-index 5bbc2c9f5..176e9b934 100644
+index d5f8ebb61..423fa99a3 100644
 --- a/website/client/store/actions/auth.js
 +++ b/website/client/store/actions/auth.js
 @@ -1,7 +1,6 @@
@@ -4041,13 +4041,13 @@ index 5bbc2c9f5..176e9b934 100644
 -const LOCALSTORAGE_SOCIAL_AUTH_KEY = 'hello'; // Used by hello.js for social auth
  
  export async function register (store, params) {
-   let url = '/api/v3/user/auth/local/register';
+   let url = '/api/v4/user/auth/local/register';
 @@ -46,27 +45,7 @@ export async function login (store, params) {
    localStorage.setItem(LOCALSTORAGE_AUTH_KEY, userLocalData);
  }
  
 -export async function socialAuth (store, params) {
--  let url = '/api/v3/user/auth/social';
+-  let url = '/api/v4/user/auth/social';
 -  let result = await axios.post(url, {
 -    network: params.auth.network,
 -    authResponse: params.auth.authResponse,
@@ -4071,7 +4071,7 @@ index 5bbc2c9f5..176e9b934 100644
    window.location.href = '/logout';
  }
 diff --git a/website/client/store/actions/chat.js b/website/client/store/actions/chat.js
-index 5bb584093..6bfdc6402 100644
+index def822e6a..ecdd7573a 100644
 --- a/website/client/store/actions/chat.js
 +++ b/website/client/store/actions/chat.js
 @@ -1,5 +1,4 @@
@@ -4079,7 +4079,7 @@ index 5bb584093..6bfdc6402 100644
 -import * as Analytics from 'client/libs/analytics';
  
  export async function getChat (store, payload) {
-   let response = await axios.get(`/api/v3/groups/${payload.groupId}/chat`);
+   let response = await axios.get(`/api/v4/groups/${payload.groupId}/chat`);
 @@ -16,32 +15,6 @@ export async function postChat (store, payload) {
      url += `?previousMsg=${payload.previousMsg}`;
    }
@@ -4114,7 +4114,7 @@ index 5bb584093..6bfdc6402 100644
      message: payload.message,
    });
 diff --git a/website/client/store/actions/guilds.js b/website/client/store/actions/guilds.js
-index 564030e55..7bb5e1645 100644
+index 3f2599850..1507bd288 100644
 --- a/website/client/store/actions/guilds.js
 +++ b/website/client/store/actions/guilds.js
 @@ -1,7 +1,6 @@
@@ -4135,7 +4135,7 @@ index 564030e55..7bb5e1645 100644
  
    return response.data.data;
 diff --git a/website/client/store/actions/quests.js b/website/client/store/actions/quests.js
-index ff13c36ab..a9cdfbb2c 100644
+index ddd88cc30..ef7fd0dd5 100644
 --- a/website/client/store/actions/quests.js
 +++ b/website/client/store/actions/quests.js
 @@ -1,25 +1,9 @@
@@ -4161,7 +4161,7 @@ index ff13c36ab..a9cdfbb2c 100644
 -
 -  Analytics.updateUser(partyData);
 -
-   let response = await axios.post(`/api/v3/groups/${payload.groupId}/${payload.action}`);
+   let response = await axios.post(`/api/v4/groups/${payload.groupId}/${payload.action}`);
  
    // @TODO: Update user?
 diff --git a/website/client/store/index.js b/website/client/store/index.js
@@ -4971,10 +4971,10 @@ index b8ddb0b63..67eb51776 100644
      user.items,
      message,
 diff --git a/website/common/script/ops/scoreTask.js b/website/common/script/ops/scoreTask.js
-index 78e5e3945..28f554c48 100644
+index 58e594754..5ab557a57 100644
 --- a/website/common/script/ops/scoreTask.js
 +++ b/website/common/script/ops/scoreTask.js
-@@ -295,6 +295,6 @@ module.exports = function scoreTask (options = {}, req = {}) {
+@@ -327,6 +327,6 @@ module.exports = function scoreTask (options = {}, req = {}) {
      }
    }
  
@@ -5501,7 +5501,7 @@ index f18644306..dcae6acda 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index b5f4ab5d8..15cf520d0 100644
+index cb1960893..cbe5bbf58 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5867,7 +5867,7 @@ index b579cc386..6ed16d973 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index dd12bc70c..16702e308 100644
+index 5cdb4618b..3b50637f3 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -22,7 +22,6 @@ import {
@@ -5877,8 +5877,8 @@ index dd12bc70c..16702e308 100644
 -import moment from 'moment';
  import apiError from '../../libs/apiError';
  
- const MAX_SCORE_NOTES_LENGTH = 256;
-@@ -169,16 +168,6 @@ api.createUserTasks = {
+ function canNotEditTasks (group, user, assignedUserId) {
+@@ -167,16 +166,6 @@ api.createUserTasks = {
      res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
  
      tasks.forEach((task) => {
@@ -5895,7 +5895,7 @@ index dd12bc70c..16702e308 100644
        taskActivityWebhook.send(user, {
          type: 'created',
          task,
-@@ -256,16 +245,6 @@ api.createChallengeTasks = {
+@@ -254,16 +243,6 @@ api.createChallengeTasks = {
  
      // If adding tasks to a challenge -> sync users
      if (challenge) challenge.addTasks(tasks);
@@ -5912,7 +5912,7 @@ index dd12bc70c..16702e308 100644
    },
  };
  
-@@ -621,7 +600,7 @@ api.scoreTask = {
+@@ -614,7 +593,7 @@ api.scoreTask = {
  
      let [delta] = common.ops.scoreTask({task, user, direction}, req);
      // Drop system (don't run on the client, as it would only be discarded since ops are sent to the API, not the results)
@@ -5921,7 +5921,7 @@ index dd12bc70c..16702e308 100644
  
      // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
      // TODO move to common code?
-@@ -690,17 +669,6 @@ api.scoreTask = {
+@@ -683,17 +662,6 @@ api.scoreTask = {
          logger.error(e);
        }
      }
@@ -7034,7 +7034,7 @@ index 0ca9d43a1..9226da287 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index c459d9d79..034b79d39 100644
+index 81d7386d5..588049197 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -25,12 +25,6 @@ let schema = new Schema({

@@ -13,7 +13,7 @@ Date:   Tue Mar 27 05:37:21 2018 +0200
     Filename: kill-footer.patch
 
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index ed3a8ad87..d27944768 100644
+index be87ab840..f7d16fe8b 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -2,101 +2,6 @@

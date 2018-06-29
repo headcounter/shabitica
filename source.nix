@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.48.0";
+  version = "4.49.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1ilac5a5hgldqz82qqmk7y0di8kx7qm7wg2snwxpa1vbbvnyc1w8";
+    sha256 = "0m2bcrl01w3hzbnz18wpk6y2bdr2gh1kqinnyx8g8vcdjmnjd6v1";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -164,6 +164,10 @@ stdenv.mkDerivation rec {
 
     # Allow to purchase gems using gold via the gem icon in the menu.
     patches/buy-gems-via-menu.patch
+
+    # The connection string of these migrations is hardcoded, so let's re-use
+    # the info from Mongoose.
+    patches/fix-connection-info-for-task-history-migration.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

@@ -97,7 +97,9 @@ in rec {
   migrator = mkCommonBuild {
     name = "migrator";
 
-    inherit (server) runtimeNodePath;
+    runtimeNodePath = let
+      monk = "${nodePackages.dev.monk}/lib/node_modules";
+    in "${server.runtimeNodePath}:${monk}";
 
     nativeBuildInputs = [ makeWrapper ];
 

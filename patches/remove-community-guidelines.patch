@@ -11,7 +11,7 @@ Date:   Fri Mar 30 20:29:49 2018 +0200
     Filename: remove-community-guidelines.patch
 
 diff --git a/website/client/components/chat/chatCard.vue b/website/client/components/chat/chatCard.vue
-index be680634c..1bb17be30 100644
+index a8fb59360..9eaa192a1 100644
 --- a/website/client/components/chat/chatCard.vue
 +++ b/website/client/components/chat/chatCard.vue
 @@ -21,10 +21,9 @@ div
@@ -90,7 +90,7 @@ index 08bb0a384..d38eca6d3 100644
              router-link(to="/groups/guild/f2db2a7f-13c5-454d-b3ee-ea1f5089e601") {{ $t('lookingForGroup') }}
            li
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index bfb40a095..4ce444ce0 100644
+index 8a0b02a73..389ae1b33 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -79,8 +79,6 @@ div
@@ -135,7 +135,7 @@ index 41e08100a..f8d54ac72 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 80ff241cd..dbd36e00f 100644
+index ebd367be7..af4213bf8 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -216,7 +216,6 @@ let schema = new Schema({
