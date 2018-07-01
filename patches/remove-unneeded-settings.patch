@@ -41,7 +41,7 @@ index 68366e110..9f8b08f3f 100644
  
    .col-12
 diff --git a/website/client/router.js b/website/client/router.js
-index 3bae954e9..ca7c202d9 100644
+index f1482a7a6..de14d60c0 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -32,9 +32,7 @@ const Settings = () => import(/* webpackChunkName: "settings" */'./components/se

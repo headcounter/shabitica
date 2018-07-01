@@ -87,7 +87,7 @@ index 68d62bd34..d240ae6ac 100644
          router-link.nav-item(tag='li', to='/register')
            a.nav-link(v-once) {{ $t('getStarted') }}
 diff --git a/website/client/router.js b/website/client/router.js
-index db2d38cb6..ea2ed6c92 100644
+index 9bf78fd8d..00ab432f5 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -14,7 +14,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'./components/stati

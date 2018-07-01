@@ -503,7 +503,7 @@ index 84ed4a636..2dd48922c 100644
      },
    },
 diff --git a/website/client/router.js b/website/client/router.js
-index b06fe97a4..db2d38cb6 100644
+index f50429548..9bf78fd8d 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -72,7 +72,6 @@ const GroupPlansAppPage = () => import(/* webpackChunkName: "guilds" */ './compo

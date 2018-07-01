@@ -112,7 +112,7 @@ index d240ae6ac..1c4fc0b98 100644
  </style>
  
 diff --git a/website/client/router.js b/website/client/router.js
-index c5f8fab3c..3bae954e9 100644
+index b4131b4ab..f1482a7a6 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -15,11 +15,8 @@ const AppPage = () => import(/* webpackChunkName: "static" */'./components/stati

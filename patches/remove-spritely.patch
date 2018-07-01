@@ -13,7 +13,7 @@ Date:   Fri Jun 29 23:09:04 2018 +0200
     Filename: remove-spritely.patch
 
 diff --git a/website/client/components/settings/api.vue b/website/client/components/settings/api.vue
-index d16102431..d9abca8c0 100644
+index 5b6627da1..d9abca8c0 100644
 --- a/website/client/components/settings/api.vue
 +++ b/website/client/components/settings/api.vue
 @@ -85,12 +85,6 @@ export default {
@@ -34,13 +34,13 @@ index d16102431..d9abca8c0 100644
    },
    methods: {
 -    receiveMessage (eventFrom) {
--      if (event.origin !== 'https://www.spritely.app') return;
+-      if (eventFrom.origin !== 'https://www.spritely.app') return;
 -
 -      const creds = {
 -        userId: this.user._id,
 -        apiToken: this.credentials.API_TOKEN,
 -      };
--      eventFrom.source.postMessage(creds, event.origin);
+-      eventFrom.source.postMessage(creds, eventFrom.origin);
 -    },
      async addWebhook (url) {
        let webhookInfo = {

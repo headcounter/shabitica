@@ -103,7 +103,7 @@ index 8a0b02a73..389ae1b33 100644
              label {{ $t('displayName') }}
              input.form-control(type='text', :placeholder="$t('fullName')", v-model='editingProfile.name')
 diff --git a/website/client/router.js b/website/client/router.js
-index ea2ed6c92..c5f8fab3c 100644
+index 00ab432f5..b4131b4ab 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -13,7 +13,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'./components/stati

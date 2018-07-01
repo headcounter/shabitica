@@ -4002,7 +4002,7 @@ index 0d5029fb7..f2e502586 100644
      },
    },
 diff --git a/website/client/router.js b/website/client/router.js
-index 05c41e65c..b06fe97a4 100644
+index bd74858d2..f50429548 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -1,7 +1,6 @@

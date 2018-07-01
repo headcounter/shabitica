@@ -153,7 +153,7 @@ index e5dd03e02..a878ec5b7 100644
        if (this.$route.name === 'plans') return;
        return 'purple-footer';
 diff --git a/website/client/router.js b/website/client/router.js
-index ca7c202d9..0e7ccb5bf 100644
+index de14d60c0..cff3c2145 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -15,7 +15,6 @@ const AppPage = () => import(/* webpackChunkName: "static" */'./components/stati
