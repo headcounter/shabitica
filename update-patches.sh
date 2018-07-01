@@ -13,7 +13,7 @@ fi
 if [ -n "$1" ]; then
   baseRev="$1"
 else
-  baseRev="$(git describe --abbrev=0)"
+  baseRev="$(git describe --abbrev=0 --tags)"
 fi
 
 for rev in $(git rev-list "$baseRev...HEAD"); do
