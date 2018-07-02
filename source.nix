@@ -181,9 +181,7 @@ stdenv.mkDerivation rec {
 
   # Kill off files we do not want to have, most of them because they redirect
   # to external services:
-  prePatch = lib.concatMapStrings (path: ''
-    rm -r ${lib.escapeShellArg path}
-  '') [
+  filesToKill = [
     "scripts/paypalBillingSetup.js"
     "test/api/unit/libs/analyticsService.test.js"
     "test/api/unit/libs/payments/amazon"
@@ -251,6 +249,10 @@ stdenv.mkDerivation rec {
     "website/static/merch"
     "website/static/presskit"
   ];
+
+  prePatch = lib.concatMapStrings (path: ''
+    rm -r ${lib.escapeShellArg path}
+  '') filesToKill;
 
   # We don't want to have anything in the code referencing any of these
   # words/regexes:
