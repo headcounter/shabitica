@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.50.4";
+  version = "4.51.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1fciyjdmaiqjrbwxlww7qgxnq2jzcxhqpqbcpgxjgl735lwq7nch";
+    sha256 = "0fkaljwf5pb90mf4l4v1qys6zzcnar36zxv64a324zvbfwjlyk2h";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -172,9 +172,6 @@ stdenv.mkDerivation rec {
     # Don't handle anything from Spritely specially (which also removes all
     # references to Spritely, see the canary below).
     patches/remove-spritely.patch
-
-    # Fix version in package{-lock}.json for version 4.50.4.
-    patches/fix-version.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -339,7 +336,7 @@ stdenv.mkDerivation rec {
     mkExclude = path: "-path ${lib.escapeShellArg "./${path}"} -prune";
   in lib.concatMapStringsSep " -o " mkExclude [
     ".github"
-    "Dockerfile-Production"
+    "Dockerfile"
     "database_reports"
     "gulp"
     "migrations"
