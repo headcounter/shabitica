@@ -2116,7 +2116,7 @@ index d1631fb27..ceb0cb7d2 100644
  
      it('buys a mount', () => {
 diff --git a/test/common/ops/buy/purchase.js b/test/common/ops/buy/purchase.js
-index 900011daa..7cddc485c 100644
+index fd1ab65b4..055a92598 100644
 --- a/test/common/ops/buy/purchase.js
 +++ b/test/common/ops/buy/purchase.js
 @@ -16,19 +16,16 @@ describe('shared.ops.purchase', () => {
@@ -2139,7 +2139,7 @@ index 900011daa..7cddc485c 100644
      pinnedGearUtils.removeItemByPath.restore();
    });
  
-@@ -130,11 +127,10 @@ describe('shared.ops.purchase', () => {
+@@ -129,11 +126,10 @@ describe('shared.ops.purchase', () => {
        let type = 'eggs';
        let key = 'Wolf';
  
@@ -2461,33 +2461,6 @@ index 0f815deec..cd47be7a0 100644
      };
    },
    mounted () {
-diff --git a/website/client/components/achievements/lowHealth.vue b/website/client/components/achievements/lowHealth.vue
-index 7e9798ecd..ccc293868 100644
---- a/website/client/components/achievements/lowHealth.vue
-+++ b/website/client/components/achievements/lowHealth.vue
-@@ -58,7 +58,6 @@
- <script>
- import Avatar from '../avatar';
- import { mapState } from 'client/libs/store';
--import * as Analytics from 'client/libs/analytics';
- import percent from '../../../common/script/libs/percent';
- import {maxHealth} from '../../../common/script/index';
- 
-@@ -82,14 +81,6 @@ export default {
-       return `${Math.ceil(this.user.stats.hp)} / ${this.maxHealth}`;
-     },
-   },
--  mounted () {
--    Analytics.track({
--      hitType: 'event',
--      eventCategory: 'button',
--      eventAction: 'click',
--      eventLabel: 'Health Warning',
--    });
--  },
-   methods: {
-     close () {
-       this.$root.$emit('bv::hide::modal', 'low-health');
 diff --git a/website/client/components/achievements/wonChallenge.vue b/website/client/components/achievements/wonChallenge.vue
 index de65914ea..ab38d5546 100644
 --- a/website/client/components/achievements/wonChallenge.vue
@@ -2817,7 +2790,7 @@ index f9b886d54..5f2f449af 100644
    data () {
      return {
 diff --git a/website/client/components/groups/createPartyModal.vue b/website/client/components/groups/createPartyModal.vue
-index 74beb78f0..e81c274b2 100644
+index 081e8d3ed..e81c274b2 100644
 --- a/website/client/components/groups/createPartyModal.vue
 +++ b/website/client/components/groups/createPartyModal.vue
 @@ -28,12 +28,6 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
@@ -2868,20 +2841,7 @@ index 74beb78f0..e81c274b2 100644
        }),
        shareUserIdShown: false,
      };
-@@ -164,12 +148,6 @@ export default {
-   },
-   methods: {
-     shareUserId () {
--      Analytics.track({
--        hitType: 'event',
--        eventCategory: 'button',
--        eventAction: 'click',
--        eventLabel: 'Health Warning',
--      });
-       this.shareUserIdShown = !this.shareUserIdShown;
-     },
-     async createParty () {
-@@ -181,11 +159,6 @@ export default {
+@@ -175,11 +159,6 @@ export default {
        this.$store.state.party.data = party;
        this.user.party._id = party._id;
  
@@ -2941,24 +2901,6 @@ index 018b93e06..d85d715bf 100644
        let hasQuests = find(this.user.items.quests, (quest) => {
          return quest > 0;
        });
-diff --git a/website/client/components/groups/groupFormModal.vue b/website/client/components/groups/groupFormModal.vue
-index 39d495542..2718f32e3 100644
---- a/website/client/components/groups/groupFormModal.vue
-+++ b/website/client/components/groups/groupFormModal.vue
-@@ -365,13 +365,6 @@ export default {
-         alert(this.$t('notEnoughGems'));
-         return;
-         // @TODO return $rootScope.openModal('buyGems', {track:"Gems > Gems > Create Group"});
--        // @TODO when modal is implemented, enable analytics
--        /* Analytics.track({
--          hitType: 'event',
--          eventCategory: 'button',
--          eventAction: 'click',
--          eventLabel: 'Health Warning',
--        }); */
-       }
- 
-       let errors = [];
 diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
 index 848f14dd0..84ed4a636 100644
 --- a/website/client/components/groups/groupPlan.vue
@@ -3070,33 +3012,6 @@ index 848f14dd0..84ed4a636 100644
      },
    },
  };
-diff --git a/website/client/components/groups/inviteModal.vue b/website/client/components/groups/inviteModal.vue
-index 8638ebf1b..8d8869f00 100644
---- a/website/client/components/groups/inviteModal.vue
-+++ b/website/client/components/groups/inviteModal.vue
-@@ -54,7 +54,6 @@ import { mapState } from 'client/libs/store';
- import filter from 'lodash/filter';
- import map from 'lodash/map';
- import notifications from 'client/mixins/notifications';
--import * as Analytics from 'client/libs/analytics';
- 
- export default {
-   mixins: [notifications],
-@@ -65,14 +64,6 @@ export default {
-       emails: [],
-     };
-   },
--  mounted () {
--    Analytics.track({
--      hitType: 'event',
--      eventCategory: 'button',
--      eventAction: 'click',
--      eventLabel: 'Invite Friends',
--    });
--  },
-   computed: {
-     ...mapState({user: 'user.data'}),
-     inviter () {
 diff --git a/website/client/components/groups/questDetailsModal.vue b/website/client/components/groups/questDetailsModal.vue
 index e02522102..4173eeda7 100644
 --- a/website/client/components/groups/questDetailsModal.vue
@@ -3259,27 +3174,17 @@ index 788197c37..ec24b1933 100644
      },
      logout () {
 diff --git a/website/client/components/settings/deleteModal.vue b/website/client/components/settings/deleteModal.vue
-index e52e4989f..8993ecab2 100644
+index 34838b050..a74c52e6e 100644
 --- a/website/client/components/settings/deleteModal.vue
 +++ b/website/client/components/settings/deleteModal.vue
-@@ -15,17 +15,6 @@
-         button.btn.btn-primary(@click='close()') {{ $t('neverMind') }}
-         button.btn.btn-danger(@click='deleteAccount()', :disabled='!password') {{ $t('deleteDo') }}
-         .modal-header
--    .social-delete(v-if='!user.auth.local.email')
--      h4 {{ $t('deleteAccount') }}
--      .modal-body
--        p {{ $t('deleteSocialAccountText', {magicWord: 'DELETE'}) }}
--        br
--        .row
--          .col-md-6
--            input.form-control(type='text', v-model='password')
--      .modal-footer
--        button.btn.btn-secondary(@click='close()') {{ $t('neverMind') }}
--        button.btn.btn-danger(:disabled='!password', @click='deleteAccount()') {{ $t('deleteDo') }}
- </template>
- 
- <script>
+@@ -3,7 +3,6 @@
+     .modal-body
+       br
+       strong(v-if='user.auth.local.email') {{ $t('deleteLocalAccountText') }}
+-      strong(v-if='!user.auth.local.email') {{ $t('deleteSocialAccountText', {magicWord: 'DELETE'}) }}
+       .row.mt-3
+         .col-6
+           input.form-control(type='password', v-model='password')
 diff --git a/website/client/components/settings/notifications.vue b/website/client/components/settings/notifications.vue
 index b92f6de0e..fc0b22c24 100644
 --- a/website/client/components/settings/notifications.vue
@@ -4346,7 +4251,7 @@ index 57eaa890c..5a9e61a0a 100644
    PARTY_LIMIT_MEMBERS,
  };
 diff --git a/website/common/script/ops/buy/abstractBuyOperation.js b/website/common/script/ops/buy/abstractBuyOperation.js
-index 9b0a2d9fe..eac44cfc8 100644
+index 78256d21c..4a7e4d7a6 100644
 --- a/website/common/script/ops/buy/abstractBuyOperation.js
 +++ b/website/common/script/ops/buy/abstractBuyOperation.js
 @@ -4,19 +4,16 @@ import {
@@ -4370,7 +4275,7 @@ index 9b0a2d9fe..eac44cfc8 100644
  
      let quantity = _get(req, 'quantity');
  
-@@ -54,10 +51,6 @@ export class AbstractBuyOperation {
+@@ -72,10 +69,6 @@ export class AbstractBuyOperation {
      throw new NotImplementedError('executeChanges');
    }
  
@@ -4381,7 +4286,7 @@ index 9b0a2d9fe..eac44cfc8 100644
    purchase () {
      if (!this.multiplePurchaseAllowed() && this.quantity > 1) {
        throw new NotAuthorized(this.i18n('messageNotAbleToBuyInBulk'));
-@@ -67,37 +60,13 @@ export class AbstractBuyOperation {
+@@ -85,37 +78,13 @@ export class AbstractBuyOperation {
  
      let resultObj = this.executeChanges(this.user, this.item, this.req);
  
@@ -4420,8 +4325,8 @@ index 9b0a2d9fe..eac44cfc8 100644
 +    super(user, req);
    }
  
-   getItemValue (item) {
-@@ -128,13 +97,4 @@ export class AbstractGoldItemOperation extends AbstractBuyOperation {
+   canUserPurchase (user, item) {
+@@ -138,20 +107,11 @@ export class AbstractGoldItemOperation extends AbstractBuyOperation {
  
      user.stats.gp -= itemValue * this.quantity;
    }
@@ -4435,11 +4340,34 @@ index 9b0a2d9fe..eac44cfc8 100644
 -    };
 -  }
  }
+ 
+ export class AbstractGemItemOperation extends AbstractBuyOperation {
+-  constructor (user, req, analytics) {
+-    super(user, req, analytics);
++  constructor (user, req) {
++    super(user, req);
+   }
+ 
+   canUserPurchase (user, item) {
+@@ -172,13 +132,4 @@ export class AbstractGemItemOperation extends AbstractBuyOperation {
+ 
+     user.balance -= itemValue * this.quantity;
+   }
+-
+-  analyticsData () {
+-    return {
+-      itemKey: this.getIemKey(this.item),
+-      itemType: 'Market',
+-      acquireMethod: 'Gems',
+-      gemCost: this.getItemValue(this.item) * 4,
+-    };
+-  }
+ }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index 413ca79e7..3ae2af1e0 100644
+index f564af45a..3f9959c09 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
-@@ -18,7 +18,7 @@ import {BuyGemOperation} from './buyGem';
+@@ -19,7 +19,7 @@ import {BuyQuestWithGemOperation} from './buyQuestGem';
  
  // @TODO: when we are sure buy is the only function used, let's move the buy files to a folder
  
@@ -4448,7 +4376,7 @@ index 413ca79e7..3ae2af1e0 100644
    let key = get(req, 'params.key');
    if (!key) throw new BadRequest(errorMessage('missingKeyParam'));
  
-@@ -32,22 +32,22 @@ module.exports = function buy (user, req = {}, analytics) {
+@@ -33,28 +33,28 @@ module.exports = function buy (user, req = {}, analytics) {
  
    switch (type) {
      case 'armoire': {
@@ -4475,8 +4403,15 @@ index 413ca79e7..3ae2af1e0 100644
  
        buyRes = buyOp.purchase();
        break;
-@@ -58,26 +58,26 @@ module.exports = function buy (user, req = {}, analytics) {
-     case 'quests':
+     }
+     case 'quests': {
+-      const buyOp = new BuyQuestWithGemOperation(user, req, analytics);
++      const buyOp = new BuyQuestWithGemOperation(user, req);
+ 
+       buyRes = buyOp.purchase();
+       break;
+@@ -64,26 +64,26 @@ module.exports = function buy (user, req = {}, analytics) {
+     case 'food':
      case 'gear':
      case 'bundles':
 -      buyRes = purchaseOp(user, req, analytics);
@@ -4649,6 +4584,21 @@ index acc0b8894..983d17a6c 100644
    }
  
    multiplePurchaseAllowed () {
+diff --git a/website/common/script/ops/buy/buyQuestGem.js b/website/common/script/ops/buy/buyQuestGem.js
+index d3dae0350..a6a6b73b6 100644
+--- a/website/common/script/ops/buy/buyQuestGem.js
++++ b/website/common/script/ops/buy/buyQuestGem.js
+@@ -10,8 +10,8 @@ import errorMessage from '../../libs/errorMessage';
+ import {AbstractGemItemOperation} from './abstractBuyOperation';
+ 
+ export class BuyQuestWithGemOperation extends AbstractGemItemOperation {
+-  constructor (user, req, analytics) {
+-    super(user, req, analytics);
++  constructor (user, req) {
++    super(user, req);
+   }
+ 
+   multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buySpell.js b/website/common/script/ops/buy/buySpell.js
 index 2a26d0def..e9dff26ed 100644
 --- a/website/common/script/ops/buy/buySpell.js
@@ -4696,12 +4646,12 @@ index 5354ee20b..b08c0d2d5 100644
      { items: user.items, purchasedPlanConsecutive: user.purchased.plan.consecutive },
      i18n.t('hourglassPurchase', req.language),
 diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index eb48ee72e..fd2a2f16b 100644
+index 4904b74fe..b4f84ade4 100644
 --- a/website/common/script/ops/buy/purchase.js
 +++ b/website/common/script/ops/buy/purchase.js
 @@ -65,7 +65,7 @@ function purchaseItem (user, item, price, type, key) {
  
- const acceptedTypes = ['eggs', 'hatchingPotions', 'food', 'quests', 'gear', 'bundles'];
+ const acceptedTypes = ['eggs', 'hatchingPotions', 'food', 'gear', 'bundles'];
  const singlePurchaseTypes = ['gear'];
 -module.exports = function purchase (user, req = {}, analytics) {
 +module.exports = function purchase (user, req = {}) {
@@ -5501,7 +5451,7 @@ index f18644306..dcae6acda 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 9f8d3c2fa..b296e9fec 100644
+index a15195e15..559bb32d7 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5671,7 +5621,7 @@ index 9f8d3c2fa..b296e9fec 100644
          member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
        }
  
-@@ -1017,19 +918,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -1022,19 +923,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -5691,7 +5641,7 @@ index 9f8d3c2fa..b296e9fec 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1045,8 +933,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1050,8 +938,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},
@@ -5867,7 +5817,7 @@ index b579cc386..6ed16d973 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index 5cdb4618b..3b50637f3 100644
+index e309eac1c..d993e584e 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -22,7 +22,6 @@ import {
@@ -6992,7 +6942,7 @@ index e3994c8e0..c6f8a4a17 100644
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 0ca9d43a1..9226da287 100644
+index 183f881d3..7abc169ee 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -11,9 +11,6 @@ import { defaults, map, flatten, flow, compact, uniq, partialRight } from 'lodas
@@ -7005,7 +6955,7 @@ index 0ca9d43a1..9226da287 100644
  
  const daysSince = common.daysSince;
  
-@@ -203,7 +200,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -207,7 +204,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
   * @param  options
   * @param  options.user  The user object who is purchasing
   * @param  options.groupId  The id of the group purchasing a subscription
@@ -7014,7 +6964,7 @@ index 0ca9d43a1..9226da287 100644
   * @param  options.cancellationReason  A text string to control sending an email
   *
   * @return a Promise from api.cancelSubscription()
-@@ -214,18 +211,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -218,18 +215,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
  // In summary, currently is is best practice to use this method to cancel a user subscription, rather than calling the
  // payment helper.
  schema.methods.cancelSubscription = async function cancelSubscription (options = {}) {

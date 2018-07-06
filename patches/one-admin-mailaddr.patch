@@ -60,10 +60,10 @@ index 89e5b133b..f3009fae9 100644
        // expect(messages[0].id).to.eql(skillMsg.id);
        // expect(messages[0].flagCount).to.eql(0);
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index 31f996429..190b64aaa 100644
+index ec6294635..c2e476d88 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
-@@ -253,7 +253,7 @@ describe('Post /groups/:groupId/invite', () => {
+@@ -266,7 +266,7 @@ describe('Post /groups/:groupId/invite', () => {
          .to.eventually.be.rejected.and.eql({
            code: 401,
            error: 'NotAuthorized',
@@ -161,7 +161,7 @@ index fcae0a65f..e4d6e7ef5 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index b296e9fec..445cc8fa9 100644
+index 559bb32d7..0d62a715b 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,7 +22,7 @@ import common from '../../../common';

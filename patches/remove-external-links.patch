@@ -119,7 +119,7 @@ index cfd14c700..9f373bb87 100644
  
  <style lang='scss'>
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index b8c7ae4dc..a13797b06 100644
+index a338ba41b..cd51c0d2a 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -734,7 +734,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {

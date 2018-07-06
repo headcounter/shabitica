@@ -68,7 +68,7 @@ index c7aa8772d..c852b2b95 100644
          'QUEST_INVITATION', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
          'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
 diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
-index 04540cae9..6b46012a1 100644
+index d25543787..34a299d89 100644
 --- a/website/client/components/notifications.vue
 +++ b/website/client/components/notifications.vue
 @@ -95,7 +95,6 @@ import guide from 'client/mixins/guide';

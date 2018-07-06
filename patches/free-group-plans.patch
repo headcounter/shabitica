@@ -126,7 +126,7 @@ index 3b5a05372..eccc26adf 100644
    });
  });
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index 190b64aaa..cac8423a3 100644
+index c2e476d88..c7196b639 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
 @@ -1,14 +1,11 @@
@@ -144,7 +144,7 @@ index 190b64aaa..cac8423a3 100644
  
  describe('Post /groups/:groupId/invite', () => {
    let inviter;
-@@ -236,27 +233,6 @@ describe('Post /groups/:groupId/invite', () => {
+@@ -249,27 +246,6 @@ describe('Post /groups/:groupId/invite', () => {
          });
      });
  
@@ -172,7 +172,7 @@ index 190b64aaa..cac8423a3 100644
      it('invites a user to a group by email', async () => {
        let res = await inviter.post(`/groups/${group._id}/invite`, {
          emails: [testInvite],
-@@ -325,25 +301,6 @@ describe('Post /groups/:groupId/invite', () => {
+@@ -338,25 +314,6 @@ describe('Post /groups/:groupId/invite', () => {
        expect(invitedUser.invitations.guilds[0].id).to.equal(group._id);
        expect(invite).to.exist;
      });
@@ -528,7 +528,7 @@ index f50429548..9bf78fd8d 100644
      },
      {
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 445cc8fa9..eed6e42da 100644
+index 0d62a715b..f6e0e81a1 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -20,6 +20,7 @@ import { sendTxn as sendTxnEmail } from '../../libs/email';

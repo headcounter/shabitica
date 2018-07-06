@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.51.0";
+  version = "4.51.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0fkaljwf5pb90mf4l4v1qys6zzcnar36zxv64a324zvbfwjlyk2h";
+    sha256 = "1kysnmmw9c5h0lxfxzljxz9061qqbjgppvmjf2756pd41c04v94g";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
