@@ -172,6 +172,13 @@ stdenv.mkDerivation rec {
     # Don't handle anything from Spritely specially (which also removes all
     # references to Spritely, see the canary below).
     patches/remove-spritely.patch
+
+    # Fix the member-details modal to not break the layout.
+    # https://github.com/HabitRPG/habitica/pull/10504
+    (fromUpstream {
+      rev = "30d85eacbed748b82b18dd3a29a531345babddd4";
+      sha256 = "0p11wprslvcfhdig137ypzybsqwcm29xcjm57yzs0r27yr95qrww";
+    })
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
