@@ -257,7 +257,7 @@ index 278388365..e62cf0d09 100644
      let { group, members } = await createAndPopulateGroup({
        groupDetails: {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 60437b8d6..f520fd5dc 100644
+index 60f02e390..d55ee63ee 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div

@@ -215,7 +215,7 @@ index 7674d4b6f..82c2825f4 100644
    .col-12
      router-view
 diff --git a/website/client/components/group-plans/taskInformation.vue b/website/client/components/group-plans/taskInformation.vue
-index a1cb91ce3..d3414ac7f 100644
+index 610ee9892..e834ff877 100644
 --- a/website/client/components/group-plans/taskInformation.vue
 +++ b/website/client/components/group-plans/taskInformation.vue
 @@ -1,6 +1,5 @@

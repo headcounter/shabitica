@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 0feacd118..63df05213 100644
+index 260d57989..63df05213 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -4,16 +4,6 @@
@@ -60,7 +60,7 @@ index 0feacd118..63df05213 100644
      "NODE_DB_URI":"mongodb://localhost/habitrpg",
      "TEST_DB_URI":"mongodb://localhost/habitrpg_test",
      "NODE_ENV":"development",
-@@ -31,87 +21,20 @@
+@@ -31,90 +21,20 @@
      "SMTP_HOST":"example.com",
      "SMTP_PORT": 587,
      "SMTP_TLS": true,
@@ -111,6 +111,9 @@ index 0feacd118..63df05213 100644
 -    "PUSH_CONFIGS": {
 -        "GCM_SERVER_API_KEY": "",
 -        "APN_ENABLED": "false",
+-        "APN_KEY_ID": "xxxxxxxxxx",
+-        "APN_KEY": "xxxxxxxxxx",
+-        "APN_TEAM_ID": "aaabbbcccd",
 -        "FCM_SERVER_API_KEY": ""
 -    },
      "SITE_HTTP_AUTH": {
@@ -2211,7 +2214,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 462f661a7..60437b8d6 100644
+index 342de7a14..60f02e390 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,7 +10,6 @@ div
@@ -2623,7 +2626,7 @@ index e101c5457..be87ab840 100644
      },
    },
 diff --git a/website/client/components/auth/registerLoginReset.vue b/website/client/components/auth/registerLoginReset.vue
-index c0385221e..8d15c31f2 100644
+index e6dec1f27..8d15c31f2 100644
 --- a/website/client/components/auth/registerLoginReset.vue
 +++ b/website/client/components/auth/registerLoginReset.vue
 @@ -13,15 +13,6 @@
@@ -2703,7 +2706,7 @@ index c0385221e..8d15c31f2 100644
    watch: {
      $route: {
        handler () {
-@@ -427,36 +388,6 @@ export default {
+@@ -427,37 +388,6 @@ export default {
        // ALSO it's the only way to make sure language data is reloaded and correct for the logged in user
        window.location.href = redirectTo;
      },
@@ -2713,10 +2716,11 @@ index c0385221e..8d15c31f2 100644
 -        await hello(network).logout();
 -      } catch (e) {} // eslint-disable-line
 -
+-      const redirectUrl = `${window.location.protocol}//${window.location.host}`;
 -      let auth = await hello(network).login({
 -        scope: 'email',
 -        // explicitly pass the redirect url or it might redirect to /home
--        redirect_uri: '', // eslint-disable-line camelcase
+-        redirect_uri: redirectUrl, // eslint-disable-line camelcase
 -      });
 -
 -      await this.$store.dispatch('auth:socialAuth', {
@@ -3513,7 +3517,7 @@ index 667172b64..68d62bd34 100644
  };
  </script>
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index 3dd2bc4e8..152e34bf1 100644
+index 7b14b0917..8b7a030df 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -13,15 +13,6 @@
@@ -3682,7 +3686,7 @@ index 3dd2bc4e8..152e34bf1 100644
      computed: {
        emailValid () {
          if (this.email.length <= 3) return false;
-@@ -649,32 +543,8 @@
+@@ -649,33 +543,8 @@
          window.location.href = redirectTo;
        },
        playButtonClick () {
@@ -3700,10 +3704,11 @@ index 3dd2bc4e8..152e34bf1 100644
 -          await hello(network).logout();
 -        } catch (e) {} // eslint-disable-line
 -
+-        const redirectUrl = `${window.location.protocol}//${window.location.host}`;
 -        const auth = await hello(network).login({
 -          scope: 'email',
 -          // explicitly pass the redirect url or it might redirect to /home
--          redirect_uri: '', // eslint-disable-line camelcase
+-          redirect_uri: redirectUrl, // eslint-disable-line camelcase
 -        });
 -
 -        await this.$store.dispatch('auth:socialAuth', {
@@ -4364,7 +4369,7 @@ index 78256d21c..4a7e4d7a6 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index f564af45a..3f9959c09 100644
+index 13a995060..7d86911f1 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
 @@ -19,7 +19,7 @@ import {BuyQuestWithGemOperation} from './buyQuestGem';
@@ -6739,7 +6744,7 @@ index 15a66b02b..315f1fa44 100644
      // Clear old completed todos - 30 days for free users, 90 for subscribers
      // Do not delete challenges completed todos TODO unless the task is broken?
 diff --git a/website/server/middlewares/errorHandler.js b/website/server/middlewares/errorHandler.js
-index cb12a714c..42d736acb 100644
+index 5b3cdb739..e10fb3f74 100644
 --- a/website/server/middlewares/errorHandler.js
 +++ b/website/server/middlewares/errorHandler.js
 @@ -50,12 +50,6 @@ module.exports = function errorHandler (err, req, res, next) { // eslint-disable
