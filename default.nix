@@ -23,6 +23,27 @@ let
   migrations = import ./migrations.nix;
   latestDbVersion = lib.length migrations;
 
+  # Results in a systemd service unit for the Habitica server which only
+  # contains BindReadOnlyPaths options. The rest of the service is defined
+  # later in systemd.services.habitica and the contents here are merged
+  # accordingly.
+  habiticaSandboxPaths = pkgs.runCommand "habitica-sandbox-paths" {
+    closureInfo = pkgs.closureInfo {
+      rootPaths = [ habitica.server pkgs.coreutils ];
+    };
+  } ''
+    mkdir -p "$out/lib/systemd/system"
+    serviceFile="$out/lib/systemd/system/habitica.service"
+
+    echo '[Service]' > "$serviceFile"
+
+    while read storePath; do
+      if [ ! -L "$storePath" ]; then
+        echo "BindReadOnlyPaths=$storePath:$storePath:rbind"
+      fi
+    done < "$closureInfo/store-paths" >> "$serviceFile"
+  '';
+
 in {
   options.habitica = {
     hostName = lib.mkOption {
@@ -181,6 +202,8 @@ in {
       users.groups.habitica = {};
 
       environment.systemPackages = [ dbtools ];
+
+      systemd.packages = [ habiticaSandboxPaths ];
 
       systemd.services.habitica-statedir-init = {
         description = "Initialize Habitica";
@@ -378,15 +401,35 @@ in {
           "habitica-mailer.service"
         ];
 
-        serviceConfig.Type = "notify";
-        serviceConfig.TimeoutStartSec = "10min";
-        serviceConfig.NotifyAccess = "all";
-        serviceConfig.ExecStart = "${habitica.server}/bin/habitica-server";
-        serviceConfig.User = "habitica";
-        serviceConfig.Group = "habitica";
-        serviceConfig.PrivateTmp = true;
-        serviceConfig.PrivateNetwork = true;
-        serviceConfig.EnvironmentFile = "/var/lib/habitica/secrets.env";
+        serviceConfig = {
+          Type = "notify";
+          TimeoutStartSec = "10min";
+          NotifyAccess = "all";
+          ExecStart = "${habitica.server}/bin/habitica-server";
+          User = "habitica";
+          Group = "habitica";
+          EnvironmentFile = "/var/lib/habitica/secrets.env";
+
+          # Everything related to restricting file system access.
+          # More BindReadOnlyPaths options are brought in via the
+          # habiticaSandboxPaths derivation defined earlier.
+          BindReadOnlyPaths = [
+            "/run/habitica/db.sock"
+            "/run/habitica-mailer.sock"
+            "/run/systemd/notify"
+          ];
+          MountAPIVFS = true;
+          MountFlags = "private";
+          PrivateDevices = true;
+          PrivateNetwork = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RootDirectory = habiticaSandboxPaths;
+          TemporaryFileSystem = "/";
+        };
       };
     }
     (lib.mkIf cfg.useNginx {
