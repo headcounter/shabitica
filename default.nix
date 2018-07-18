@@ -251,7 +251,7 @@ in {
           mongoDbCfg = pkgs.writeText "mongodb.conf" (builtins.toJSON {
             net.bindIp = "/run/habitica/db.sock"
                        + lib.optionalString cfg.insecureDB ",127.0.0.1";
-            net.unixDomainSocket.filePermissions = "0770";
+            net.unixDomainSocket.filePermissions = "0660";
             storage.dbPath = "/var/lib/habitica/db";
             processManagement.fork = false;
           });
