@@ -28,6 +28,8 @@ let
       confirmPassword='snakeoil',
     )
 
+    print(fetch_new_mail())
+
     foo = Habitipy({
       'url': 'http://localhost',
       'login': first_user['id'],
@@ -47,6 +49,11 @@ let
         {'name': 'bar', 'email': 'bar@example.com'}
       ]
     )
+
+    print(fetch_new_mail())
+
+    # This is the only occurence where the simple send() function is used.
+    anonymous.user.reset_password.post(email='foo@example.org')
 
     print(fetch_new_mail())
   '';

@@ -130,10 +130,10 @@ index 1d68278a2..7a9168374 100644
 \ No newline at end of file
 +));
 diff --git a/package.json b/package.json
-index 50f306d40..ef07b3922 100644
+index 4d086c16f..290bf8083 100644
 --- a/package.json
 +++ b/package.json
-@@ -111,9 +111,9 @@
+@@ -110,9 +110,9 @@
      "test:api-v3:integration:separate-server": "NODE_ENV=test gulp test:api-v3:integration:separate-server",
      "test:api-v4:integration": "gulp test:api-v4:integration",
      "test:api-v4:integration:separate-server": "NODE_ENV=test gulp test:api-v4:integration:separate-server",

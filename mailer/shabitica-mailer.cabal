@@ -1,0 +1,55 @@
+name:                shabitica-mailer
+version:             0.1.0
+synopsis:            Habitica email helper
+description:         Simple daemon which receives mail template variables from
+                     Habitica via socket, composes them and sends them out
+                     using the sendmail binary or an SMTP connection via TCP.
+license:             GPL-3
+author:              aszlig
+maintainer:          aszlig@nix.build
+category:            Network
+build-type:          Simple
+cabal-version:       >= 1.10
+
+library
+  ghc-options:         -Wall
+  hs-source-dirs:      lib
+  exposed-modules:     Render, Types
+  build-depends:       aeson,
+                       base >= 4.9 && < 5,
+                       containers,
+                       mime-mail >= 0.4.14,
+                       stache,
+                       text,
+                       unordered-containers,
+                       vector,
+                       word-wrap
+  default-language:    Haskell2010
+
+executable shabitica-mailer
+  ghc-options:         -Wall
+  main-is:             Main.hs
+  build-depends:       aeson,
+                       base >= 4.9 && < 5,
+                       http-types,
+                       mime-mail >= 0.4.14,
+                       network,
+                       shabitica-mailer,
+                       systemd,
+                       text,
+                       vector,
+                       wai == 3.*,
+                       warp
+  default-language:    Haskell2010
+
+test-suite template-tests
+  ghc-options:         -Wall
+  main-is:             Tests.hs
+  type:                exitcode-stdio-1.0
+  build-depends:       aeson,
+                       base >= 4.9 && < 5,
+                       hspec,
+                       neat-interpolation,
+                       shabitica-mailer,
+                       text
+  default-language:    Haskell2010

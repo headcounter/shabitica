@@ -165,8 +165,7 @@ in {
         BASE_URL = cfg.baseURL;
         NODE_DB_URI = "mongodb://%2Frun%2Fhabitica%2Fdb.sock";
         PORT = "/run/habitica.sock";
-        SENDMAIL_PATH = "${config.security.wrapperDir}/sendmail";
-        MAIL_FROM = cfg.senderMailAddress;
+        MAILER_SOCKET = "/run/habitica-mailer.sock";
       };
 
       users.users.habitica-db = {
@@ -334,6 +333,32 @@ in {
         '';
       };
 
+      systemd.sockets.habitica-mailer = {
+        description = "Socket For Habitica Mailer Daemon";
+        wantedBy = [ "sockets.target" ];
+
+        socketConfig.ListenStream = "/run/habitica-mailer.sock";
+        socketConfig.SocketMode = "0600";
+        socketConfig.SocketUser = "habitica";
+        socketConfig.SocketGroup = "habitica";
+      };
+
+      systemd.services.habitica-mailer = {
+        description = "Habitica Mailer Daemon";
+        wantedBy = [ "multi-user.target" ];
+        after = [
+          "exim.service" "nullmailer.service" "opensmtpd.service"
+          "postfix.service"
+        ];
+
+        environment.MAIL_FROM = cfg.senderMailAddress;
+        environment.SENDMAIL_PATH = "${config.security.wrapperDir}/sendmail";
+
+        serviceConfig.ExecStart = let
+          mailer = pkgs.haskellPackages.callPackage ./mailer {};
+        in "${mailer}/bin/shabitica-mailer";
+      };
+
       systemd.sockets.habitica = {
         description = "Habitica Socket";
         wantedBy = [ "sockets.target" ];
@@ -346,7 +371,12 @@ in {
       systemd.services.habitica = {
         description = "Habitica";
         wantedBy = [ "multi-user.target" ];
-        after = [ "habitica-init.service" "habitica-db.service" ];
+
+        after = [
+          "habitica-init.service"
+          "habitica-db.service"
+          "habitica-mailer.service"
+        ];
 
         serviceConfig.Type = "notify";
         serviceConfig.TimeoutStartSec = "10min";

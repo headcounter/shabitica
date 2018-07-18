@@ -18,21 +18,21 @@ Date:   Tue Mar 27 05:37:18 2018 +0200
     Filename: one-admin-mailaddr.patch
 
 diff --git a/config.json.example b/config.json.example
-index bf97716b2..7f562276f 100644
+index 2c7e1f0e2..43f22cc9b 100644
 --- a/config.json.example
 +++ b/config.json.example
-@@ -16,11 +16,5 @@
+@@ -15,11 +15,5 @@
+     "SESSION_SECRET_KEY": "1234567891234567891234567891234567891234567891234567891234567891",
      "SESSION_SECRET_IV": "12345678912345678912345678912345",
      "ADMIN_EMAIL": "you@example.com",
-     "SENDMAIL_PATH": "/usr/sbin/sendmail",
--    "MAIL_FROM": "unconfigured@example.com",
+-    "MAILER_SOCKET": "/run/habitica/mailer.sock",
 -    "FLAG_REPORT_EMAIL": "email@mod.com,email2@mod.com",
 -    "EMAILS" : {
 -        "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
 -        "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
 -        "PRESS_ENQUIRY_EMAIL" : "admin@habitica.com"
 -    }
-+    "MAIL_FROM": "unconfigured@example.com"
++    "MAILER_SOCKET": "/run/habitica/mailer.sock"
  }
 diff --git a/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js b/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
 index 89e5b133b..f3009fae9 100644

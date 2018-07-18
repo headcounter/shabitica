@@ -10,15 +10,15 @@ Date:   Mon Apr 2 06:30:04 2018 +0200
     Filename: invite-only-config-option.patch
 
 diff --git a/config.json.example b/config.json.example
-index 9b3b5ca72..16b1f7986 100644
+index b3fb47d49..22d1d724d 100644
 --- a/config.json.example
 +++ b/config.json.example
-@@ -13,5 +13,6 @@
+@@ -12,5 +12,6 @@
+     "CRON_SEMI_SAFE_MODE":"false",
      "MAINTENANCE_MODE": "false",
      "ADMIN_EMAIL": "you@example.com",
-     "SENDMAIL_PATH": "/usr/sbin/sendmail",
--    "MAIL_FROM": "unconfigured@example.com"
-+    "MAIL_FROM": "unconfigured@example.com",
+-    "MAILER_SOCKET": "/run/habitica/mailer.sock"
++    "MAILER_SOCKET": "/run/habitica/mailer.sock",
 +    "INVITE_ONLY": "true"
  }
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js

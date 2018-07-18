@@ -38,9 +38,8 @@ stdenv.mkDerivation rec {
     # Don't allow anonymous users to register, we only want to invite people.
     patches/invite-only.patch
 
-    # Poor mans sendmail implementation, because the official Habitica instance
-    # uses MailChimp and it appears that the templates reside on their account.
-    patches/sendmail.patch
+    # Integrates the mailer daemon found in the mailer subdirectory.
+    patches/mailer-daemon.patch
 
     # Official Habitica has different mail addresses for different positions,
     # but for a private instance this is not really necessary. So let's use

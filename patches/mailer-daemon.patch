@@ -1,0 +1,184 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Tue Mar 27 05:37:16 2018 +0200
+
+    Support email notifications using a mailer daemon
+    
+    The official Habitica setup uses MailChimp to send out emails and it's
+    doing so by talking to their API, giving only a few template variables.
+    
+    However, the real mail templates are hosted within their MailChimp
+    account, so we don't have access to the templates.
+    
+    Instead of sending those mails via HTTPS to the MailChimp API, we now
+    have a daemon, which more or less replicates the API. This daemon works
+    using UNIX domain sockets, so all we need to do is to use the "unix" URL
+    scheme for got.post().
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: mailer-daemon.patch
+
+diff --git a/config.json.example b/config.json.example
+index 63df05213..2c7e1f0e2 100644
+--- a/config.json.example
++++ b/config.json.example
+@@ -15,23 +15,8 @@
+     "SESSION_SECRET_KEY": "1234567891234567891234567891234567891234567891234567891234567891",
+     "SESSION_SECRET_IV": "12345678912345678912345678912345",
+     "ADMIN_EMAIL": "you@example.com",
+-    "SMTP_USER":"user@example.com",
+-    "SMTP_PASS":"password",
+-    "SMTP_SERVICE":"Gmail",
+-    "SMTP_HOST":"example.com",
+-    "SMTP_PORT": 587,
+-    "SMTP_TLS": true,
++    "MAILER_SOCKET": "/run/habitica/mailer.sock",
+     "FLAG_REPORT_EMAIL": "email@mod.com,email2@mod.com",
+-    "EMAIL_SERVER": {
+-        "url": "http://example.com",
+-        "authUser": "user",
+-        "authPassword": "password"
+-    },
+-    "SITE_HTTP_AUTH": {
+-        "ENABLED": "false",
+-        "USERNAME": "admin",
+-        "PASSWORD": "password"
+-    },
+     "EMAILS" : {
+         "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
+         "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
+diff --git a/package.json b/package.json
+index 50f306d40..4d086c16f 100644
+--- a/package.json
++++ b/package.json
+@@ -59,7 +59,6 @@
+     "morgan": "^1.7.0",
+     "nconf": "^0.10.0",
+     "node-sass": "^4.9.0",
+-    "nodemailer": "^4.6.4",
+     "ora": "^2.1.0",
+     "pageres": "^4.1.1",
+     "passport": "^0.4.0",
+diff --git a/test/api/unit/libs/email.test.js b/test/api/unit/libs/email.test.js
+index 23989fbf3..b043db942 100644
+--- a/test/api/unit/libs/email.test.js
++++ b/test/api/unit/libs/email.test.js
+@@ -1,7 +1,6 @@
+ /* eslint-disable global-require */
+ import got from 'got';
+ import nconf from 'nconf';
+-import nodemailer from 'nodemailer';
+ import requireAgain from 'require-again';
+ import logger from '../../../../website/server/libs/logger';
+ import { TAVERN_ID } from '../../../../website/server/models/group';
+@@ -36,13 +35,8 @@ describe('emails', () => {
+   let pathToEmailLib = '../../../../website/server/libs/email';
+ 
+   describe('sendEmail', () => {
+-    let sendMailSpy;
+-
+     beforeEach(() => {
+-      sendMailSpy = sandbox.stub().returns(defer().promise);
+-      sandbox.stub(nodemailer, 'createTransport').returns({
+-        sendMail: sendMailSpy,
+-      });
++      sandbox.stub(got, 'post').returns(defer().promise);
+     });
+ 
+     afterEach(() => {
+@@ -52,7 +46,7 @@ describe('emails', () => {
+     it('can send an email using the default transport', () => {
+       let attachEmail = requireAgain(pathToEmailLib);
+       attachEmail.send();
+-      expect(sendMailSpy).to.be.calledOnce;
++      expect(got.post).to.be.calledOnce;
+     });
+ 
+     it('logs errors', (done) => {
+@@ -60,7 +54,7 @@ describe('emails', () => {
+ 
+       let attachEmail = requireAgain(pathToEmailLib);
+       attachEmail.send();
+-      expect(sendMailSpy).to.be.calledOnce;
++      expect(got.post).to.be.calledOnce;
+       defer().reject();
+ 
+       // wait for unhandledRejection event to fire
+@@ -143,7 +137,7 @@ describe('emails', () => {
+       };
+ 
+       sendTxnEmail(mailingInfo, emailType);
+-      expect(got.post).to.be.calledWith('undefined/job', sinon.match({
++      expect(got.post).to.be.calledWith('unix:undefined:/job', sinon.match({
+         json: true,
+         body: {
+           data: {
+@@ -178,7 +172,7 @@ describe('emails', () => {
+       let mailingInfo = getUser();
+ 
+       sendTxnEmail(mailingInfo, emailType);
+-      expect(got.post).to.be.calledWith('undefined/job', sinon.match({
++      expect(got.post).to.be.calledWith('unix:undefined:/job', sinon.match({
+         json: true,
+         body: {
+           data: {
+@@ -201,7 +195,7 @@ describe('emails', () => {
+       let variables = [1, 2, 3];
+ 
+       sendTxnEmail(mailingInfo, emailType, variables);
+-      expect(got.post).to.be.calledWith('undefined/job', sinon.match({
++      expect(got.post).to.be.calledWith('unix:undefined:/job', sinon.match({
+         json: true,
+         body: {
+           data: {
+diff --git a/website/server/libs/email.js b/website/server/libs/email.js
+index 744c29af7..a6d71bc7f 100644
+--- a/website/server/libs/email.js
++++ b/website/server/libs/email.js
+@@ -1,4 +1,3 @@
+-import nodemailer from 'nodemailer';
+ import nconf from 'nconf';
+ import { TAVERN_ID } from '../models/group';
+ import { encrypt } from './encryption';
+@@ -6,27 +5,16 @@ import got from 'got';
+ import logger from './logger';
+ 
+ const IS_PROD = nconf.get('IS_PROD');
+-const EMAIL_SERVER = {
+-  url: nconf.get('EMAIL_SERVER:url'),
+-  auth: {
+-    user: nconf.get('EMAIL_SERVER:authUser'),
+-    password: nconf.get('EMAIL_SERVER:authPassword'),
+-  },
+-};
++const MAILER_SOCKET = nconf.get('MAILER_SOCKET');
+ const BASE_URL = nconf.get('BASE_URL');
+ 
+-let smtpTransporter = nodemailer.createTransport({
+-  service: nconf.get('SMTP_SERVICE'),
+-  auth: {
+-    user: nconf.get('SMTP_USER'),
+-    pass: nconf.get('SMTP_PASS'),
+-  },
+-});
+-
+ // Send email directly from the server using the smtpTransporter,
+ // used only to send password reset emails because users unsubscribed on Mandrill wouldn't get them
+ export function send (mailData) {
+-  return smtpTransporter.sendMail(mailData); // promise
++  return got.post(`unix:${MAILER_SOCKET}:/simple-mail`, {
++    json: true,
++    body: mailData,
++  });
+ }
+ 
+ export function getUserInfo (user, fields = []) {
+@@ -135,8 +123,7 @@ export function sendTxn (mailingInfoArray, emailType, variables, personalVariabl
+   }
+ 
+   if (IS_PROD && mailingInfoArray.length > 0) {
+-    got.post(`${EMAIL_SERVER.url}/job`, {
+-      auth: `${EMAIL_SERVER.auth.user}:${EMAIL_SERVER.auth.password}`,
++    got.post(`unix:${MAILER_SOCKET}:/job`, {
+       json: true,
+       body: {
+         type: 'email',
