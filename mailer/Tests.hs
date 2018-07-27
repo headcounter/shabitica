@@ -111,6 +111,92 @@ inviteFriendBody = TL.fromStrict [text|
     Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
 |]
 
+inviteCollectionQuest :: TxnMail
+inviteCollectionQuest = commonTxnMail
+    { txnEmailType = "invite-collection-quest"
+    , txnVariables = object
+        [ "QUEST_NAME" .= T.pack
+              "Attack of the Mundane, Part 1: Dish Disaster!"
+        , "INVITER"    .= T.pack "foo"
+        , "BASE_URL"   .= T.pack "https://habitica.example.org"
+        , "PARTY_URL"  .= T.pack "/party"
+        ]
+    , txnPersonalVariables = M.singleton commonTxnAddr $ object
+        [ "RECIPIENT_NAME" .= T.pack "bar"
+        , "RECIPIENT_UNSUB_URL" .= T.pack "/email/unsubscribe?code=1234"
+        ]
+    }
+
+inviteCollectionQuestBody :: TL.Text
+inviteCollectionQuestBody = TL.fromStrict [text|
+    Hello bar,
+
+    You were invited to the Collection Quest Attack of the Mundane, Part 1:
+    Dish Disaster!
+
+    To join, please head over to:
+
+    https://habitica.example.org/party
+    --$space
+    Self-hosted Habitica instance at https://habitica.example.org/
+    Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
+|]
+
+inviteBossQuest :: TxnMail
+inviteBossQuest = commonTxnMail
+    { txnEmailType = "invite-boss-quest"
+    , txnVariables = object
+        [ "QUEST_NAME" .= T.pack "The Basi-List"
+        , "INVITER"    .= T.pack "foo"
+        , "BASE_URL"   .= T.pack "https://habitica.example.org"
+        , "PARTY_URL"  .= T.pack "/party"
+        ]
+    , txnPersonalVariables = M.singleton commonTxnAddr $ object
+        [ "RECIPIENT_NAME" .= T.pack "bar"
+        , "RECIPIENT_UNSUB_URL" .= T.pack "/email/unsubscribe?code=1234"
+        ]
+    }
+
+inviteBossQuestBody :: TL.Text
+inviteBossQuestBody = TL.fromStrict [text|
+    Hello bar,
+
+    You were invited to the Boss Quest The Basi-List
+
+    To join, please head over to:
+
+    https://habitica.example.org/party
+    --$space
+    Self-hosted Habitica instance at https://habitica.example.org/
+    Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
+|]
+
+questStarted :: TxnMail
+questStarted = commonTxnMail
+    { txnEmailType = "quest-started"
+    , txnVariables = object
+        [ "BASE_URL"   .= T.pack "https://habitica.example.org"
+        , "PARTY_URL"  .= T.pack "/party"
+        ]
+    , txnPersonalVariables = M.singleton commonTxnAddr $ object
+        [ "RECIPIENT_NAME" .= T.pack "bar"
+        , "RECIPIENT_UNSUB_URL" .= T.pack "/email/unsubscribe?code=1234"
+        ]
+    }
+
+questStartedBody :: TL.Text
+questStartedBody = TL.fromStrict [text|
+    Hello bar,
+
+    The quest you have joined has just started. Please head over to your
+    party to see the details:
+
+    https://habitica.example.org/party
+    --$space
+    Self-hosted Habitica instance at https://habitica.example.org/
+    Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
+|]
+
 main :: IO ()
 main = hspec $ do
     describe "reset-password" $ do
@@ -136,3 +222,29 @@ main = hspec $ do
             subject rendered `shouldBe` "Invitation to Habitica from foo"
         it "has correct body" $
             body rendered `shouldBe` inviteFriendBody
+
+    describe "invite-collection-quest" $ do
+        let rendered = snd $ renderTxnMail commonTxnRecip inviteCollectionQuest
+
+        it "has correct subject" $
+            subject rendered `shouldBe`
+                "New Collection Quest: Attack of the Mundane,"
+             <> " Part 1: Dish Disaster!"
+        it "has correct body" $
+            body rendered `shouldBe` inviteCollectionQuestBody
+
+    describe "invite-boss-quest" $ do
+        let rendered = snd $ renderTxnMail commonTxnRecip inviteBossQuest
+
+        it "has correct subject" $
+            subject rendered `shouldBe` "New Boss Quest: The Basi-List"
+        it "has correct body" $
+            body rendered `shouldBe` inviteBossQuestBody
+
+    describe "quest-started" $ do
+        let rendered = snd $ renderTxnMail commonTxnRecip questStarted
+
+        it "has correct subject" $
+            subject rendered `shouldBe` "Habitica Quest started"
+        it "has correct body" $
+            body rendered `shouldBe` questStartedBody

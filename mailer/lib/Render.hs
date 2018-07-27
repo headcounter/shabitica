@@ -55,15 +55,12 @@ footer = $(compileMustacheText "footer" . T.intercalate "\n" $
    group-member-join
    group-subscription-begins
    guild-invite-rescinded
-   invite-boss-quest
-   invite-collection-quest
    invited-guild
    invited-party
    kicked-from-guild
    kicked-from-party
    new-pm
    party-invite-rescinded
-   quest-started
    subscription-begins
    unflag-report-to-mods
    won-challenge
