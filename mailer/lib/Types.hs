@@ -7,16 +7,17 @@ module Types
     , RenderedMail(..)
     ) where
 
-import Data.Maybe (catMaybes, listToMaybe)
+import Data.Maybe (catMaybes)
 import Control.Monad (unless)
 import Data.Text (Text)
 import Data.Aeson ((.:), (.:?), (.=), object)
 import Data.Aeson.Types (Parser)
-import Network.Mail.Mime (Address(Address))
+import Network.Mail.Mime (Address(..))
 
 import qualified Data.Text.Lazy as TL
 import qualified Data.Aeson as J
 import qualified Data.Vector as V
+import qualified Data.HashMap.Strict as M
 
 -- XXX: Still needed for NixOS 18.03 which has base-4.10.1.0.
 -- TODO: Bump cabal requirements to base-4.11 after NixOS 18.09 was released.
@@ -26,7 +27,7 @@ data TxnMail = TxnMail
     { txnEmailType         :: Text
     , txnTo                :: [Address]
     , txnVariables         :: J.Value
-    , txnPersonalVariables :: Maybe J.Value
+    , txnPersonalVariables :: M.HashMap Text J.Value
     } deriving Show
 
 instance J.FromJSON TxnMail where
@@ -52,9 +53,9 @@ instance J.FromJSON TxnMail where
         extractRcpt = J.withObject "Recipient" $ \r ->
             (,) <$> r .: "rcpt" <*> (parseVars =<< (r .: "vars"))
 
-        parseNestedVars :: J.Value -> Parser (Maybe J.Value)
+        parseNestedVars :: J.Value -> Parser (M.HashMap Text J.Value)
         parseNestedVars = J.withArray "recipients" $ \rcpts ->
-            listToMaybe <$> mapM (fmap snd . extractRcpt) (V.toList rcpts)
+            M.fromList <$> mapM extractRcpt (V.toList rcpts)
 
         parseAddress :: J.Value -> Parser Address
         parseAddress = J.withObject "Address" $ \a ->

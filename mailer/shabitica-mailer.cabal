@@ -51,5 +51,6 @@ test-suite template-tests
                        hspec,
                        neat-interpolation,
                        shabitica-mailer,
-                       text
+                       text,
+                       unordered-containers
   default-language:    Haskell2010

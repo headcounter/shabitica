@@ -10,11 +10,12 @@ import Text.Mustache (Template(..), PName(PName), Node(..),
 import Text.Mustache.Compile.TH (compileMustacheDir, compileMustacheText)
 import Text.Wrap (wrapText, defaultWrapSettings)
 
+import qualified Data.HashMap.Strict as HM
 import qualified Data.Map.Lazy as M
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 
-import Types (SimpleMail(..), TxnMail(..), RenderedMail(..))
+import Types (SimpleMail(..), TxnMail(..), RenderedMail(..), Address(..))
 
 -- XXX: Still needed for NixOS 18.03 which has base-4.10.1.0.
 -- TODO: Bump cabal requirements to base-4.11 after NixOS 18.09 was released.
@@ -102,11 +103,11 @@ postProcessWarnings isUnknown warnings =
     wfilter (MustacheDirectlyRenderedValue _) = True
     wfilter _                                 = False
 
-renderTxnMail :: TxnMail -> ([T.Text], RenderedMail)
-renderTxnMail txn = render $ object
+renderTxnMail :: Address -> TxnMail -> ([T.Text], RenderedMail)
+renderTxnMail to txn = render $ object
     [ "emailType" .= txnEmailType txn
     , "v" .= txnVariables txn
-    , "p" .= txnPersonalVariables txn
+    , "p" .= HM.lookup (addressEmail to) (txnPersonalVariables txn)
     ]
   where
     postProcess = postProcessWarnings isUnknown *** postProcessRendered

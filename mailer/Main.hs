@@ -1,11 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import Control.Arrow (first)
 import Data.Maybe (fromMaybe)
 import System.Posix.Internals (setNonBlockingFD)
 import System.Environment (lookupEnv)
 import System.IO (hPrint, stderr)
-import Network.Mail.Mime (simpleMail', renderSendMailCustom)
+import Network.Mail.Mime (simpleMail', renderSendMailCustom, Mail)
 import Network.Wai (Application)
 import System.Systemd.Daemon (getActivatedSockets)
 import Network.Socket (fdSocket)
@@ -29,15 +30,23 @@ data Settings = Settings
 sender :: Address
 sender = Address (Just "SHabitica") "admin@example.org"
 
+renderMimeTxnMails :: Settings -> TxnMail -> ([T.Text], [Mail])
+renderMimeTxnMails s txn =
+    first concat . unzip . fmap mkMail $ txnTo txn
+  where
+    mkMail to =
+        (warnings, sm)
+      where
+        sm = simpleMail' to (fromEmail s) (subject rendered) (body rendered)
+        (warnings, rendered) = renderTxnMail to txn
+
 handleTxnMail :: Settings -> TxnMail -> IO JsonResponse
 handleTxnMail s txn = do
     mapM_ (TIO.hPutStrLn stderr) warnings
     mapM_ (renderSendMailCustom (sendmailPath s) ["-t"]) mails
     return JsonOk
   where
-    (warnings, rendered) = renderTxnMail txn
-    mkMail to = simpleMail' to (fromEmail s) (subject rendered) (body rendered)
-    mails = mkMail <$> txnTo txn
+    (warnings, mails) = renderMimeTxnMails s txn
 
 handleSimpleMail :: Settings -> SimpleMail -> IO JsonResponse
 handleSimpleMail s sm = do

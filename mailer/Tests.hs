@@ -8,6 +8,7 @@ import Test.Hspec
 
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
+import qualified Data.HashMap.Strict as M
 
 import Types
 import Render
@@ -44,13 +45,26 @@ resetPasswordBody = TL.fromStrict [text|
     password reset, please ignore this email.
 |]
 
+commonTxnAddr :: T.Text
+commonTxnAddr = "foo@example.org"
+
+commonTxnRecip :: Address
+commonTxnRecip = Address (Just "foo") commonTxnAddr
+
+commonTxnMail :: TxnMail
+commonTxnMail = TxnMail
+    { txnEmailType = "unknown"
+    , txnTo = [commonTxnRecip]
+    , txnVariables = object []
+    , txnPersonalVariables = M.empty
+    }
+
 welcome :: TxnMail
-welcome = TxnMail
+welcome = commonTxnMail
     { txnEmailType = "welcome"
-    , txnTo = [Address (Just "foo") "foo@example.org"]
     , txnVariables = object
         ["BASE_URL" .= T.pack "https://habitica.example.org"]
-    , txnPersonalVariables = Just $ object
+    , txnPersonalVariables = M.singleton commonTxnAddr $ object
         ["RECIPIENT_UNSUB_URL" .= T.pack "/email/unsubscribe?code=1234"]
     }
 
@@ -69,9 +83,8 @@ welcomeBody = TL.fromStrict [text|
 |]
 
 inviteFriend :: TxnMail
-inviteFriend = TxnMail
+inviteFriend = commonTxnMail
     { txnEmailType = "invite-friend"
-    , txnTo = [Address (Just "foo") "foo@example.org"]
     , txnVariables = object
         [ "LINK"     .= T.pack "/static/front?groupInvite=abcdef0123456789"
         , "INVITER"  .= T.pack "foo"
@@ -109,7 +122,7 @@ main = hspec $ do
             body rendered `shouldBe` resetPasswordBody
 
     describe "welcome" $ do
-        let rendered = snd $ renderTxnMail welcome
+        let rendered = snd $ renderTxnMail commonTxnRecip welcome
 
         it "has correct subject" $
             subject rendered `shouldBe` "Welcome to Habitica"
@@ -117,7 +130,7 @@ main = hspec $ do
             body rendered `shouldBe` welcomeBody
 
     describe "invite-friend" $ do
-        let rendered = snd $ renderTxnMail inviteFriend
+        let rendered = snd $ renderTxnMail commonTxnRecip inviteFriend
 
         it "has correct subject" $
             subject rendered `shouldBe` "Invitation to Habitica from foo"
