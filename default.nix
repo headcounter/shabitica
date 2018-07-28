@@ -362,7 +362,8 @@ in {
 
       systemd.sockets.habitica-mailer = {
         description = "Socket For Habitica Mailer Daemon";
-        wantedBy = [ "sockets.target" ];
+        requiredBy = [ "habitica.service" ];
+        before = [ "habitica.service" ];
 
         socketConfig.ListenStream = "/run/habitica-mailer.sock";
         socketConfig.SocketMode = "0600";
@@ -372,7 +373,7 @@ in {
 
       systemd.services.habitica-mailer = {
         description = "Habitica Mailer Daemon";
-        wantedBy = [ "multi-user.target" ];
+
         after = [
           "exim.service" "nullmailer.service" "opensmtpd.service"
           "postfix.service"
