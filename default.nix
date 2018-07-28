@@ -435,21 +435,23 @@ in {
         } // (if supportsTmpfs then {
           TemporaryFileSystem = "/";
         } else {
-          BindPaths = [ "/run/habitica-chroot:/:rbind" ];
+          BindPaths = [ "/run/habitica-chroot:/" ];
         });
       };
     }
     (lib.mkIf (!supportsTmpfs) {
       systemd.mounts = lib.singleton {
         description = "Tmpfs For Habitica Chroot";
+
+        bindsTo = [ "habitica.service" ];
+        requiredBy = [ "habitica.service" ];
+        before = [ "habitica.service" ];
+        after = [ "local-fs.target" ];
+
         what = "tmpfs";
         where = "/run/habitica-chroot";
         type = "tmpfs";
-        options = "nodev";
-      };
-      systemd.automounts = lib.singleton {
-        wantedBy = [ "local-fs.target" ];
-        where = "/run/habitica-chroot";
+        options = "nodev,noexec,nosuid";
       };
     })
     (lib.mkIf cfg.useNginx {
