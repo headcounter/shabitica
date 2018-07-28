@@ -384,6 +384,7 @@ in {
         serviceConfig.ExecStart = let
           mailer = pkgs.haskellPackages.callPackage ./mailer {};
         in "${mailer}/bin/shabitica-mailer";
+        serviceConfig.PrivateNetwork = true;
       };
 
       systemd.sockets.habitica = {
