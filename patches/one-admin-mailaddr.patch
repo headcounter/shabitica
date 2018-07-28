@@ -133,7 +133,7 @@ index cf04a520a..5bfbbd7ef 100644
  };
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 8ee06fa87..879571de9 100644
+index a87a1075c..9bacbd469 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -20,8 +20,8 @@ import { send as sendEmail } from '../../libs/email';
@@ -161,7 +161,7 @@ index fcae0a65f..e4d6e7ef5 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 559bb32d7..0d62a715b 100644
+index cd35f58fc..15122e075 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,7 +22,7 @@ import common from '../../../common';
@@ -202,7 +202,7 @@ index 49b3f3d16..13e8fe8c0 100644
  });
  
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
-index fde7cf592..eeb03417a 100644
+index 301f14ea5..9fbce5113 100644
 --- a/website/server/middlewares/auth.js
 +++ b/website/server/middlewares/auth.js
 @@ -7,7 +7,7 @@ import {
@@ -212,5 +212,5 @@ index fde7cf592..eeb03417a 100644
 -const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
 +const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
  
- function getUserFields (userFieldsToExclude, req) {
+ function getUserFields (options, req) {
    // A list of user fields that aren't needed for the route and are not loaded from the db.

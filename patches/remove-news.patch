@@ -68,7 +68,7 @@ index c7aa8772d..c852b2b95 100644
          'QUEST_INVITATION', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
          'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
 diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
-index d25543787..34a299d89 100644
+index 6ae21ff7e..7faab1ef8 100644
 --- a/website/client/components/notifications.vue
 +++ b/website/client/components/notifications.vue
 @@ -95,7 +95,6 @@ import guide from 'client/mixins/guide';
@@ -153,7 +153,7 @@ index e5dd03e02..a878ec5b7 100644
        if (this.$route.name === 'plans') return;
        return 'purple-footer';
 diff --git a/website/client/router.js b/website/client/router.js
-index de14d60c0..cff3c2145 100644
+index 01855b7e4..90690af04 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -15,7 +15,6 @@ const AppPage = () => import(/* webpackChunkName: "static" */'./components/stati
@@ -164,7 +164,7 @@ index de14d60c0..cff3c2145 100644
  const OverviewPage = () => import(/* webpackChunkName: "static" */'./components/static/overview');
  const PrivacyPage = () => import(/* webpackChunkName: "static" */'./components/static/privacy');
  const TermsPage = () => import(/* webpackChunkName: "static" */'./components/static/terms');
-@@ -231,7 +230,6 @@ const router = new VueRouter({
+@@ -233,7 +232,6 @@ const router = new VueRouter({
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
          { name: 'home', path: 'home', component: HomePage, meta: {requiresLogin: false} },
          { name: 'front', path: 'front', component: HomePage, meta: {requiresLogin: false} },

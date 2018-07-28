@@ -225,10 +225,10 @@ index b1d374925..9160226c5 100644
  
    describe('bulk purchasing', () => {
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 56965773c..950516199 100644
+index 07f2d05f7..23142097a 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
-@@ -135,6 +135,13 @@ api.registerLocal = {
+@@ -139,6 +139,13 @@ api.registerLocal = {
            passwordHashMethod: 'bcrypt',
          },
        },

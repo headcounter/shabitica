@@ -215,7 +215,7 @@ index 7674d4b6f..82c2825f4 100644
    .col-12
      router-view
 diff --git a/website/client/components/group-plans/taskInformation.vue b/website/client/components/group-plans/taskInformation.vue
-index 610ee9892..e834ff877 100644
+index 01aeb6c3e..d4b20ce7a 100644
 --- a/website/client/components/group-plans/taskInformation.vue
 +++ b/website/client/components/group-plans/taskInformation.vue
 @@ -1,6 +1,5 @@
@@ -225,7 +225,7 @@ index 610ee9892..e834ff877 100644
    task-modal(
      :task="workingTask",
      :purpose="taskFormPurpose",
-@@ -235,7 +234,6 @@
+@@ -236,7 +235,6 @@
  import taskDefaults from 'common/script/libs/taskDefaults';
  import TaskColumn from '../tasks/column';
  import TaskModal from '../tasks/taskModal';
@@ -233,7 +233,7 @@ index 610ee9892..e834ff877 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import filterIcon from 'assets/svg/filter.svg';
-@@ -256,7 +254,6 @@ export default {
+@@ -257,7 +255,6 @@ export default {
    components: {
      TaskColumn,
      TaskModal,
@@ -241,7 +241,7 @@ index 610ee9892..e834ff877 100644
    },
    data () {
      return {
-@@ -302,10 +299,6 @@ export default {
+@@ -303,10 +300,6 @@ export default {
    mounted () {
      if (!this.searchId) this.searchId = this.groupId;
      this.load();
@@ -503,10 +503,10 @@ index 84ed4a636..2dd48922c 100644
      },
    },
 diff --git a/website/client/router.js b/website/client/router.js
-index f50429548..9bf78fd8d 100644
+index 242cb646f..a6195542b 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
-@@ -72,7 +72,6 @@ const GroupPlansAppPage = () => import(/* webpackChunkName: "guilds" */ './compo
+@@ -73,7 +73,6 @@ const GroupPlansAppPage = () => import(/* webpackChunkName: "guilds" */ './compo
  // Group Plans
  const GroupPlanIndex = () => import(/* webpackChunkName: "group-plans" */ './components/group-plans/index');
  const GroupPlanTaskInformation = () => import(/* webpackChunkName: "group-plans" */ './components/group-plans/taskInformation');
@@ -514,7 +514,7 @@ index f50429548..9bf78fd8d 100644
  
  // Challenges
  const ChallengeIndex = () => import(/* webpackChunkName: "challenges" */ './components/challenges/index');
-@@ -145,12 +144,6 @@ const router = new VueRouter({
+@@ -147,12 +146,6 @@ const router = new VueRouter({
            component: GroupPage,
            props: true,
          },
@@ -528,7 +528,7 @@ index f50429548..9bf78fd8d 100644
      },
      {
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 0d62a715b..f6e0e81a1 100644
+index 15122e075..c9d5614e6 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -20,6 +20,7 @@ import { sendTxn as sendTxnEmail } from '../../libs/email';
@@ -548,7 +548,7 @@ index 0d62a715b..f6e0e81a1 100644
      let validationErrors = req.validationErrors();
      if (validationErrors) throw validationErrors;
  
-@@ -179,6 +178,18 @@ api.createGroupPlan = {
+@@ -178,6 +177,18 @@ api.createGroupPlan = {
      user.guilds.push(group._id);
  
      let results = await Promise.all([user.save(), group.save()]);
@@ -568,7 +568,7 @@ index 0d62a715b..f6e0e81a1 100644
  
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 4853f9ec1..e1c044f06 100644
+index a8a8bbc93..de6a45a98 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -1,4 +1,3 @@
@@ -576,7 +576,7 @@ index 4853f9ec1..e1c044f06 100644
  import mongoose from 'mongoose';
  import {
    model as User,
-@@ -1471,14 +1470,12 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
+@@ -1473,14 +1472,12 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
  };
  
  schema.methods.isSubscribed = function isSubscribed () {

@@ -15,10 +15,10 @@ Date:   Tue Mar 27 05:37:23 2018 +0200
     Filename: allow-register-first.patch
 
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 879571de9..7f223ac43 100644
+index 9bacbd469..c11403c10 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
-@@ -149,15 +149,17 @@ api.registerLocal = {
+@@ -153,15 +153,17 @@ api.registerLocal = {
        },
      };
  

@@ -112,7 +112,7 @@ index d240ae6ac..1c4fc0b98 100644
  </style>
  
 diff --git a/website/client/router.js b/website/client/router.js
-index b4131b4ab..f1482a7a6 100644
+index 5e5e77a78..4937d0d3c 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -15,11 +15,8 @@ const AppPage = () => import(/* webpackChunkName: "static" */'./components/stati
@@ -127,7 +127,7 @@ index b4131b4ab..f1482a7a6 100644
  const PrivacyPage = () => import(/* webpackChunkName: "static" */'./components/static/privacy');
  const TermsPage = () => import(/* webpackChunkName: "static" */'./components/static/terms');
  
-@@ -244,14 +241,10 @@ const router = new VueRouter({
+@@ -246,14 +243,10 @@ const router = new VueRouter({
          { name: 'clearBrowserData', path: 'clear-browser-data', component: ClearBrowserDataPage, meta: {requiresLogin: false}},
          { name: 'faq', path: 'faq', component: FAQPage, meta: {requiresLogin: false}},
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},

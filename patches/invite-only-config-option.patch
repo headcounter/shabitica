@@ -22,7 +22,7 @@ index b3fb47d49..22d1d724d 100644
 +    "INVITE_ONLY": "true"
  }
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 7f223ac43..ca7dbdcfd 100644
+index c11403c10..1020bf1fa 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -22,6 +22,7 @@ import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs
@@ -33,7 +33,7 @@ index 7f223ac43..ca7dbdcfd 100644
  const USERNAME_LENGTH_MIN = 1;
  const USERNAME_LENGTH_MAX = 20;
  
-@@ -157,9 +158,9 @@ api.registerLocal = {
+@@ -161,9 +162,9 @@ api.registerLocal = {
      // we check for partyInvite for backward compatibility
      if (req.query.groupInvite || req.query.partyInvite) {
        let success = await _handleGroupInvitation(newUser, req.query.groupInvite || req.query.partyInvite);

@@ -87,7 +87,7 @@ index 68d62bd34..d240ae6ac 100644
          router-link.nav-item(tag='li', to='/register')
            a.nav-link(v-once) {{ $t('getStarted') }}
 diff --git a/website/client/router.js b/website/client/router.js
-index 9bf78fd8d..00ab432f5 100644
+index a6195542b..7db093af0 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -14,7 +14,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'./components/stati
@@ -98,7 +98,7 @@ index 9bf78fd8d..00ab432f5 100644
  const FAQPage = () => import(/* webpackChunkName: "static" */'./components/static/faq');
  const FeaturesPage = () => import(/* webpackChunkName: "static" */'./components/static/features');
  const GroupPlansPage = () => import(/* webpackChunkName: "static" */'./components/static/groupPlans');
-@@ -245,7 +244,6 @@ const router = new VueRouter({
+@@ -247,7 +246,6 @@ const router = new VueRouter({
          { name: 'app', path: 'app', component: AppPage, meta: {requiresLogin: false}},
          { name: 'clearBrowserData', path: 'clear-browser-data', component: ClearBrowserDataPage, meta: {requiresLogin: false}},
          { name: 'communityGuidelines', path: 'community-guidelines', component: CommunityGuidelinesPage, meta: {requiresLogin: false}},

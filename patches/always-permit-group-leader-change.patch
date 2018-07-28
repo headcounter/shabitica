@@ -14,10 +14,10 @@ Date:   Tue Mar 27 05:37:27 2018 +0200
     Filename: always-permit-group-leader-change.patch
 
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index f6e0e81a1..a338ba41b 100644
+index c9d5614e6..abea6ad74 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -403,8 +403,6 @@ api.updateGroup = {
+@@ -402,8 +402,6 @@ api.updateGroup = {
      if (group.leader !== user._id && group.type === 'party') throw new NotAuthorized(res.t('messageGroupOnlyLeaderCanUpdate'));
      else if (group.leader !== user._id && !user.contributor.admin) throw new NotAuthorized(res.t('messageGroupOnlyLeaderCanUpdate'));
  
@@ -27,7 +27,7 @@ index f6e0e81a1..a338ba41b 100644
  
      let savedGroup = await group.save();
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index e1c044f06..4dd5f3104 100644
+index de6a45a98..ce0da0d76 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -18,7 +18,6 @@ import {

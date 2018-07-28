@@ -12,7 +12,7 @@ Date:   Tue Mar 27 05:37:13 2018 +0200
     Filename: invite-only.patch
 
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index 8b7a030df..13b858ce9 100644
+index 6f2d4fc84..ee42ff1e8 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -5,7 +5,7 @@
@@ -56,7 +56,7 @@ index 8b7a030df..13b858ce9 100644
      methods: {
        validateEmail (email) {
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 950516199..8ee06fa87 100644
+index 23142097a..a87a1075c 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -60,7 +60,9 @@ async function _handleGroupInvitation (user, invite) {
@@ -69,7 +69,7 @@ index 950516199..8ee06fa87 100644
  }
  
  /**
-@@ -152,7 +154,11 @@ api.registerLocal = {
+@@ -156,7 +158,11 @@ api.registerLocal = {
  
      // we check for partyInvite for backward compatibility
      if (req.query.groupInvite || req.query.partyInvite) {

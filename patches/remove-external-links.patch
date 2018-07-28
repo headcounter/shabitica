@@ -71,19 +71,19 @@ index f61e52ae6..67f5631f9 100644
              a.topbar-dropdown-item.dropdown-item(href="http://habitica.wikia.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
        .currency-tray.form-inline
 diff --git a/website/client/components/static/faq.vue b/website/client/components/static/faq.vue
-index a26e1260c..f55c3624f 100644
+index e2ce08aa0..5000dac10 100644
 --- a/website/client/components/static/faq.vue
 +++ b/website/client/components/static/faq.vue
 @@ -3,7 +3,7 @@
      .row
        .col-12.col-md-6.offset-md-3
-         h1 {{ $t('frequentlyAskedQuestions') }}
--        .faq-question(v-for='(heading, index) in headings')
-+        .faq-question(v-for='(heading, index) in headings', v-if="heading != ''")
-           h2.accordion(@click='setActivePage(heading)') {{ $t(`faqQuestion${index}`) }}
-           div(v-if='pageState[heading]', v-markdown="$t('webFaqAnswer' + index, replacements)")
-         hr
-@@ -43,8 +43,8 @@
+         h1#faq-heading {{ $t('frequentlyAskedQuestions') }}
+-        .faq-question(v-for='(heading, index) in headings', :key="index")
++        .faq-question(v-for='(heading, index) in headings', :key="index", v-if="heading != ''")
+           h2(role="tab", v-b-toggle="heading", @click="handleClick($event)", variant="info") {{ $t(`faqQuestion${index}`) }}
+           b-collapse(:id="heading", :visible="isVisible(heading)", accordion="faq", role="tabpanel")
+             div.card-body(v-markdown="$t('webFaqAnswer' + index, replacements)")
+@@ -62,8 +62,8 @@
          'character-classes',
          'blue-mana-bar',
          'monsters-quests',
@@ -94,10 +94,10 @@ index a26e1260c..f55c3624f 100644
          'world-boss',
        ];
  
-@@ -61,11 +61,6 @@
-           techAssistanceEmail: TECH_ASSISTANCE_EMAIL,
+@@ -76,11 +76,6 @@
            wikiTechAssistanceEmail: `mailto:${TECH_ASSISTANCE_EMAIL}`,
          },
+         visible: hash && headings.includes(hash) ? hash : null,
 -        // @TODO webFaqStillNeedHelp: {
 -        // linkStart: '[',
 -        // linkEnd: '](/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a)',
@@ -119,10 +119,10 @@ index cfd14c700..9f373bb87 100644
  
  <style lang='scss'>
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index a338ba41b..cd51c0d2a 100644
+index abea6ad74..16de5bfc8 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -734,7 +734,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
+@@ -733,7 +733,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
        {name: 'GROUP_NAME', content: group.name},
        {name: 'MESSAGE', content: message},
        {name: 'GUILDS_LINK', content: '/groups/discovery'},

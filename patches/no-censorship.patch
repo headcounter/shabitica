@@ -12,7 +12,7 @@ Date:   Sat Apr 7 03:03:48 2018 +0200
     Filename: no-censorship.patch
 
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index 278388365..e62cf0d09 100644
+index a851acda6..d2c6add6a 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -11,19 +11,10 @@ import {
@@ -257,7 +257,7 @@ index 278388365..e62cf0d09 100644
      let { group, members } = await createAndPopulateGroup({
        groupDetails: {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 60f02e390..d55ee63ee 100644
+index 54b5376d6..59e7f4ccf 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -293,7 +293,7 @@ index 60f02e390..d55ee63ee 100644
          // Don't show errors from getting user details. These users have delete their account,
          // but their chat message still exists.
          let configExists = Boolean(error.response) && Boolean(error.response.config);
-@@ -427,25 +422,6 @@ export default {
+@@ -451,25 +446,6 @@ export default {
      if (loadingScreen) document.body.removeChild(loadingScreen);
    },
    methods: {

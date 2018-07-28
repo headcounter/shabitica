@@ -1480,7 +1480,7 @@ index 28d4135e2..2deb85228 100644
        })
        .catch(done);
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index 6a675aab9..278388365 100644
+index 3f52127d0..a851acda6 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -15,10 +15,6 @@ import { getMatchesByWordArray } from '../../../../../website/server/libs/string
@@ -2156,7 +2156,7 @@ index fd1ab65b4..055a92598 100644
  
      it('purchases hatchingPotions', () => {
 diff --git a/webpack/config/index.js b/webpack/config/index.js
-index 463e6f302..deadd58b0 100644
+index ca098d0a9..4f9bee934 100644
 --- a/webpack/config/index.js
 +++ b/webpack/config/index.js
 @@ -50,18 +50,6 @@ module.exports = {
@@ -2175,7 +2175,7 @@ index 463e6f302..deadd58b0 100644
 -        target: DEV_BASE_URL,
 -        changeOrigin: true,
 -      },
-       '/logout': {
+       '/logout-server': {
          target: DEV_BASE_URL,
          changeOrigin: true,
 diff --git a/webpack/config/prod.env.js b/webpack/config/prod.env.js
@@ -2214,7 +2214,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 342de7a14..60f02e390 100644
+index 400991d4d..54b5376d6 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,7 +10,6 @@ div
@@ -2246,7 +2246,7 @@ index 342de7a14..60f02e390 100644
      bannedAccountModal,
    },
    data () {
-@@ -391,11 +386,6 @@ export default {
+@@ -415,11 +410,6 @@ export default {
        document.title = title;
      });
  
@@ -2258,7 +2258,7 @@ index 342de7a14..60f02e390 100644
      if (this.isUserLoggedIn && !this.isStaticPage) {
        // Load the user and the user tasks
        Promise.all([
-@@ -403,8 +393,6 @@ export default {
+@@ -427,8 +417,6 @@ export default {
          this.$store.dispatch('tasks:fetchUserTasks'),
        ]).then(() => {
          this.$store.state.isUserLoaded = true;
@@ -2267,7 +2267,7 @@ index 342de7a14..60f02e390 100644
  
          this.hideLoadingScreen();
  
-@@ -416,8 +404,6 @@ export default {
+@@ -440,8 +428,6 @@ export default {
          }
  
          this.$nextTick(() => {
@@ -2276,7 +2276,7 @@ index 342de7a14..60f02e390 100644
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -466,8 +452,6 @@ export default {
+@@ -490,8 +476,6 @@ export default {
          if (data.fromRoot) return;
          const modalStack = this.$store.state.modalStack;
  
@@ -2285,7 +2285,7 @@ index 342de7a14..60f02e390 100644
          // Add new modal to the stack
          const prev = modalStack[modalStack.length - 1];
          const prevId = prev ? prev.modalId : undefined;
-@@ -522,18 +506,6 @@ export default {
+@@ -555,18 +539,6 @@ export default {
  
        return true;
      },
@@ -2626,7 +2626,7 @@ index e101c5457..be87ab840 100644
      },
    },
 diff --git a/website/client/components/auth/registerLoginReset.vue b/website/client/components/auth/registerLoginReset.vue
-index e6dec1f27..8d15c31f2 100644
+index 77d1c92cc..d536eb95a 100644
 --- a/website/client/components/auth/registerLoginReset.vue
 +++ b/website/client/components/auth/registerLoginReset.vue
 @@ -13,15 +13,6 @@
@@ -2706,7 +2706,7 @@ index e6dec1f27..8d15c31f2 100644
    watch: {
      $route: {
        handler () {
-@@ -427,37 +388,6 @@ export default {
+@@ -422,37 +383,6 @@ export default {
        // ALSO it's the only way to make sure language data is reloaded and correct for the logged in user
        window.location.href = redirectTo;
      },
@@ -2745,7 +2745,7 @@ index e6dec1f27..8d15c31f2 100644
        if (this.registering) {
          this.register();
 diff --git a/website/client/components/challenges/challengeModal.vue b/website/client/components/challenges/challengeModal.vue
-index 0b4637505..2231b0148 100644
+index 84e328a8c..7d033fdb9 100644
 --- a/website/client/components/challenges/challengeModal.vue
 +++ b/website/client/components/challenges/challengeModal.vue
 @@ -54,8 +54,6 @@
@@ -2794,23 +2794,23 @@ index f9b886d54..5f2f449af 100644
    data () {
      return {
 diff --git a/website/client/components/groups/createPartyModal.vue b/website/client/components/groups/createPartyModal.vue
-index 081e8d3ed..e81c274b2 100644
+index 42d168baf..1c760270c 100644
 --- a/website/client/components/groups/createPartyModal.vue
 +++ b/website/client/components/groups/createPartyModal.vue
-@@ -28,12 +28,6 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
-         .option-item(v-once)
+@@ -29,12 +29,6 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
+         //.option-item(v-once)
            .svg-icon(v-html="icons.qrCode")
            | {{$t('qrCode')}}
--        .option-item(v-once)
+-        //.option-item(v-once)
 -          .svg-icon.facebook(v-html="icons.facebook")
 -          | Facebook
--        .option-item(v-once)
+-        //.option-item(v-once)
 -          .svg-icon(v-html="icons.twitter")
 -          | Twitter
  </template>
  
  <style>
-@@ -121,11 +115,6 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
+@@ -127,11 +121,6 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
          display: inline-block;
          vertical-align: bottom;
        }
@@ -2822,7 +2822,7 @@ index 081e8d3ed..e81c274b2 100644
      }
  
      .option-item:hover {
-@@ -138,13 +127,10 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
+@@ -144,13 +133,10 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
  
  <script>
  import { mapState } from 'client/libs/store';
@@ -2836,7 +2836,7 @@ index 081e8d3ed..e81c274b2 100644
  
  export default {
    data () {
-@@ -153,8 +139,6 @@ export default {
+@@ -159,8 +145,6 @@ export default {
          copy: copyIcon,
          greyBadge: greyBadgeIcon,
          qrCode: qrCodeIcon,
@@ -2845,7 +2845,7 @@ index 081e8d3ed..e81c274b2 100644
        }),
        shareUserIdShown: false,
      };
-@@ -175,11 +159,6 @@ export default {
+@@ -181,11 +165,6 @@ export default {
        this.$store.state.party.data = party;
        this.user.party._id = party._id;
  
@@ -3151,7 +3151,7 @@ index 7e72975a0..31df3f29c 100644
      },
  
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
-index 788197c37..ec24b1933 100644
+index bcbfcfd07..1333d3839 100644
 --- a/website/client/components/header/userDropdown.vue
 +++ b/website/client/components/header/userDropdown.vue
 @@ -67,7 +67,6 @@ menu-dropdown.item-user(:right="true")
@@ -3517,7 +3517,7 @@ index 667172b64..68d62bd34 100644
  };
  </script>
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index 7b14b0917..8b7a030df 100644
+index 7482c9eba..6f2d4fc84 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -13,15 +13,6 @@
@@ -3686,7 +3686,7 @@ index 7b14b0917..8b7a030df 100644
      computed: {
        emailValid () {
          if (this.email.length <= 3) return false;
-@@ -649,33 +543,8 @@
+@@ -644,33 +538,8 @@
          window.location.href = redirectTo;
        },
        playButtonClick () {
@@ -3754,7 +3754,7 @@ index cc63b911c..d6877ca53 100644
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
        const crit = tmp.crit;
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index aa35641b5..8a0b02a73 100644
+index f3d1e65ea..d2d7d3c46 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -75,14 +75,12 @@ div
@@ -3912,7 +3912,7 @@ index 0d5029fb7..f2e502586 100644
      },
    },
 diff --git a/website/client/router.js b/website/client/router.js
-index bd74858d2..f50429548 100644
+index 6368e3974..242cb646f 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -1,7 +1,6 @@
@@ -3923,7 +3923,7 @@ index bd74858d2..f50429548 100644
  
  // import EmptyView from './components/emptyView';
  
-@@ -342,16 +341,6 @@ router.beforeEach(function routerGuard (to, from, next) {
+@@ -344,16 +343,6 @@ router.beforeEach(function routerGuard (to, from, next) {
      });
    }
  
@@ -3941,7 +3941,7 @@ index bd74858d2..f50429548 100644
  });
  
 diff --git a/website/client/store/actions/auth.js b/website/client/store/actions/auth.js
-index d5f8ebb61..423fa99a3 100644
+index 02fd27d28..c407d8614 100644
 --- a/website/client/store/actions/auth.js
 +++ b/website/client/store/actions/auth.js
 @@ -1,7 +1,6 @@
@@ -3978,7 +3978,7 @@ index d5f8ebb61..423fa99a3 100644
  export function logout () {
    localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
 -  localStorage.removeItem(LOCALSTORAGE_SOCIAL_AUTH_KEY);
-   window.location.href = '/logout';
+   window.location.href = '/logout-server';
  }
 diff --git a/website/client/store/actions/chat.js b/website/client/store/actions/chat.js
 index def822e6a..ecdd7573a 100644
@@ -4684,19 +4684,32 @@ index 4904b74fe..b4f84ade4 100644
      pick(user, splitWhitespace('items balance')),
    ];
 diff --git a/website/common/script/ops/changeClass.js b/website/common/script/ops/changeClass.js
-index c1ce86c7b..7c82345fa 100644
+index 618a61761..7c66147a8 100644
 --- a/website/common/script/ops/changeClass.js
 +++ b/website/common/script/ops/changeClass.js
-@@ -28,7 +28,7 @@ function resetClass (user, req = {}) {
-   user.flags.classSelected = false;
+@@ -33,18 +33,17 @@ function resetClass (user, req = {}) {
+   return balanceRemoved;
  }
  
 -module.exports = function changeClass (user, req = {}, analytics) {
 +module.exports = function changeClass (user, req = {}) {
    let klass = get(req, 'query.class');
+-  let balanceRemoved = 0;
    // user.flags.classSelected is set to false after the user paid the 3 gems
    if (user.stats.lvl < 10) {
-@@ -50,17 +50,6 @@ module.exports = function changeClass (user, req = {}, analytics) {
+     throw new NotAuthorized(i18n.t('lvl10ChangeClass', req.language));
+   } else if (!klass) {
+     // if no class is specified, reset points and set user.flags.classSelected to false. User will have paid 3 gems and will be prompted to select class.
+-    balanceRemoved = resetClass(user, req);
++    resetClass(user, req);
+   } else if (klass === 'warrior' || klass === 'rogue' || klass === 'wizard' || klass === 'healer') {
+     if (user.flags.classSelected) {
+-      balanceRemoved = resetClass(user, req);
++      resetClass(user, req);
+     }
+ 
+     user.stats.class = klass;
+@@ -56,17 +55,6 @@ module.exports = function changeClass (user, req = {}, analytics) {
      if (klass === 'rogue')  user.items.gear.owned[`shield_${klass}_0`] = true;
  
      removePinnedItemsByOwnedGear(user);
@@ -4705,8 +4718,8 @@ index c1ce86c7b..7c82345fa 100644
 -      analytics.track('change class', {
 -        uuid: user._id,
 -        class: klass,
--        acquireMethod: 'Gems',
--        gemCost: 3,
+-        acquireMethod: balanceRemoved === 0 ? 'Free' : 'Gems',
+-        gemCost: balanceRemoved / 0.25,
 -        category: 'behavior',
 -        headers: req.headers,
 -      });
@@ -4990,7 +5003,7 @@ index bbe4a7910..d89c3e920 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 62b3009c2..56965773c 100644
+index 760a9f584..07f2d05f7 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -1,6 +1,5 @@
@@ -5049,8 +5062,8 @@ index 62b3009c2..56965773c 100644
 +    let existingUser = res.locals.user;
  
      req.checkBody({
-       email: {
-@@ -155,19 +140,8 @@ api.registerLocal = {
+       username: {
+@@ -159,19 +144,8 @@ api.registerLocal = {
        },
      };
  
@@ -5072,7 +5085,7 @@ index 62b3009c2..56965773c 100644
  
      // we check for partyInvite for backward compatibility
      if (req.query.groupInvite || req.query.partyInvite) {
-@@ -191,17 +165,6 @@ api.registerLocal = {
+@@ -195,17 +169,6 @@ api.registerLocal = {
          if (!existingUser) sendTxnEmail(savedUser, 'welcome');
        });
  
@@ -5090,7 +5103,7 @@ index 62b3009c2..56965773c 100644
      return null;
    },
  };
-@@ -274,183 +237,10 @@ api.loginLocal = {
+@@ -278,183 +241,10 @@ api.loginLocal = {
        await user.save();
      }
  
@@ -5274,7 +5287,7 @@ index 62b3009c2..56965773c 100644
  /**
   * @api {put} /api/v3/user/auth/update-username Update username
   * @apiDescription Update the username of a local user
-@@ -710,35 +500,4 @@ api.resetPasswordSetNewOne = {
+@@ -714,35 +504,4 @@ api.resetPasswordSetNewOne = {
    },
  };
  
@@ -5311,7 +5324,7 @@ index 62b3009c2..56965773c 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 0f36e6387..7b62ef47d 100644
+index 083dd926e..9104388a9 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -204,16 +204,6 @@ api.createChallenge = {
@@ -5456,7 +5469,7 @@ index f18644306..dcae6acda 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index a15195e15..559bb32d7 100644
+index 16d586a5c..cd35f58fc 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5496,7 +5509,7 @@ index a15195e15..559bb32d7 100644
      res.respond(201, response); // do not remove chat flags data as we've just created the group
    },
  };
-@@ -203,54 +181,6 @@ api.createGroupPlan = {
+@@ -202,54 +180,6 @@ api.createGroupPlan = {
      let results = await Promise.all([user.save(), group.save()]);
      let savedGroup = results[1];
  
@@ -5551,7 +5564,7 @@ index a15195e15..559bb32d7 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -592,7 +522,6 @@ api.joinGroup = {
+@@ -591,7 +521,6 @@ api.joinGroup = {
      if (!group.hasNotCancelled() && group.memberCount === 0) group.leader = user._id; // If new user is only member -> set as leader
  
      if (group.hasNotCancelled())  {
@@ -5559,7 +5572,7 @@ index a15195e15..559bb32d7 100644
        await group.updateGroupPlan();
      }
  
-@@ -645,22 +574,6 @@ api.joinGroup = {
+@@ -644,22 +573,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -5582,7 +5595,7 @@ index a15195e15..559bb32d7 100644
      res.respond(200, response);
    },
  };
-@@ -791,7 +704,7 @@ api.leaveGroup = {
+@@ -790,7 +703,7 @@ api.leaveGroup = {
      }
  
      await group.leave(user, req.query.keep, req.body.keepChallenges);
@@ -5591,7 +5604,7 @@ index a15195e15..559bb32d7 100644
      _removeMessagesFromMember(user, group._id);
      await user.save();
  
-@@ -800,11 +713,6 @@ api.leaveGroup = {
+@@ -799,11 +712,6 @@ api.leaveGroup = {
        user.guilds.splice(guildIndex, 1);
      }
  
@@ -5603,7 +5616,7 @@ index a15195e15..559bb32d7 100644
      res.respond(200, {});
    },
  };
-@@ -894,8 +802,7 @@ api.removeGroupMember = {
+@@ -893,8 +801,7 @@ api.removeGroupMember = {
      if (isInGroup) {
        group.memberCount -= 1;
        if (group.hasNotCancelled())  {
@@ -5613,7 +5626,7 @@ index a15195e15..559bb32d7 100644
        }
  
        if (group.quest && group.quest.leader === member._id) {
-@@ -911,12 +818,6 @@ api.removeGroupMember = {
+@@ -910,12 +817,6 @@ api.removeGroupMember = {
          removeFromArray(member.guilds, group._id);
        }
        if (isInGroup === 'party') {
@@ -5626,7 +5639,7 @@ index a15195e15..559bb32d7 100644
          member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
        }
  
-@@ -1022,19 +923,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -1021,19 +922,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -5646,7 +5659,7 @@ index a15195e15..559bb32d7 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1050,8 +938,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1049,8 +937,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},
@@ -5822,10 +5835,10 @@ index b579cc386..6ed16d973 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index e309eac1c..d993e584e 100644
+index a7707e977..feed970e6 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
-@@ -22,7 +22,6 @@ import {
+@@ -23,7 +23,6 @@ import {
  import common from '../../../common';
  import _ from 'lodash';
  import logger from '../../libs/logger';
@@ -5833,7 +5846,7 @@ index e309eac1c..d993e584e 100644
  import apiError from '../../libs/apiError';
  
  function canNotEditTasks (group, user, assignedUserId) {
-@@ -167,16 +166,6 @@ api.createUserTasks = {
+@@ -168,16 +167,6 @@ api.createUserTasks = {
      res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
  
      tasks.forEach((task) => {
@@ -5850,7 +5863,7 @@ index e309eac1c..d993e584e 100644
        taskActivityWebhook.send(user, {
          type: 'created',
          task,
-@@ -254,16 +243,6 @@ api.createChallengeTasks = {
+@@ -255,16 +244,6 @@ api.createChallengeTasks = {
  
      // If adding tasks to a challenge -> sync users
      if (challenge) challenge.addTasks(tasks);
@@ -5867,7 +5880,7 @@ index e309eac1c..d993e584e 100644
    },
  };
  
-@@ -614,7 +593,7 @@ api.scoreTask = {
+@@ -618,7 +597,7 @@ api.scoreTask = {
  
      let [delta] = common.ops.scoreTask({task, user, direction}, req);
      // Drop system (don't run on the client, as it would only be discarded since ops are sent to the API, not the results)
@@ -5876,7 +5889,7 @@ index e309eac1c..d993e584e 100644
  
      // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
      // TODO move to common code?
-@@ -683,17 +662,6 @@ api.scoreTask = {
+@@ -693,17 +672,6 @@ api.scoreTask = {
          logger.error(e);
        }
      }
@@ -5895,10 +5908,10 @@ index e309eac1c..d993e584e 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks/groups.js b/website/server/controllers/api-v3/tasks/groups.js
-index bd68fe6d2..a6076c9f0 100644
+index 11f45a225..414afb277 100644
 --- a/website/server/controllers/api-v3/tasks/groups.js
 +++ b/website/server/controllers/api-v3/tasks/groups.js
-@@ -59,16 +59,6 @@ api.createGroupTasks = {
+@@ -62,16 +62,6 @@ api.createGroupTasks = {
      let tasks = await createTasks(req, res, {user, group});
  
      res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
@@ -6141,7 +6154,7 @@ index 83b27e727..9c208db6d 100644
    },
  };
 diff --git a/website/server/controllers/top-level/dataexport.js b/website/server/controllers/top-level/dataexport.js
-index 7943355bb..cf1e614ff 100644
+index af59996f4..4d41d4959 100644
 --- a/website/server/controllers/top-level/dataexport.js
 +++ b/website/server/controllers/top-level/dataexport.js
 @@ -8,17 +8,7 @@ import _ from 'lodash';
@@ -6162,7 +6175,7 @@ index 7943355bb..cf1e614ff 100644
  
  let api = {};
  
-@@ -188,75 +178,6 @@ api.exportUserAvatarHtml = {
+@@ -215,75 +205,6 @@ api.exportUserAvatarHtml = {
    },
  };
  
@@ -6816,7 +6829,7 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 5ab0b154c..4853f9ec1 100644
+index f1612af3e..a8a8bbc93 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -24,16 +24,12 @@ import {
@@ -6896,7 +6909,7 @@ index 5ab0b154c..4853f9ec1 100644
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  
-@@ -1508,7 +1481,7 @@ schema.methods.hasNotCancelled = function hasNotCancelled () {
+@@ -1510,7 +1483,7 @@ schema.methods.hasNotCancelled = function hasNotCancelled () {
    return this.isSubscribed() && !plan.dateTerminated;
  };
  
@@ -6905,7 +6918,7 @@ index 5ab0b154c..4853f9ec1 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1517,12 +1490,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1519,12 +1492,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;

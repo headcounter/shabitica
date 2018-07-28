@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.52.0";
+  version = "4.54.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1yxkfn6jb60x81y4c2r1zmwxk5lil5lj5nsf79ijh1k7q9sr2rnm";
+    sha256 = "1f9bsfjgwwixl15mgr3j08qjv7pi60512yg7jaza4a6ql5hsds2r";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -171,13 +171,6 @@ stdenv.mkDerivation rec {
     # Don't handle anything from Spritely specially (which also removes all
     # references to Spritely, see the canary below).
     patches/remove-spritely.patch
-
-    # Fix the member-details modal to not break the layout.
-    # https://github.com/HabitRPG/habitica/pull/10504
-    (fromUpstream {
-      rev = "30d85eacbed748b82b18dd3a29a531345babddd4";
-      sha256 = "0p11wprslvcfhdig137ypzybsqwcm29xcjm57yzs0r27yr95qrww";
-    })
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

@@ -9,7 +9,7 @@ Date:   Sat Apr 7 01:42:11 2018 +0200
     Filename: remove-unneeded-settings.patch
 
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
-index ec24b1933..2e581048d 100644
+index 1333d3839..2fa723349 100644
 --- a/website/client/components/header/userDropdown.vue
 +++ b/website/client/components/header/userDropdown.vue
 @@ -16,14 +16,7 @@ menu-dropdown.item-user(:right="true")
@@ -41,10 +41,10 @@ index 68366e110..9f8b08f3f 100644
  
    .col-12
 diff --git a/website/client/router.js b/website/client/router.js
-index f1482a7a6..de14d60c0 100644
+index 4937d0d3c..01855b7e4 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
-@@ -32,9 +32,7 @@ const Settings = () => import(/* webpackChunkName: "settings" */'./components/se
+@@ -33,9 +33,7 @@ const Settings = () => import(/* webpackChunkName: "settings" */'./components/se
  const API = () => import(/* webpackChunkName: "settings" */'./components/settings/api');
  const DataExport = () => import(/* webpackChunkName: "settings" */'./components/settings/dataExport');
  const Notifications = () => import(/* webpackChunkName: "settings" */'./components/settings/notifications');
@@ -54,7 +54,7 @@ index f1482a7a6..de14d60c0 100644
  
  // Hall
  const HallPage = () => import(/* webpackChunkName: "hall" */'./components/hall/index');
-@@ -214,16 +212,6 @@ const router = new VueRouter({
+@@ -216,16 +214,6 @@ const router = new VueRouter({
                path: 'data-export',
                component: DataExport,
              },
