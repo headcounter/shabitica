@@ -171,6 +171,12 @@ stdenv.mkDerivation rec {
     # Don't handle anything from Spritely specially (which also removes all
     # references to Spritely, see the canary below).
     patches/remove-spritely.patch
+
+    # Add missing Mystery Set name (mysterySet201807)
+    (fromUpstream {
+      rev = "9aa4cce3b9cb7b12dba8b34dc371e9a7d53101ea";
+      sha256 = "0cvj670z918pwa2rfxm3infwjfivsjdbjx1r8c2yy3hyx0b3lwlp";
+    })
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
