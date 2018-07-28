@@ -23,6 +23,10 @@ let
   migrations = import ./migrations.nix;
   latestDbVersion = lib.length migrations;
 
+  # XXX: This is because NixOS 18.03 is using systemd version 237, which
+  #      doesn't have the TemporaryFileSystem option.
+  supportsTmpfs = lib.versionAtLeast config.systemd.package.version "238";
+
   # Results in a systemd service unit for the Habitica server which only
   # contains BindReadOnlyPaths options. The rest of the service is defined
   # later in systemd.services.habitica and the contents here are merged
@@ -428,10 +432,26 @@ in {
           ProtectKernelModules = true;
           ProtectKernelTunables = true;
           RootDirectory = habiticaSandboxPaths;
+        } // (if supportsTmpfs then {
           TemporaryFileSystem = "/";
-        };
+        } else {
+          BindPaths = [ "/run/habitica-chroot:/:rbind" ];
+        });
       };
     }
+    (lib.mkIf (!supportsTmpfs) {
+      systemd.mounts = lib.singleton {
+        description = "Tmpfs For Habitica Chroot";
+        what = "tmpfs";
+        where = "/run/habitica-chroot";
+        type = "tmpfs";
+        options = "nodev";
+      };
+      systemd.automounts = lib.singleton {
+        wantedBy = [ "local-fs.target" ];
+        where = "/run/habitica-chroot";
+      };
+    })
     (lib.mkIf cfg.useNginx {
       services.nginx.enable = lib.mkOverride 900 true;
       services.nginx.virtualHosts.${cfg.hostName} = {
