@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Control.Arrow (first)
+import Control.Arrow (first, second)
+import Control.Monad (liftM2)
 import Data.Maybe (fromMaybe)
 import System.Posix.Internals (setNonBlockingFD)
 import System.Environment (lookupEnv)
@@ -27,18 +28,13 @@ data Settings = Settings
     , sendmailPath :: FilePath
     } deriving Show
 
-sender :: Address
-sender = Address (Just "SHabitica") "admin@example.org"
-
 renderMimeTxnMails :: Settings -> TxnMail -> ([T.Text], [Mail])
 renderMimeTxnMails s txn =
     first concat . unzip . fmap mkMail $ txnTo txn
   where
-    mkMail to =
-        (warnings, sm)
-      where
-        sm = simpleMail' to (fromEmail s) (subject rendered) (body rendered)
-        (warnings, rendered) = renderTxnMail to txn
+    mkMail :: Address -> ([T.Text], Mail)
+    mkMail to = second (liftM2 (simpleMail' to $ fromEmail s) subject body) $
+        renderTxnMail to txn
 
 handleTxnMail :: Settings -> TxnMail -> IO JsonResponse
 handleTxnMail s txn = do
@@ -65,7 +61,6 @@ responseJson status =
 wrapJson :: J.FromJSON a => (a -> IO JsonResponse) -> Application
 wrapJson fun req respond = do
     reqBody <- W.strictRequestBody req
-    hPrint stderr reqBody
     case J.eitherDecode reqBody of
          Left err -> do
              hPrint stderr err
