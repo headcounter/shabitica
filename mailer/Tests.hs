@@ -197,6 +197,29 @@ questStartedBody = TL.fromStrict [text|
     Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
 |]
 
+newPm :: TxnMail
+newPm = commonTxnMail
+    { txnEmailType = "new-pm"
+    , txnVariables = object
+        [ "BASE_URL" .= T.pack "https://habitica.example.org"
+        , "SENDER"   .= T.pack "foo"
+        ]
+    , txnPersonalVariables = M.singleton commonTxnAddr $ object
+        [ "RECIPIENT_NAME" .= T.pack "bar"
+        , "RECIPIENT_UNSUB_URL" .= T.pack "/email/unsubscribe?code=1234"
+        ]
+    }
+
+newPmBody :: TL.Text
+newPmBody = TL.fromStrict [text|
+    Hello bar,
+
+    You got a new private message from foo.
+    --$space
+    Self-hosted Habitica instance at https://habitica.example.org/
+    Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
+|]
+
 main :: IO ()
 main = hspec $ do
     describe "reset-password" $ do
@@ -248,3 +271,11 @@ main = hspec $ do
             subject rendered `shouldBe` "Habitica Quest started"
         it "has correct body" $
             body rendered `shouldBe` questStartedBody
+
+    describe "new-pm" $ do
+        let rendered = snd $ renderTxnMail commonTxnRecip newPm
+
+        it "has correct subject" $
+            subject rendered `shouldBe` "New private message from foo"
+        it "has correct body" $
+            body rendered `shouldBe` newPmBody
