@@ -198,12 +198,18 @@ in {
         group = "habitica";
       };
 
+      users.users.habitica-mailer = {
+        description = "Habitica Mailer Daemon User";
+        group = "habitica-mailer";
+      };
+
       users.users.habitica = {
         description = "Habitica User";
         group = "habitica";
       };
 
       users.groups.habitica = {};
+      users.groups.habitica-mailer = {};
 
       environment.systemPackages = [ dbtools ];
 
@@ -385,6 +391,8 @@ in {
         serviceConfig.ExecStart = let
           mailer = pkgs.haskellPackages.callPackage ./mailer {};
         in "${mailer}/bin/shabitica-mailer";
+        serviceConfig.User = "habitica-mailer";
+        serviceConfig.Group = "habitica-mailer";
         serviceConfig.PrivateNetwork = true;
       };
 
