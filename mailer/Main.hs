@@ -28,6 +28,10 @@ data Settings = Settings
     , sendmailPath :: FilePath
     } deriving Show
 
+sendRendered :: Settings -> [Mail] -> IO ()
+sendRendered s = mapM_ . renderSendMailCustom (sendmailPath s) $
+    ["-t", "-f", T.unpack . addressEmail $ fromEmail s]
+
 renderMimeTxnMails :: Settings -> TxnMail -> ([T.Text], [Mail])
 renderMimeTxnMails s txn =
     first concat . unzip . fmap mkMail $ txnTo txn
@@ -39,15 +43,14 @@ renderMimeTxnMails s txn =
 handleTxnMail :: Settings -> TxnMail -> IO JsonResponse
 handleTxnMail s txn = do
     mapM_ (TIO.hPutStrLn stderr) warnings
-    mapM_ (renderSendMailCustom (sendmailPath s) ["-t"]) mails
+    sendRendered s mails
     return JsonOk
   where
     (warnings, mails) = renderMimeTxnMails s txn
 
 handleSimpleMail :: Settings -> SimpleMail -> IO JsonResponse
 handleSimpleMail s sm = do
-    renderSendMailCustom (sendmailPath s) ["-t"] $
-        simpleMail' (smTo sm) (fromEmail s) subj bdy
+    sendRendered s [simpleMail' (smTo sm) (fromEmail s) subj bdy]
     return JsonOk
   where
     RenderedMail { subject = subj, body = bdy } = renderSimpleMail sm
