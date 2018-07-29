@@ -91,7 +91,7 @@ readSettings :: IO Settings
 readSettings = do
     addr <- maybe "unconfigured@example.org" T.pack <$> lookupEnv "MAIL_FROM"
     sm <- fromMaybe "/run/wrappers/bin/sendmail" <$> lookupEnv "SENDMAIL_PATH"
-    return $ Settings (Address (Just "SHabitica") addr) sm
+    return $ Settings (Address (Just "Shabitica") addr) sm
 
 main :: IO ()
 main = do
