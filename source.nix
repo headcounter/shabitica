@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
   name = "habitica-source-patched-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
-  version = "4.54.0";
+  version = "4.55.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1f9bsfjgwwixl15mgr3j08qjv7pi60512yg7jaza4a6ql5hsds2r";
+    sha256 = "1a1ml91gvn21zawi20gkr2wffbqmrfdjv5rmlxvggbzp918v347g";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -171,12 +171,6 @@ stdenv.mkDerivation rec {
     # Don't handle anything from Spritely specially (which also removes all
     # references to Spritely, see the canary below).
     patches/remove-spritely.patch
-
-    # Add missing Mystery Set name (mysterySet201807)
-    (fromUpstream {
-      rev = "9aa4cce3b9cb7b12dba8b34dc371e9a7d53101ea";
-      sha256 = "0cvj670z918pwa2rfxm3infwjfivsjdbjx1r8c2yy3hyx0b3lwlp";
-    })
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
