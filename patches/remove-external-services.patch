@@ -2858,10 +2858,10 @@ index 42d168baf..1c760270c 100644
        this.$router.push('/party');
      },
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index 018b93e06..d85d715bf 100644
+index 6f63f305b..516840fff 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
-@@ -258,7 +258,6 @@ import extend from 'lodash/extend';
+@@ -259,7 +259,6 @@ import extend from 'lodash/extend';
  import groupUtilities from 'client/mixins/groupsUtilities';
  import styleHelper from 'client/mixins/styleHelper';
  import { mapState } from 'client/libs/store';
@@ -2869,7 +2869,7 @@ index 018b93e06..d85d715bf 100644
  import membersModal from './membersModal';
  import startQuestModal from './startQuestModal';
  import questDetailsModal from './questDetailsModal';
-@@ -501,13 +500,6 @@ export default {
+@@ -505,13 +504,6 @@ export default {
        await this.$store.dispatch('guilds:join', {groupId: this.group._id, type: 'guild'});
      },
      clickLeave () {
@@ -2883,7 +2883,7 @@ index 018b93e06..d85d715bf 100644
        // @TODO: Get challenges and ask to keep or remove
        if (!confirm('Are you sure you want to leave?')) return;
        let keep = true;
-@@ -524,7 +516,6 @@ export default {
+@@ -528,7 +520,6 @@ export default {
  
        if (this.isParty) {
          data.type = 'party';
@@ -2891,20 +2891,6 @@ index 018b93e06..d85d715bf 100644
          this.$store.state.partyMembers = [];
        }
  
-@@ -539,13 +530,6 @@ export default {
-       this.$router.push('/group-plans');
-     },
-     clickStartQuest () {
--      Analytics.track({
--        hitType: 'event',
--        eventCategory: 'button',
--        eventAction: 'click',
--        eventLabel: 'Start a Quest',
--      });
--
-       let hasQuests = find(this.user.items.quests, (quest) => {
-         return quest > 0;
-       });
 diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
 index 848f14dd0..84ed4a636 100644
 --- a/website/client/components/groups/groupPlan.vue
@@ -3039,7 +3025,7 @@ index e02522102..4173eeda7 100644
          goldIcon,
          difficultyStarIcon,
 diff --git a/website/client/components/groups/startQuestModal.vue b/website/client/components/groups/startQuestModal.vue
-index 66bee4afe..456a968d1 100644
+index 9d13f2d0b..97d18ff8f 100644
 --- a/website/client/components/groups/startQuestModal.vue
 +++ b/website/client/components/groups/startQuestModal.vue
 @@ -106,15 +106,12 @@
@@ -3067,7 +3053,7 @@ index 66bee4afe..456a968d1 100644
          starIcon,
          goldIcon,
          difficultyStarIcon,
-@@ -169,11 +164,6 @@ export default {
+@@ -174,11 +169,6 @@ export default {
      async questInit () {
        this.loading = true;
  
@@ -3080,7 +3066,7 @@ index 66bee4afe..456a968d1 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/index.vue b/website/client/components/header/index.vue
-index 4fa0e750c..87264d954 100644
+index fb7e2965c..6bdd417f3 100644
 --- a/website/client/components/header/index.vue
 +++ b/website/client/components/header/index.vue
 @@ -35,26 +35,11 @@ div
@@ -6960,11 +6946,11 @@ index e3994c8e0..c6f8a4a17 100644
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 183f881d3..7abc169ee 100644
+index 078ae60ca..670c2797a 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
-@@ -11,9 +11,6 @@ import { defaults, map, flatten, flow, compact, uniq, partialRight } from 'lodas
- import { model as UserNotification } from '../userNotification';
+@@ -11,9 +11,6 @@ import {defaults, map, flatten, flow, compact, uniq, partialRight} from 'lodash'
+ import {model as UserNotification} from '../userNotification';
  import schema from './schema';
  import payments from '../../libs/payments/payments';
 -import amazonPayments from '../../libs/payments/amazon';

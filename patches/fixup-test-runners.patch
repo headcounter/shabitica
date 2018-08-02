@@ -130,7 +130,7 @@ index 1d68278a2..7a9168374 100644
 \ No newline at end of file
 +));
 diff --git a/package.json b/package.json
-index 5a2d15d2e..653148253 100644
+index fd5e93ba7..d177b056b 100644
 --- a/package.json
 +++ b/package.json
 @@ -110,9 +110,9 @@
