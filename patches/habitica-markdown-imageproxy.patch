@@ -1,0 +1,24 @@
+diff --git a/index.js b/index.js
+index 8111c20..3f17908 100644
+--- a/index.js
++++ b/index.js
+@@ -21,6 +21,19 @@ function createMdInstance (options) {
+     })
+     .use(emojiPlugin);
+ 
++  // The original image renderer we're going to replace.
++  var imgRender = md.renderer.rules.image;
++
++  md.renderer.rules.image = function(tokens, idx, options, env, slf) {
++    var imgurl = tokens[idx].attrGet('src');
++    if (imgurl != null && !imgurl.startsWith("@baseUrl@")) {
++      var imgb64 = Buffer.from(imgurl).toString('base64')
++        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
++      tokens[idx].attrSet('src', '@proxyUrl@' + imgb64);
++    }
++    return imgRender(tokens, idx, options, env, slf);
++  };
++
+   return md;
+ }
+ 

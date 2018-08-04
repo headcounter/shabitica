@@ -1,0 +1,150 @@
+diff --git a/cmd/go-camo/main.go b/cmd/go-camo/main.go
+index 34e9203..9df91d2 100644
+--- a/cmd/go-camo/main.go
++++ b/cmd/go-camo/main.go
+@@ -97,7 +97,7 @@ func main() {
+ 	mlog.SetFlags(0)
+ 
+ 	config := camo.Config{}
+-	if hmacKey := os.Getenv("GOCAMO_HMAC"); hmacKey != "" {
++	if hmacKey := os.Getenv("SESSION_SECRET"); hmacKey != "" {
+ 		config.HMACKey = []byte(hmacKey)
+ 	}
+ 
+diff --git a/pkg/camo/encoding/url.go b/pkg/camo/encoding/url.go
+index 45713f3..7d6164e 100644
+--- a/pkg/camo/encoding/url.go
++++ b/pkg/camo/encoding/url.go
+@@ -42,7 +42,7 @@ func b64encode(data []byte) string {
+ 	return strings.TrimRight(base64.URLEncoding.EncodeToString(data), "=")
+ }
+ 
+-func b64decode(str string) ([]byte, error) {
++func B64decode(str string) ([]byte, error) {
+ 	padChars := (4 - (len(str) % 4)) % 4
+ 	for i := 0; i < padChars; i++ {
+ 		str = str + "="
+@@ -86,11 +86,11 @@ func HexEncodeURL(hmacKey []byte, oURL string) string {
+ // unencodes the url, returning the url (if valid) and whether the
+ // HMAC was verified.
+ func B64DecodeURL(hmackey []byte, encdig string, encURL string) (string, error) {
+-	urlBytes, err := b64decode(encURL)
++	urlBytes, err := B64decode(encURL)
+ 	if err != nil {
+ 		return "", fmt.Errorf("bad url decode")
+ 	}
+-	macBytes, err := b64decode(encdig)
++	macBytes, err := B64decode(encdig)
+ 	if err != nil {
+ 		return "", fmt.Errorf("bad mac decode")
+ 	}
+diff --git a/pkg/camo/proxy.go b/pkg/camo/proxy.go
+index eb08eff..bd6ea31 100644
+--- a/pkg/camo/proxy.go
++++ b/pkg/camo/proxy.go
+@@ -16,6 +16,10 @@ import (
+ 	"strings"
+ 	"time"
+ 
++	"crypto/hmac"
++	"crypto/sha1"
++	"crypto/subtle"
++
+ 	"github.com/cactus/go-camo/pkg/camo/encoding"
+ 
+ 	"github.com/cactus/mlog"
+@@ -85,22 +89,50 @@ func (p *Proxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+ 		return
+ 	}
+ 
+-	// split path and get components
+-	components := strings.Split(req.URL.Path, "/")
+-	if len(components) < 3 {
+-		http.Error(w, "Malformed request path", http.StatusNotFound)
++	encodedURL := strings.TrimLeft(req.URL.Path, "/");
++
++	mlog.Debugm("client request", mlog.Map{"req": req})
++
++	sess, err := req.Cookie("session")
++	if err != nil {
++		http.Error(w, "No session cookie", http.StatusBadRequest)
+ 		return
+ 	}
+-	sigHash, encodedURL := components[1], components[2]
+ 
+-	mlog.Debugm("client request", mlog.Map{"req": req})
++	sig, err := req.Cookie("session.sig")
++	if err != nil {
++		http.Error(w, "No session signature", http.StatusBadRequest)
++		return
++	}
++
++	sigraw, err := encoding.B64decode(sig.Value)
++	if err != nil {
++		http.Error(w, "Can't decode session signature", http.StatusForbidden)
++		return
++	}
++
++	mac := hmac.New(sha1.New, p.config.HMACKey)
++	mac.Write([]byte("session=" + sess.Value))
++	calculated := mac.Sum(nil);
++
++	if len(calculated) != len(sigraw) {
++		http.Error(w, "Invalid session signature length", http.StatusForbidden)
++		return
++	}
+ 
+-	sURL, ok := encoding.DecodeURL(p.config.HMACKey, sigHash, encodedURL)
+-	if !ok {
+-		http.Error(w, "Bad Signature", http.StatusForbidden)
++	if subtle.ConstantTimeCompare(calculated, sigraw) != 1 {
++		http.Error(w, "Invalid session signature", http.StatusForbidden)
+ 		return
+ 	}
+ 
++	sURLbytes, err := encoding.B64decode(encodedURL);
++	if err != nil {
++		http.Error(w, "Unable to decode URL", http.StatusBadRequest);
++		return
++	}
++
++	sURL := string(sURLbytes);
++
+ 	mlog.Debugm("signed client url", mlog.Map{"url": sURL})
+ 
+ 	u, err := url.Parse(sURL)
+diff --git a/pkg/router/router.go b/pkg/router/router.go
+index ff307fe..552e162 100644
+--- a/pkg/router/router.go
++++ b/pkg/router/router.go
+@@ -6,7 +6,6 @@ package router
+ 
+ import (
+ 	"net/http"
+-	"strings"
+ )
+ 
+ // DumbRouter is a basic, special purpose, http router
+@@ -42,21 +41,5 @@ func (dr *DumbRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+ 		http.Error(w, "Method Not Allowed", 405)
+ 	}
+ 
+-	components := strings.Split(r.URL.Path, "/")
+-	if len(components) == 3 {
+-		dr.CamoHandler.ServeHTTP(w, r)
+-		return
+-	}
+-
+-	if r.URL.Path == "/healthcheck" {
+-		dr.HealthCheckHandler(w, r)
+-		return
+-	}
+-
+-	if dr.StatsHandler != nil && r.URL.Path == "/status" {
+-		dr.StatsHandler(w, r)
+-		return
+-	}
+-
+-	http.Error(w, "404 Not Found", 404)
++	dr.CamoHandler.ServeHTTP(w, r)
+ }

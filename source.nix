@@ -174,6 +174,9 @@ stdenv.mkDerivation rec {
 
     # Make session cookie compliant with RFC 6265.
     patches/fix-invalid-session-cookie.patch
+
+    # Small E2E test to make sure our habitica-markdown override works.
+    patches/test-imageproxy-in-markdown.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

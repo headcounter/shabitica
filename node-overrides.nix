@@ -1,4 +1,4 @@
-{ lib, fetchurl
+{ lib, fetchurl, substituteAll
 , libsass, libjpeg, optipng, gifsicle, pkgconfig, phantomjs2, systemd
 , chromedriver, chromium
 
@@ -8,6 +8,12 @@
 {
   main.habitica-markdown = drv: {
     preRebuild = (drv.preRebuild or "") + ''
+      patch -p1 < ${substituteAll {
+        src = ./patches/habitica-markdown-imageproxy.patch;
+        proxyUrl = "${habiticaConfig.BASE_URL}/imageproxy/";
+        baseUrl = habiticaConfig.BASE_URL;
+      }}
+
       sed -i -e '
         s|https://s3.amazonaws.com/habitica-assets/cdn/emoji|${
           habiticaConfig.BASE_URL

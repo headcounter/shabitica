@@ -1,0 +1,53 @@
+diff --git a/cmd/go-camo/main.go b/cmd/go-camo/main.go
+index 9df91d2..d8d3305 100644
+--- a/cmd/go-camo/main.go
++++ b/cmd/go-camo/main.go
+@@ -23,6 +23,8 @@ import (
+ 
+ 	"github.com/cactus/mlog"
+ 	flags "github.com/jessevdk/go-flags"
++
++	"github.com/coreos/go-systemd/activation"
+ )
+ 
+ var (
+@@ -47,7 +49,7 @@ func main() {
+ 		SSLKey              string        `long:"ssl-key" description:"ssl private key (key.pem) path"`
+ 		SSLCert             string        `long:"ssl-cert" description:"ssl cert (cert.pem) path"`
+ 		AllowList           string        `long:"allow-list" description:"Text file of hostname allow regexes (one per line)"`
+-		BindAddress         string        `long:"listen" default:"0.0.0.0:8080" description:"Address:Port to bind to for HTTP"`
++		BindAddress         string        `long:"listen" description:"Address:Port to bind to for HTTP"`
+ 		BindAddressSSL      string        `long:"ssl-listen" description:"Address:Port to bind to for HTTPS/SSL/TLS"`
+ 		MaxSize             int64         `long:"max-size" default:"5120" description:"Max allowed response size (KB)"`
+ 		ReqTimeout          time.Duration `long:"timeout" default:"4s" description:"Upstream request timeout"`
+@@ -110,10 +112,6 @@ func main() {
+ 		mlog.Fatal("HMAC key required")
+ 	}
+ 
+-	if opts.BindAddress == "" && opts.BindAddressSSL == "" {
+-		mlog.Fatal("One of listen or ssl-listen required")
+-	}
+-
+ 	if opts.BindAddressSSL != "" && opts.SSLKey == "" {
+ 		mlog.Fatal("ssl-key is required when specifying ssl-listen")
+ 	}
+@@ -214,6 +212,19 @@ func main() {
+ 			mlog.Fatal(srv.ListenAndServeTLS(opts.SSLCert, opts.SSLKey))
+ 		}()
+ 	}
++	if opts.BindAddress == "" && opts.BindAddressSSL == "" {
++		listeners, err := activation.Listeners()
++		if err != nil {
++			mlog.Fatal("Couldn't find listener sockets for socket activation" +
++					   " and neither listen nor ssl-listen was specified.")
++		}
++		for _, listener := range listeners {
++			go func() {
++				srv := &http.Server{ReadTimeout: 30 * time.Second};
++				mlog.Fatal(srv.Serve(listener))
++			}()
++		}
++	}
+ 
+ 	// just block. listen and serve will exit the program if they fail/return
+ 	// so we just need to block to prevent main from exiting.

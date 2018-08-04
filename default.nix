@@ -49,6 +49,8 @@ let
   '';
 
 in {
+  imports = [ ./imageproxy.nix ];
+
   options.habitica = {
     hostName = lib.mkOption {
       type = lib.types.str;
