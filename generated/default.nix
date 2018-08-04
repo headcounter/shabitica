@@ -112,7 +112,6 @@ in {
     morgan = nodePackages."morgan-^1.7.0";
     nconf = nodePackages."nconf-^0.10.0";
     "node-sass" = nodePackages."node-sass-^4.9.0";
-    nodemailer = nodePackages."nodemailer-^4.6.4";
     ora = nodePackages."ora-^2.1.0";
     pageres = nodePackages."pageres-^4.1.1";
     passport = nodePackages."passport-^0.4.0";
