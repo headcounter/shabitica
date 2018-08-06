@@ -1,0 +1,37 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Mon Aug 6 08:07:39 2018 +0200
+
+    Fix invalid session cookie name
+    
+    From https://tools.ietf.org/html/rfc6265#section-4.1.1
+    
+      cookie-name    = token
+      token          = <token, defined in [RFC2616], Section 2.2>
+    
+    From https://tools.ietf.org/html/rfc2616#section-2.2:
+    
+      token          = 1*<any CHAR except CTLs or separators>
+      separators     = "(" | ")" | "<" | ">" | "@"
+                     | "," | ";" | ":" | "\" | <">
+                     | "/" | "[" | "]" | "?" | "="
+                     | "{" | "}" | SP | HT
+    
+    So a colon in the cookie name shouldn't be there, even for backwards
+    compatibility.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: fix-invalid-session-cookie.patch
+
+diff --git a/website/server/middlewares/index.js b/website/server/middlewares/index.js
+index c61dac982..f18333d36 100644
+--- a/website/server/middlewares/index.js
++++ b/website/server/middlewares/index.js
+@@ -63,7 +63,7 @@ module.exports = function attachMiddlewares (app, server) {
+   app.use(methodOverride());
+ 
+   app.use(cookieSession({
+-    name: 'connect:sess', // Used to keep backward compatibility with Express 3 cookies
++    name: 'session', // Used to keep backward compatibility with Express 3 cookies
+     secret: SESSION_SECRET,
+     httpOnly: true, // so cookies are not accessible with browser JS
+     // TODO what about https only (secure) ?

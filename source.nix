@@ -171,6 +171,9 @@ stdenv.mkDerivation rec {
     # Don't handle anything from Spritely specially (which also removes all
     # references to Spritely, see the canary below).
     patches/remove-spritely.patch
+
+    # Make session cookie compliant with RFC 6265.
+    patches/fix-invalid-session-cookie.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
