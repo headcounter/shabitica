@@ -126,7 +126,6 @@
     my $baseUrl = 'http://habitica.example.org';
     my $validUrl = 'http://unrelated.org/test.png';
     my $validSslUrl = 'https://sslhost.org/test.png';
-    my $validProxyUrl = "$baseUrl/imageproxy/$validUrl";
     my $secret;
 
     $habitica->nest('check whether DNS resolver works', sub {
@@ -164,8 +163,9 @@
       my $invalidSess = 'dGhpcyBpcyBpbnZhbGlkCg==';
       my $invalidSig = '0D1XbRNCLlS3Rk3-EP_zWjT_IA0';
       my $invalidCookies = "session=$invalidSess; session.sig=$invalidSig";
-      $client->fail(curl("-b '$invalidCookies' '$validProxyUrl'"));
-      $client->fail(curl("'$validProxyUrl'"));
+      my $url = $baseUrl.'/imageproxy/'.encode_base64url($validUrl);
+      $client->fail(curl("-b '$invalidCookies' '$url'"));
+      $client->fail(curl("'$url'"));
     };
 
     subtest "works with valid session", sub {

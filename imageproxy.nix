@@ -196,7 +196,7 @@ in {
           proxy_cache_lock on;
           proxy_cache_use_stale error timeout invalid_header updating;
           proxy_cache_valid 200 30d;
-          proxy_cache_valid any 5m;
+          proxy_cache_valid any 0;
         '';
       };
     })
