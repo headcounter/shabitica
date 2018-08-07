@@ -7,46 +7,92 @@
     mkNetwork = num: { lib, ... }: let
       v4 = "98.76.54.${toString num}";
       v6 = "abcd::${toString num}";
+      forceAddr = attrs: lib.mkForce (lib.singleton attrs);
     in {
       networking.useDHCP = false;
       networking.interfaces.eth1 = {
-        ipv4.addresses = lib.singleton { address = v4; prefixLength = 24; };
-        ipv6.addresses = lib.singleton { address = v6; prefixLength = 64; };
+        ipv4.addresses = forceAddr { address = v4; prefixLength = 24; };
+        ipv6.addresses = forceAddr { address = v6; prefixLength = 64; };
       };
-      networking.primaryIPAddress = "${v4} ${v6}";
     };
+
+    useResolver = { lib, nodes, ... }: {
+      networking.nameservers = let
+        inherit (nodes.resolver.config.networking.interfaces.eth1) ipv4 ipv6;
+        getAddrs = attr: map (a: a.address) attr.addresses;
+      in lib.mkForce (getAddrs ipv4 ++ getAddrs ipv6);
+    };
+
   in {
-    habitica.imports = [ common (mkNetwork 1) ];
-    client = mkNetwork 2;
+    resolver = { config, pkgs, nodes, lib, ... }: {
+      imports = lib.singleton (mkNetwork 1);
+      networking.firewall.enable = false;
+      services.bind.enable = true;
+      services.bind.cacheNetworks = lib.mkForce [ "any" ];
+      services.bind.forwarders = lib.mkForce [];
+      services.bind.zones = lib.singleton {
+        name = ".";
+        file = let
+          mkAddrRRs = fqdn: node: let
+            inherit (node.config.networking.interfaces.eth1) ipv4 ipv6;
+            mkRR = rtype: addr: "${fqdn}. IN ${rtype} ${addr.address}\n";
+            mkRRs = rtype: lib.concatMapStrings (mkRR rtype);
+          in mkRRs "A" ipv4.addresses + mkRRs "AAAA" ipv6.addresses;
+        in pkgs.writeText "fake-root.zone" ''
+          $TTL 3600
+          . IN SOA ns.fakedns. admin.fakedns. ( 1 3h 1h 1w 1d )
+          . IN NS ns.fakedns.
+          ${mkAddrRRs "ns.fakedns" nodes.resolver}
+          ${mkAddrRRs "habitica.example.org" nodes.habitica}
+          ${mkAddrRRs "unrelated.org" nodes.unrelated}
+        '';
+      };
+    };
+
+    habitica = {
+      imports = [ common (mkNetwork 2) useResolver ];
+      habitica.hostName = "habitica.example.org";
+      habitica.useSSL = false;
+    };
+
+    client.imports = [ (mkNetwork 3) useResolver ];
 
     unrelated = { lib, pkgs, ... }: {
-      imports = lib.singleton (mkNetwork 3);
+      imports = [ (mkNetwork 4) useResolver ];
       networking.firewall.enable = false;
       services.nginx.enable = true;
-      services.nginx.virtualHosts.unrelated.root = pkgs.runCommand "docroot" {
-        nativeBuildInputs = [ pkgs.imagemagick ];
-      } ''
-        mkdir -p "$out"
-        convert -size 200x200 xc:green "$out/test.png"
-      '';
+      services.nginx.virtualHosts."unrelated.org"= {
+        root = pkgs.runCommand "docroot" {
+          nativeBuildInputs = [ pkgs.imagemagick ];
+        } ''
+          mkdir -p "$out"
+          convert -size 200x200 xc:green "$out/test.png"
+        '';
+      };
     };
   };
 
   testScript = { nodes, ... }: let
     inherit (nodes.unrelated.config.services.nginx) virtualHosts;
-    image = "${virtualHosts.unrelated.root}/test.png";
+    image = "${virtualHosts."unrelated.org".root}/test.png";
   in ''
     use Digest::SHA qw(hmac_sha1);
     use MIME::Base64 qw(encode_base64 encode_base64url);
 
     startAll;
+    $resolver->waitForUnit('bind.service');
     $unrelated->waitForOpenPort(80);
     $client->waitForUnit('multi-user.target');
     $habitica->waitForUnit('habitica.service');
 
-    my $validUrl = 'http://unrelated/test.png';
-    my $validProxyUrl = "http://habitica/imageproxy/$validUrl";
+    my $baseUrl = 'http://habitica.example.org';
+    my $validUrl = 'http://unrelated.org/test.png';
+    my $validProxyUrl = "$baseUrl/imageproxy/$validUrl";
     my $secret;
+
+    $habitica->nest('check whether DNS resolver works', sub {
+      $habitica->succeed('host unrelated.org');
+    });
 
     $habitica->nest('getting session secret', sub {
       $secret = $habitica->succeed(
@@ -55,7 +101,7 @@
     });
 
     sub mkRequest ($) {
-      my $url = 'http://habitica/imageproxy/'.encode_base64url($_[0]);
+      my $url = $baseUrl.'/imageproxy/'.encode_base64url($_[0]);
       my $sessraw = '{"userId":"56756b7c-f0a8-4553-92c7-b1c553742828"}';
       my $sess = encode_base64($sessraw, "");
       my $sigraw = hmac_sha1('session='.$sess, $secret);
@@ -64,7 +110,7 @@
     }
 
     subtest "image can be fetched directly", sub {
-      $client->succeed('curl -f http://unrelated/test.png > direct.png');
+      $client->succeed('curl -f '.$validUrl.' > direct.png');
       $client->succeed('cmp direct.png ${image}');
     };
 
@@ -77,7 +123,7 @@
     };
 
     subtest "works with valid session", sub {
-      $client->succeed('curl -f '.mkRequest($validUrl).' > /dev/null');
+      $client->execute('curl -f '.mkRequest($validUrl).' > /dev/null');
     };
 
     subtest "emits the right image", sub {

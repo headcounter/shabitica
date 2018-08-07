@@ -139,9 +139,7 @@ in {
               sourceBind = "${source}:/etc/${etcfile}";
               fallback = "-/etc/${etcfile}";
             in if hasFile && hasSource then sourceBind else fallback;
-          in map mkEtcFile [
-            "resolv.conf" "resolvconf.conf" "hosts" "host.conf" "nsswitch.conf"
-          ];
+          in map mkEtcFile (lib.singleton "resolv.conf");
 
           # Needed so that the proxy can validate sessions.
           EnvironmentFile = "/var/lib/habitica/secrets.env";
