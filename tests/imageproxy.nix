@@ -109,8 +109,13 @@
       return "-b 'session=$sess; session.sig=$sig' '$url'";
     }
 
+    sub curl ($) {
+      my $headers = "-H 'Pragma: no-cache' -H 'Cache-Control: no-cache'";
+      return "curl -f $headers $_[0]";
+    }
+
     subtest "image can be fetched directly", sub {
-      $client->succeed('curl -f '.$validUrl.' > direct.png');
+      $client->succeed(curl($validUrl).' > direct.png');
       $client->succeed('cmp direct.png ${image}');
     };
 
@@ -118,22 +123,22 @@
       my $invalidSess = 'dGhpcyBpcyBpbnZhbGlkCg==';
       my $invalidSig = '0D1XbRNCLlS3Rk3-EP_zWjT_IA0';
       my $invalidCookies = "session=$invalidSess; session.sig=$invalidSig";
-      $client->fail("curl -f -b '$invalidCookies' '$validProxyUrl'");
-      $client->fail("curl -f '$validProxyUrl'");
+      $client->fail(curl("-b '$invalidCookies' '$validProxyUrl'"));
+      $client->fail(curl("'$validProxyUrl'"));
     };
 
     subtest "works with valid session", sub {
-      $client->execute('curl -f '.mkRequest($validUrl).' > /dev/null');
+      $client->execute(curl(mkRequest($validUrl)).' > /dev/null');
     };
 
     subtest "emits the right image", sub {
-      $client->succeed('curl -f '.mkRequest($validUrl).' > image.png');
+      $client->succeed(curl(mkRequest($validUrl)).' > image.png');
       $client->succeed('cmp image.png ${image}');
     };
 
     subtest "caching works", sub {
       $unrelated->shutdown;
-      $client->succeed('curl -f '.mkRequest($validUrl).' > cached.png');
+      $client->succeed(curl(mkRequest($validUrl)).' > cached.png');
       $client->succeed('cmp cached.png ${image}');
     };
   '';
