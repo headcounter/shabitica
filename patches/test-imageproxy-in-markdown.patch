@@ -15,7 +15,7 @@ Date:   Sat Aug 4 23:09:37 2018 +0200
     Filename: test-imageproxy-in-markdown.patch
 
 diff --git a/test/client/e2e/specs/test.js b/test/client/e2e/specs/test.js
-index f43964476..4f63b2f4a 100644
+index f43964476..5b8c6ae0e 100644
 --- a/test/client/e2e/specs/test.js
 +++ b/test/client/e2e/specs/test.js
 @@ -15,4 +15,31 @@ module.exports = {
@@ -45,7 +45,7 @@ index f43964476..4f63b2f4a 100644
 +        'Test ![image](http://example.org/image.png)',
 +        [browser.Keys.ENTER],
 +      ])
-+      .waitForElementVisible('.markdown-img', 10000)
++      .waitForElementVisible('.markdown-img', 50000)
 +      .assert.attributeEquals('.markdown-img', 'src',
 +        `${baseUrl}/imageproxy/aHR0cDovL2V4YW1wbGUub3JnL2ltYWdlLnBuZw`);
 +  },

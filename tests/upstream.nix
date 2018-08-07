@@ -81,16 +81,7 @@ in lib.mapAttrs runTests {
           > "$out/nix-support/hydra-build-products"
       '';
     };
-    machine = { config, pkgs, ... }: let
-      # XXX: There seems to be a problem with Selenium/Chromedriver on NixOS
-      # 18.03, so let's use a version of nixpkgs where it works.
-      pinnedPkgs = import (pkgs.fetchFromGitHub {
-        owner = "NixOS";
-        repo = "nixpkgs";
-        rev = "a8f2d1f92c955a3a4bc1dc7a4588983d9c918fc6";
-        sha256 = "0kjyvnk1wps6gfb40ka507xz6ynk4zs0y6hr8vgw12bg50njlwg6";
-      }) { inherit (config.nixpkgs) config system; };
-    in {
+    machine = {
       imports = [ ../. ];
       networking.firewall.enable = false;
       virtualisation.diskSize = 16384;
@@ -102,7 +93,7 @@ in lib.mapAttrs runTests {
         description = "Selenium Server";
         requiredBy = [ "multi-user.target" ];
         serviceConfig.ExecStart = let
-          bin = "${pinnedPkgs.selenium-server-standalone}/bin/selenium-server";
+          bin = "${pkgs.selenium-server-standalone}/bin/selenium-server";
           cmd = [ "${pkgs.xvfb_run}/bin/xvfb-run" bin "-port" "4444" ];
         in lib.concatMapStringsSep " " lib.escapeShellArg cmd;
         serviceConfig.User = "selenium";
@@ -111,7 +102,7 @@ in lib.mapAttrs runTests {
       #      don't need this ugly workaround.
       system.activationScripts.chromium = ''
         mkdir -m 0755 -p /bin
-        ln -sfn ${pinnedPkgs.chromium}/bin/chromium /bin/chromium
+        ln -sfn ${pkgs.chromium}/bin/chromium /bin/chromium
       '';
     };
   };
