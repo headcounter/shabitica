@@ -15,7 +15,7 @@ Date:   Sat Aug 4 23:09:37 2018 +0200
     Filename: test-imageproxy-in-markdown.patch
 
 diff --git a/test/client/e2e/specs/test.js b/test/client/e2e/specs/test.js
-index f43964476..5b8c6ae0e 100644
+index f43964476..af0f35e6e 100644
 --- a/test/client/e2e/specs/test.js
 +++ b/test/client/e2e/specs/test.js
 @@ -15,4 +15,31 @@ module.exports = {
@@ -27,7 +27,7 @@ index f43964476..5b8c6ae0e 100644
 +
 +    browser
 +      .url(`${baseUrl}/register`)
-+      .waitForElementVisible('#app', 5000)
++      .waitForElementVisible('#app', 50000)
 +      .setValue('#usernameInput', 'foo')
 +      .setValue('#emailInput', 'foo@example.org')
 +      .setValue('#passwordInput', 'bar')
@@ -35,11 +35,11 @@ index f43964476..5b8c6ae0e 100644
 +      .useXpath()
 +      .click('//*[text()="Join Habitica"]')
 +      .useCss()
-+      .waitForElementVisible('.welcome-section', 10000)
++      .waitForElementVisible('.welcome-section', 50000)
 +      .click('.next')
 +      .click('.next')
 +      .click('.next')
-+      .waitForElementVisible('.introjs-donebutton', 10000)
++      .waitForElementVisible('.introjs-donebutton', 50000)
 +      .click('.introjs-donebutton')
 +      .setValue('textarea.quick-add', [
 +        'Test ![image](http://example.org/image.png)',
