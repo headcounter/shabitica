@@ -4,6 +4,11 @@
   name = "habitica-imageproxy";
 
   nodes = let
+    snakeOilCerts = { lib, nodes, ... }: let
+      inherit (nodes.sslhost.config.services.nginx) virtualHosts;
+      inherit (virtualHosts."sslhost.org") sslCertificate;
+    in { security.pki.certificateFiles = lib.singleton sslCertificate; };
+
     mkNetwork = num: { lib, ... }: let
       v4 = "98.76.54.${toString num}";
       v6 = "abcd::${toString num}";
@@ -45,23 +50,24 @@
           ${mkAddrRRs "ns.fakedns" nodes.resolver}
           ${mkAddrRRs "habitica.example.org" nodes.habitica}
           ${mkAddrRRs "unrelated.org" nodes.unrelated}
+          ${mkAddrRRs "sslhost.org" nodes.sslhost}
         '';
       };
     };
 
     habitica = {
-      imports = [ common (mkNetwork 2) useResolver ];
+      imports = [ common (mkNetwork 2) useResolver snakeOilCerts ];
       habitica.hostName = "habitica.example.org";
       habitica.useSSL = false;
     };
 
-    client.imports = [ (mkNetwork 3) useResolver ];
+    client.imports = [ (mkNetwork 3) useResolver snakeOilCerts ];
 
     unrelated = { lib, pkgs, ... }: {
       imports = [ (mkNetwork 4) useResolver ];
       networking.firewall.enable = false;
       services.nginx.enable = true;
-      services.nginx.virtualHosts."unrelated.org"= {
+      services.nginx.virtualHosts."unrelated.org" = {
         root = pkgs.runCommand "docroot" {
           nativeBuildInputs = [ pkgs.imagemagick ];
         } ''
@@ -70,11 +76,43 @@
         '';
       };
     };
+
+    sslhost = { lib, pkgs, ... }: {
+      imports = [ (mkNetwork 5) useResolver ];
+      networking.firewall.enable = false;
+      services.nginx.enable = true;
+      services.nginx.virtualHosts."sslhost.org" = let
+        keypair = pkgs.runCommand "snakeoil-keys" {
+          nativeBuildInputs = [ pkgs.openssl ];
+        } ''
+          mkdir "$out"
+          openssl req -nodes -x509 -newkey rsa:2048 -days 65535 \
+            -subj '/CN=sslhost.org' \
+            -keyout "$out/key.pem" -out "$out/cert.pem"
+        '';
+      in {
+        onlySSL = true;
+        enableACME = false;
+        sslCertificate = "${keypair}/cert.pem";
+        sslCertificateKey = "${keypair}/key.pem";
+
+        root = pkgs.runCommand "docroot-ssl" {
+          nativeBuildInputs = [ pkgs.imagemagick ];
+        } ''
+          mkdir -p "$out"
+          convert -size 200x200 xc:blue "$out/test.png"
+        '';
+      };
+    };
   };
 
   testScript = { nodes, ... }: let
-    inherit (nodes.unrelated.config.services.nginx) virtualHosts;
-    image = "${virtualHosts."unrelated.org".root}/test.png";
+    green = let
+      inherit (nodes.unrelated.config.services.nginx) virtualHosts;
+    in "${virtualHosts."unrelated.org".root}/test.png";
+    blue = let
+      inherit (nodes.sslhost.config.services.nginx) virtualHosts;
+    in "${virtualHosts."sslhost.org".root}/test.png";
   in ''
     use Digest::SHA qw(hmac_sha1);
     use MIME::Base64 qw(encode_base64 encode_base64url);
@@ -87,6 +125,7 @@
 
     my $baseUrl = 'http://habitica.example.org';
     my $validUrl = 'http://unrelated.org/test.png';
+    my $validSslUrl = 'https://sslhost.org/test.png';
     my $validProxyUrl = "$baseUrl/imageproxy/$validUrl";
     my $secret;
 
@@ -114,9 +153,11 @@
       return "curl -f $headers $_[0]";
     }
 
-    subtest "image can be fetched directly", sub {
+    subtest "images can be fetched directly", sub {
       $client->succeed(curl($validUrl).' > direct.png');
-      $client->succeed('cmp direct.png ${image}');
+      $client->succeed('cmp direct.png ${green}');
+      $client->succeed(curl($validSslUrl).' > direct-ssl.png');
+      $client->succeed('cmp direct-ssl.png ${blue}');
     };
 
     subtest "refuses invalid session", sub {
@@ -129,17 +170,22 @@
 
     subtest "works with valid session", sub {
       $client->execute(curl(mkRequest($validUrl)).' > /dev/null');
+      $client->execute(curl(mkRequest($validSslUrl)).' > /dev/null');
     };
 
     subtest "emits the right image", sub {
       $client->succeed(curl(mkRequest($validUrl)).' > image.png');
-      $client->succeed('cmp image.png ${image}');
+      $client->succeed('cmp image.png ${green}');
+      $client->succeed(curl(mkRequest($validSslUrl)).' > image-ssl.png');
+      $client->succeed('cmp image-ssl.png ${blue}');
     };
 
     subtest "caching works", sub {
       $unrelated->shutdown;
       $client->succeed(curl(mkRequest($validUrl)).' > cached.png');
-      $client->succeed('cmp cached.png ${image}');
+      $client->succeed('cmp cached.png ${green}');
+      $client->succeed(curl(mkRequest($validSslUrl)).' > cached-ssl.png');
+      $client->succeed('cmp cached-ssl.png ${blue}');
     };
   '';
 }

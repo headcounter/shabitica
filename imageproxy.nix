@@ -134,12 +134,11 @@ in {
           BindReadOnlyPaths = let
             mkEtcFile = etcfile: let
               hasFile = config.environment.etc ? ${etcfile};
-              hasSource = config.environment.etc.${etcfile}.text != null;
               inherit (config.environment.etc.${etcfile}) source;
               sourceBind = "${source}:/etc/${etcfile}";
               fallback = "-/etc/${etcfile}";
-            in if hasFile && hasSource then sourceBind else fallback;
-          in map mkEtcFile (lib.singleton "resolv.conf");
+            in if hasFile then sourceBind else fallback;
+          in map mkEtcFile [ "resolv.conf" "ssl/certs/ca-certificates.crt" ];
 
           # Needed so that the proxy can validate sessions.
           EnvironmentFile = "/var/lib/habitica/secrets.env";
@@ -147,6 +146,7 @@ in {
           RootDirectory = sandboxPaths;
           MountFlags = "private";
           RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          PrivateDevices = true;
 
           SystemCallErrorNumber = "EPERM";
           SystemCallFilter = [
