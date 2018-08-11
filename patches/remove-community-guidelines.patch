@@ -27,7 +27,7 @@ index 3776ac223..2629c4eef 100644
          .svg-icon(v-html="icons.delete")
          | {{$t('delete')}}
 diff --git a/website/client/components/groups/chat.vue b/website/client/components/groups/chat.vue
-index 58e16cac0..76957bacd 100644
+index 5babe873f..949e15061 100644
 --- a/website/client/components/groups/chat.vue
 +++ b/website/client/components/groups/chat.vue
 @@ -26,8 +26,6 @@

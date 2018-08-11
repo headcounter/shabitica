@@ -38,7 +38,7 @@ index fc6bcbaa6..9155977e4 100644
    methods: {
      ...mapActions({
 diff --git a/website/client/components/header/notificationsDropdown.vue b/website/client/components/header/notificationsDropdown.vue
-index c7aa8772d..c852b2b95 100644
+index 458ad12b4..1ac892e94 100644
 --- a/website/client/components/header/notificationsDropdown.vue
 +++ b/website/client/components/header/notificationsDropdown.vue
 @@ -79,7 +79,6 @@ import MessageCount from './messageCount';
@@ -68,7 +68,7 @@ index c7aa8772d..c852b2b95 100644
          'QUEST_INVITATION', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
          'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
 diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
-index 6ae21ff7e..7faab1ef8 100644
+index 1ef1d89e6..0d711ba53 100644
 --- a/website/client/components/notifications.vue
 +++ b/website/client/components/notifications.vue
 @@ -95,7 +95,6 @@ import guide from 'client/mixins/guide';

@@ -47,7 +47,7 @@ index 63df05213..2c7e1f0e2 100644
          "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
          "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
 diff --git a/package.json b/package.json
-index 0710ba696..fd5e93ba7 100644
+index c6341b46b..5165aade4 100644
 --- a/package.json
 +++ b/package.json
 @@ -59,7 +59,6 @@

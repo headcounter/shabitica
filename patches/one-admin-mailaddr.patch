@@ -35,7 +35,7 @@ index 2c7e1f0e2..43f22cc9b 100644
 +    "MAILER_SOCKET": "/run/habitica/mailer.sock"
  }
 diff --git a/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js b/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
-index 89e5b133b..f3009fae9 100644
+index 153bc3bd0..a0b90dbc8 100644
 --- a/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
 +++ b/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
 @@ -3,7 +3,6 @@ import {
@@ -43,10 +43,10 @@ index 89e5b133b..f3009fae9 100644
    translate as t,
  } from '../../../../helpers/api-integration/v3';
 -import config from '../../../../../config.json';
+ import moment from 'moment';
  import { v4 as generateUUID } from 'uuid';
  
- describe('POST /groups/:id/chat/:id/clearflags', () => {
-@@ -97,11 +96,7 @@ describe('POST /groups/:id/chat/:id/clearflags', () => {
+@@ -103,11 +102,7 @@ describe('POST /groups/:id/chat/:id/clearflags', () => {
  
        let [skillMsg] = await member.get(`/groups/${group.id}/chat`);
        await expect(member.post(`/groups/${group._id}/chat/${skillMsg.id}/flag`))
@@ -187,10 +187,10 @@ index 9c208db6d..41e08100a 100644
  /**
   * @apiDefine UserNotFound
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index 49b3f3d16..13e8fe8c0 100644
+index 48de1142c..30eeef4e2 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
-@@ -10,8 +10,8 @@ import { model as Group } from '../../models/group';
+@@ -11,8 +11,8 @@ import { model as Group } from '../../models/group';
  import { model as Chat } from '../../models/chat';
  import apiError from '../apiError';
  
@@ -200,7 +200,7 @@ index 49b3f3d16..13e8fe8c0 100644
 +const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
    return { email, canSend: true };
  });
- 
+ const USER_AGE_FOR_FLAGGING = 3; // accounts less than this many days old don't increment flagCount
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
 index 301f14ea5..9fbce5113 100644
 --- a/website/server/middlewares/auth.js

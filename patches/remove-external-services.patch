@@ -1479,8 +1479,91 @@ index 28d4135e2..2deb85228 100644
          done();
        })
        .catch(done);
+diff --git a/test/api/v3/integration/chat/POST-chat.flag.test.js b/test/api/v3/integration/chat/POST-chat.flag.test.js
+index 88b41744c..322e5853a 100644
+--- a/test/api/v3/integration/chat/POST-chat.flag.test.js
++++ b/test/api/v3/integration/chat/POST-chat.flag.test.js
+@@ -4,10 +4,6 @@ import {
+ } from '../../../../helpers/api-integration/v3';
+ import { find } from 'lodash';
+ import moment from 'moment';
+-import nconf from 'nconf';
+-import { IncomingWebhook } from '@slack/client';
+-
+-const BASE_URL = nconf.get('BASE_URL');
+ 
+ describe('POST /chat/:chatId/flag', () => {
+   let user, admin, anotherUser, newUser, group;
+@@ -19,7 +15,6 @@ describe('POST /chat/:chatId/flag', () => {
+     admin = await generateUser({balance: 1, 'contributor.admin': true});
+     anotherUser = await generateUser({'auth.timestamps.created': moment().subtract(USER_AGE_FOR_FLAGGING + 1, 'days').toDate()});
+     newUser = await generateUser({'auth.timestamps.created': moment().subtract(1, 'days').toDate()});
+-    sandbox.stub(IncomingWebhook.prototype, 'send');
+ 
+     group = await user.post('/groups', {
+       name: 'Test Guild',
+@@ -57,31 +52,9 @@ describe('POST /chat/:chatId/flag', () => {
+ 
+     let messageToCheck = find(groupWithFlags.chat, {id: message.id});
+     expect(messageToCheck.flags[user._id]).to.equal(true);
+-
+-    // Slack message to mods
+-    const timestamp = `${moment(message.timestamp).utc().format('YYYY-MM-DD HH:mm')} UTC`;
+-
+-    /* eslint-disable camelcase */
+-    expect(IncomingWebhook.prototype.send).to.be.calledWith({
+-      text: `${user.profile.name} (${user.id}; language: en) flagged a message`,
+-      attachments: [{
+-        fallback: 'Flag Message',
+-        color: 'danger',
+-        author_name: `${anotherUser.profile.name} - ${anotherUser.auth.local.email} - ${anotherUser._id}\n${timestamp}`,
+-        title: 'Flag in Test Guild',
+-        title_link: `${BASE_URL}/groups/guild/${group._id}`,
+-        text: TEST_MESSAGE,
+-        footer: `<https://habitrpg.github.io/flag-o-rama/?groupId=${group._id}&chatId=${message.id}|Flag this message.>`,
+-        mrkdwn_in: [
+-          'text',
+-        ],
+-      }],
+-    });
+-    /* eslint-ensable camelcase */
+   });
+ 
+   it('Does not increment message flag count and sends different message to moderator Slack when user is new', async () => {
+-    let automatedComment = `The post's flag count has not been increased because the flagger's account is less than ${USER_AGE_FOR_FLAGGING} days old.`;
+     let { message } = await newUser.post(`/groups/${group._id}/chat`, {message: TEST_MESSAGE});
+ 
+     let flagResult = await newUser.post(`/groups/${group._id}/chat/${message.id}/flag`);
+@@ -92,27 +65,6 @@ describe('POST /chat/:chatId/flag', () => {
+ 
+     let messageToCheck = find(groupWithFlags.chat, {id: message.id});
+     expect(messageToCheck.flags[newUser._id]).to.equal(true);
+-
+-    // Slack message to mods
+-    const timestamp = `${moment(message.timestamp).utc().format('YYYY-MM-DD HH:mm')} UTC`;
+-
+-    /* eslint-disable camelcase */
+-    expect(IncomingWebhook.prototype.send).to.be.calledWith({
+-      text: `${newUser.profile.name} (${newUser.id}; language: en) flagged a message`,
+-      attachments: [{
+-        fallback: 'Flag Message',
+-        color: 'danger',
+-        author_name: `${newUser.profile.name} - ${newUser.auth.local.email} - ${newUser._id}\n${timestamp}`,
+-        title: 'Flag in Test Guild',
+-        title_link: `${BASE_URL}/groups/guild/${group._id}`,
+-        text: TEST_MESSAGE,
+-        footer: `<https://habitrpg.github.io/flag-o-rama/?groupId=${group._id}&chatId=${message.id}|Flag this message.> ${automatedComment}`,
+-        mrkdwn_in: [
+-          'text',
+-        ],
+-      }],
+-    });
+-    /* eslint-ensable camelcase */
+   });
+ 
+   it('Flags a chat when the author\'s account was deleted', async () => {
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index 3f52127d0..a851acda6 100644
+index d607c045f..a851acda6 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -15,10 +15,6 @@ import { getMatchesByWordArray } from '../../../../../website/server/libs/string
@@ -1502,7 +1585,7 @@ index 3f52127d0..a851acda6 100644
      });
  
      afterEach(() => {
-@@ -247,26 +242,6 @@ describe('POST /chat', () => {
+@@ -247,25 +242,6 @@ describe('POST /chat', () => {
        expect(email.sendTxn).to.be.calledOnce;
        expect(email.sendTxn.args[0][1]).to.eql('slur-report-to-mods');
  
@@ -1518,7 +1601,6 @@ index 3f52127d0..a851acda6 100644
 -          title: 'Slur in Test Guild',
 -          title_link: `${BASE_URL}/groups/guild/${groupWithChat.id}`,
 -          text: testSlurMessage,
--          // footer: sandbox.match(/<.*?groupId=group-id&chatId=chat-id\|Flag this message>/),
 -          mrkdwn_in: [
 -            'text',
 -          ],
@@ -1529,7 +1611,7 @@ index 3f52127d0..a851acda6 100644
        // Chat privileges are revoked
        await expect(user.post(`/groups/${groupWithChat._id}/chat`, { message: testMessage})).to.eventually.be.rejected.and.eql({
          code: 401,
-@@ -300,26 +275,6 @@ describe('POST /chat', () => {
+@@ -299,25 +275,6 @@ describe('POST /chat', () => {
        expect(email.sendTxn).to.be.calledThrice;
        expect(email.sendTxn.args[2][1]).to.eql('slur-report-to-mods');
  
@@ -1545,7 +1627,6 @@ index 3f52127d0..a851acda6 100644
 -          title: 'Slur in Party - (private party)',
 -          title_link: undefined,
 -          text: testSlurMessage,
--          // footer: sandbox.match(/<.*?groupId=group-id&chatId=chat-id\|Flag this message>/),
 -          mrkdwn_in: [
 -            'text',
 -          ],
@@ -6238,10 +6319,10 @@ index af59996f4..4d41d4959 100644
   * @api {get} /export/inbox.html Export user private messages as HTML document
   * @apiName ExportUserPrivateMessages
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index c34460741..49b3f3d16 100644
+index f883b6716..48de1142c 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
-@@ -6,7 +6,6 @@ import {
+@@ -7,7 +7,6 @@ import {
    NotFound,
  } from '../errors';
  import { getGroupUrl, sendTxn } from '../email';
@@ -6249,7 +6330,16 @@ index c34460741..49b3f3d16 100644
  import { model as Group } from '../../models/group';
  import { model as Chat } from '../../models/chat';
  import apiError from '../apiError';
-@@ -58,14 +57,6 @@ export default class GroupChatReporter extends ChatReporter {
+@@ -49,7 +48,7 @@ export default class GroupChatReporter extends ChatReporter {
+     return {message, group, userComment};
+   }
+ 
+-  async notify (group, message, userComment, automatedComment = '') {
++  async notify (group, message, userComment) {
+     await super.notify(group, message);
+ 
+     const groupUrl = getGroupUrl(group);
+@@ -60,15 +59,6 @@ export default class GroupChatReporter extends ChatReporter {
        {name: 'GROUP_URL', content: groupUrl},
        {name: 'REPORTER_COMMENT', content: userComment || ''},
      ]));
@@ -6260,10 +6350,27 @@ index c34460741..49b3f3d16 100644
 -      group,
 -      message,
 -      userComment,
+-      automatedComment,
 -    });
    }
  
-   async flagGroupMessage (group, message) {
+   async flagGroupMessage (group, message, increaseFlagCount) {
+@@ -95,14 +85,12 @@ export default class GroupChatReporter extends ChatReporter {
+     let {message, group, userComment} = await this.validate();
+ 
+     let increaseFlagCount = true;
+-    let automatedComment = '';
+     if (moment().diff(this.user.auth.timestamps.created, 'days') < USER_AGE_FOR_FLAGGING) {
+       increaseFlagCount = false;
+-      automatedComment = `The post's flag count has not been increased because the flagger's account is less than ${USER_AGE_FOR_FLAGGING} days old.`;
+       // This is to prevent trolls from making new accounts to maliciously flag-and-hide.
+     }
+ 
+-    await this.notify(group, message, userComment, automatedComment);
++    await this.notify(group, message, userComment);
+     await this.flagGroupMessage(group, message, increaseFlagCount);
+     return message;
+   }
 diff --git a/website/server/libs/cron.js b/website/server/libs/cron.js
 index c98ecf929..aa6e84a81 100644
 --- a/website/server/libs/cron.js
