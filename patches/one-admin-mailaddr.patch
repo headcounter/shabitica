@@ -148,7 +148,7 @@ index a87a1075c..9bacbd469 100644
  const USERNAME_LENGTH_MAX = 20;
  
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index fcae0a65f..e4d6e7ef5 100644
+index 7d819f83c..fa548bea4 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -18,7 +18,7 @@ import { getMatchesByWordArray } from '../../libs/stringUtils';
@@ -174,7 +174,7 @@ index cd35f58fc..15122e075 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 9c208db6d..41e08100a 100644
+index baef566c1..f10525e34 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -24,7 +24,7 @@ import {

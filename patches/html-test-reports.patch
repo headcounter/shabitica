@@ -63,7 +63,7 @@ index 000000000..347c750ab
 +  "mochaSimpleHtmlReporterReporterOptions": {"output": "test-report.html"}
 +}
 diff --git a/package.json b/package.json
-index ae66283bf..9905adf92 100644
+index 01b1388dc..2ac4f842c 100644
 --- a/package.json
 +++ b/package.json
 @@ -110,9 +110,9 @@
@@ -81,7 +81,7 @@ index ae66283bf..9905adf92 100644
      "sprites": "gulp sprites:compile",
 @@ -161,6 +161,8 @@
      "karma-webpack": "^3.0.0",
-     "lcov-result-merger": "^2.0.0",
+     "lcov-result-merger": "^3.0.0",
      "mocha": "^5.1.1",
 +    "mocha-multi-reporters": "^1.1.7",
 +    "mocha-simple-html-reporter": "^1.1.0",

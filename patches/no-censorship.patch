@@ -12,7 +12,7 @@ Date:   Sat Apr 7 03:03:48 2018 +0200
     Filename: no-censorship.patch
 
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index a851acda6..d2c6add6a 100644
+index cce17bc43..684e36973 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -11,19 +11,10 @@ import {
@@ -35,7 +35,7 @@ index a851acda6..d2c6add6a 100644
  
    before(async () => {
      let { group, groupLeader, members } = await createAndPopulateGroup({
-@@ -85,220 +76,6 @@ describe('POST /chat', () => {
+@@ -87,221 +78,6 @@ describe('POST /chat', () => {
      });
    });
  
@@ -203,6 +203,7 @@ index a851acda6..d2c6add6a 100644
 -        message: t('chatPrivilegesRevoked'),
 -      });
 -
+-      // @TODO: The next test should not depend on this. We should reset the user test in a beforeEach
 -      // Restore chat privileges to continue testing
 -      user.flags.chatRevoked = false;
 -      await user.update({'flags.chatRevoked': false});
@@ -320,7 +321,7 @@ index 54b5376d6..59e7f4ccf 100644
        // Manage modals
        this.$root.$on('bv::show::modal', (modalId, data = {}) => {
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index e4d6e7ef5..d3885bb7b 100644
+index fa548bea4..ee61b27a0 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -3,7 +3,6 @@ import { model as Group } from '../../models/group';
@@ -365,7 +366,7 @@ index e4d6e7ef5..d3885bb7b 100644
  /**
   * @api {post} /api/v3/groups/:groupId/chat Post chat message to a group
   * @apiName PostChat
-@@ -118,49 +104,11 @@ api.postChat = {
+@@ -118,50 +104,12 @@ api.postChat = {
  
      let group = await Group.getGroup({user, groupId});
  
@@ -400,6 +401,7 @@ index e4d6e7ef5..d3885bb7b 100644
 -    }
 -
      if (!group) throw new NotFound(res.t('groupNotFound'));
+ 
      if (group.privacy !== 'private' && user.flags.chatRevoked) {
        throw new NotAuthorized(res.t('chatPrivilegesRevoked'));
      }

@@ -42,7 +42,7 @@ index d38eca6d3..569dacecb 100644
        sidebar-section(:title="$t('playerTiers')")
          .row
 diff --git a/website/client/components/hall/heroes.vue b/website/client/components/hall/heroes.vue
-index 010ed7ec6..3efc605f5 100644
+index 3ee4e7ad8..f7e2253d2 100644
 --- a/website/client/components/hall/heroes.vue
 +++ b/website/client/components/hall/heroes.vue
 @@ -23,10 +23,6 @@
