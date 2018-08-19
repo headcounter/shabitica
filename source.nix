@@ -177,6 +177,9 @@ stdenv.mkDerivation rec {
 
     # Small E2E test to make sure our habitica-markdown override works.
     patches/test-imageproxy-in-markdown.patch
+
+    # Use image proxy for profile photos.
+    patches/profile-photo-imageproxy.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

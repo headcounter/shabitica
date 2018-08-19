@@ -1,0 +1,45 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Sun Aug 19 06:56:32 2018 +0200
+
+    Use image proxy for profile photo
+    
+    This is another ocasion where the game allows to specify external
+    images, so let's run it through the image proxy as well.
+    
+    The hardcoded https://habitica.com occurences are replaced by the
+    configured base URL in the source derivation.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: profile-photo-imageproxy.patch
+
+diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
+index 47f6782de..4bffce3be 100644
+--- a/website/client/components/userMenu/profile.vue
++++ b/website/client/components/userMenu/profile.vue
+@@ -55,7 +55,7 @@ div
+             p(v-else) {{ $t('noDescription') }}
+           .photo
+             h2 {{ $t('photo') }}
+-            img.img-rendering-auto(v-if='user.profile.imageUrl', :src='user.profile.imageUrl')
++            img.img-rendering-auto(v-if='photoUrl', :src='photoUrl')
+             p(v-else) {{ $t('noPhoto') }}
+ 
+         .col-12.col-md-4
+@@ -385,6 +385,17 @@ export default {
+     costumeItems () {
+       return this.user.items.gear.costume;
+     },
++    photoUrl () {
++      let photourl = this.user.profile.imageUrl;
++
++      if (photourl && !photourl.startsWith('https://habitica.com/')) {
++        let photob64 = Buffer.from(photourl).toString('base64')
++          .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
++        return `https://habitica.com/imageproxy/${photob64}`;
++      }
++
++      return photourl;
++    },
+     user () {
+       let user = this.userLoggedIn;
+ 
