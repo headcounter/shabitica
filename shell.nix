@@ -6,8 +6,8 @@ let
              + " like '--arg sourceTree ~/habitica'.";
   in if sourceTree == null then throw noArgErr else toString sourceTree;
 
-  habitica = pkgs.callPackages ./habitica.nix {
-    habiticaConfig = rec {
+  shabitica = pkgs.callPackages ./shabitica.nix {
+    shabiticaConfig = rec {
       NODE_ENV = "development";
       SESSION_SECRET = "YOUR SECRET HERE";
       SESSION_SECRET_KEY = "12345678912345678912345678912345"
@@ -28,9 +28,9 @@ let
     storage.journal.enabled = false;
   });
 
-  mkShellDrv = attrs: habitica.mkCommonBuild ({
+  mkShellDrv = attrs: shabitica.mkCommonBuild ({
     name = "dev-shell";
-    nativeBuildInputs = lib.attrValues habitica.nodePackages.dev
+    nativeBuildInputs = lib.attrValues shabitica.nodePackages.dev
                      ++ lib.singleton pkgs.mongodb;
   } // attrs);
 
@@ -109,14 +109,14 @@ let
       npm run client:dev &
       npm start
     '';
-  in pkgs.writeScriptBin "habitica-dev-shell-hook" ''
+  in pkgs.writeScriptBin "shabitica-dev-shell-hook" ''
     #!${pkgs.stdenv.shell}
     exec ${pkgs.coreutils}/bin/env -i "$SHELL" -e \
       -c ${lib.escapeShellArg wrapped}
   '';
 
   sandboxedShellHook = pkgs.stdenv.mkDerivation {
-    name = "habitica-dev-sandbox";
+    name = "shabitica-dev-sandbox";
     src = "${vuizvuiSrc}/pkgs/build-support/build-sandbox/src";
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
@@ -264,6 +264,6 @@ let
 
 in mkShellDrv {
   shellHook = ''
-    exec ${sandboxedShellHook}/bin/habitica-dev-shell-hook
+    exec ${sandboxedShellHook}/bin/shabitica-dev-shell-hook
   '';
 }

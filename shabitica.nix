@@ -1,6 +1,6 @@
 { lib, pkgs, stdenv, makeWrapper, writeText, jq, nodejs-8_x
 
-, habiticaConfig ? {
+, shabiticaConfig ? {
     NODE_ENV = "production";
     BASE_URL = "http://localhost";
     ADMIN_EMAIL = "unconfigured@example.org";
@@ -11,7 +11,7 @@ let
   nodePackages = callPackage ./node-packages.nix {};
 
   callPackage = lib.callPackageWith (pkgs // {
-    inherit callPackage nodePackages habiticaConfig;
+    inherit callPackage nodePackages shabiticaConfig;
   });
 
   src = callPackage ./source.nix {};
@@ -22,14 +22,14 @@ let
       "name" "version" "nativeBuildInputs" "buildInputs"
     ];
   in stdenv.mkDerivation ({
-    name = "habitica-${attrs.name}-${version}";
+    name = "shabitica-${attrs.name}-${version}";
     inherit src version;
 
     configurePhase = ''
       runHook preConfigure
 
       # Merge config.json.example with our config and create config.json:
-      echo ${lib.escapeShellArg (builtins.toJSON habiticaConfig)} \
+      echo ${lib.escapeShellArg (builtins.toJSON shabiticaConfig)} \
         | ${jq}/bin/jq -s '.[0] * .[1]' config.json.example - > config.json
 
       runHook postConfigure
@@ -39,7 +39,8 @@ let
 
     buildPhase = let
       mkVar = key: val: "${key}=${lib.escapeShellArg (toString val)}";
-      env = lib.concatStringsSep " " (lib.mapAttrsToList mkVar habiticaConfig);
+      vars = lib.mapAttrsToList mkVar shabiticaConfig;
+      env = lib.concatStringsSep " " vars;
     in ''
       runHook preBuild
 
@@ -114,7 +115,7 @@ in rec {
       ' migrations/migration-runner.js
 
       find migrations -type f -name '*.js' -exec sed -i -e \
-        's!\(\.\./\)\+website/server!${server}/libexec/habitica/server!' {} +
+        's!\(\.\./\)\+website/server!${server}/libexec/shabitica/server!' {} +
     '';
 
     buildProg = "gulp --cwd . -f ${writeText "build-migrations.js" ''
@@ -138,7 +139,7 @@ in rec {
       migPath=${lib.escapeShellArg "_migrations_transpiled/${file}"}
       migFile="$(basename "$migPath")"
       migDir="_migrations/${toString num}"
-      migOutDir="$out/share/habitica/migrations/${toString num}"
+      migOutDir="$out/share/shabitica/migrations/${toString num}"
       migRunner="$migDir/runner.js"
 
       mkdir "$migDir"
@@ -155,28 +156,28 @@ in rec {
         --add-flags "$migOutDir/runner.js" \
         --set NODE_ENV production \
         --set NODE_PATH "$runtimeNodePath" \
-        --run "cd '${server}/libexec/habitica'" \
+        --run "cd '${server}/libexec/shabitica'" \
         --run ${let
           desc = "${migrationMsg} ${toString num} (${file})";
         in lib.escapeShellArg "echo ${lib.escapeShellArg desc} >&2"}
     '') (import ./migrations.nix));
 
     installPhase = ''
-      mkdir -p "$out/bin" "$out/share/habitica"
+      mkdir -p "$out/bin" "$out/share/shabitica"
 
-      mv _migrations "$out/share/habitica/migrations"
+      mv _migrations "$out/share/shabitica/migrations"
 
       cat > "$out/bin/migrate" <<EOF
       #!${stdenv.shell} -e
       usage() {
         echo "Usage \$0 MIGRATION_NUMBER" >&2
-        echo "Run the specified database migration number on Habitica" >&2
+        echo "Run the specified database migration number on Shabitica" >&2
       }
 
       if [ -z "\$1" ]; then
         usage; exit 1
       else
-        exec "$out/share/habitica/migrations/\$1/run.sh" "\$@"
+        exec "$out/share/shabitica/migrations/\$1/run.sh" "\$@"
       fi
       EOF
       chmod +x "$out/bin/migrate"
@@ -189,9 +190,9 @@ in rec {
     buildTarget = "build:server";
 
     postPatch = ''
-      # Load config.json from $out/etc/habitica:
+      # Load config.json from $out/etc/shabitica:
       sed -i -e '/^const PATH_TO_CONFIG/ {
-        c const PATH_TO_CONFIG = "'"$out"'/etc/habitica/config.json";
+        c const PATH_TO_CONFIG = "'"$out"'/etc/shabitica/config.json";
       }' website/server/libs/setupNconf.js
 
       # Hardcode the data of the client's index.html.
@@ -211,20 +212,20 @@ in rec {
     in lib.makeSearchPath "lib/node_modules" packages;
 
     installPhase = ''
-      mkdir -p "$out/bin" "$out/libexec/habitica"
-      install -vD -m 0644 config.json "$out/etc/habitica/config.json"
-      cp -rdT website/transpiled-babel "$out/libexec/habitica/server"
-      cp -rdT website/common/transpiled-babel "$out/libexec/habitica/common"
-      cp -rdT website/common/locales "$out/libexec/habitica/common/locales"
-      cp -rdT website/common/errors "$out/libexec/habitica/common/errors"
+      mkdir -p "$out/bin" "$out/libexec/shabitica"
+      install -vD -m 0644 config.json "$out/etc/shabitica/config.json"
+      cp -rdT website/transpiled-babel "$out/libexec/shabitica/server"
+      cp -rdT website/common/transpiled-babel "$out/libexec/shabitica/common"
+      cp -rdT website/common/locales "$out/libexec/shabitica/common/locales"
+      cp -rdT website/common/errors "$out/libexec/shabitica/common/errors"
 
       makeWrapper \
         ${lib.escapeShellArg "${nodejs-8_x}/bin/node"} \
-        "$out/bin/habitica-server" \
-        --add-flags "$out/libexec/habitica/server/index.js" \
+        "$out/bin/shabitica-server" \
+        --add-flags "$out/libexec/shabitica/server/index.js" \
         --set NODE_ENV production \
         --set NODE_PATH "$runtimeNodePath" \
-        --run "cd '$out/libexec/habitica'"
+        --run "cd '$out/libexec/shabitica'"
     '';
   };
 

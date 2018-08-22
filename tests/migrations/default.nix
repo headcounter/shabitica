@@ -1,11 +1,11 @@
 { common, pkgs, lib, ... }:
 
 {
-  name = "habitica-migration";
+  name = "shabitica-migration";
 
   machine = { pkgs, ... }: {
     imports = [ common ];
-    habitica.hostName = "localhost";
+    shabitica.hostName = "localhost";
 
     environment.systemPackages = let
       mainRunner = ''
@@ -83,25 +83,25 @@
     inherit (import ../../docinfo.nix) migrationMsg;
 
   in ''
-    $machine->waitForUnit('habitica.service');
+    $machine->waitForUnit('shabitica.service');
 
     $machine->nest('populate database with old version', sub {
-      $machine->stopJob('habitica.service');
-      $machine->succeed('habitica-db-shell --eval "db.dropDatabase()"');
-      $machine->succeed('habitica-db-restore --db admin ${./fixture}');
-      $machine->succeed('rm /var/lib/habitica/db-version');
+      $machine->stopJob('shabitica.service');
+      $machine->succeed('shabitica-db-shell --eval "db.dropDatabase()"');
+      $machine->succeed('shabitica-db-restore --db admin ${./fixture}');
+      $machine->succeed('rm /var/lib/shabitica/db-version');
     });
 
     $machine->nest('reboot to run migrations', sub {
       $machine->shutdown;
-      $machine->waitForUnit('habitica.service');
+      $machine->waitForUnit('shabitica.service');
     });
 
     ${lib.concatMapStrings mkTest (import ../../migrations.nix)}
 
     $machine->nest('reboot machine to hopefully not run migrations', sub {
       $machine->shutdown;
-      $machine->waitForUnit('habitica.service');
+      $machine->waitForUnit('shabitica.service');
     });
 
     $machine->nest('verify that migrations were not applied again', sub {
@@ -110,7 +110,7 @@
       # matching with grep and use "wc -l" to check if the amount of matching
       # lines is indeed zero.
       $machine->succeed(
-        'test "$(journalctl -b -u habitica-db-update.service'.
+        'test "$(journalctl -b -u shabitica-db-update.service'.
         ' | grep -F "${migrationMsg}" | wc -l)" -eq 0'
       );
     });

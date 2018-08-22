@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config.habitica;
+  cfg = config.shabitica;
 
   go-camo = pkgs.buildGoPackage rec {
     name = "go-camo-${version}";
@@ -73,11 +73,11 @@ let
   #      doesn't have the TemporaryFileSystem option.
   supportsTmpfs = lib.versionAtLeast config.systemd.package.version "238";
 
-  sandboxPaths = pkgs.runCommand "habitica-imageproxy-sandbox-paths" {
+  sandboxPaths = pkgs.runCommand "shabitica-imageproxy-sandbox-paths" {
     closureInfo = pkgs.closureInfo { rootPaths = [ go-camo.bin ]; };
   } ''
     mkdir -p "$out/lib/systemd/system"
-    serviceFile="$out/lib/systemd/system/habitica-imageproxy.service"
+    serviceFile="$out/lib/systemd/system/shabitica-imageproxy.service"
 
     echo '[Service]' > "$serviceFile"
 
@@ -89,7 +89,7 @@ let
   '';
 
 in {
-  options.habitica.imageProxy = {
+  options.shabitica.imageProxy = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = cfg.useNginx;
@@ -105,18 +105,18 @@ in {
 
   config = lib.mkMerge [
     (lib.mkIf cfg.imageProxy.enable {
-      users.users.habitica-imageproxy = {
-        description = "Habitica Image Proxy User";
-        group = "habitica-imageproxy";
+      users.users.shabitica-imageproxy = {
+        description = "Shabitica Image Proxy User";
+        group = "shabitica-imageproxy";
       };
 
-      users.groups.habitica-imageproxy = {};
+      users.groups.shabitica-imageproxy = {};
 
-      systemd.sockets.habitica-imageproxy = {
-        description = "Habitica Image Proxy Socket";
-        requiredBy = [ "habitica.service" ];
+      systemd.sockets.shabitica-imageproxy = {
+        description = "Shabitica Image Proxy Socket";
+        requiredBy = [ "shabitica.service" ];
 
-        socketConfig.ListenStream = "/run/habitica-imageproxy.sock";
+        socketConfig.ListenStream = "/run/shabitica-imageproxy.sock";
         socketConfig.SocketMode = "0660";
         socketConfig.SocketUser = "root";
         socketConfig.SocketGroup = config.services.nginx.group;
@@ -124,12 +124,12 @@ in {
 
       systemd.packages = [ sandboxPaths ];
 
-      systemd.services.habitica-imageproxy = {
-        description = "Habitica Image Proxy";
+      systemd.services.shabitica-imageproxy = {
+        description = "Shabitica Image Proxy";
         serviceConfig = {
-          ExecStart = "@${go-camo.bin}/bin/go-camo habitica-imageproxy";
-          User = "habitica-imageproxy";
-          Group = "habitica-imageproxy";
+          ExecStart = "@${go-camo.bin}/bin/go-camo shabitica-imageproxy";
+          User = "shabitica-imageproxy";
+          Group = "shabitica-imageproxy";
 
           BindReadOnlyPaths = let
             mkEtcFile = etcfile: let
@@ -141,7 +141,7 @@ in {
           in map mkEtcFile [ "resolv.conf" "ssl/certs/ca-certificates.crt" ];
 
           # Needed so that the proxy can validate sessions.
-          EnvironmentFile = "/var/lib/habitica/secrets.env";
+          EnvironmentFile = "/var/lib/shabitica/secrets.env";
 
           RootDirectory = sandboxPaths;
           MountFlags = "private";
@@ -158,15 +158,15 @@ in {
         } // (if supportsTmpfs then {
           TemporaryFileSystem = "/";
         } else {
-          BindPaths = [ "/run/habitica-imageproxy-chroot:/" ];
+          BindPaths = [ "/run/shabitica-imageproxy-chroot:/" ];
         });
       };
     })
     (lib.mkIf (cfg.imageProxy.enable && cfg.useNginx) {
-      systemd.sockets.habitica-imageproxy.wantedBy = [ "nginx.service" ];
+      systemd.sockets.shabitica-imageproxy.wantedBy = [ "nginx.service" ];
 
-      systemd.services.habitica-imageproxy-cachedir = {
-        description = "Create Habitica Image Proxy Cache Dir";
+      systemd.services.shabitica-imageproxy-cachedir = {
+        description = "Create Shabitica Image Proxy Cache Dir";
         requiredBy = [ "nginx.service" ];
         before = [ "nginx.service" ];
         after = [ "local-fs.target" ];
@@ -174,22 +174,22 @@ in {
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
 
-        unitConfig.ConditionPathExists = "!/var/cache/habitica-imageproxy";
+        unitConfig.ConditionPathExists = "!/var/cache/shabitica-imageproxy";
 
         script = ''
-          mkdir -p /var/cache/habitica-imageproxy
-          chmod 0710 /var/cache/habitica-imageproxy
-          chown root:nginx /var/cache/habitica-imageproxy
+          mkdir -p /var/cache/shabitica-imageproxy
+          chmod 0710 /var/cache/shabitica-imageproxy
+          chown root:nginx /var/cache/shabitica-imageproxy
         '';
       };
 
       services.nginx.commonHttpConfig = ''
-        proxy_cache_path /var/cache/habitica-imageproxy
+        proxy_cache_path /var/cache/shabitica-imageproxy
           keys_zone=imageproxy:1m levels=1:2 inactive=30d max_size=1G;
       '';
 
       services.nginx.virtualHosts.${cfg.hostName}.locations."/imageproxy/" = {
-        proxyPass = "http://unix:/run/habitica-imageproxy.sock:/";
+        proxyPass = "http://unix:/run/shabitica-imageproxy.sock:/";
         extraConfig = ''
           proxy_cache imageproxy;
           proxy_cache_key $uri;
@@ -202,15 +202,15 @@ in {
     })
     (lib.mkIf (cfg.imageProxy.enable && !supportsTmpfs) {
       systemd.mounts = lib.singleton {
-        description = "Tmpfs For Habitica Image Proxy Chroot";
+        description = "Tmpfs For Shabitica Image Proxy Chroot";
 
-        bindsTo = [ "habitica-imageproxy.service" ];
-        requiredBy = [ "habitica-imageproxy.service" ];
-        before = [ "habitica-imageproxy.service" ];
+        bindsTo = [ "shabitica-imageproxy.service" ];
+        requiredBy = [ "shabitica-imageproxy.service" ];
+        before = [ "shabitica-imageproxy.service" ];
         after = [ "local-fs.target" ];
 
         what = "tmpfs";
-        where = "/run/habitica-imageproxy-chroot";
+        where = "/run/shabitica-imageproxy-chroot";
         type = "tmpfs";
         options = "nodev,noexec,nosuid";
       };

@@ -13,6 +13,6 @@ mkDerivation {
     text unordered-containers vector wai warp word-wrap
   ];
   testHaskellDepends = [ hspec neat-interpolation ];
-  description = "Habitica email helper";
+  description = "Shabitica email helper";
   license = stdenv.lib.licenses.gpl3;
 }

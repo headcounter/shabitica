@@ -1,8 +1,8 @@
 { nixpkgs, pkgs, lib, ... }:
 
 let
-  habitica = pkgs.callPackages ../habitica.nix {
-    habiticaConfig = rec {
+  shabitica = pkgs.callPackages ../shabitica.nix {
+    shabiticaConfig = rec {
       NODE_ENV = "test";
       SESSION_SECRET = "YOUR SECRET HERE";
       SESSION_SECRET_KEY = "12345678912345678912345678912345"
@@ -16,11 +16,11 @@ let
     };
   };
 
-  mkTest = name: { target, useDB ? false }: habitica.mkCommonBuild {
+  mkTest = name: { target, useDB ? false }: shabitica.mkCommonBuild {
     name = "test-${name}";
     buildTarget = "test:${target}";
 
-    nativeBuildInputs = lib.attrValues habitica.nodePackages.dev
+    nativeBuildInputs = lib.attrValues shabitica.nodePackages.dev
                      ++ lib.singleton pkgs.mongodb;
 
     createHydraTestFailure = true;
@@ -67,9 +67,9 @@ in lib.mapAttrs runTests {
   client.e2e = (import "${nixpkgs}/nixos/lib/testing.nix" {
     inherit (pkgs) system;
   }).runInMachine {
-    drv = habitica.mkCommonBuild {
+    drv = shabitica.mkCommonBuild {
       name = "test-client-e2e";
-      nativeBuildInputs = lib.attrValues habitica.nodePackages.dev;
+      nativeBuildInputs = lib.attrValues shabitica.nodePackages.dev;
       createHydraTestFailure = true;
       buildProg = "npm run";
       buildTarget = "client:e2e";

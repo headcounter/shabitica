@@ -23,14 +23,14 @@ space = " "
 resetPassword :: SimpleMail
 resetPassword = SimpleMail
     { smTo = "foo@example.org"
-    , smSubject = "Password Reset for Habitica"
-    , smText = "If you requested a password reset for foo on Habitica, head"
+    , smSubject = "Password Reset for Shabitica"
+    , smText = "If you requested a password reset for foo on Shabitica, head"
             <> " to http://example.org/.../reset-password-set-new-one?code="
             <> "123456 to set a new one. The link will expire after 24 hours."
             <> " If you haven't requested a password reset, please ignore"
             <> " this email."
     , smHtml = Just $ "If you requested a password reset for <strong>foo</str"
-                   <> "ong> on Habitica, <a href=\"http://example.org/.../"
+                   <> "ong> on Shabitica, <a href=\"http://example.org/.../"
                    <> "reset-password-set-new-one?code=123456\">click"
                    <> " here</a> to set a new one. The link will expire"
                    <> " after 24 hours.<br/><br>If you haven't requested a"
@@ -39,7 +39,7 @@ resetPassword = SimpleMail
 
 resetPasswordBody :: TL.Text
 resetPasswordBody = TL.fromStrict [text|
-    If you requested a password reset for foo on Habitica, head to
+    If you requested a password reset for foo on Shabitica, head to
     http://example.org/.../reset-password-set-new-one?code=123456 to set a
     new one. The link will expire after 24 hours. If you haven't requested a
     password reset, please ignore this email.
@@ -63,7 +63,7 @@ welcome :: TxnMail
 welcome = commonTxnMail
     { txnEmailType = "welcome"
     , txnVariables = object
-        ["BASE_URL" .= T.pack "https://habitica.example.org"]
+        ["BASE_URL" .= T.pack "https://shabitica.example.org"]
     , txnPersonalVariables = M.singleton commonTxnAddr $ object
         ["RECIPIENT_UNSUB_URL" .= T.pack "/email/unsubscribe?code=1234"]
     }
@@ -73,13 +73,13 @@ welcomeBody = TL.fromStrict [text|
     Hello stranger,
 
     Welcome to the self-hosted Habitica instance at
-    https://habitica.example.org/.
+    https://shabitica.example.org/.
 
-    To get started simply head over to https://habitica.example.org/ and log
+    To get started simply head over to https://shabitica.example.org/ and log
     in.
     --$space
-    Self-hosted Habitica instance at https://habitica.example.org/
-    Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
+    Self-hosted Habitica instance at https://shabitica.example.org/
+    Unsubscribe: https://shabitica.example.org/email/unsubscribe?code=1234
 |]
 
 inviteFriend :: TxnMail
@@ -88,7 +88,7 @@ inviteFriend = commonTxnMail
     , txnVariables = object
         [ "LINK"     .= T.pack "/static/front?groupInvite=abcdef0123456789"
         , "INVITER"  .= T.pack "foo"
-        , "BASE_URL" .= T.pack "https://habitica.example.org"
+        , "BASE_URL" .= T.pack "https://shabitica.example.org"
         ]
     , txnPersonalVariables = M.singleton commonTxnAddr $ object
         [ "RECIPIENT_NAME" .= T.pack "bar"
@@ -100,15 +100,15 @@ inviteFriendBody :: TL.Text
 inviteFriendBody = TL.fromStrict [text|
     Hello bar,
 
-    foo has invited you to the self-hosted Habitica instance at
-    https://habitica.example.org/.
+    foo has invited you to the self-hosted Shabitica instance at
+    https://shabitica.example.org/.
 
     Please head to the following URL to accept your invitation:
 
-    https://habitica.example.org/static/front?groupInvite=abcdef0123456789
+    https://shabitica.example.org/static/front?groupInvite=abcdef0123456789
     --$space
-    Self-hosted Habitica instance at https://habitica.example.org/
-    Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
+    Self-hosted Habitica instance at https://shabitica.example.org/
+    Unsubscribe: https://shabitica.example.org/email/unsubscribe?code=1234
 |]
 
 inviteCollectionQuest :: TxnMail
@@ -118,7 +118,7 @@ inviteCollectionQuest = commonTxnMail
         [ "QUEST_NAME" .= T.pack
               "Attack of the Mundane, Part 1: Dish Disaster!"
         , "INVITER"    .= T.pack "foo"
-        , "BASE_URL"   .= T.pack "https://habitica.example.org"
+        , "BASE_URL"   .= T.pack "https://shabitica.example.org"
         , "PARTY_URL"  .= T.pack "/party"
         ]
     , txnPersonalVariables = M.singleton commonTxnAddr $ object
@@ -136,10 +136,10 @@ inviteCollectionQuestBody = TL.fromStrict [text|
 
     To join, please head over to:
 
-    https://habitica.example.org/party
+    https://shabitica.example.org/party
     --$space
-    Self-hosted Habitica instance at https://habitica.example.org/
-    Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
+    Self-hosted Habitica instance at https://shabitica.example.org/
+    Unsubscribe: https://shabitica.example.org/email/unsubscribe?code=1234
 |]
 
 inviteBossQuest :: TxnMail
@@ -148,7 +148,7 @@ inviteBossQuest = commonTxnMail
     , txnVariables = object
         [ "QUEST_NAME" .= T.pack "The Basi-List"
         , "INVITER"    .= T.pack "foo"
-        , "BASE_URL"   .= T.pack "https://habitica.example.org"
+        , "BASE_URL"   .= T.pack "https://shabitica.example.org"
         , "PARTY_URL"  .= T.pack "/party"
         ]
     , txnPersonalVariables = M.singleton commonTxnAddr $ object
@@ -165,17 +165,17 @@ inviteBossQuestBody = TL.fromStrict [text|
 
     To join, please head over to:
 
-    https://habitica.example.org/party
+    https://shabitica.example.org/party
     --$space
-    Self-hosted Habitica instance at https://habitica.example.org/
-    Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
+    Self-hosted Habitica instance at https://shabitica.example.org/
+    Unsubscribe: https://shabitica.example.org/email/unsubscribe?code=1234
 |]
 
 questStarted :: TxnMail
 questStarted = commonTxnMail
     { txnEmailType = "quest-started"
     , txnVariables = object
-        [ "BASE_URL"   .= T.pack "https://habitica.example.org"
+        [ "BASE_URL"   .= T.pack "https://shabitica.example.org"
         , "PARTY_URL"  .= T.pack "/party"
         ]
     , txnPersonalVariables = M.singleton commonTxnAddr $ object
@@ -191,17 +191,17 @@ questStartedBody = TL.fromStrict [text|
     The quest you have joined has just started. Please head over to your
     party to see the details:
 
-    https://habitica.example.org/party
+    https://shabitica.example.org/party
     --$space
-    Self-hosted Habitica instance at https://habitica.example.org/
-    Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
+    Self-hosted Habitica instance at https://shabitica.example.org/
+    Unsubscribe: https://shabitica.example.org/email/unsubscribe?code=1234
 |]
 
 newPm :: TxnMail
 newPm = commonTxnMail
     { txnEmailType = "new-pm"
     , txnVariables = object
-        [ "BASE_URL" .= T.pack "https://habitica.example.org"
+        [ "BASE_URL" .= T.pack "https://shabitica.example.org"
         , "SENDER"   .= T.pack "foo"
         ]
     , txnPersonalVariables = M.singleton commonTxnAddr $ object
@@ -216,8 +216,8 @@ newPmBody = TL.fromStrict [text|
 
     You got a new private message from foo.
     --$space
-    Self-hosted Habitica instance at https://habitica.example.org/
-    Unsubscribe: https://habitica.example.org/email/unsubscribe?code=1234
+    Self-hosted Habitica instance at https://shabitica.example.org/
+    Unsubscribe: https://shabitica.example.org/email/unsubscribe?code=1234
 |]
 
 main :: IO ()
@@ -226,7 +226,7 @@ main = hspec $ do
         let rendered = renderSimpleMail resetPassword
 
         it "has correct subject" $
-            subject rendered `shouldBe` "Password Reset for Habitica"
+            subject rendered `shouldBe` "Password Reset for Shabitica"
         it "has correct body" $
             body rendered `shouldBe` resetPasswordBody
 
@@ -234,7 +234,7 @@ main = hspec $ do
         let rendered = snd $ renderTxnMail commonTxnRecip welcome
 
         it "has correct subject" $
-            subject rendered `shouldBe` "Welcome to Habitica"
+            subject rendered `shouldBe` "Welcome to Shabitica"
         it "has correct body" $
             body rendered `shouldBe` welcomeBody
 
@@ -242,7 +242,7 @@ main = hspec $ do
         let rendered = snd $ renderTxnMail commonTxnRecip inviteFriend
 
         it "has correct subject" $
-            subject rendered `shouldBe` "Invitation to Habitica from foo"
+            subject rendered `shouldBe` "Invitation to Shabitica from foo"
         it "has correct body" $
             body rendered `shouldBe` inviteFriendBody
 
@@ -268,7 +268,7 @@ main = hspec $ do
         let rendered = snd $ renderTxnMail commonTxnRecip questStarted
 
         it "has correct subject" $
-            subject rendered `shouldBe` "Habitica Quest started"
+            subject rendered `shouldBe` "Shabitica Quest started"
         it "has correct body" $
             body rendered `shouldBe` questStartedBody
 

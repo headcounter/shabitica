@@ -13,14 +13,14 @@ let
         check = false;
       };
 
-      isHOpt = opt: lib.head (lib.splitString "." opt.name) == "habitica";
+      isHOpt = opt: lib.head (lib.splitString "." opt.name) == "shabitica";
       filterDoc = lib.filter (opt: isHOpt opt && opt.visible && !opt.internal);
       filtered = filterDoc (lib.optionAttrSetToDocList modules.options);
       optsXML = builtins.unsafeDiscardStringContext (builtins.toXML filtered);
       optsFile = builtins.toFile "options.xml" optsXML;
 
     in pkgs.stdenv.mkDerivation {
-      name = "habitica-options-manual";
+      name = "shabitica-options-manual";
 
       nativeBuildInputs = [ pkgs.libxslt ];
 
@@ -29,14 +29,14 @@ let
       ];
 
       buildCommand = ''
-        dest="$out/share/doc/habitica"
+        dest="$out/share/doc/shabitica"
         mkdir -p "$dest"
 
         cat > manual.xml <<XML
         <book xmlns="http://docbook.org/ns/docbook"
               xmlns:xlink="http://www.w3.org/1999/xlink"
               xmlns:xi="http://www.w3.org/2001/XInclude">
-          <title>NixOS options for Habitica Standalone</title>
+          <title>NixOS options for Shabitica</title>
           <xi:include href="options-db.xml" />
         </book>
         XML
@@ -68,8 +68,8 @@ let
   };
 
 in jobs // {
-  habitica = pkgs.releaseTools.channel {
-    name = "habitica";
+  shabitica = pkgs.releaseTools.channel {
+    name = "shabitica";
     constituents = lib.collect lib.isDerivation jobs;
     src = ./.;
   };

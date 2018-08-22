@@ -1,11 +1,11 @@
 { pkgs, lib, common, registerUser, ... }:
 
 {
-  name = "habitica-backup";
+  name = "shabitica-backup";
 
   machine = {
     imports = [ common ];
-    habitica.hostName = "localhost";
+    shabitica.hostName = "localhost";
   };
 
   testScript = let
@@ -45,7 +45,7 @@
       return $result;
     }
 
-    $machine->waitForUnit('habitica.service');
+    $machine->waitForUnit('shabitica.service');
 
     my $curlAuthArgs;
 
@@ -65,7 +65,7 @@
     });
 
     $machine->nest("trigger backup", sub {
-      $machine->succeed('systemctl start habitica-db-backup.service');
+      $machine->succeed('systemctl start shabitica-db-backup.service');
     });
 
     $machine->nest("change todo text", sub {
@@ -81,8 +81,8 @@
     });
 
     $machine->nest("restore database", sub {
-      $machine->succeed('${dbrestore}"/var/backup/habitica/'
-                       .'$(ls -1 /var/backup/habitica | tail -n 1)"');
+      $machine->succeed('${dbrestore}"/var/backup/shabitica/'
+                       .'$(ls -1 /var/backup/shabitica | tail -n 1)"');
     });
 
     $machine->nest("check whether task has old text", sub {

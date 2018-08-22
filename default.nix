@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config.habitica;
+  cfg = config.shabitica;
 
   mongodb = pkgs.mongodb.overrideAttrs (drv: {
     patches = (drv.patches or []) ++ [ patches/mongodb-systemd.patch ];
@@ -9,12 +9,12 @@ let
     NIX_LDFLAGS = lib.toList (drv.NIX_LDFLAGS or []) ++ [ "-lsystemd" ];
   });
 
-  habitica = pkgs.callPackages ./habitica.nix {
-    habiticaConfig = cfg.config;
+  shabitica = pkgs.callPackages ./shabitica.nix {
+    shabiticaConfig = cfg.config;
   };
 
   hostIsFqdn = builtins.match ".+\\..+" cfg.hostName != null;
-  isFqdnText = "builtins.match \".+\\\\..+\" config.habitica.hostName != null";
+  isFqdnTxt = "builtins.match \".+\\\\..+\" config.shabitica.hostName != null";
 
   dbtools = pkgs.callPackage ./dbtools.nix {};
 
@@ -27,17 +27,17 @@ let
   #      doesn't have the TemporaryFileSystem option.
   supportsTmpfs = lib.versionAtLeast config.systemd.package.version "238";
 
-  # Results in a systemd service unit for the Habitica server which only
+  # Results in a systemd service unit for the Shabitica server which only
   # contains BindReadOnlyPaths options. The rest of the service is defined
-  # later in systemd.services.habitica and the contents here are merged
+  # later in systemd.services.shabitica and the contents here are merged
   # accordingly.
-  habiticaSandboxPaths = pkgs.runCommand "habitica-sandbox-paths" {
+  shabiticaSandboxPaths = pkgs.runCommand "shabitica-sandbox-paths" {
     closureInfo = pkgs.closureInfo {
-      rootPaths = [ habitica.server pkgs.coreutils ];
+      rootPaths = [ shabitica.server pkgs.coreutils ];
     };
   } ''
     mkdir -p "$out/lib/systemd/system"
-    serviceFile="$out/lib/systemd/system/habitica.service"
+    serviceFile="$out/lib/systemd/system/shabitica.service"
 
     echo '[Service]' > "$serviceFile"
 
@@ -51,18 +51,18 @@ let
 in {
   imports = [ ./imageproxy.nix ];
 
-  options.habitica = {
+  options.shabitica = {
     hostName = lib.mkOption {
       type = lib.types.str;
       default = "localhost";
-      example = "habitica.example.org";
-      description = "The host name to use for Habitica.";
+      example = "shabitica.example.org";
+      description = "The host name to use for Shabitica.";
     };
 
     adminMailAddress = lib.mkOption {
       type = lib.types.str;
       default = "root@localhost";
-      example = "habitica-admin@example.org";
+      example = "shabitica-admin@example.org";
       description = "Email address of the administrator.";
     };
 
@@ -80,7 +80,7 @@ in {
 
         Otherwise if the value is <literal>null</literal>, you can still
         trigger a database backup manually by issuing <command>systemctl start
-        habitica-db-backup.service</command>.
+        shabitica-db-backup.service</command>.
 
         The database backups are stored in <option>backupDir</option>.
       '';
@@ -88,7 +88,7 @@ in {
 
     backupDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/backup/habitica";
+      default = "/var/backup/shabitica";
       description = let
         inherit (docInfo) archiveExampleFilename;
         exampleFile = "<replaceable>${archiveExampleFilename}</replaceable>";
@@ -102,8 +102,8 @@ in {
 
     senderMailAddress = lib.mkOption {
       type = lib.types.str;
-      default = "habitica@localhost";
-      example = "habitica@example.org";
+      default = "shabitica@localhost";
+      example = "shabitica@example.org";
       description = "The email address to use for sending notifications.";
     };
 
@@ -113,8 +113,8 @@ in {
         defaultScheme = if cfg.useSSL then "https" else "http";
       in "${defaultScheme}://${cfg.hostName}";
       defaultText = let
-        schemeText = "if config.habitica.useSSL then \"https\" else \"http\"";
-        hostText = "config.habitica.hostName";
+        schemeText = "if config.shabitica.useSSL then \"https\" else \"http\"";
+        hostText = "config.shabitica.hostName";
       in lib.literalExample "\"\${${schemeText}}://\${${hostText}}\"";
       description = ''
         The base URL to use for serving web site content.
@@ -137,16 +137,16 @@ in {
 
     staticPath = lib.mkOption {
       type = lib.types.path;
-      default = habitica.client;
-      defaultText = lib.literalExample "habitica.client";
+      default = shabitica.client;
+      defaultText = lib.literalExample "shabitica.client";
       readOnly = true;
-      description = "The path to the static assets of Habitica.";
+      description = "The path to the static assets of Shabitica.";
     };
 
     apiDocPath = lib.mkOption {
       type = lib.types.path;
-      default = habitica.apidoc;
-      defaultText = lib.literalExample "habitica.apidoc";
+      default = shabitica.apidoc;
+      defaultText = lib.literalExample "shabitica.apidoc";
       readOnly = true;
       description = "The path to the API documentation.";
     };
@@ -154,7 +154,7 @@ in {
     useSSL = lib.mkOption {
       type = lib.types.bool;
       default = hostIsFqdn;
-      defaultText = lib.literalExample isFqdnText;
+      defaultText = lib.literalExample isFqdnTxt;
       description = ''
         Whether to allow HTTPS connections only. If <option>hostName</option>
         contains any dots the default is <literal>true</literal>, otherwise
@@ -181,67 +181,67 @@ in {
 
     config = lib.mkOption {
       type = with lib.types; attrsOf (either int str);
-      description = "Configuration options to pass to Habitica.";
+      description = "Configuration options to pass to Shabitica.";
     };
   };
 
   config = lib.mkMerge [
-    { habitica.config = {
+    { shabitica.config = {
         ADMIN_EMAIL = cfg.adminMailAddress;
         NODE_ENV = "production";
         BASE_URL = cfg.baseURL;
-        NODE_DB_URI = "mongodb://%2Frun%2Fhabitica%2Fdb.sock";
-        PORT = "/run/habitica.sock";
-        MAILER_SOCKET = "/run/habitica-mailer.sock";
+        NODE_DB_URI = "mongodb://%2Frun%2Fshabitica%2Fdb.sock";
+        PORT = "/run/shabitica.sock";
+        MAILER_SOCKET = "/run/shabitica-mailer.sock";
       };
 
-      users.users.habitica-db = {
-        description = "Habitica Database User";
-        group = "habitica";
+      users.users.shabitica-db = {
+        description = "Shabitica Database User";
+        group = "shabitica";
       };
 
-      users.users.habitica-mailer = {
-        description = "Habitica Mailer Daemon User";
-        group = "habitica-mailer";
+      users.users.shabitica-mailer = {
+        description = "Shabitica Mailer Daemon User";
+        group = "Shabitica-mailer";
       };
 
-      users.users.habitica = {
-        description = "Habitica User";
-        group = "habitica";
+      users.users.shabitica = {
+        description = "Shabitica User";
+        group = "shabitica";
       };
 
-      users.groups.habitica = {};
-      users.groups.habitica-mailer = {};
+      users.groups.shabitica = {};
+      users.groups.shabitica-mailer = {};
 
       environment.systemPackages = [ dbtools ];
 
-      systemd.packages = [ habiticaSandboxPaths ];
+      systemd.packages = [ shabiticaSandboxPaths ];
 
-      systemd.services.habitica-statedir-init = {
-        description = "Initialize Habitica";
+      systemd.services.shabitica-statedir-init = {
+        description = "Initialize Shabitica";
         wantedBy = [ "multi-user.target" ];
         after = [ "local-fs.target" ];
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
-        unitConfig.ConditionPathExists = "!/var/lib/habitica";
+        unitConfig.ConditionPathExists = "!/var/lib/shabitica";
         script = ''
-          mkdir -p /var/lib/habitica/db
+          mkdir -p /var/lib/shabitica/db
 
-          chmod 0710 /var/lib/habitica
-          chown root:habitica /var/lib/habitica
+          chmod 0710 /var/lib/shabitica
+          chown root:shabitica /var/lib/shabitica
 
-          echo ${toString latestDbVersion} > /var/lib/habitica/db-version
+          echo ${toString latestDbVersion} > /var/lib/shabitica/db-version
 
-          chmod 0700 /var/lib/habitica/db
-          chown habitica-db:habitica /var/lib/habitica/db
+          chmod 0700 /var/lib/shabitica/db
+          chown shabitica-db:shabitica /var/lib/shabitica/db
         '';
       };
 
-      systemd.services.habitica-secrets-init = {
-        description = "Initialize Secrets for Habitica";
+      systemd.services.shabitica-secrets-init = {
+        description = "Initialize Secrets for Shabitica";
         wantedBy = [ "multi-user.target" ];
-        after = [ "local-fs.target" "habitica-statedir-init.service" ];
-        unitConfig.ConditionPathExists = "!/var/lib/habitica/secrets.env";
+        after = [ "local-fs.target" "shabitica-statedir-init.service" ];
+        unitConfig.ConditionPathExists = "!/var/lib/shabitica/secrets.env";
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
         serviceConfig.UMask = "0077";
@@ -254,53 +254,53 @@ in {
             'SESSION_SECRET_IV': secrets.token_hex(16)
           }
           lines = [key + '="' + val + '"\n' for key, val in secrets.items()]
-          open('/var/lib/habitica/secrets.env', 'w').write("".join(lines))
+          open('/var/lib/shabitica/secrets.env', 'w').write("".join(lines))
         '';
       };
 
-      systemd.services.habitica-init = {
-        description = "Initialize Habitica";
+      systemd.services.shabitica-init = {
+        description = "Initialize Shabitica";
         wantedBy = [ "multi-user.target" ];
         after = [
           "local-fs.target"
-          "habitica-statedir-init.service"
-          "habitica-secrets-init.service"
+          "shabitica-statedir-init.service"
+          "shabitica-secrets-init.service"
         ];
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
-        unitConfig.ConditionPathExists = "!/run/habitica";
+        unitConfig.ConditionPathExists = "!/run/shabitica";
         script = ''
-          mkdir -p /run/habitica
-          chmod 0710 /run/habitica
-          chown habitica-db:habitica /run/habitica
+          mkdir -p /run/shabitica
+          chmod 0710 /run/shabitica
+          chown shabitica-db:shabitica /run/shabitica
         '';
       };
 
-      systemd.services.habitica-db = {
-        description = "Habitica MongoDB Instance";
+      systemd.services.shabitica-db = {
+        description = "Shabitica MongoDB Instance";
         wantedBy = [ "multi-user.target" ];
-        after = [ "habitica-init.service" ];
+        after = [ "shabitica-init.service" ];
 
         serviceConfig.ExecStart = let
           mongoDbCfg = pkgs.writeText "mongodb.conf" (builtins.toJSON {
-            net.bindIp = "/run/habitica/db.sock"
+            net.bindIp = "/run/shabitica/db.sock"
                        + lib.optionalString cfg.insecureDB ",127.0.0.1";
             net.unixDomainSocket.filePermissions = "0660";
-            storage.dbPath = "/var/lib/habitica/db";
+            storage.dbPath = "/var/lib/shabitica/db";
             processManagement.fork = false;
           });
         in "${mongodb}/bin/mongod --config ${mongoDbCfg}";
 
         serviceConfig.Type = "notify";
-        serviceConfig.User = "habitica-db";
-        serviceConfig.Group = "habitica";
+        serviceConfig.User = "shabitica-db";
+        serviceConfig.Group = "shabitica";
         serviceConfig.PrivateTmp = true;
         serviceConfig.PrivateNetwork = !cfg.insecureDB;
       };
 
-      systemd.services.habitica-db-backup = {
-        description = "Backup Habitica Database";
-        after = [ "habitica-db.service" ];
+      systemd.services.shabitica-db-backup = {
+        description = "Backup Shabitica Database";
+        after = [ "shabitica-db.service" ];
 
         serviceConfig.Type = "oneshot";
         serviceConfig.PrivateTmp = true;
@@ -310,26 +310,26 @@ in {
           backupDir=${lib.escapeShellArg cfg.backupDir}
           mkdir -p "$backupDir"
           archiveFile="$(date +${docInfo.archiveDateFormat}).archive"
-          ${dbtools}/bin/habitica-db-dump --archive="$backupDir/$archiveFile"
+          ${dbtools}/bin/shabitica-db-dump --archive="$backupDir/$archiveFile"
         '';
       };
 
-      systemd.services.habitica-db-update = {
-        description = "Apply Habitica Database Updates";
-        requiredBy = [ "habitica.service" ];
+      systemd.services.shabitica-db-update = {
+        description = "Apply Shabitica Database Updates";
+        requiredBy = [ "shabitica.service" ];
         wantedBy = [ "multi-user.target" ];
         after = [
-          "habitica-db-backup.service" "habitica-db.service"
-          "habitica-init.service"
+          "shabitica-db-backup.service" "shabitica-db.service"
+          "shabitica-init.service"
         ];
-        before = [ "habitica.service" ];
+        before = [ "shabitica.service" ];
 
         path = lib.singleton (pkgs.writeScriptBin "query-db-version" ''
           #!${pkgs.stdenv.shell} -e
-          if [ ! -e /var/lib/habitica/db-version ]; then
+          if [ ! -e /var/lib/shabitica/db-version ]; then
             current=0
           else
-            declare -i current=$(< /var/lib/habitica/db-version)
+            declare -i current=$(< /var/lib/shabitica/db-version)
           fi
           latest=${toString latestDbVersion}
           case "$1" in
@@ -342,45 +342,45 @@ in {
 
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
-        serviceConfig.EnvironmentFile = "/var/lib/habitica/secrets.env";
-        serviceConfig.User = "habitica";
-        serviceConfig.Group = "habitica";
+        serviceConfig.EnvironmentFile = "/var/lib/shabitica/secrets.env";
+        serviceConfig.User = "shabitica";
+        serviceConfig.Group = "shabitica";
         serviceConfig.PrivateTmp = true;
         serviceConfig.PrivateNetwork = true;
         serviceConfig.PermissionsStartOnly = true;
 
         preStart = ''
           if query-db-version needs-update; then
-            systemctl start habitica-db-backup.service
+            systemctl start shabitica-db-backup.service
           fi
         '';
 
         script = ''
           if query-db-version needs-update; then
             for ver in $(query-db-version new-versions); do
-              ${habitica.migrator}/bin/migrate "$ver"
+              ${shabitica.migrator}/bin/migrate "$ver"
             done
           fi
         '';
 
         postStart = ''
-          echo ${toString latestDbVersion} > /var/lib/habitica/db-version
+          echo ${toString latestDbVersion} > /var/lib/shabitica/db-version
         '';
       };
 
-      systemd.sockets.habitica-mailer = {
-        description = "Socket For Habitica Mailer Daemon";
-        requiredBy = [ "habitica.service" ];
-        before = [ "habitica.service" ];
+      systemd.sockets.shabitica-mailer = {
+        description = "Socket For Shabitica Mailer Daemon";
+        requiredBy = [ "shabitica.service" ];
+        before = [ "shabitica.service" ];
 
-        socketConfig.ListenStream = "/run/habitica-mailer.sock";
+        socketConfig.ListenStream = "/run/shabitica-mailer.sock";
         socketConfig.SocketMode = "0600";
-        socketConfig.SocketUser = "habitica";
-        socketConfig.SocketGroup = "habitica";
+        socketConfig.SocketUser = "shabitica";
+        socketConfig.SocketGroup = "shabitica";
       };
 
-      systemd.services.habitica-mailer = {
-        description = "Habitica Mailer Daemon";
+      systemd.services.shabitica-mailer = {
+        description = "Shabitica Mailer Daemon";
 
         after = [
           "exim.service" "nullmailer.service" "opensmtpd.service"
@@ -393,45 +393,45 @@ in {
         serviceConfig.ExecStart = let
           mailer = pkgs.haskellPackages.callPackage ./mailer {};
         in "${mailer}/bin/shabitica-mailer";
-        serviceConfig.User = "habitica-mailer";
-        serviceConfig.Group = "habitica-mailer";
+        serviceConfig.User = "shabitica-mailer";
+        serviceConfig.Group = "shabitica-mailer";
         serviceConfig.PrivateNetwork = true;
       };
 
-      systemd.sockets.habitica = {
-        description = "Habitica Socket";
+      systemd.sockets.shabitica = {
+        description = "Shabitica Socket";
         wantedBy = [ "sockets.target" ];
-        socketConfig.ListenStream = "/run/habitica.sock";
+        socketConfig.ListenStream = "/run/shabitica.sock";
         socketConfig.SocketMode = "0660";
         socketConfig.SocketUser = "root";
         socketConfig.SocketGroup = config.services.nginx.group;
       };
 
-      systemd.services.habitica = {
-        description = "Habitica";
+      systemd.services.shabitica = {
+        description = "Shabitica";
         wantedBy = [ "multi-user.target" ];
 
         after = [
-          "habitica-init.service"
-          "habitica-db.service"
-          "habitica-mailer.service"
+          "shabitica-init.service"
+          "shabitica-db.service"
+          "shabitica-mailer.service"
         ];
 
         serviceConfig = {
           Type = "notify";
           TimeoutStartSec = "10min";
           NotifyAccess = "all";
-          ExecStart = "${habitica.server}/bin/habitica-server";
-          User = "habitica";
-          Group = "habitica";
-          EnvironmentFile = "/var/lib/habitica/secrets.env";
+          ExecStart = "${shabitica.server}/bin/shabitica-server";
+          User = "shabitica";
+          Group = "shabitica";
+          EnvironmentFile = "/var/lib/shabitica/secrets.env";
 
           # Everything related to restricting file system access.
           # More BindReadOnlyPaths options are brought in via the
-          # habiticaSandboxPaths derivation defined earlier.
+          # shabiticaSandboxPaths derivation defined earlier.
           BindReadOnlyPaths = [
-            "/run/habitica/db.sock"
-            "/run/habitica-mailer.sock"
+            "/run/shabitica/db.sock"
+            "/run/shabitica-mailer.sock"
             "/run/systemd/notify"
           ];
           MountAPIVFS = true;
@@ -443,25 +443,25 @@ in {
           ProtectControlGroups = true;
           ProtectKernelModules = true;
           ProtectKernelTunables = true;
-          RootDirectory = habiticaSandboxPaths;
+          RootDirectory = shabiticaSandboxPaths;
         } // (if supportsTmpfs then {
           TemporaryFileSystem = "/";
         } else {
-          BindPaths = [ "/run/habitica-chroot:/" ];
+          BindPaths = [ "/run/shabitica-chroot:/" ];
         });
       };
     }
     (lib.mkIf (!supportsTmpfs) {
       systemd.mounts = lib.singleton {
-        description = "Tmpfs For Habitica Chroot";
+        description = "Tmpfs For Shabitica Chroot";
 
-        bindsTo = [ "habitica.service" ];
-        requiredBy = [ "habitica.service" ];
-        before = [ "habitica.service" ];
+        bindsTo = [ "shabitica.service" ];
+        requiredBy = [ "shabitica.service" ];
+        before = [ "shabitica.service" ];
         after = [ "local-fs.target" ];
 
         what = "tmpfs";
-        where = "/run/habitica-chroot";
+        where = "/run/shabitica-chroot";
         type = "tmpfs";
         options = "nodev,noexec,nosuid";
       };
@@ -484,7 +484,7 @@ in {
             etag off;
           '';
 
-          "@backend".proxyPass = "http://unix:/run/habitica.sock:";
+          "@backend".proxyPass = "http://unix:/run/shabitica.sock:";
           "@backend".extraConfig = ''
             proxy_http_version 1.1;
             proxy_set_header   X-Real-IP        $remote_addr;
@@ -501,8 +501,8 @@ in {
       };
     })
     (lib.mkIf (cfg.backupInterval != null) {
-      systemd.timers.habitica-db-backup = {
-        description = "Backup Habitica Database";
+      systemd.timers.shabitica-db-backup = {
+        description = "Backup Shabitica Database";
         wantedBy = [ "timers.target" ];
         timerConfig.OnCalendar = cfg.backupInterval;
         timerConfig.Persistent = true;

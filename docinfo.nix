@@ -3,7 +3,7 @@
 # define specifics such as date formats and commands and use them in tests or
 # assertions so that an eval or build will fail if something is wrong.
 rec {
-  dbrestore = "habitica-db-restore --drop --archive=";
+  dbrestore = "shabitica-db-restore --drop --archive=";
 
   # XXX: No assertion yet, so make sure to keep both in par!
   archiveDateFormat = "%Y-%m-%dT%H:%M:%S";

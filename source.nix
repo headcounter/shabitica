@@ -1,9 +1,9 @@
 { stdenv, lib, runCommand, fetchFromGitHub, fetchpatch, nodePackages
-, habiticaConfig
+, shabiticaConfig
 }:
 
 stdenv.mkDerivation rec {
-  name = "habitica-source-patched-${version}";
+  name = "shabitica-source-${version}";
   # NOTE: Be sure to run update-deps.py after changing this!
   version = "4.57.3";
 
@@ -371,9 +371,9 @@ stdenv.mkDerivation rec {
     sedEscape = lib.escape ["\\" "&" "!"];
     mkHtmlMail = lib.replaceStrings ["@" "."] ["&commat;" "&period;"];
 
-    escBaseURL = sedEscape habiticaConfig.BASE_URL;
-    escSimpleMail = sedEscape habiticaConfig.ADMIN_EMAIL;
-    escHtmlMail = sedEscape (mkHtmlMail habiticaConfig.ADMIN_EMAIL);
+    escBaseURL = sedEscape shabiticaConfig.BASE_URL;
+    escSimpleMail = sedEscape shabiticaConfig.ADMIN_EMAIL;
+    escHtmlMail = sedEscape (mkHtmlMail shabiticaConfig.ADMIN_EMAIL);
 
   in lib.concatStringsSep "; " [
     "s!https\\?://habitica\\.com!${escBaseURL}!g"

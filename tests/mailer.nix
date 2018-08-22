@@ -59,11 +59,11 @@ let
   '';
 
 in {
-  name = "habitica-mailer";
+  name = "shabitica-mailer";
 
   machine = { pkgs, lib, ... }: {
     imports = [ common ];
-    habitica.hostName = "localhost";
+    shabitica.hostName = "localhost";
 
     services.postfix.enable = true;
     services.postfix.virtual = "/.*/ root\n";
@@ -103,7 +103,7 @@ in {
   };
 
   testScript = ''
-    $machine->waitForUnit('habitica.service');
+    $machine->waitForUnit('shabitica.service');
     $machine->succeed('mailer-test-runner >&2');
   '';
 }

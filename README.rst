@@ -26,26 +26,38 @@ making the client more mobile-friendly could be a viable alternative.
 Getting started on NixOS
 ------------------------
 
-The easiest way is to just add the channel by issuing:
+The easiest way is to just add the channel and reference it via your NixOS
+configuration.
+
+Adding the channel on NixOS 18.03
+`````````````````````````````````
 
 .. code-block:: sh-session
 
-  # nix-channel --add https://headcounter.org/hydra/channel/custom/headcounter/habitica/habitica
-  # nix-channel --update habitica
+  # nix-channel --add https://headcounter.org/hydra/channel/custom/shabitica/nixos-18.03/shabitica
+  # nix-channel --update shabitica
+
+Adding the channel on NixOS Unstable
+````````````````````````````````````
+
+.. code-block:: sh-session
+
+  # nix-channel --add https://headcounter.org/hydra/channel/custom/shabitica/nixos-18.03/shabitica
+  # nix-channel --update shabitica
 
 You can add the service to your `NixOS configuration`_ (typically
-``/etc/nixos/configuration.nix``) by just importing ``<habitica>``, like this:
+``/etc/nixos/configuration.nix``) by just importing ``<shabitica>``, like this:
 
 .. code-block:: nix
 
   {
-    imports = [ <habitica> ];
-    habitica.hostName = "habitica.example.org";
-    habitica.adminMailAddress = "root@example.org";
-    habitica.senderMailAddress = "habitica@example.org";
+    imports = [ <shabitica> ];
+    shabitica.hostName = "shabitica.example.org";
+    shabitica.adminMailAddress = "root@example.org";
+    shabitica.senderMailAddress = "shabitica@example.org";
   }
 
-This configures `Habitica`_ to run on ``habitica.example.org`` with an `NGINX
+This configures Shabitica to run on ``shabitica.example.org`` with an `NGINX
 reverse proxy`_. If you don't provide any options, it will run on your local
 machine only.
 
@@ -71,5 +83,5 @@ Ideas
 .. _Nix: https://nixos.org/nix/
 .. _NixOS configuration: https://nixos.org/nixos/manual/index.html#sec-configuration-file
 .. _NixOS: https://nixos.org/
-.. _manual: https://headcounter.org/hydra/job/headcounter/habitica/manual/latest/download
+.. _manual: https://headcounter.org/hydra/job/shabitica/nixos-18.03/manual/latest/download
 .. _NGINX reverse proxy: https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/

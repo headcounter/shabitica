@@ -44,10 +44,10 @@ let
   in {
     imports = [ ./. zshModule ];
 
-    habitica.hostName = "localhost";
-    habitica.baseURL = "http://localhost:3000";
-    habitica.config.ENABLE_CONSOLE_LOGS_IN_PROD = "true";
-    habitica.insecureDB = true;
+    shabitica.hostName = "localhost";
+    shabitica.baseURL = "http://localhost:3000";
+    shabitica.config.ENABLE_CONSOLE_LOGS_IN_PROD = "true";
+    shabitica.insecureDB = true;
 
     environment.systemPackages = [
       pkgs.htop pkgs.mongodb-tools
@@ -75,7 +75,7 @@ let
     users.defaultUserShell = "/var/run/current-system/sw/bin/zsh";
     time.timeZone = "Europe/Berlin";
 
-    networking.hostName = "habitica-dev";
+    networking.hostName = "shabitica-dev";
     networking.firewall.enable = false;
 
     services.postfix.enable = true;

@@ -1,7 +1,7 @@
 { common, ... }:
 
 {
-  name = "habitica-imageproxy";
+  name = "shabitica-imageproxy";
 
   nodes = let
     snakeOilCerts = { lib, nodes, ... }: let
@@ -48,17 +48,17 @@
           . IN SOA ns.fakedns. admin.fakedns. ( 1 3h 1h 1w 1d )
           . IN NS ns.fakedns.
           ${mkAddrRRs "ns.fakedns" nodes.resolver}
-          ${mkAddrRRs "habitica.example.org" nodes.habitica}
+          ${mkAddrRRs "shabitica.example.org" nodes.shabitica}
           ${mkAddrRRs "unrelated.org" nodes.unrelated}
           ${mkAddrRRs "sslhost.org" nodes.sslhost}
         '';
       };
     };
 
-    habitica = {
+    shabitica = {
       imports = [ common (mkNetwork 2) useResolver snakeOilCerts ];
-      habitica.hostName = "habitica.example.org";
-      habitica.useSSL = false;
+      shabitica.hostName = "shabitica.example.org";
+      shabitica.useSSL = false;
     };
 
     client.imports = [ (mkNetwork 3) useResolver snakeOilCerts ];
@@ -121,20 +121,20 @@
     $resolver->waitForUnit('bind.service');
     $unrelated->waitForOpenPort(80);
     $client->waitForUnit('multi-user.target');
-    $habitica->waitForUnit('habitica.service');
+    $shabitica->waitForUnit('shabitica.service');
 
-    my $baseUrl = 'http://habitica.example.org';
+    my $baseUrl = 'http://shabitica.example.org';
     my $validUrl = 'http://unrelated.org/test.png';
     my $validSslUrl = 'https://sslhost.org/test.png';
     my $secret;
 
-    $habitica->nest('check whether DNS resolver works', sub {
-      $habitica->succeed('host unrelated.org');
+    $shabitica->nest('check whether DNS resolver works', sub {
+      $shabitica->succeed('host unrelated.org');
     });
 
-    $habitica->nest('getting session secret', sub {
-      $secret = $habitica->succeed(
-        'source /var/lib/habitica/secrets.env && echo -n "$SESSION_SECRET"'
+    $shabitica->nest('getting session secret', sub {
+      $secret = $shabitica->succeed(
+        'source /var/lib/shabitica/secrets.env && echo -n "$SESSION_SECRET"'
       );
     });
 

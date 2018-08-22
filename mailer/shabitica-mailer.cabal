@@ -1,8 +1,8 @@
 name:                shabitica-mailer
 version:             0.1.0
-synopsis:            Habitica email helper
+synopsis:            Shabitica email helper
 description:         Simple daemon which receives mail template variables from
-                     Habitica via socket, composes them and sends them out
+                     Shabitica via socket, composes them and sends them out
                      using the sendmail binary or an SMTP connection via TCP.
 license:             GPL-3
 author:              aszlig

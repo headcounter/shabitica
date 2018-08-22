@@ -1,21 +1,21 @@
 { common, lib, registerUser, ... }:
 
 {
-  name = "habitica-allow-register-first";
+  name = "shabitica-allow-register-first";
 
-  nodes.habitica = common;
+  nodes.shabitica = common;
   nodes.client = {};
 
   testScript = ''
     startAll;
 
-    $habitica->waitForUnit('habitica.service');
-    $habitica->waitForOpenPort(80);
+    $shabitica->waitForUnit('shabitica.service');
+    $shabitica->waitForOpenPort(80);
     $client->waitForUnit('multi-user.target');
 
     subtest "check if service only allows first user to register", sub {
-      $client->succeed(${registerUser "foo" "habitica"});
-      $client->fail(${registerUser "bar" "habitica"});
+      $client->succeed(${registerUser "foo" "shabitica"});
+      $client->fail(${registerUser "bar" "shabitica"});
     };
   '';
 }
