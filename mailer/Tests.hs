@@ -75,8 +75,8 @@ welcomeBody = TL.fromStrict [text|
     Welcome to the self-hosted Habitica instance at
     https://shabitica.example.org/.
 
-    To get started simply head over to https://shabitica.example.org/ and log
-    in.
+    To get started simply head over to https://shabitica.example.org/ and
+    log in.
     --$space
     Self-hosted Habitica instance at https://shabitica.example.org/
     Unsubscribe: https://shabitica.example.org/email/unsubscribe?code=1234
@@ -100,7 +100,7 @@ inviteFriendBody :: TL.Text
 inviteFriendBody = TL.fromStrict [text|
     Hello bar,
 
-    foo has invited you to the self-hosted Shabitica instance at
+    foo has invited you to the self-hosted Habitica instance at
     https://shabitica.example.org/.
 
     Please head to the following URL to accept your invitation:
