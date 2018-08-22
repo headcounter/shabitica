@@ -202,7 +202,7 @@ in {
 
       users.users.shabitica-mailer = {
         description = "Shabitica Mailer Daemon User";
-        group = "Shabitica-mailer";
+        group = "shabitica-mailer";
       };
 
       users.users.shabitica = {
