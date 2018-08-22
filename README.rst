@@ -42,7 +42,7 @@ Adding the channel on NixOS Unstable
 
 .. code-block:: sh-session
 
-  # nix-channel --add https://headcounter.org/hydra/channel/custom/shabitica/nixos-18.03/shabitica
+  # nix-channel --add https://headcounter.org/hydra/channel/custom/shabitica/nixos-unstable/shabitica
   # nix-channel --update shabitica
 
 You can add the service to your `NixOS configuration`_ (typically
