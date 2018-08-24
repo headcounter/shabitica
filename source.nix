@@ -4,7 +4,8 @@
 
 stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
-  # NOTE: Be sure to run update-deps.py after changing this!
+  # NOTE: If appropriate, run update-deps.py after changing this!
+  #       Also, don't forget to run ./find-canaries.py after rebasing patches.
   version = "4.57.3";
 
   src = fetchFromGitHub {
@@ -311,7 +312,9 @@ stdenv.mkDerivation rec {
     "BuyGemOperation([^,]*,[^,)]*,"
     "BuyHealthPotionOperation([^,]*,[^,)]*,"
     "BuyMarketGearOperation([^,]*,[^,)]*,"
+    "BuyQuestWithGemOperation([^,]*,[^,)]*,"
     "BuyQuestWithGoldOperation([^,]*,[^,)]*,"
+    "BuySpellOperation([^,]*,[^,)]*,"
     "buy([^,]*,[^,)]*,"
     "buyArmoire([^,]*,[^,)]*,"
     "buyGear([^,]*,[^,)]*,"
