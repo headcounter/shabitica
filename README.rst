@@ -103,6 +103,7 @@ If you're using NixOS Unstable, you can add it like this:
 
 Example configuration
 `````````````````````
+
 .. code-block:: nix
 
   {
