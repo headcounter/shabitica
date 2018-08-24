@@ -153,7 +153,7 @@ index 260d57989..63df05213 100644
 +    }
  }
 diff --git a/test/api/unit/libs/cron.test.js b/test/api/unit/libs/cron.test.js
-index a0136056f..839225128 100644
+index a6ff60ea1..1d373a98c 100644
 --- a/test/api/unit/libs/cron.test.js
 +++ b/test/api/unit/libs/cron.test.js
 @@ -6,7 +6,6 @@ import { recoverCron, cron } from '../../../../website/server/libs/cron';
@@ -164,7 +164,7 @@ index a0136056f..839225128 100644
  
  // const scoreTask = common.ops.scoreTask;
  
-@@ -30,41 +29,33 @@ describe('cron', () => {
+@@ -30,47 +29,33 @@ describe('cron', () => {
          },
        },
      });
@@ -206,10 +206,16 @@ index a0136056f..839225128 100644
 -    expect(analytics.track.callCount).to.equal(1);
 -  });
 -
+-  it('calls analytics when user is sleeping', () => {
+-    user.preferences.sleep = true;
+-    cron({user, tasksByType, daysMissed, analytics});
+-    expect(analytics.track.callCount).to.equal(1);
+-  });
+-
    describe('end of the month perks', () => {
      beforeEach(() => {
        user.purchased.plan.customerId = 'subscribedId';
-@@ -73,14 +64,14 @@ describe('cron', () => {
+@@ -79,14 +64,14 @@ describe('cron', () => {
  
      it('resets plan.gemsBought on a new month', () => {
        user.purchased.plan.gemsBought = 10;
@@ -226,7 +232,7 @@ index a0136056f..839225128 100644
        expect(user.purchased.plan.gemsBought).to.equal(0);
      });
  
-@@ -89,32 +80,32 @@ describe('cron', () => {
+@@ -95,32 +80,32 @@ describe('cron', () => {
        user.purchased.plan.dateUpdated = moment().startOf('month').toDate();
  
        user.purchased.plan.gemsBought = 10;
@@ -264,7 +270,7 @@ index a0136056f..839225128 100644
        expect(user.purchased.plan.consecutive.offset).to.equal(1);
      });
  
-@@ -124,7 +115,7 @@ describe('cron', () => {
+@@ -130,7 +115,7 @@ describe('cron', () => {
        user.purchased.plan.consecutive.count = 5;
        user.purchased.plan.consecutive.trinkets = 1;
  
@@ -273,7 +279,7 @@ index a0136056f..839225128 100644
  
        expect(user.purchased.plan.consecutive.trinkets).to.equal(1);
      });
-@@ -132,13 +123,13 @@ describe('cron', () => {
+@@ -138,13 +123,13 @@ describe('cron', () => {
      it('does not increment plan.consecutive.gemCapExtra when user has reached the gemCap limit', () => {
        user.purchased.plan.consecutive.gemCapExtra = 25;
        user.purchased.plan.consecutive.count = 5;
@@ -289,7 +295,7 @@ index a0136056f..839225128 100644
        expect(user.purchased.plan.customerId).to.exist;
      });
  
-@@ -148,7 +139,7 @@ describe('cron', () => {
+@@ -154,7 +139,7 @@ describe('cron', () => {
        user.purchased.plan.consecutive.count = 5;
        user.purchased.plan.consecutive.offset = 1;
  
@@ -298,7 +304,7 @@ index a0136056f..839225128 100644
  
        expect(user.purchased.plan.customerId).to.not.exist;
        expect(user.purchased.plan.consecutive.gemCapExtra).to.equal(0);
-@@ -182,7 +173,7 @@ describe('cron', () => {
+@@ -188,7 +173,7 @@ describe('cron', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(1, 'months').add(2, 'days').toDate());
          // Add 1 month to simulate what happens a month after the subscription was created.
          // Add 2 days so that we're sure we're not affected by any start-of-month effects e.g., from time zone oddness.
@@ -307,7 +313,7 @@ index a0136056f..839225128 100644
          expect(user1.purchased.plan.consecutive.count).to.equal(1);
          expect(user1.purchased.plan.consecutive.offset).to.equal(0);
          expect(user1.purchased.plan.consecutive.trinkets).to.equal(0);
-@@ -193,7 +184,7 @@ describe('cron', () => {
+@@ -199,7 +184,7 @@ describe('cron', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(2, 'months').add(2, 'days').toDate());
          // Add 1 month to simulate what happens a month after the subscription was created.
          // Add 2 days so that we're sure we're not affected by any start-of-month effects e.g., from time zone oddness.
@@ -316,7 +322,7 @@ index a0136056f..839225128 100644
          expect(user1.purchased.plan.consecutive.count).to.equal(2);
          expect(user1.purchased.plan.consecutive.offset).to.equal(0);
          expect(user1.purchased.plan.consecutive.trinkets).to.equal(0);
-@@ -204,7 +195,7 @@ describe('cron', () => {
+@@ -210,7 +195,7 @@ describe('cron', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(3, 'months').add(2, 'days').toDate());
          // Add 1 month to simulate what happens a month after the subscription was created.
          // Add 2 days so that we're sure we're not affected by any start-of-month effects e.g., from time zone oddness.
@@ -325,7 +331,7 @@ index a0136056f..839225128 100644
          expect(user1.purchased.plan.consecutive.count).to.equal(3);
          expect(user1.purchased.plan.consecutive.offset).to.equal(0);
          expect(user1.purchased.plan.consecutive.trinkets).to.equal(1);
-@@ -215,7 +206,7 @@ describe('cron', () => {
+@@ -221,7 +206,7 @@ describe('cron', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(4, 'months').add(2, 'days').toDate());
          // Add 1 month to simulate what happens a month after the subscription was created.
          // Add 2 days so that we're sure we're not affected by any start-of-month effects e.g., from time zone oddness.
@@ -334,7 +340,7 @@ index a0136056f..839225128 100644
          expect(user1.purchased.plan.consecutive.count).to.equal(4);
          expect(user1.purchased.plan.consecutive.offset).to.equal(0);
          expect(user1.purchased.plan.consecutive.trinkets).to.equal(1);
-@@ -224,7 +215,7 @@ describe('cron', () => {
+@@ -230,7 +215,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits correctly if user has been absent with continuous subscription', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(10, 'months').add(2, 'days').toDate());
@@ -343,7 +349,7 @@ index a0136056f..839225128 100644
          expect(user1.purchased.plan.consecutive.count).to.equal(10);
          expect(user1.purchased.plan.consecutive.offset).to.equal(0);
          expect(user1.purchased.plan.consecutive.trinkets).to.equal(3);
-@@ -255,7 +246,7 @@ describe('cron', () => {
+@@ -261,7 +246,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the first month of the first paid period that they already have benefits for', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(1, 'months').add(2, 'days').toDate());
@@ -352,7 +358,7 @@ index a0136056f..839225128 100644
          expect(user3.purchased.plan.consecutive.count).to.equal(1);
          expect(user3.purchased.plan.consecutive.offset).to.equal(2);
          expect(user3.purchased.plan.consecutive.trinkets).to.equal(1);
-@@ -264,7 +255,7 @@ describe('cron', () => {
+@@ -270,7 +255,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the middle of the period that they already have benefits for', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(2, 'months').add(2, 'days').toDate());
@@ -361,7 +367,7 @@ index a0136056f..839225128 100644
          expect(user3.purchased.plan.consecutive.count).to.equal(2);
          expect(user3.purchased.plan.consecutive.offset).to.equal(1);
          expect(user3.purchased.plan.consecutive.trinkets).to.equal(1);
-@@ -273,7 +264,7 @@ describe('cron', () => {
+@@ -279,7 +264,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the final month of the period that they already have benefits for', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(3, 'months').add(2, 'days').toDate());
@@ -370,7 +376,7 @@ index a0136056f..839225128 100644
          expect(user3.purchased.plan.consecutive.count).to.equal(3);
          expect(user3.purchased.plan.consecutive.offset).to.equal(0);
          expect(user3.purchased.plan.consecutive.trinkets).to.equal(1);
-@@ -282,7 +273,7 @@ describe('cron', () => {
+@@ -288,7 +273,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits the month after the second paid period has started', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(4, 'months').add(2, 'days').toDate());
@@ -379,7 +385,7 @@ index a0136056f..839225128 100644
          expect(user3.purchased.plan.consecutive.count).to.equal(4);
          expect(user3.purchased.plan.consecutive.offset).to.equal(2);
          expect(user3.purchased.plan.consecutive.trinkets).to.equal(2);
-@@ -291,7 +282,7 @@ describe('cron', () => {
+@@ -297,7 +282,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the second month of the second period that they already have benefits for', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(5, 'months').add(2, 'days').toDate());
@@ -388,7 +394,7 @@ index a0136056f..839225128 100644
          expect(user3.purchased.plan.consecutive.count).to.equal(5);
          expect(user3.purchased.plan.consecutive.offset).to.equal(1);
          expect(user3.purchased.plan.consecutive.trinkets).to.equal(2);
-@@ -300,7 +291,7 @@ describe('cron', () => {
+@@ -306,7 +291,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the final month of the second period that they already have benefits for', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(6, 'months').add(2, 'days').toDate());
@@ -397,7 +403,7 @@ index a0136056f..839225128 100644
          expect(user3.purchased.plan.consecutive.count).to.equal(6);
          expect(user3.purchased.plan.consecutive.offset).to.equal(0);
          expect(user3.purchased.plan.consecutive.trinkets).to.equal(2);
-@@ -309,7 +300,7 @@ describe('cron', () => {
+@@ -315,7 +300,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits the month after the third paid period has started', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(7, 'months').add(2, 'days').toDate());
@@ -406,7 +412,7 @@ index a0136056f..839225128 100644
          expect(user3.purchased.plan.consecutive.count).to.equal(7);
          expect(user3.purchased.plan.consecutive.offset).to.equal(2);
          expect(user3.purchased.plan.consecutive.trinkets).to.equal(3);
-@@ -318,7 +309,7 @@ describe('cron', () => {
+@@ -324,7 +309,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits correctly if user has been absent with continuous subscription', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(10, 'months').add(2, 'days').toDate());
@@ -415,7 +421,7 @@ index a0136056f..839225128 100644
          expect(user3.purchased.plan.consecutive.count).to.equal(10);
          expect(user3.purchased.plan.consecutive.offset).to.equal(2);
          expect(user3.purchased.plan.consecutive.trinkets).to.equal(4);
-@@ -349,7 +340,7 @@ describe('cron', () => {
+@@ -355,7 +340,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the first month of the first paid period that they already have benefits for', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(1, 'months').add(2, 'days').toDate());
@@ -424,7 +430,7 @@ index a0136056f..839225128 100644
          expect(user6.purchased.plan.consecutive.count).to.equal(1);
          expect(user6.purchased.plan.consecutive.offset).to.equal(5);
          expect(user6.purchased.plan.consecutive.trinkets).to.equal(2);
-@@ -358,7 +349,7 @@ describe('cron', () => {
+@@ -364,7 +349,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the final month of the period that they already have benefits for', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(6, 'months').add(2, 'days').toDate());
@@ -433,7 +439,7 @@ index a0136056f..839225128 100644
          expect(user6.purchased.plan.consecutive.count).to.equal(6);
          expect(user6.purchased.plan.consecutive.offset).to.equal(0);
          expect(user6.purchased.plan.consecutive.trinkets).to.equal(2);
-@@ -367,7 +358,7 @@ describe('cron', () => {
+@@ -373,7 +358,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits the month after the second paid period has started', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(7, 'months').add(2, 'days').toDate());
@@ -442,7 +448,7 @@ index a0136056f..839225128 100644
          expect(user6.purchased.plan.consecutive.count).to.equal(7);
          expect(user6.purchased.plan.consecutive.offset).to.equal(5);
          expect(user6.purchased.plan.consecutive.trinkets).to.equal(4);
-@@ -376,7 +367,7 @@ describe('cron', () => {
+@@ -382,7 +367,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits the month after the third paid period has started', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(13, 'months').add(2, 'days').toDate());
@@ -451,7 +457,7 @@ index a0136056f..839225128 100644
          expect(user6.purchased.plan.consecutive.count).to.equal(13);
          expect(user6.purchased.plan.consecutive.offset).to.equal(5);
          expect(user6.purchased.plan.consecutive.trinkets).to.equal(6);
-@@ -385,7 +376,7 @@ describe('cron', () => {
+@@ -391,7 +376,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits correctly if user has been absent with continuous subscription', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(19, 'months').add(2, 'days').toDate());
@@ -460,7 +466,7 @@ index a0136056f..839225128 100644
          expect(user6.purchased.plan.consecutive.count).to.equal(19);
          expect(user6.purchased.plan.consecutive.offset).to.equal(5);
          expect(user6.purchased.plan.consecutive.trinkets).to.equal(8);
-@@ -416,7 +407,7 @@ describe('cron', () => {
+@@ -422,7 +407,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the first month of the first paid period that they already have benefits for', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(1, 'months').add(2, 'days').toDate());
@@ -469,7 +475,7 @@ index a0136056f..839225128 100644
          expect(user12.purchased.plan.consecutive.count).to.equal(1);
          expect(user12.purchased.plan.consecutive.offset).to.equal(11);
          expect(user12.purchased.plan.consecutive.trinkets).to.equal(4);
-@@ -425,7 +416,7 @@ describe('cron', () => {
+@@ -431,7 +416,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the final month of the period that they already have benefits for', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(12, 'months').add(2, 'days').toDate());
@@ -478,7 +484,7 @@ index a0136056f..839225128 100644
          expect(user12.purchased.plan.consecutive.count).to.equal(12);
          expect(user12.purchased.plan.consecutive.offset).to.equal(0);
          expect(user12.purchased.plan.consecutive.trinkets).to.equal(4);
-@@ -434,7 +425,7 @@ describe('cron', () => {
+@@ -440,7 +425,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits the month after the second paid period has started', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(13, 'months').add(2, 'days').toDate());
@@ -487,7 +493,7 @@ index a0136056f..839225128 100644
          expect(user12.purchased.plan.consecutive.count).to.equal(13);
          expect(user12.purchased.plan.consecutive.offset).to.equal(11);
          expect(user12.purchased.plan.consecutive.trinkets).to.equal(8);
-@@ -443,7 +434,7 @@ describe('cron', () => {
+@@ -449,7 +434,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits the month after the third paid period has started', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(25, 'months').add(2, 'days').toDate());
@@ -496,7 +502,7 @@ index a0136056f..839225128 100644
          expect(user12.purchased.plan.consecutive.count).to.equal(25);
          expect(user12.purchased.plan.consecutive.offset).to.equal(11);
          expect(user12.purchased.plan.consecutive.trinkets).to.equal(12);
-@@ -452,7 +443,7 @@ describe('cron', () => {
+@@ -458,7 +443,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits correctly if user has been absent with continuous subscription', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(37, 'months').add(2, 'days').toDate());
@@ -505,7 +511,7 @@ index a0136056f..839225128 100644
          expect(user12.purchased.plan.consecutive.count).to.equal(37);
          expect(user12.purchased.plan.consecutive.offset).to.equal(11);
          expect(user12.purchased.plan.consecutive.trinkets).to.equal(16);
-@@ -484,7 +475,7 @@ describe('cron', () => {
+@@ -490,7 +475,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the first month of the gift subscription', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(1, 'months').add(2, 'days').toDate());
@@ -514,7 +520,7 @@ index a0136056f..839225128 100644
          expect(user3g.purchased.plan.consecutive.count).to.equal(1);
          expect(user3g.purchased.plan.consecutive.offset).to.equal(2);
          expect(user3g.purchased.plan.consecutive.trinkets).to.equal(1);
-@@ -493,7 +484,7 @@ describe('cron', () => {
+@@ -499,7 +484,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the second month of the gift subscription', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(2, 'months').add(2, 'days').toDate());
@@ -523,7 +529,7 @@ index a0136056f..839225128 100644
          expect(user3g.purchased.plan.consecutive.count).to.equal(2);
          expect(user3g.purchased.plan.consecutive.offset).to.equal(1);
          expect(user3g.purchased.plan.consecutive.trinkets).to.equal(1);
-@@ -502,7 +493,7 @@ describe('cron', () => {
+@@ -508,7 +493,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the third month of the gift subscription', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(3, 'months').add(2, 'days').toDate());
@@ -532,7 +538,7 @@ index a0136056f..839225128 100644
          expect(user3g.purchased.plan.consecutive.count).to.equal(3);
          expect(user3g.purchased.plan.consecutive.offset).to.equal(0);
          expect(user3g.purchased.plan.consecutive.trinkets).to.equal(1);
-@@ -511,7 +502,7 @@ describe('cron', () => {
+@@ -517,7 +502,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the month after the gift subscription has ended', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(4, 'months').add(2, 'days').toDate());
@@ -541,7 +547,7 @@ index a0136056f..839225128 100644
          expect(user3g.purchased.plan.consecutive.count).to.equal(0); // subscription has been erased by now
          expect(user3g.purchased.plan.consecutive.offset).to.equal(0);
          expect(user3g.purchased.plan.consecutive.trinkets).to.equal(1);
-@@ -542,7 +533,7 @@ describe('cron', () => {
+@@ -548,7 +533,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits in the first month since the fix for #4819 goes live', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(1, 'months').add(2, 'days').toDate());
@@ -550,7 +556,7 @@ index a0136056f..839225128 100644
          expect(user6x.purchased.plan.consecutive.count).to.equal(9);
          expect(user6x.purchased.plan.consecutive.offset).to.equal(5);
          expect(user6x.purchased.plan.consecutive.trinkets).to.equal(5);
-@@ -551,7 +542,7 @@ describe('cron', () => {
+@@ -557,7 +542,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the second month after the fix goes live', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(2, 'months').add(2, 'days').toDate());
@@ -559,7 +565,7 @@ index a0136056f..839225128 100644
          expect(user6x.purchased.plan.consecutive.count).to.equal(10);
          expect(user6x.purchased.plan.consecutive.offset).to.equal(4);
          expect(user6x.purchased.plan.consecutive.trinkets).to.equal(5);
-@@ -560,7 +551,7 @@ describe('cron', () => {
+@@ -566,7 +551,7 @@ describe('cron', () => {
  
        it('does not increment consecutive benefits in the third month after the fix goes live', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(3, 'months').add(2, 'days').toDate());
@@ -568,7 +574,7 @@ index a0136056f..839225128 100644
          expect(user6x.purchased.plan.consecutive.count).to.equal(11);
          expect(user6x.purchased.plan.consecutive.offset).to.equal(3);
          expect(user6x.purchased.plan.consecutive.trinkets).to.equal(5);
-@@ -569,7 +560,7 @@ describe('cron', () => {
+@@ -575,7 +560,7 @@ describe('cron', () => {
  
        it('increments consecutive benefits in the seventh month after the fix goes live', () => {
          clock = sinon.useFakeTimers(moment().zone(0).startOf('month').add(7, 'months').add(2, 'days').toDate());
@@ -577,7 +583,7 @@ index a0136056f..839225128 100644
          expect(user6x.purchased.plan.consecutive.count).to.equal(15);
          expect(user6x.purchased.plan.consecutive.offset).to.equal(5);
          expect(user6x.purchased.plan.consecutive.trinkets).to.equal(7);
-@@ -585,7 +576,7 @@ describe('cron', () => {
+@@ -591,7 +576,7 @@ describe('cron', () => {
  
      it('resets plan.gemsBought on a new month', () => {
        user.purchased.plan.gemsBought = 10;
@@ -586,7 +592,7 @@ index a0136056f..839225128 100644
        expect(user.purchased.plan.gemsBought).to.equal(0);
      });
  
-@@ -594,49 +585,49 @@ describe('cron', () => {
+@@ -600,49 +585,49 @@ describe('cron', () => {
        user.purchased.plan.dateUpdated = moment().startOf('month').toDate();
  
        user.purchased.plan.gemsBought = 10;
@@ -644,7 +650,7 @@ index a0136056f..839225128 100644
        expect(user.purchased.plan.customerId).to.not.exist;
      });
  
-@@ -646,7 +637,7 @@ describe('cron', () => {
+@@ -652,7 +637,7 @@ describe('cron', () => {
        user.purchased.plan.consecutive.count = 5;
        user.purchased.plan.consecutive.offset = 1;
  
@@ -653,46 +659,7 @@ index a0136056f..839225128 100644
  
        expect(user.purchased.plan.customerId).to.exist;
        expect(user.purchased.plan.consecutive.gemCapExtra).to.exist;
-@@ -660,11 +651,6 @@ describe('cron', () => {
-       user.preferences.sleep = true;
-     });
- 
--    it('calls analytics', () => {
--      cron({user, tasksByType, daysMissed, analytics});
--      expect(analytics.track.callCount).to.equal(1);
--    });
--
-     it('clears user buffs', () => {
-       user.stats.buffs = {
-         str: 1,
-@@ -675,7 +661,7 @@ describe('cron', () => {
-         streaks: true,
-       };
- 
--      cron({user, tasksByType, daysMissed, analytics});
-+      cron({user, tasksByType, daysMissed});
- 
-       expect(user.stats.buffs.str).to.equal(0);
-       expect(user.stats.buffs.int).to.equal(0);
-@@ -700,7 +686,7 @@ describe('cron', () => {
- 
-       let healthBefore = user.stats.hp;
- 
--      cron({user, tasksByType, daysMissed, analytics});
-+      cron({user, tasksByType, daysMissed});
- 
-       expect(tasksByType.dailys[0].completed).to.be.false;
-       expect(user.stats.hp).to.equal(healthBefore);
-@@ -719,7 +705,7 @@ describe('cron', () => {
-       tasksByType.dailys.push(task);
-       tasksByType.dailys[0].completed = true;
- 
--      cron({user, tasksByType, daysMissed, analytics});
-+      cron({user, tasksByType, daysMissed});
- 
-       expect(tasksByType.dailys[0].isDue).to.be.exist;
-     });
-@@ -739,14 +725,14 @@ describe('cron', () => {
+@@ -675,14 +660,14 @@ describe('cron', () => {
  
      it('should make uncompleted todos redder', () => {
        let valueBefore = tasksByType.todos[0].value;
@@ -709,7 +676,7 @@ index a0136056f..839225128 100644
  
        expect(user.history.todos).to.be.lengthOf(1);
      });
-@@ -775,7 +761,7 @@ describe('cron', () => {
+@@ -711,7 +696,7 @@ describe('cron', () => {
        expect(tasksByType.todos).to.be.lengthOf(2);
        expect(user.tasksOrder.todos).to.be.lengthOf(3);
  
@@ -718,7 +685,7 @@ index a0136056f..839225128 100644
  
        // user.tasksOrder.todos should be filtered while tasks by type remains unchanged
        expect(tasksByType.todos).to.be.lengthOf(2);
-@@ -804,7 +790,7 @@ describe('cron', () => {
+@@ -740,7 +725,7 @@ describe('cron', () => {
        }).reverse();
        let original = user.tasksOrder.todos; // Preserve the original order
  
@@ -727,7 +694,7 @@ index a0136056f..839225128 100644
  
        let listsAreEqual = true;
        user.tasksOrder.todos.forEach((taskId, index) => {
-@@ -842,7 +828,7 @@ describe('cron', () => {
+@@ -778,7 +763,7 @@ describe('cron', () => {
        tasksByType.dailys[0].frequency = 'daily';
        tasksByType.dailys[0].everyX = 5;
        tasksByType.dailys[0].startDate = moment().add(1, 'days').toDate();
@@ -736,7 +703,16 @@ index a0136056f..839225128 100644
        expect(tasksByType.dailys[0].isDue).to.be.false;
      });
  
-@@ -850,25 +836,25 @@ describe('cron', () => {
+@@ -787,7 +772,7 @@ describe('cron', () => {
+       tasksByType.dailys[0].frequency = 'daily';
+       tasksByType.dailys[0].everyX = 5;
+       tasksByType.dailys[0].startDate = moment().toDate();
+-      cron({user, tasksByType, daysMissed, analytics});
++      cron({user, tasksByType, daysMissed});
+       expect(tasksByType.dailys[0].isDue).to.exist;
+     });
+ 
+@@ -795,32 +780,32 @@ describe('cron', () => {
        tasksByType.dailys[0].frequency = 'daily';
        tasksByType.dailys[0].everyX = 5;
        tasksByType.dailys[0].startDate = moment().add(1, 'days').toDate();
@@ -758,6 +734,14 @@ index a0136056f..839225128 100644
        expect(tasksByType.dailys[0].completed).to.be.false;
      });
  
+     it('should set tasks completed to false when user is sleeping', () => {
+       user.preferences.sleep = true;
+       tasksByType.dailys[0].completed = true;
+-      cron({user, tasksByType, daysMissed, analytics});
++      cron({user, tasksByType, daysMissed});
+       expect(tasksByType.dailys[0].completed).to.be.false;
+     });
+ 
      it('should reset task checklist for completed dailys', () => {
        tasksByType.dailys[0].checklist.push({title: 'test', completed: false});
        tasksByType.dailys[0].completed = true;
@@ -766,7 +750,16 @@ index a0136056f..839225128 100644
        expect(tasksByType.dailys[0].checklist[0].completed).to.be.false;
      });
  
-@@ -876,7 +862,7 @@ describe('cron', () => {
+@@ -828,7 +813,7 @@ describe('cron', () => {
+       user.preferences.sleep = true;
+       tasksByType.dailys[0].checklist.push({title: 'test', completed: false});
+       tasksByType.dailys[0].completed = true;
+-      cron({user, tasksByType, daysMissed, analytics});
++      cron({user, tasksByType, daysMissed});
+       expect(tasksByType.dailys[0].checklist[0].completed).to.be.false;
+     });
+ 
+@@ -836,7 +821,7 @@ describe('cron', () => {
        daysMissed = 10;
        tasksByType.dailys[0].checklist.push({title: 'test', completed: false});
        tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
@@ -775,16 +768,25 @@ index a0136056f..839225128 100644
        expect(tasksByType.dailys[0].checklist[0].completed).to.be.false;
      });
  
-@@ -885,7 +871,7 @@ describe('cron', () => {
+@@ -844,7 +829,7 @@ describe('cron', () => {
+       daysMissed = 1;
        let hpBefore = user.stats.hp;
        tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
- 
 -      cron({user, tasksByType, daysMissed, analytics});
 +      cron({user, tasksByType, daysMissed});
- 
        expect(user.stats.hp).to.be.lessThan(hpBefore);
      });
-@@ -898,7 +884,7 @@ describe('cron', () => {
+ 
+@@ -853,7 +838,7 @@ describe('cron', () => {
+       daysMissed = 1;
+       let hpBefore = user.stats.hp;
+       tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
+-      cron({user, tasksByType, daysMissed, analytics});
++      cron({user, tasksByType, daysMissed});
+       expect(user.stats.hp).to.equal(hpBefore);
+     });
+ 
+@@ -865,7 +850,7 @@ describe('cron', () => {
        let hpBefore = user.stats.hp;
        tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
  
@@ -793,7 +795,7 @@ index a0136056f..839225128 100644
  
        expect(user.stats.hp).to.equal(hpBefore);
      });
-@@ -909,7 +895,7 @@ describe('cron', () => {
+@@ -876,7 +861,7 @@ describe('cron', () => {
        user.stats.buffs.stealth = 2;
        tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
  
@@ -802,7 +804,7 @@ index a0136056f..839225128 100644
  
        expect(user.stats.hp).to.equal(hpBefore);
      });
-@@ -918,13 +904,13 @@ describe('cron', () => {
+@@ -885,13 +870,13 @@ describe('cron', () => {
        daysMissed = 1;
        let hpBefore = user.stats.hp;
        tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
@@ -818,7 +820,7 @@ index a0136056f..839225128 100644
        let hpDifferenceOfPartiallyIncompleteDaily = hpBefore - user.stats.hp;
  
        expect(hpDifferenceOfPartiallyIncompleteDaily).to.be.lessThan(hpDifferenceOfFullyIncompleteDaily);
-@@ -934,7 +920,7 @@ describe('cron', () => {
+@@ -901,7 +886,7 @@ describe('cron', () => {
        daysMissed = 1;
        tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
  
@@ -827,7 +829,16 @@ index a0136056f..839225128 100644
  
        expect(progress.down).to.equal(-1);
      });
-@@ -953,7 +939,7 @@ describe('cron', () => {
+@@ -911,7 +896,7 @@ describe('cron', () => {
+       daysMissed = 1;
+       tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
+ 
+-      let progress = cron({user, tasksByType, daysMissed, analytics});
++      let progress = cron({user, tasksByType, daysMissed});
+ 
+       expect(progress.down).to.equal(0);
+     });
+@@ -930,7 +915,7 @@ describe('cron', () => {
        tasksByType.dailys[1].everyX = 2;
        tasksByType.dailys[1].frequency = 'daily';
  
@@ -836,7 +847,7 @@ index a0136056f..839225128 100644
  
        expect(user.stats.hp).to.equal(48);
      });
-@@ -975,7 +961,7 @@ describe('cron', () => {
+@@ -952,7 +937,7 @@ describe('cron', () => {
        tasksByType.habits[0].value = 1;
        tasksByType.habits[0].down = false;
  
@@ -845,7 +856,7 @@ index a0136056f..839225128 100644
  
        expect(tasksByType.habits[0].value).to.be.lessThan(1);
      });
-@@ -984,7 +970,7 @@ describe('cron', () => {
+@@ -961,7 +946,7 @@ describe('cron', () => {
        tasksByType.habits[0].value = 1;
        tasksByType.habits[0].up = false;
  
@@ -854,7 +865,7 @@ index a0136056f..839225128 100644
  
        expect(tasksByType.habits[0].value).to.be.lessThan(1);
      });
-@@ -994,7 +980,7 @@ describe('cron', () => {
+@@ -971,7 +956,7 @@ describe('cron', () => {
        tasksByType.habits[0].up = true;
        tasksByType.habits[0].down = true;
  
@@ -863,7 +874,7 @@ index a0136056f..839225128 100644
  
        expect(tasksByType.habits[0].value).to.equal(1);
      });
-@@ -1011,7 +997,7 @@ describe('cron', () => {
+@@ -988,7 +973,7 @@ describe('cron', () => {
          tasksByType.habits[0].counterUp = 1;
          tasksByType.habits[0].counterDown = 1;
  
@@ -872,7 +883,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(0);
          expect(tasksByType.habits[0].counterDown).to.equal(0);
-@@ -1022,7 +1008,7 @@ describe('cron', () => {
+@@ -999,7 +984,7 @@ describe('cron', () => {
          tasksByType.habits[0].counterUp = 1;
          tasksByType.habits[0].counterDown = 1;
  
@@ -881,7 +892,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(0);
          expect(tasksByType.habits[0].counterDown).to.equal(0);
-@@ -1034,14 +1020,14 @@ describe('cron', () => {
+@@ -1011,14 +996,14 @@ describe('cron', () => {
          tasksByType.habits[0].counterDown = 1;
  
          // should not reset
@@ -898,7 +909,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(0);
          expect(tasksByType.habits[0].counterDown).to.equal(0);
-@@ -1063,7 +1049,7 @@ describe('cron', () => {
+@@ -1040,7 +1025,7 @@ describe('cron', () => {
          daysMissed = 1;
  
          // should not reset
@@ -907,7 +918,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(1);
          expect(tasksByType.habits[0].counterDown).to.equal(1);
-@@ -1075,7 +1061,7 @@ describe('cron', () => {
+@@ -1052,7 +1037,7 @@ describe('cron', () => {
          clock = sinon.useFakeTimers(monday);
  
          // should reset after user CDS
@@ -916,7 +927,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(0);
          expect(tasksByType.habits[0].counterDown).to.equal(0);
-@@ -1097,7 +1083,7 @@ describe('cron', () => {
+@@ -1074,7 +1059,7 @@ describe('cron', () => {
          daysMissed = 1;
  
          // should not reset
@@ -925,7 +936,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(1);
          expect(tasksByType.habits[0].counterDown).to.equal(1);
-@@ -1105,7 +1091,7 @@ describe('cron', () => {
+@@ -1082,7 +1067,7 @@ describe('cron', () => {
          // User missed one cron, which will subtract User clock back to Monday 1am UTC + 2
          // should reset
          daysMissed = 2;
@@ -934,7 +945,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(0);
          expect(tasksByType.habits[0].counterDown).to.equal(0);
-@@ -1127,7 +1113,7 @@ describe('cron', () => {
+@@ -1104,7 +1089,7 @@ describe('cron', () => {
          daysMissed = 1;
  
          // should reset
@@ -943,7 +954,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(0);
          expect(tasksByType.habits[0].counterDown).to.equal(0);
-@@ -1149,7 +1135,7 @@ describe('cron', () => {
+@@ -1126,7 +1111,7 @@ describe('cron', () => {
          daysMissed = 1;
  
          // should not reset
@@ -952,7 +963,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(1);
          expect(tasksByType.habits[0].counterDown).to.equal(1);
-@@ -1161,14 +1147,14 @@ describe('cron', () => {
+@@ -1138,14 +1123,14 @@ describe('cron', () => {
          tasksByType.habits[0].counterDown = 1;
  
          // should not reset
@@ -969,7 +980,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(0);
          expect(tasksByType.habits[0].counterDown).to.equal(0);
-@@ -1191,7 +1177,7 @@ describe('cron', () => {
+@@ -1168,7 +1153,7 @@ describe('cron', () => {
          daysMissed = 1;
  
          // should reset
@@ -978,7 +989,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(0);
          expect(tasksByType.habits[0].counterDown).to.equal(0);
-@@ -1213,7 +1199,7 @@ describe('cron', () => {
+@@ -1190,7 +1175,7 @@ describe('cron', () => {
          daysMissed = 1;
  
          // should not reset
@@ -987,7 +998,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(1);
          expect(tasksByType.habits[0].counterDown).to.equal(1);
-@@ -1221,7 +1207,7 @@ describe('cron', () => {
+@@ -1198,7 +1183,7 @@ describe('cron', () => {
          // User missed one day, which will subtract User clock back to 5/1/17 2am UTC + 3
          // should reset
          daysMissed = 2;
@@ -996,7 +1007,7 @@ index a0136056f..839225128 100644
  
          expect(tasksByType.habits[0].counterUp).to.equal(0);
          expect(tasksByType.habits[0].counterDown).to.equal(0);
-@@ -1252,7 +1238,7 @@ describe('cron', () => {
+@@ -1229,7 +1214,7 @@ describe('cron', () => {
      it('stores a new entry in user.history.exp', () => {
        user.stats.lvl = 2;
  
@@ -1005,7 +1016,7 @@ index a0136056f..839225128 100644
  
        expect(user.history.exp).to.have.lengthOf(1);
        expect(user.history.exp[0].value).to.equal(150);
-@@ -1263,7 +1249,7 @@ describe('cron', () => {
+@@ -1240,7 +1225,7 @@ describe('cron', () => {
        tasksByType.dailys[0].completed = true;
        tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
  
@@ -1014,7 +1025,7 @@ index a0136056f..839225128 100644
  
        expect(user.achievements.perfect).to.equal(1);
      });
-@@ -1273,7 +1259,7 @@ describe('cron', () => {
+@@ -1250,7 +1235,7 @@ describe('cron', () => {
        tasksByType.dailys[0].completed = true;
        tasksByType.dailys[0].startDate = moment(new Date()).add({days: 1});
  
@@ -1023,7 +1034,7 @@ index a0136056f..839225128 100644
  
        expect(user.achievements.perfect).to.equal(0);
      });
-@@ -1285,7 +1271,7 @@ describe('cron', () => {
+@@ -1262,7 +1247,7 @@ describe('cron', () => {
  
        let previousBuffs = user.stats.buffs.toObject();
  
@@ -1032,7 +1043,16 @@ index a0136056f..839225128 100644
  
        expect(user.stats.buffs.str).to.be.greaterThan(previousBuffs.str);
        expect(user.stats.buffs.int).to.be.greaterThan(previousBuffs.int);
-@@ -1307,7 +1293,7 @@ describe('cron', () => {
+@@ -1278,7 +1263,7 @@ describe('cron', () => {
+ 
+       let previousBuffs = user.stats.buffs.toObject();
+ 
+-      cron({user, tasksByType, daysMissed, analytics});
++      cron({user, tasksByType, daysMissed});
+ 
+       expect(user.stats.buffs.str).to.be.greaterThan(previousBuffs.str);
+       expect(user.stats.buffs.int).to.be.greaterThan(previousBuffs.int);
+@@ -1300,7 +1285,7 @@ describe('cron', () => {
          streaks: true,
        };
  
@@ -1041,7 +1061,7 @@ index a0136056f..839225128 100644
  
        expect(user.stats.buffs.str).to.equal(0);
        expect(user.stats.buffs.int).to.equal(0);
-@@ -1331,7 +1317,7 @@ describe('cron', () => {
+@@ -1325,7 +1310,7 @@ describe('cron', () => {
          streaks: true,
        };
  
@@ -1050,7 +1070,25 @@ index a0136056f..839225128 100644
  
        expect(user.stats.buffs.str).to.equal(0);
        expect(user.stats.buffs.int).to.equal(0);
-@@ -1350,7 +1336,7 @@ describe('cron', () => {
+@@ -1349,7 +1334,7 @@ describe('cron', () => {
+         streaks: true,
+       };
+ 
+-      cron({user, tasksByType, daysMissed, analytics});
++      cron({user, tasksByType, daysMissed});
+ 
+       expect(user.stats.buffs.str).to.equal(0);
+       expect(user.stats.buffs.int).to.equal(0);
+@@ -1374,7 +1359,7 @@ describe('cron', () => {
+         streaks: true,
+       };
+ 
+-      cron({user, tasksByType, daysMissed, analytics});
++      cron({user, tasksByType, daysMissed});
+ 
+       expect(user.stats.buffs.str).to.equal(0);
+       expect(user.stats.buffs.int).to.equal(0);
+@@ -1393,7 +1378,7 @@ describe('cron', () => {
  
        let previousBuffs = user.stats.buffs.toObject();
  
@@ -1059,7 +1097,16 @@ index a0136056f..839225128 100644
  
        expect(user.stats.buffs.str).to.be.greaterThan(previousBuffs.str);
        expect(user.stats.buffs.int).to.be.greaterThan(previousBuffs.int);
-@@ -1367,7 +1353,7 @@ describe('cron', () => {
+@@ -1411,7 +1396,7 @@ describe('cron', () => {
+ 
+       let previousBuffs = user.stats.buffs.toObject();
+ 
+-      cronOverride({user, tasksByType, daysMissed, analytics});
++      cronOverride({user, tasksByType, daysMissed});
+ 
+       expect(user.stats.buffs.str).to.be.greaterThan(previousBuffs.str);
+       expect(user.stats.buffs.int).to.be.greaterThan(previousBuffs.int);
+@@ -1428,7 +1413,7 @@ describe('cron', () => {
        let mpBefore = user.stats.mp;
        tasksByType.dailys[0].completed = true;
        stubbedStatsComputed.returns(Object.assign(statsComputedRes, {maxMP: 100}));
@@ -1068,7 +1115,16 @@ index a0136056f..839225128 100644
        expect(user.stats.mp).to.be.greaterThan(mpBefore);
  
        common.statsComputed.restore();
-@@ -1378,7 +1364,7 @@ describe('cron', () => {
+@@ -1442,7 +1427,7 @@ describe('cron', () => {
+       let mpBefore = user.stats.mp;
+       tasksByType.dailys[0].completed = true;
+       stubbedStatsComputed.returns(Object.assign(statsComputedRes, {maxMP: 100}));
+-      cron({user, tasksByType, daysMissed, analytics});
++      cron({user, tasksByType, daysMissed});
+       expect(user.stats.mp).to.equal(mpBefore);
+ 
+       common.statsComputed.restore();
+@@ -1453,7 +1438,7 @@ describe('cron', () => {
        const stubbedStatsComputed = sinon.stub(common, 'statsComputed');
        user.stats.mp = 120;
        stubbedStatsComputed.returns(Object.assign(statsComputedRes, {maxMP: 100}));
@@ -1077,7 +1133,7 @@ index a0136056f..839225128 100644
        expect(user.stats.mp).to.equal(common.statsComputed(user).maxMP);
  
        common.statsComputed.restore();
-@@ -1409,14 +1395,14 @@ describe('cron', () => {
+@@ -1484,14 +1469,14 @@ describe('cron', () => {
      });
  
      it('resets user progress', () => {
@@ -1094,7 +1150,7 @@ index a0136056f..839225128 100644
        expect(progress.down).to.equal(-1);
      });
    });
-@@ -1434,7 +1420,7 @@ describe('cron', () => {
+@@ -1509,7 +1494,7 @@ describe('cron', () => {
        let hpBefore = user.stats.hp;
        tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
  
@@ -1103,7 +1159,7 @@ index a0136056f..839225128 100644
  
        expect(user.notifications.length).to.be.greaterThan(0);
        expect(user.notifications[1].type).to.equal('CRON');
-@@ -1458,7 +1444,7 @@ describe('cron', () => {
+@@ -1533,7 +1518,7 @@ describe('cron', () => {
        let hpBefore1 = user.stats.hp;
        tasksByType.dailys[0].startDate = moment(new Date()).subtract({days: 1});
  
@@ -1112,7 +1168,7 @@ index a0136056f..839225128 100644
  
        expect(user.notifications.length).to.be.greaterThan(0);
        expect(user.notifications[1].type).to.equal('CRON');
-@@ -1473,7 +1459,7 @@ describe('cron', () => {
+@@ -1548,7 +1533,7 @@ describe('cron', () => {
  
        user.lastCron = moment(new Date()).subtract({days: 2});
  
@@ -1121,7 +1177,7 @@ index a0136056f..839225128 100644
  
        expect(user.notifications.length - notifsBefore2).to.equal(0);
        expect(user.notifications[0].type).to.not.equal('CRON');
-@@ -1516,7 +1502,7 @@ describe('cron', () => {
+@@ -1591,7 +1576,7 @@ describe('cron', () => {
      });
  
      xit('does not clear pms under 200', () => {
@@ -1130,7 +1186,7 @@ index a0136056f..839225128 100644
        expect(user.inbox.messages[lastMessageId]).to.exist;
      });
  
-@@ -1531,7 +1517,7 @@ describe('cron', () => {
+@@ -1606,7 +1591,7 @@ describe('cron', () => {
          flagCount: 0,
        };
  
@@ -1139,7 +1195,7 @@ index a0136056f..839225128 100644
  
        expect(user.inbox.messages[messageId]).to.not.exist;
      });
-@@ -1539,23 +1525,23 @@ describe('cron', () => {
+@@ -1614,23 +1599,23 @@ describe('cron', () => {
  
    describe('login incentives', () => {
      it('increments incentive counter each cron', () => {
@@ -1169,7 +1225,7 @@ index a0136056f..839225128 100644
  
        let filteredNotifications = user.notifications.filter(n => n.type === 'LOGIN_INCENTIVE');
  
-@@ -1564,18 +1550,18 @@ describe('cron', () => {
+@@ -1639,18 +1624,18 @@ describe('cron', () => {
  
      it('increments loginIncentives by 1 even if days are skipped in between', () => {
        daysMissed = 3;
@@ -1178,7 +1234,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(1);
      });
  
-     it('increments loginIncentives by 1 even if user has Dailies paused', () => {
+     it('increments loginIncentives by 1 even if user is sleeping', () => {
        user.preferences.sleep = true;
 -      cron({user, tasksByType, daysMissed, analytics});
 +      cron({user, tasksByType, daysMissed});
@@ -1191,7 +1247,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(1);
        expect(user.items.gear.owned.armor_special_bardRobes).to.eql(true);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1583,7 +1569,7 @@ describe('cron', () => {
+@@ -1658,7 +1643,7 @@ describe('cron', () => {
  
      it('awards user incentive backgrounds if login incentive is 2', () => {
        user.loginIncentives = 1;
@@ -1200,7 +1256,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(2);
        expect(user.purchased.background.blue).to.eql(true);
        expect(user.purchased.background.green).to.eql(true);
-@@ -1595,7 +1581,7 @@ describe('cron', () => {
+@@ -1670,7 +1655,7 @@ describe('cron', () => {
  
      it('awards user Bard Hat if login incentive is 3', () => {
        user.loginIncentives = 2;
@@ -1209,7 +1265,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(3);
        expect(user.items.gear.owned.head_special_bardHat).to.eql(true);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1603,7 +1589,7 @@ describe('cron', () => {
+@@ -1678,7 +1663,7 @@ describe('cron', () => {
  
      it('awards user RoyalPurple Hatching Potion if login incentive is 4', () => {
        user.loginIncentives = 3;
@@ -1218,7 +1274,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(4);
        expect(user.items.hatchingPotions.RoyalPurple).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1611,7 +1597,7 @@ describe('cron', () => {
+@@ -1686,7 +1671,7 @@ describe('cron', () => {
  
      it('awards user a Chocolate, Meat and Pink Contton Candy if login incentive is 5', () => {
        user.loginIncentives = 4;
@@ -1227,7 +1283,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(5);
  
        expect(user.items.food.Chocolate).to.eql(1);
-@@ -1623,7 +1609,7 @@ describe('cron', () => {
+@@ -1698,7 +1683,7 @@ describe('cron', () => {
  
      it('awards user moon quest if login incentive is 7', () => {
        user.loginIncentives = 6;
@@ -1236,7 +1292,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(7);
        expect(user.items.quests.moon1).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1631,7 +1617,7 @@ describe('cron', () => {
+@@ -1706,7 +1691,7 @@ describe('cron', () => {
  
      it('awards user RoyalPurple Hatching Potion if login incentive is 10', () => {
        user.loginIncentives = 9;
@@ -1245,7 +1301,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(10);
        expect(user.items.hatchingPotions.RoyalPurple).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1639,7 +1625,7 @@ describe('cron', () => {
+@@ -1714,7 +1699,7 @@ describe('cron', () => {
  
      it('awards user a Strawberry, Patato and Blue Contton Candy if login incentive is 14', () => {
        user.loginIncentives = 13;
@@ -1254,7 +1310,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(14);
  
        expect(user.items.food.Strawberry).to.eql(1);
-@@ -1651,7 +1637,7 @@ describe('cron', () => {
+@@ -1726,7 +1711,7 @@ describe('cron', () => {
  
      it('awards user a bard instrument if login incentive is 18', () => {
        user.loginIncentives = 17;
@@ -1263,7 +1319,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(18);
        expect(user.items.gear.owned.weapon_special_bardInstrument).to.eql(true);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1659,7 +1645,7 @@ describe('cron', () => {
+@@ -1734,7 +1719,7 @@ describe('cron', () => {
  
      it('awards user second moon quest if login incentive is 22', () => {
        user.loginIncentives = 21;
@@ -1272,7 +1328,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(22);
        expect(user.items.quests.moon2).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1667,7 +1653,7 @@ describe('cron', () => {
+@@ -1742,7 +1727,7 @@ describe('cron', () => {
  
      it('awards user a RoyalPurple hatching potion if login incentive is 26', () => {
        user.loginIncentives = 25;
@@ -1281,7 +1337,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(26);
        expect(user.items.hatchingPotions.RoyalPurple).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1675,7 +1661,7 @@ describe('cron', () => {
+@@ -1750,7 +1735,7 @@ describe('cron', () => {
  
      it('awards user Fish, Milk, Rotten Meat and Honey if login incentive is 30', () => {
        user.loginIncentives = 29;
@@ -1290,7 +1346,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(30);
  
        expect(user.items.food.Fish).to.eql(1);
-@@ -1688,7 +1674,7 @@ describe('cron', () => {
+@@ -1763,7 +1748,7 @@ describe('cron', () => {
  
      it('awards user a RoyalPurple hatching potion if login incentive is 35', () => {
        user.loginIncentives = 34;
@@ -1299,7 +1355,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(35);
        expect(user.items.hatchingPotions.RoyalPurple).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1696,7 +1682,7 @@ describe('cron', () => {
+@@ -1771,7 +1756,7 @@ describe('cron', () => {
  
      it('awards user the third moon quest if login incentive is 40', () => {
        user.loginIncentives = 39;
@@ -1308,7 +1364,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(40);
        expect(user.items.quests.moon3).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1704,7 +1690,7 @@ describe('cron', () => {
+@@ -1779,7 +1764,7 @@ describe('cron', () => {
  
      it('awards user a RoyalPurple hatching potion if login incentive is 45', () => {
        user.loginIncentives = 44;
@@ -1317,7 +1373,7 @@ index a0136056f..839225128 100644
        expect(user.loginIncentives).to.eql(45);
        expect(user.items.hatchingPotions.RoyalPurple).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1712,7 +1698,7 @@ describe('cron', () => {
+@@ -1787,7 +1772,7 @@ describe('cron', () => {
  
      it('awards user a saddle if login incentive is 50', () => {
        user.loginIncentives = 49;
@@ -2126,6 +2182,36 @@ index 4554b9832..06d5bf80d 100644
      } catch (err) {
        expect(err).to.be.an.instanceof(BadRequest);
        expect(err.message).to.equal(i18n.t('invalidQuantity'));
+diff --git a/test/common/ops/buy/buyQuestGems.js b/test/common/ops/buy/buyQuestGems.js
+index 3bb19841e..067cb39f5 100644
+--- a/test/common/ops/buy/buyQuestGems.js
++++ b/test/common/ops/buy/buyQuestGems.js
+@@ -11,10 +11,9 @@ import {BuyQuestWithGemOperation} from '../../../../website/common/script/ops/bu
+ describe('shared.ops.buyQuestGems', () => {
+   let user;
+   let goldPoints = 40;
+-  let analytics = {track () {}};
+ 
+-  function buyQuest (_user, _req, _analytics) {
+-    const buyOp = new BuyQuestWithGemOperation(_user, _req, _analytics);
++  function buyQuest (_user, _req) {
++    const buyOp = new BuyQuestWithGemOperation(_user, _req);
+ 
+     return buyOp.purchase();
+   }
+@@ -24,12 +23,10 @@ describe('shared.ops.buyQuestGems', () => {
+   });
+ 
+   beforeEach(() => {
+-    sinon.stub(analytics, 'track');
+     sinon.spy(pinnedGearUtils, 'removeItemByPath');
+   });
+ 
+   afterEach(() => {
+-    analytics.track.restore();
+     pinnedGearUtils.removeItemByPath.restore();
+   });
+ 
 diff --git a/test/common/ops/buy/buySpell.js b/test/common/ops/buy/buySpell.js
 index 02d0bda6a..6db2b7b50 100644
 --- a/test/common/ops/buy/buySpell.js
@@ -3920,17 +4006,17 @@ index 7e86bb5d3..5180aded1 100644
  
  export default new Vue({
 diff --git a/website/client/mixins/guide.js b/website/client/mixins/guide.js
-index 0d5029fb7..f2e502586 100644
+index 4dd3d9be8..d213fb545 100644
 --- a/website/client/mixins/guide.js
 +++ b/website/client/mixins/guide.js
 @@ -1,6 +1,5 @@
  import times from 'lodash/times';
- import Intro from 'intro.js/';
+ import introjs from 'intro.js';
 -import * as Analytics from 'client/libs/analytics';
  
- export default {
-   data () {
-@@ -136,12 +135,6 @@ export default {
+ let showingTour = false;
+ 
+@@ -140,12 +139,6 @@ export default {
          case 'equipment':  return this.goto('equipment', 0);
        }
      },
@@ -3943,7 +4029,7 @@ index 0d5029fb7..f2e502586 100644
      goto (chapter, page, force) {
        if (chapter === 'intro' && this.user.flags.welcomed !== true)  {
          // @TODO: Add dispatch User.set({'flags.welcomed': true});
-@@ -158,15 +151,6 @@ export default {
+@@ -162,15 +155,6 @@ export default {
          opts.steps  = opts.steps.concat(this.chapters[chapter][p]);
        });
  
@@ -3957,15 +4043,9 @@ index 0d5029fb7..f2e502586 100644
 -      });
 -
        // @TODO: Do we always need to initialize here?
-       let intro = Intro.introJs();
+       const intro = introjs();
        intro.setOptions({
-@@ -197,22 +181,11 @@ export default {
-       //     //   message: this.$t('checkinEarned'),
-       //     //   nextRewardAt: 1,
-       //     // };
--      //     // @TODO: Notification.showLoginIncentive(this.user, rewardData, Social.loadWidgets);
-       //   }
- 
+@@ -196,15 +180,6 @@ export default {
        // Mark tour complete
        ups[`flags.tour.${chapter}`] = -2; // @TODO: Move magic numbers to enum
  
@@ -3977,7 +4057,6 @@ index 0d5029fb7..f2e502586 100644
 -        eventValue: lastKnownStep,
 -        complete: true,
 -      });
--      // }
 -
        this.$store.dispatch('user:set', ups);
      },
@@ -4185,7 +4264,7 @@ index 1bc330846..ff0e5f1d6 100644
  
  export const PARTY_LIMIT_MEMBERS = 30;
 diff --git a/website/common/script/content/spells.js b/website/common/script/content/spells.js
-index d04bddd8e..62ebaed03 100644
+index 58d69d375..e641f1546 100644
 --- a/website/common/script/content/spells.js
 +++ b/website/common/script/content/spells.js
 @@ -44,13 +44,13 @@ spells.wizard = {
@@ -4327,7 +4406,7 @@ index 57eaa890c..5a9e61a0a 100644
    PARTY_LIMIT_MEMBERS,
  };
 diff --git a/website/common/script/ops/buy/abstractBuyOperation.js b/website/common/script/ops/buy/abstractBuyOperation.js
-index 78256d21c..4a7e4d7a6 100644
+index 85b9588f0..b8393026a 100644
 --- a/website/common/script/ops/buy/abstractBuyOperation.js
 +++ b/website/common/script/ops/buy/abstractBuyOperation.js
 @@ -4,19 +4,16 @@ import {
@@ -4351,7 +4430,7 @@ index 78256d21c..4a7e4d7a6 100644
  
      let quantity = _get(req, 'quantity');
  
-@@ -72,10 +69,6 @@ export class AbstractBuyOperation {
+@@ -84,10 +81,6 @@ export class AbstractBuyOperation {
      throw new NotImplementedError('executeChanges');
    }
  
@@ -4362,7 +4441,7 @@ index 78256d21c..4a7e4d7a6 100644
    purchase () {
      if (!this.multiplePurchaseAllowed() && this.quantity > 1) {
        throw new NotAuthorized(this.i18n('messageNotAbleToBuyInBulk'));
-@@ -85,37 +78,13 @@ export class AbstractBuyOperation {
+@@ -97,37 +90,13 @@ export class AbstractBuyOperation {
  
      let resultObj = this.executeChanges(this.user, this.item, this.req);
  
@@ -4402,15 +4481,15 @@ index 78256d21c..4a7e4d7a6 100644
    }
  
    canUserPurchase (user, item) {
-@@ -138,20 +107,11 @@ export class AbstractGoldItemOperation extends AbstractBuyOperation {
+@@ -150,20 +119,11 @@ export class AbstractGoldItemOperation extends AbstractBuyOperation {
  
      user.stats.gp -= itemValue * this.quantity;
    }
 -
 -  analyticsData () {
 -    return {
--      itemKey: this.getIemKey(this.item),
--      itemType: 'Market',
+-      itemKey: this.getItemKey(this.item),
+-      itemType: this.getItemType(this.item),
 -      acquireMethod: 'Gold',
 -      goldCost: this.getItemValue(this.item),
 -    };
@@ -4425,15 +4504,15 @@ index 78256d21c..4a7e4d7a6 100644
    }
  
    canUserPurchase (user, item) {
-@@ -172,13 +132,4 @@ export class AbstractGemItemOperation extends AbstractBuyOperation {
+@@ -184,13 +144,4 @@ export class AbstractGemItemOperation extends AbstractBuyOperation {
  
      user.balance -= itemValue * this.quantity;
    }
 -
 -  analyticsData () {
 -    return {
--      itemKey: this.getIemKey(this.item),
--      itemType: 'Market',
+-      itemKey: this.getItemKey(this.item),
+-      itemType: this.getItemType(this.item),
 -      acquireMethod: 'Gems',
 -      gemCost: this.getItemValue(this.item) * 4,
 -    };
@@ -4519,7 +4598,7 @@ index 13a995060..7d86911f1 100644
        buyRes = buyOp.purchase();
        break;
 diff --git a/website/common/script/ops/buy/buyArmoire.js b/website/common/script/ops/buy/buyArmoire.js
-index 4d091a2c1..c3a6051f0 100644
+index 82c7868e3..c3a6051f0 100644
 --- a/website/common/script/ops/buy/buyArmoire.js
 +++ b/website/common/script/ops/buy/buyArmoire.js
 @@ -18,8 +18,8 @@ const YIELD_EQUIPMENT_THRESHOLD = 0.6;
@@ -4533,19 +4612,8 @@ index 4d091a2c1..c3a6051f0 100644
    }
  
    multiplePurchaseAllowed () {
-@@ -135,10 +135,4 @@ export class BuyArmoireOperation extends AbstractGoldItemOperation {
-       },
-     };
-   }
--
--  analyticsData () {
--    let data = super.analyticsData();
--    data.itemKey = 'Armoire';
--    return data;
--  }
- }
 diff --git a/website/common/script/ops/buy/buyGem.js b/website/common/script/ops/buy/buyGem.js
-index 9655537d4..de1b9c6b6 100644
+index b2ea03046..81fa5be9d 100644
 --- a/website/common/script/ops/buy/buyGem.js
 +++ b/website/common/script/ops/buy/buyGem.js
 @@ -9,8 +9,8 @@ import get from 'lodash/get';
@@ -4559,7 +4627,7 @@ index 9655537d4..de1b9c6b6 100644
    }
  
    multiplePurchaseAllowed () {
-@@ -68,14 +68,4 @@ export class BuyGemOperation extends AbstractGoldItemOperation {
+@@ -72,8 +72,4 @@ export class BuyGemOperation extends AbstractGoldItemOperation {
        this.i18n('plusGem', {count: this.quantity}),
      ];
    }
@@ -4567,15 +4635,9 @@ index 9655537d4..de1b9c6b6 100644
 -  analyticsLabel () {
 -    return 'purchase gems';
 -  }
--
--  analyticsData () {
--    let data = super.analyticsData();
--    data.itemKey = 'gem';
--    return data;
--  }
  }
 diff --git a/website/common/script/ops/buy/buyHealthPotion.js b/website/common/script/ops/buy/buyHealthPotion.js
-index cad055a97..5bd6cf4b5 100644
+index e3d6c1062..5bd6cf4b5 100644
 --- a/website/common/script/ops/buy/buyHealthPotion.js
 +++ b/website/common/script/ops/buy/buyHealthPotion.js
 @@ -6,8 +6,8 @@ import {
@@ -4589,17 +4651,6 @@ index cad055a97..5bd6cf4b5 100644
    }
  
    multiplePurchaseAllowed () {
-@@ -46,10 +46,4 @@ export class BuyHealthPotionOperation extends AbstractGoldItemOperation {
-       message,
-     ];
-   }
--
--  analyticsData () {
--    let data = super.analyticsData();
--    data.itemKey = 'Potion';
--    return data;
--  }
- }
 diff --git a/website/common/script/ops/buy/buyMarketGear.js b/website/common/script/ops/buy/buyMarketGear.js
 index 13408b18b..6b936c662 100644
 --- a/website/common/script/ops/buy/buyMarketGear.js
@@ -4646,7 +4697,7 @@ index 7e0bf0c83..0d4387ddb 100644
  
    user.purchased.plan.consecutive.trinkets--;
 diff --git a/website/common/script/ops/buy/buyQuest.js b/website/common/script/ops/buy/buyQuest.js
-index acc0b8894..983d17a6c 100644
+index 92e5e92dc..cad76239d 100644
 --- a/website/common/script/ops/buy/buyQuest.js
 +++ b/website/common/script/ops/buy/buyQuest.js
 @@ -10,8 +10,8 @@ import {AbstractGoldItemOperation} from './abstractBuyOperation';
@@ -4661,7 +4712,7 @@ index acc0b8894..983d17a6c 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buyQuestGem.js b/website/common/script/ops/buy/buyQuestGem.js
-index d3dae0350..a6a6b73b6 100644
+index 90cf0190e..b3ae661ab 100644
 --- a/website/common/script/ops/buy/buyQuestGem.js
 +++ b/website/common/script/ops/buy/buyQuestGem.js
 @@ -10,8 +10,8 @@ import errorMessage from '../../libs/errorMessage';
@@ -4676,7 +4727,7 @@ index d3dae0350..a6a6b73b6 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buySpell.js b/website/common/script/ops/buy/buySpell.js
-index 2a26d0def..e9dff26ed 100644
+index 46e73a5d8..5397b5012 100644
 --- a/website/common/script/ops/buy/buySpell.js
 +++ b/website/common/script/ops/buy/buySpell.js
 @@ -10,8 +10,8 @@ import {AbstractGoldItemOperation} from './abstractBuyOperation';
@@ -4722,7 +4773,7 @@ index 5354ee20b..b08c0d2d5 100644
      { items: user.items, purchasedPlanConsecutive: user.purchased.plan.consecutive },
      i18n.t('hourglassPurchase', req.language),
 diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index 4904b74fe..b4f84ade4 100644
+index bd0724859..b4f84ade4 100644
 --- a/website/common/script/ops/buy/purchase.js
 +++ b/website/common/script/ops/buy/purchase.js
 @@ -65,7 +65,7 @@ function purchaseItem (user, item, price, type, key) {
@@ -4742,7 +4793,7 @@ index 4904b74fe..b4f84ade4 100644
 -    analytics.track('acquire item', {
 -      uuid: user._id,
 -      itemKey: key,
--      itemType: 'Market',
+-      itemType: type,
 -      acquireMethod: 'Gems',
 -      gemCost: price * 4,
 -      quantityPurchased: quantity,
@@ -5540,7 +5591,7 @@ index f18644306..dcae6acda 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 16d586a5c..cd35f58fc 100644
+index 087089095..cd35f58fc 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5739,8 +5790,25 @@ index 16d586a5c..cd35f58fc 100644
    ]})
      .select({_id: true, 'preferences.emailNotifications': true})
      .exec();
+@@ -1213,16 +1099,6 @@ api.inviteToGroup = {
+       results.push(...emailResults);
+     }
+ 
+-    let analyticsObject = {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-      groupType: group.type,
+-      headers: req.headers,
+-    };
+-
+-    res.analytics.track('group invite', analyticsObject);
+-
+     res.respond(200, results);
+   },
+ };
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index 421e2cf4b..9e0588ab0 100644
+index d0c8f2e8b..fc8b465dc 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,6 @@ import {
@@ -5751,10 +5819,10 @@ index 421e2cf4b..9e0588ab0 100644
  import { achievements } from '../../../../website/common/';
  
  let api = {};
-@@ -497,18 +496,6 @@ api.sendPrivateMessage = {
-         {name: 'SENDER', content: getUserInfo(sender, ['name']).name},
+@@ -497,19 +496,6 @@ api.sendPrivateMessage = {
        ]);
      }
+ 
 -    if (receiver.preferences.pushNotifications.newPM !== false) {
 -      sendPushNotification(
 -        receiver,
@@ -5767,10 +5835,11 @@ index 421e2cf4b..9e0588ab0 100644
 -        }
 -      );
 -    }
- 
-     res.respond(200, {});
+-
+     res.respond(200, { message: newMessage });
    },
-@@ -587,15 +574,6 @@ api.transferGems = {
+ };
+@@ -587,15 +573,6 @@ api.transferGems = {
          {name: 'X_GEMS_GIFTED', content: gemAmount},
        ]);
      }
@@ -5906,7 +5975,7 @@ index b579cc386..6ed16d973 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index a7707e977..feed970e6 100644
+index 39a12edf5..feed970e6 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -23,7 +23,6 @@ import {
@@ -5917,7 +5986,7 @@ index a7707e977..feed970e6 100644
  import apiError from '../../libs/apiError';
  
  function canNotEditTasks (group, user, assignedUserId) {
-@@ -168,16 +167,6 @@ api.createUserTasks = {
+@@ -168,17 +167,6 @@ api.createUserTasks = {
      res.respond(201, tasks.length === 1 ? tasks[0] : tasks);
  
      tasks.forEach((task) => {
@@ -5928,13 +5997,14 @@ index a7707e977..feed970e6 100644
 -          hitType: 'event',
 -          category: 'behavior',
 -          taskType: task.type,
+-          headers: req.headers,
 -        });
 -      }
 -
        taskActivityWebhook.send(user, {
          type: 'created',
          task,
-@@ -255,16 +244,6 @@ api.createChallengeTasks = {
+@@ -256,16 +244,6 @@ api.createChallengeTasks = {
  
      // If adding tasks to a challenge -> sync users
      if (challenge) challenge.addTasks(tasks);
@@ -5951,7 +6021,7 @@ index a7707e977..feed970e6 100644
    },
  };
  
-@@ -618,7 +597,7 @@ api.scoreTask = {
+@@ -619,7 +597,7 @@ api.scoreTask = {
  
      let [delta] = common.ops.scoreTask({task, user, direction}, req);
      // Drop system (don't run on the client, as it would only be discarded since ops are sent to the API, not the results)
@@ -5960,7 +6030,7 @@ index a7707e977..feed970e6 100644
  
      // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
      // TODO move to common code?
-@@ -693,17 +672,6 @@ api.scoreTask = {
+@@ -694,18 +672,6 @@ api.scoreTask = {
          logger.error(e);
        }
      }
@@ -5973,6 +6043,7 @@ index a7707e977..feed970e6 100644
 -        category: 'behavior',
 -        taskType: task.type,
 -        direction,
+-        headers: req.headers,
 -      });
 -    }
    },
@@ -6376,7 +6447,7 @@ index f883b6716..48de1142c 100644
      return message;
    }
 diff --git a/website/server/libs/cron.js b/website/server/libs/cron.js
-index c98ecf929..aa6e84a81 100644
+index 309198763..51ecaae46 100644
 --- a/website/server/libs/cron.js
 +++ b/website/server/libs/cron.js
 @@ -85,12 +85,12 @@ function grantEndOfTheMonthPerks (user, now) {
@@ -6394,8 +6465,8 @@ index c98ecf929..aa6e84a81 100644
            let match = plan.planId.match(planIdRegExp);
            if (match !== null && match[0] !== null) {
              planMonthsLength = match[1]; // 3 for 3-month recurring subscription, etc
-@@ -193,22 +193,6 @@ function performSleepTasks (user, tasksByType, now, daysMissed) {
-   resetHabitCounters(user, tasksByType, now, daysMissed);
+@@ -172,32 +172,6 @@ function resetHabitCounters (user, tasksByType, now, daysMissed) {
+   });
  }
  
 -function trackCronAnalytics (analytics, user, _progress, options) {
@@ -6412,12 +6483,22 @@ index c98ecf929..aa6e84a81 100644
 -    headers: options.headers,
 -    loginIncentives: user.loginIncentives,
 -  });
+-
+-  if (user.party && user.party.quest && !user.party.quest.RSVPNeeded && !user.party.quest.completed && user.party.quest.key && !user.preferences.sleep) {
+-    analytics.track('quest participation', {
+-      category: 'behavior',
+-      uuid: user._id,
+-      user,
+-      questName: user.party.quest.key,
+-      headers: options.headers,
+-    });
+-  }
 -}
 -
  function awardLoginIncentives (user) {
    if (user.loginIncentives > MAX_INCENTIVES) return;
    // A/B test 2016-12-21: Should we deliver notifications for upcoming incentives on days when users don't receive rewards?
-@@ -261,7 +245,7 @@ function awardLoginIncentives (user) {
+@@ -250,7 +224,7 @@ function awardLoginIncentives (user) {
  
  // Perform various beginning-of-day reset actions.
  export function cron (options = {}) {
@@ -6426,17 +6507,9 @@ index c98ecf929..aa6e84a81 100644
    let _progress = {down: 0, up: 0, collectedItems: 0};
  
    // Record pre-cron values of HP and MP to show notifications later
-@@ -298,7 +282,6 @@ export function cron (options = {}) {
-   // On cron, buffs are cleared and all dailies are reset without performing damage
-   if (user.preferences.sleep === true) {
-     performSleepTasks(user, tasksByType, now, daysMissed);
--    trackCronAnalytics(analytics, user, _progress, options);
-     return;
-   }
- 
-@@ -502,9 +485,7 @@ export function cron (options = {}) {
-   //   user.markModified('inbox.messages');
-   // }
+@@ -475,9 +449,7 @@ export function cron (options = {}) {
+     mp: user.stats.mp - beforeCronStats.mp - (oldCronNotif ? oldCronNotif.data.mp : 0),
+   });
  
 -  // Analytics
    user.flags.cronCount++;
@@ -7057,7 +7130,7 @@ index e3994c8e0..c6f8a4a17 100644
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 078ae60ca..670c2797a 100644
+index fe5beb8ed..6fc41f06f 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -11,9 +11,6 @@ import {defaults, map, flatten, flow, compact, uniq, partialRight} from 'lodash'
@@ -7070,7 +7143,7 @@ index 078ae60ca..670c2797a 100644
  
  const daysSince = common.daysSince;
  
-@@ -207,7 +204,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -210,7 +207,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
   * @param  options
   * @param  options.user  The user object who is purchasing
   * @param  options.groupId  The id of the group purchasing a subscription
@@ -7079,7 +7152,7 @@ index 078ae60ca..670c2797a 100644
   * @param  options.cancellationReason  A text string to control sending an email
   *
   * @return a Promise from api.cancelSubscription()
-@@ -218,18 +215,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -221,18 +218,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
  // In summary, currently is is best practice to use this method to cancel a user subscription, rather than calling the
  // payment helper.
  schema.methods.cancelSubscription = async function cancelSubscription (options = {}) {

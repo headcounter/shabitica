@@ -9,13 +9,13 @@ Date:   Wed May 2 03:15:04 2018 +0200
     Filename: migration-substvar.patch
 
 diff --git a/migrations/migration-runner.js b/migrations/migration-runner.js
-index cc8d33e9b..92c5855b8 100644
+index bce68392e..92c5855b8 100644
 --- a/migrations/migration-runner.js
 +++ b/migrations/migration-runner.js
 @@ -17,5 +17,5 @@ function setUpServer () {
  setUpServer();
  
  // Replace this with your migration
--const processUsers = require('./users/takeThis.js');
+-const processUsers = require('./groups/reconcile-group-plan-members.js');
 +const processUsers = require('@migrationScript@');
  processUsers();

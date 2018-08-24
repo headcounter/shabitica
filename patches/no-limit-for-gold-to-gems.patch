@@ -150,10 +150,10 @@ index c075987fe..c69ba6b87 100644
      methods: {
        getClassName (classType) {
 diff --git a/website/common/script/ops/buy/buyGem.js b/website/common/script/ops/buy/buyGem.js
-index de1b9c6b6..0c41236b2 100644
+index 81fa5be9d..08dc3ee2f 100644
 --- a/website/common/script/ops/buy/buyGem.js
 +++ b/website/common/script/ops/buy/buyGem.js
-@@ -29,12 +29,6 @@ export class BuyGemOperation extends AbstractGoldItemOperation {
+@@ -33,12 +33,6 @@ export class BuyGemOperation extends AbstractGoldItemOperation {
      let key = this.key = get(req, 'params.key');
      if (!key) throw new BadRequest(this.i18n('missingKeyParam'));
  
@@ -166,7 +166,7 @@ index de1b9c6b6..0c41236b2 100644
      this.canUserPurchase(user);
    }
  
-@@ -44,17 +38,6 @@ export class BuyGemOperation extends AbstractGoldItemOperation {
+@@ -48,17 +42,6 @@ export class BuyGemOperation extends AbstractGoldItemOperation {
      }
  
      super.canUserPurchase(user, item);
