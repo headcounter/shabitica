@@ -123,7 +123,7 @@ index 7db093af0..5e5e77a78 100644
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
          { name: 'groupPlans', path: 'group-plans', component: GroupPlansPage, meta: {requiresLogin: false}},
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index f10525e34..6cdf9f797 100644
+index 92d3ba6d7..0e89cb9ca 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -196,7 +196,6 @@ let updatablePaths = [

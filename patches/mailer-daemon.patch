@@ -47,10 +47,10 @@ index 63df05213..2c7e1f0e2 100644
          "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
          "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
 diff --git a/package.json b/package.json
-index 2e8f7f55a..778647179 100644
+index be78fec71..3b853bd77 100644
 --- a/package.json
 +++ b/package.json
-@@ -59,7 +59,6 @@
+@@ -60,7 +60,6 @@
      "morgan": "^1.7.0",
      "nconf": "^0.10.0",
      "node-sass": "^4.9.0",

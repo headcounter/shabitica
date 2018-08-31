@@ -2385,7 +2385,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 400991d4d..54b5376d6 100644
+index 295ff26a7..7b9cbff74 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,7 +10,6 @@ div
@@ -2475,6 +2475,11 @@ index 400991d4d..54b5376d6 100644
      resetItemToBuy ($event) {
        // @TODO: Do we need this? I think selecting a new item
        // overwrites. @negue might know
+@@ -659,4 +631,3 @@ export default {
+ <style src="assets/css/sprites/spritesmith-main-21.css"></style>
+ <style src="assets/css/sprites/spritesmith-main-22.css"></style>
+ <style src="assets/css/sprites.css"></style>
+-<style src="smartbanner.js/dist/smartbanner.min.css"></style>
 diff --git a/website/client/components/achievements/achievementFooter.vue b/website/client/components/achievements/achievementFooter.vue
 index 862c19099..9b5328c7c 100644
 --- a/website/client/components/achievements/achievementFooter.vue
@@ -2797,7 +2802,7 @@ index e101c5457..be87ab840 100644
      },
    },
 diff --git a/website/client/components/auth/registerLoginReset.vue b/website/client/components/auth/registerLoginReset.vue
-index 77d1c92cc..d536eb95a 100644
+index 430bc570a..d536eb95a 100644
 --- a/website/client/components/auth/registerLoginReset.vue
 +++ b/website/client/components/auth/registerLoginReset.vue
 @@ -13,15 +13,6 @@
@@ -2812,17 +2817,19 @@ index 77d1c92cc..d536eb95a 100644
 -      .col-12.col-md-6
 -        .btn.btn-secondary.social-button(@click='socialAuth("google")')
 -          .svg-icon.social-icon(v-html="icons.googleIcon")
--          span {{registering ? $t('signUpWithSocial', {social: 'Google'}) : $t('loginWithSocial', {social: 'Google'})}}
+-          .text {{registering ? $t('signUpWithSocial', {social: 'Google'}) : $t('loginWithSocial', {social: 'Google'})}}
      .form-group(v-if='registering')
        label(for='usernameInput', v-once) {{$t('username')}}
        input#usernameInput.form-control(type='text', :placeholder='$t("usernamePlaceholder")', v-model='username')
-@@ -204,24 +195,6 @@
+@@ -204,26 +195,6 @@
        font-size: 14px;
        color: $white;
      }
 -
 -    .social-button {
 -      width: 100%;
+-      height: 100%;
+-      white-space: inherit;
 -      text-align: center;
 -
 -      .text {
@@ -2841,7 +2848,7 @@ index 77d1c92cc..d536eb95a 100644
    }
  
    #top-background {
-@@ -279,12 +252,9 @@
+@@ -281,12 +252,9 @@
  
  <script>
  import axios from 'axios';
@@ -2854,7 +2861,7 @@ index 77d1c92cc..d536eb95a 100644
  
  export default {
    data () {
-@@ -303,8 +273,6 @@ export default {
+@@ -305,8 +273,6 @@ export default {
      data.icons = Object.freeze({
        gryphon,
        habiticaIcon,
@@ -2863,7 +2870,7 @@ index 77d1c92cc..d536eb95a 100644
      });
  
      return data;
-@@ -323,13 +291,6 @@ export default {
+@@ -325,13 +291,6 @@ export default {
        return false;
      },
    },
@@ -2877,7 +2884,7 @@ index 77d1c92cc..d536eb95a 100644
    watch: {
      $route: {
        handler () {
-@@ -422,37 +383,6 @@ export default {
+@@ -424,37 +383,6 @@ export default {
        // ALSO it's the only way to make sure language data is reloaded and correct for the logged in user
        window.location.href = redirectTo;
      },
@@ -2916,7 +2923,7 @@ index 77d1c92cc..d536eb95a 100644
        if (this.registering) {
          this.register();
 diff --git a/website/client/components/challenges/challengeModal.vue b/website/client/components/challenges/challengeModal.vue
-index 84e328a8c..7d033fdb9 100644
+index b142f8907..a8bb57142 100644
 --- a/website/client/components/challenges/challengeModal.vue
 +++ b/website/client/components/challenges/challengeModal.vue
 @@ -54,8 +54,6 @@
@@ -3236,52 +3243,8 @@ index 9d13f2d0b..97d18ff8f 100644
        let groupId = this.group._id || this.user.party._id;
  
        const key = this.selectedQuest;
-diff --git a/website/client/components/header/index.vue b/website/client/components/header/index.vue
-index fb7e2965c..6bdd417f3 100644
---- a/website/client/components/header/index.vue
-+++ b/website/client/components/header/index.vue
-@@ -35,26 +35,11 @@ div
-         span.small-text(v-html="$t('inviteFriendsParty')")
-         br
-         button.btn.btn-primary(@click='createOrInviteParty()') {{ user.party._id ? $t('inviteFriends') : $t('startAParty') }}
--  a.useMobileApp(v-if="isAndroidMobile()", v-once, href="https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica") {{ $t('useMobileApps') }}
--  a.useMobileApp(v-if="isIOSMobile()", v-once, href="https://itunes.apple.com/us/app/habitica-gamified-task-manager/id994882113?mt=8") {{ $t('useMobileApps') }}
- </template>
- 
- <style lang="scss" scoped>
-   @import '~client/assets/scss/colors.scss';
- 
--  .useMobileApp {
--    background: red;
--    color: white;
--    z-index: 10;
--    width: 100%;
--    margin: 10px 5px 0 0;
--    height: 64px;
--    text-align: center;
--
--    display: flex;
--    align-items: center;
--  }
--
-   #app-header {
-     padding-left: 24px;
-     padding-top: 9px;
-@@ -155,12 +140,6 @@ export default {
-     ...mapActions({
-       getPartyMembers: 'party:getMembers',
-     }),
--    isAndroidMobile () {
--      return navigator.userAgent.match(/Android/i);
--    },
--    isIOSMobile () {
--      return navigator.userAgent.match(/iPhone|iPad|iPod/i);
--    },
-     expandMember (memberId) {
-       if (this.expandedMember === memberId) {
-         this.expandedMember = null;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 7e72975a0..31df3f29c 100644
+index ed0fe4986..ac7c28a91 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -334,7 +334,6 @@ div
@@ -3292,7 +3255,7 @@ index 7e72975a0..31df3f29c 100644
  import { goToModForm } from 'client/libs/modform';
  
  import gemIcon from 'assets/svg/gem.svg';
-@@ -411,14 +410,6 @@ export default {
+@@ -412,14 +411,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -3962,19 +3925,30 @@ index f3d1e65ea..d2d7d3c46 100644
      profileStats,
    },
 diff --git a/website/client/index.html b/website/client/index.html
-index 3ce5bf4e4..a1c28b030 100644
+index 32ecee0b0..a1c28b030 100644
 --- a/website/client/index.html
 +++ b/website/client/index.html
-@@ -6,7 +6,7 @@
+@@ -6,18 +6,7 @@
      <title>Habitica - Gamify Your Life</title>
      <meta name="description" content="Habitica is a free habit and productivity app that treats your real life like a game. Habitica can help you achieve your goals to become healthy and happy.">
      <meta name="keywords" content="Habits,Goals,Todo,Gamification,Health,Fitness,School,Work">
+-    <meta name="smartbanner:title" content="Habitica">
+-    <meta name="smartbanner:author" content="HabitRPG, Inc.">
+-    <meta name="smartbanner:price" content="FREE">
+-    <meta name="smartbanner:price-suffix-apple" content=" - On the App Store">
+-    <meta name="smartbanner:price-suffix-google" content=" - In Google Play">
+-    <meta name="smartbanner:icon-apple" content="/static/presskit/Logo/iOS.png">
+-    <meta name="smartbanner:icon-google" content="/static/presskit/Logo/Android.png">
+-    <meta name="smartbanner:button" content="VIEW">
+-    <meta name="smartbanner:button-url-apple" content="https://itunes.apple.com/us/app/habitica-gamified-taskmanager/id994882113">
+-    <meta name="smartbanner:button-url-google" content="https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica">
+-    <meta name="smartbanner:enabled-platforms" content="android,ios">
 -    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,400i,700,700i|Roboto:400,400i,700,700i" rel="stylesheet">
 +    <link href="/static/fonts/fonts.css" rel="stylesheet">
      <link rel="shortcut icon" sizes="48x48" href="/static/icons/favicon.ico">
      <link rel="shortcut icon" sizes="192x192" href="/static/icons/favicon_192x192.png">
      <link rel="mask-icon" href="/static/icons/favicon.ico">
-@@ -22,7 +22,6 @@
+@@ -33,7 +22,6 @@
      <div id="app"></div>
      <!-- built files will be auto injected -->
  
@@ -3983,10 +3957,10 @@ index 3ce5bf4e4..a1c28b030 100644
      <script type='text/javascript' src='/api/v4/i18n/browser-script'></script>
    </body>
 diff --git a/website/client/main.js b/website/client/main.js
-index 7e86bb5d3..5180aded1 100644
+index 928d48bd9..5180aded1 100644
 --- a/website/client/main.js
 +++ b/website/client/main.js
-@@ -1,9 +1,5 @@
+@@ -1,15 +1,10 @@
  import Vue from 'vue';
  import AppComponent from './app';
 -import {
@@ -3996,7 +3970,13 @@ index 7e86bb5d3..5180aded1 100644
  import router from './router';
  import getStore from './store';
  import StoreModule from './libs/store';
-@@ -29,8 +25,6 @@ Vue.use(i18n, {i18nData: window && window['habitica-i18n']});
+ import './filters/registerGlobals';
+ import i18n from './libs/i18n';
+-import 'smartbanner.js/dist/smartbanner.js';
+ 
+ import BootstrapVue from 'bootstrap-vue';
+ 
+@@ -30,8 +25,6 @@ Vue.use(i18n, {i18nData: window && window['habitica-i18n']});
  Vue.use(StoreModule);
  Vue.use(BootstrapVue);
  
@@ -5446,7 +5426,7 @@ index 760a9f584..07f2d05f7 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 083dd926e..9104388a9 100644
+index 7419949ea..b318aae6d 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -204,16 +204,6 @@ api.createChallenge = {
@@ -5591,7 +5571,7 @@ index f18644306..dcae6acda 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 087089095..cd35f58fc 100644
+index f386cba45..7235b5a09 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5686,15 +5666,19 @@ index 087089095..cd35f58fc 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -591,7 +521,6 @@ api.joinGroup = {
-     if (!group.hasNotCancelled() && group.memberCount === 0) group.leader = user._id; // If new user is only member -> set as leader
+@@ -633,10 +563,7 @@ api.joinGroup = {
  
-     if (group.hasNotCancelled())  {
+     promises = await Promise.all(promises);
+ 
+-    if (group.hasNotCancelled())  {
 -      await payments.addSubToGroupUser(user, group);
-       await group.updateGroupPlan();
-     }
+-      await group.updateGroupPlan();
+-    }
++    if (group.hasNotCancelled()) await group.updateGroupPlan();
  
-@@ -644,22 +573,6 @@ api.joinGroup = {
+     let response = await Group.toJSONCleanChat(promises[0], user);
+     let leader = await User.findById(response.leader).select(nameFields).exec();
+@@ -644,22 +571,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -5717,16 +5701,7 @@ index 087089095..cd35f58fc 100644
      res.respond(200, response);
    },
  };
-@@ -790,7 +703,7 @@ api.leaveGroup = {
-     }
- 
-     await group.leave(user, req.query.keep, req.body.keepChallenges);
--    if (group.hasNotCancelled()) await group.updateGroupPlan(true);
-+    if (group.hasNotCancelled()) await group.updateGroupPlan();
-     _removeMessagesFromMember(user, group._id);
-     await user.save();
- 
-@@ -799,11 +712,6 @@ api.leaveGroup = {
+@@ -798,12 +709,7 @@ api.leaveGroup = {
        user.guilds.splice(guildIndex, 1);
      }
  
@@ -5735,20 +5710,12 @@ index 087089095..cd35f58fc 100644
 -      await payments.cancelGroupSubscriptionForUser(user, group);
 -    }
 -
+-    if (group.hasNotCancelled()) await group.updateGroupPlan(true);
++    if (group.hasNotCancelled()) await group.updateGroupPlan();
      res.respond(200, {});
    },
  };
-@@ -893,8 +801,7 @@ api.removeGroupMember = {
-     if (isInGroup) {
-       group.memberCount -= 1;
-       if (group.hasNotCancelled())  {
--        await group.updateGroupPlan(true);
--        await payments.cancelGroupSubscriptionForUser(member, group, true);
-+        await group.updateGroupPlan();
-       }
- 
-       if (group.quest && group.quest.leader === member._id) {
-@@ -910,12 +817,6 @@ api.removeGroupMember = {
+@@ -906,12 +812,6 @@ api.removeGroupMember = {
          removeFromArray(member.guilds, group._id);
        }
        if (isInGroup === 'party') {
@@ -5761,7 +5728,17 @@ index 087089095..cd35f58fc 100644
          member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
        }
  
-@@ -1021,19 +922,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -942,8 +842,7 @@ api.removeGroupMember = {
+     ]);
+ 
+     if (isInGroup && group.hasNotCancelled())  {
+-      await group.updateGroupPlan(true);
+-      await payments.cancelGroupSubscriptionForUser(member, group, true);
++      await group.updateGroupPlan();
+     }
+ 
+     res.respond(200, {});
+@@ -1023,19 +922,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -5781,7 +5758,7 @@ index 087089095..cd35f58fc 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1049,8 +937,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1051,8 +937,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},
@@ -5790,7 +5767,7 @@ index 087089095..cd35f58fc 100644
    ]})
      .select({_id: true, 'preferences.emailNotifications': true})
      .exec();
-@@ -1213,16 +1099,6 @@ api.inviteToGroup = {
+@@ -1215,16 +1099,6 @@ api.inviteToGroup = {
        results.push(...emailResults);
      }
  
@@ -6071,7 +6048,7 @@ index 11f45a225..414afb277 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 763caeab2..baef566c1 100644
+index 651033919..ca25dc316 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -21,12 +21,10 @@ import {
@@ -6999,7 +6976,7 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index f1612af3e..a8a8bbc93 100644
+index bc6a8c29e..0b70764e5 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -24,16 +24,12 @@ import {
@@ -7066,7 +7043,7 @@ index f1612af3e..a8a8bbc93 100644
      }
  
      // Send webhooks
-@@ -1246,12 +1225,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1250,12 +1229,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      promises.push(User.update({_id: user._id}, {$pull: {guilds: group._id}}).exec());
    } else {
      promises.push(User.update({_id: user._id}, {$set: {party: {}}}).exec());
@@ -7079,7 +7056,7 @@ index f1612af3e..a8a8bbc93 100644
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  
-@@ -1510,7 +1483,7 @@ schema.methods.hasNotCancelled = function hasNotCancelled () {
+@@ -1514,7 +1487,7 @@ schema.methods.hasNotCancelled = function hasNotCancelled () {
    return this.isSubscribed() && !plan.dateTerminated;
  };
  
@@ -7088,7 +7065,7 @@ index f1612af3e..a8a8bbc93 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1519,12 +1492,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1523,12 +1496,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;

@@ -13,7 +13,7 @@ Date:   Sat Jun 23 14:25:29 2018 +0200
     Filename: buy-gems-via-menu.patch
 
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 67f5631f9..138380147 100644
+index 51b9bb64b..1744b5d35 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -58,7 +58,7 @@ div
@@ -34,7 +34,7 @@ index 67f5631f9..138380147 100644
  export default {
    components: {
      userDropdown,
-@@ -400,11 +402,10 @@ export default {
+@@ -401,11 +403,10 @@ export default {
      openPartyModal () {
        this.$root.$emit('bv::show::modal', 'create-party-modal');
      },

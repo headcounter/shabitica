@@ -68,10 +68,10 @@ index 458ad12b4..1ac892e94 100644
          'QUEST_INVITATION', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
          'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
 diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
-index d05667cfe..ec2c43053 100644
+index 1ef1d89e6..0d711ba53 100644
 --- a/website/client/components/notifications.vue
 +++ b/website/client/components/notifications.vue
-@@ -96,7 +96,6 @@ import guide from 'client/mixins/guide';
+@@ -95,7 +95,6 @@ import guide from 'client/mixins/guide';
  
  import yesterdailyModal from './yesterdailyModal';
  import welcomeModal from './achievements/welcome';
@@ -79,7 +79,7 @@ index d05667cfe..ec2c43053 100644
  import death from './achievements/death';
  import lowHealth from './achievements/lowHealth';
  import levelUp from './achievements/levelUp';
-@@ -130,7 +129,6 @@ export default {
+@@ -129,7 +128,6 @@ export default {
      joinedChallenge,
      invitedFriend,
      welcomeModal,
@@ -87,7 +87,7 @@ index d05667cfe..ec2c43053 100644
      death,
      lowHealth,
      levelUp,
-@@ -427,10 +425,6 @@ export default {
+@@ -421,10 +419,6 @@ export default {
      async handleUserNotifications (after) {
        if (this.$store.state.isRunningYesterdailies) return;
  
@@ -189,7 +189,7 @@ index d87fd8862..640f45648 100644
    let result = await axios.post('/api/v4/user/rebirth');
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 371445f32..cbfe7be6f 100644
+index 3e3be07cc..b6ec76bbe 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -199,7 +199,6 @@ let updatablePaths = [

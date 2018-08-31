@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:02 2018 +0200
     Filename: strip-dependencies.patch
 
 diff --git a/package.json b/package.json
-index 567eba535..368186da2 100644
+index bfdfdc167..6a77fc49f 100644
 --- a/package.json
 +++ b/package.json
-@@ -4,14 +4,9 @@
-   "version": "4.58.0",
+@@ -4,14 +4,10 @@
+   "version": "4.59.2",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@slack/client": "^3.8.1",
@@ -22,13 +22,13 @@ index 567eba535..368186da2 100644
 -    "amazon-payments": "^0.2.7",
 -    "amplitude": "^3.5.0",
      "apidoc": "^0.17.5",
+     "apn": "^2.2.0",
      "autoprefixer": "^8.5.0",
 -    "aws-sdk": "^2.239.1",
--    "apn": "^2.2.0",
      "axios": "^0.18.0",
      "axios-progress-bar": "^1.2.0",
      "babel-core": "^6.26.3",
-@@ -50,10 +45,8 @@
+@@ -50,10 +46,8 @@
      "gulp-nodemon": "^2.2.1",
      "gulp.spritesmith": "^6.9.0",
      "habitica-markdown": "^1.3.0",
@@ -39,7 +39,7 @@ index 567eba535..368186da2 100644
      "intro.js": "^2.9.3",
      "jquery": ">=3.0.0",
      "js2xmlparser": "^3.0.0",
-@@ -65,31 +58,23 @@
+@@ -65,32 +59,23 @@
      "mongoose": "^5.1.2",
      "morgan": "^1.7.0",
      "nconf": "^0.10.0",
@@ -61,6 +61,7 @@ index 567eba535..368186da2 100644
      "rimraf": "^2.4.3",
      "sass-loader": "^7.0.0",
      "shelljs": "^0.8.2",
+-    "smartbanner.js": "^1.9.1",
 -    "stripe": "^5.9.0",
      "superagent": "^3.8.3",
      "svg-inline-loader": "^0.8.0",
@@ -71,7 +72,7 @@ index 567eba535..368186da2 100644
      "update": "^0.7.4",
      "upgrade": "^1.1.0",
      "url-loader": "^1.0.0",
-@@ -108,7 +93,6 @@
+@@ -109,7 +94,6 @@
      "webpack": "^3.12.0",
      "webpack-merge": "^4.0.0",
      "winston": "^2.4.2",
@@ -79,7 +80,7 @@ index 567eba535..368186da2 100644
      "xml2js": "^0.4.4"
    },
    "private": true,
-@@ -190,7 +174,6 @@
+@@ -191,7 +175,6 @@
      "webpack-hot-middleware": "^2.22.2"
    },
    "optionalDependencies": {
