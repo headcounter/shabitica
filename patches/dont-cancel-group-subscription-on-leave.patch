@@ -10,10 +10,10 @@ Date:   Mon Apr 2 04:50:12 2018 +0200
     Filename: dont-cancel-group-subscription-on-leave.patch
 
 diff --git a/test/api/unit/models/group.test.js b/test/api/unit/models/group.test.js
-index 30bdda62d..982a8be8a 100644
+index 30bdda62d..588df1adf 100644
 --- a/test/api/unit/models/group.test.js
 +++ b/test/api/unit/models/group.test.js
-@@ -834,10 +834,13 @@ describe('Group Model', () => {
+@@ -834,10 +834,14 @@ describe('Group Model', () => {
        });
  
        it('deletes a private group when the last member leaves and a subscription is active', async () => {
@@ -22,13 +22,14 @@ index 30bdda62d..982a8be8a 100644
 +        await party.save();
  
          await party.leave(participatingMember);
++        await party.leave(sleepingParticipatingMember);
 +        await party.leave(questLeader);
 +        await party.leave(nonParticipatingMember);
 +        await party.leave(undecidedMember);
  
          party = await Group.findOne({_id: party._id});
          expect(party).to.not.exist;
-@@ -846,6 +849,7 @@ describe('Group Model', () => {
+@@ -846,6 +850,7 @@ describe('Group Model', () => {
        it('allows a leader to leave a group with an active subscription', async () => {
          party.memberCount = 2;
          party.purchased.plan.customerId = '110002222333';
