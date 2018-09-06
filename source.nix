@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.59.2";
+  version = "4.60.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1i6b9fh3p5ry0dgzs17r5lp0g0ig614aydpqpfp16swkc23jkda1";
+    sha256 = "01lrkwlczcal6z0i2av11wy13ifbscf46y744cdv7v84vfsw78sm";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -406,6 +406,7 @@ stdenv.mkDerivation rec {
       | grep -v 'user/schema\.js: *pushNotifications:' \
       | grep -v 'user/methods\.js:schema\.statics\.pushNotification' \
       | grep -v 'api-v3/groups.js:.*payments' \
+      | grep -v 'backgrounds.js:.*[Aa]pple.\?[Pp]icking' \
       || :)"
 
     if [ -n "$extServicesWithoutFalsePositives" ]; then
