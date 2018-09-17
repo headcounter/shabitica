@@ -97,58 +97,85 @@ index 1326dea81..c04eb6738 100644
        notEnoughCurrency () {
          return !this.enoughCurrency(this.getPriceClass(), this.item.value * this.selectedAmountToBuy);
        },
-diff --git a/website/client/components/shops/market/index.vue b/website/client/components/shops/market/index.vue
-index c075987fe..c69ba6b87 100644
---- a/website/client/components/shops/market/index.vue
-+++ b/website/client/components/shops/market/index.vue
-@@ -145,7 +145,6 @@
-             @click="itemSelected(item)"
-           )
-             span(slot="popoverContent")
--              strong(v-if='item.key === "gem" && gemsLeft === 0') {{ $t('maxBuyGems') }}
-               h4.popover-content-title {{ item.text }}
-             template(slot="itemBadge", slot-scope="ctx")
-               countBadge(
-@@ -153,8 +152,6 @@
-                 :show="userItems[item.purchaseType][item.key] != 0",
-                 :count="userItems[item.purchaseType][item.key] || 0"
-               )
--              .badge.badge-pill.badge-purple.gems-left(v-if='item.key === "gem"')
--                | {{ gemsLeft }}
-               span.badge.badge-pill.badge-item.badge-svg(
-                 :class="{'item-selected-badge': ctx.item.pinned, 'hide': !ctx.item.pinned}",
-                 @click.prevent.stop="togglePinned(ctx.item)"
-@@ -332,11 +329,6 @@
-     }
-   }
+diff --git a/website/client/components/shops/market/categoryItem.vue b/website/client/components/shops/market/categoryItem.vue
+index bdd4546ca..50a453312 100644
+--- a/website/client/components/shops/market/categoryItem.vue
++++ b/website/client/components/shops/market/categoryItem.vue
+@@ -5,8 +5,6 @@ div
+     :show="true",
+     :count="count"
+   )
+-  .badge.badge-pill.badge-purple.gems-left(v-if='item.key === "gem"')
+-    | {{ gemsLeft }}
+   span.badge.badge-pill.badge-item.badge-svg(
+     :class="{'item-selected-badge': item.pinned, 'hide': !item.pinned}",
+     @click.prevent.stop="togglePinned(item)"
+@@ -19,7 +17,6 @@ import { mapState } from 'client/libs/store';
+ import CountBadge from 'client/components/ui/countBadge';
  
--  .market .gems-left {
--    right: -.5em;
--    top: -.5em;
--  }
--
-   @media only screen and (max-width: 768px) {
-     .featuredItems .content {
-       display: none !important;
-@@ -382,7 +374,6 @@
-   import getItemInfo from 'common/script/libs/getItemInfo';
-   import isPinned from 'common/script/libs/isPinned';
-   import shops from 'common/script/libs/shops';
+ import svgPin from 'assets/svg/pin.svg';
+-import planGemLimits from 'common/script/libs/planGemLimits';
+ import pinUtils from '../../../mixins/pinUtils';
+ 
+ export default {
+@@ -43,10 +40,6 @@ export default {
+     count () {
+       return this.userItems[this.item.purchaseType][this.item.key];
+     },
+-    gemsLeft () {
+-      if (!this.user.purchased.plan) return 0;
+-      return planGemLimits.convCap + this.user.purchased.plan.consecutive.gemCapExtra - this.user.purchased.plan.gemsBought;
+-    },
+   },
+ };
+ </script>
+diff --git a/website/client/components/shops/market/categoryRow.vue b/website/client/components/shops/market/categoryRow.vue
+index 9f4b96acd..d9b8ec7a6 100644
+--- a/website/client/components/shops/market/categoryRow.vue
++++ b/website/client/components/shops/market/categoryRow.vue
+@@ -7,7 +7,6 @@ div.items
+     :popoverPosition="'top'",
+     @click="itemSelected(item)")
+     span(slot="popoverContent")
+-      strong(v-if='item.key === "gem" && gemsLeft === 0') {{ $t('maxBuyGems') }}
+       h4.popover-content-title {{ item.text }}
+     template(slot="itemBadge", slot-scope="ctx")
+       category-item(:item='ctx.item')
+@@ -16,7 +15,6 @@ div.items
+ <script>
+   import { mapState } from 'client/libs/store';
+   import pinUtils from 'client/mixins/pinUtils';
 -  import planGemLimits from 'common/script/libs/planGemLimits';
  
-   import _filter from 'lodash/filter';
-   import _sortBy from 'lodash/sortBy';
-@@ -572,10 +563,6 @@ export default {
-           },
-         ];
-       },
+   import ShopItem from '../shopItem';
+   import CategoryItem from './categoryItem';
+@@ -39,10 +37,6 @@ div.items
+         userItems: 'user.data.items',
+         userStats: 'user.data.stats',
+       }),
 -      gemsLeft () {
 -        if (!this.user.purchased.plan) return 0;
 -        return planGemLimits.convCap + this.user.purchased.plan.consecutive.gemCapExtra - this.user.purchased.plan.gemsBought;
 -      },
-     },
-     methods: {
-       getClassName (classType) {
+       sortedMarketItems () {
+         let result = _map(this.category.items, (e) => {
+           return {
+diff --git a/website/client/components/shops/market/index.vue b/website/client/components/shops/market/index.vue
+index ccf3f432d..c1e78024d 100644
+--- a/website/client/components/shops/market/index.vue
++++ b/website/client/components/shops/market/index.vue
+@@ -116,11 +116,6 @@
+       }
+     }
+   }
+-
+-  .market .gems-left {
+-    right: -.5em;
+-    top: -.5em;
+-  }
+ </style>
+ 
+ 
 diff --git a/website/common/script/ops/buy/buyGem.js b/website/common/script/ops/buy/buyGem.js
 index 81fa5be9d..08dc3ee2f 100644
 --- a/website/common/script/ops/buy/buyGem.js

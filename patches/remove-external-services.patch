@@ -153,7 +153,7 @@ index 260d57989..63df05213 100644
 +    }
  }
 diff --git a/test/api/unit/libs/cron.test.js b/test/api/unit/libs/cron.test.js
-index a6ff60ea1..1d373a98c 100644
+index 101069f4e..45db2b9bf 100644
 --- a/test/api/unit/libs/cron.test.js
 +++ b/test/api/unit/libs/cron.test.js
 @@ -6,7 +6,6 @@ import { recoverCron, cron } from '../../../../website/server/libs/cron';
@@ -1177,25 +1177,7 @@ index a6ff60ea1..1d373a98c 100644
  
        expect(user.notifications.length - notifsBefore2).to.equal(0);
        expect(user.notifications[0].type).to.not.equal('CRON');
-@@ -1591,7 +1576,7 @@ describe('cron', () => {
-     });
- 
-     xit('does not clear pms under 200', () => {
--      cron({user, tasksByType, daysMissed, analytics});
-+      cron({user, tasksByType, daysMissed});
-       expect(user.inbox.messages[lastMessageId]).to.exist;
-     });
- 
-@@ -1606,7 +1591,7 @@ describe('cron', () => {
-         flagCount: 0,
-       };
- 
--      cron({user, tasksByType, daysMissed, analytics});
-+      cron({user, tasksByType, daysMissed});
- 
-       expect(user.inbox.messages[messageId]).to.not.exist;
-     });
-@@ -1614,23 +1599,23 @@ describe('cron', () => {
+@@ -1593,23 +1578,23 @@ describe('cron', () => {
  
    describe('login incentives', () => {
      it('increments incentive counter each cron', () => {
@@ -1225,7 +1207,7 @@ index a6ff60ea1..1d373a98c 100644
  
        let filteredNotifications = user.notifications.filter(n => n.type === 'LOGIN_INCENTIVE');
  
-@@ -1639,18 +1624,18 @@ describe('cron', () => {
+@@ -1618,18 +1603,18 @@ describe('cron', () => {
  
      it('increments loginIncentives by 1 even if days are skipped in between', () => {
        daysMissed = 3;
@@ -1247,7 +1229,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(1);
        expect(user.items.gear.owned.armor_special_bardRobes).to.eql(true);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1658,7 +1643,7 @@ describe('cron', () => {
+@@ -1637,7 +1622,7 @@ describe('cron', () => {
  
      it('awards user incentive backgrounds if login incentive is 2', () => {
        user.loginIncentives = 1;
@@ -1256,7 +1238,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(2);
        expect(user.purchased.background.blue).to.eql(true);
        expect(user.purchased.background.green).to.eql(true);
-@@ -1670,7 +1655,7 @@ describe('cron', () => {
+@@ -1649,7 +1634,7 @@ describe('cron', () => {
  
      it('awards user Bard Hat if login incentive is 3', () => {
        user.loginIncentives = 2;
@@ -1265,7 +1247,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(3);
        expect(user.items.gear.owned.head_special_bardHat).to.eql(true);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1678,7 +1663,7 @@ describe('cron', () => {
+@@ -1657,7 +1642,7 @@ describe('cron', () => {
  
      it('awards user RoyalPurple Hatching Potion if login incentive is 4', () => {
        user.loginIncentives = 3;
@@ -1274,7 +1256,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(4);
        expect(user.items.hatchingPotions.RoyalPurple).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1686,7 +1671,7 @@ describe('cron', () => {
+@@ -1665,7 +1650,7 @@ describe('cron', () => {
  
      it('awards user a Chocolate, Meat and Pink Contton Candy if login incentive is 5', () => {
        user.loginIncentives = 4;
@@ -1283,7 +1265,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(5);
  
        expect(user.items.food.Chocolate).to.eql(1);
-@@ -1698,7 +1683,7 @@ describe('cron', () => {
+@@ -1677,7 +1662,7 @@ describe('cron', () => {
  
      it('awards user moon quest if login incentive is 7', () => {
        user.loginIncentives = 6;
@@ -1292,7 +1274,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(7);
        expect(user.items.quests.moon1).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1706,7 +1691,7 @@ describe('cron', () => {
+@@ -1685,7 +1670,7 @@ describe('cron', () => {
  
      it('awards user RoyalPurple Hatching Potion if login incentive is 10', () => {
        user.loginIncentives = 9;
@@ -1301,7 +1283,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(10);
        expect(user.items.hatchingPotions.RoyalPurple).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1714,7 +1699,7 @@ describe('cron', () => {
+@@ -1693,7 +1678,7 @@ describe('cron', () => {
  
      it('awards user a Strawberry, Patato and Blue Contton Candy if login incentive is 14', () => {
        user.loginIncentives = 13;
@@ -1310,7 +1292,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(14);
  
        expect(user.items.food.Strawberry).to.eql(1);
-@@ -1726,7 +1711,7 @@ describe('cron', () => {
+@@ -1705,7 +1690,7 @@ describe('cron', () => {
  
      it('awards user a bard instrument if login incentive is 18', () => {
        user.loginIncentives = 17;
@@ -1319,7 +1301,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(18);
        expect(user.items.gear.owned.weapon_special_bardInstrument).to.eql(true);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1734,7 +1719,7 @@ describe('cron', () => {
+@@ -1713,7 +1698,7 @@ describe('cron', () => {
  
      it('awards user second moon quest if login incentive is 22', () => {
        user.loginIncentives = 21;
@@ -1328,7 +1310,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(22);
        expect(user.items.quests.moon2).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1742,7 +1727,7 @@ describe('cron', () => {
+@@ -1721,7 +1706,7 @@ describe('cron', () => {
  
      it('awards user a RoyalPurple hatching potion if login incentive is 26', () => {
        user.loginIncentives = 25;
@@ -1337,7 +1319,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(26);
        expect(user.items.hatchingPotions.RoyalPurple).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1750,7 +1735,7 @@ describe('cron', () => {
+@@ -1729,7 +1714,7 @@ describe('cron', () => {
  
      it('awards user Fish, Milk, Rotten Meat and Honey if login incentive is 30', () => {
        user.loginIncentives = 29;
@@ -1346,7 +1328,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(30);
  
        expect(user.items.food.Fish).to.eql(1);
-@@ -1763,7 +1748,7 @@ describe('cron', () => {
+@@ -1742,7 +1727,7 @@ describe('cron', () => {
  
      it('awards user a RoyalPurple hatching potion if login incentive is 35', () => {
        user.loginIncentives = 34;
@@ -1355,7 +1337,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(35);
        expect(user.items.hatchingPotions.RoyalPurple).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1771,7 +1756,7 @@ describe('cron', () => {
+@@ -1750,7 +1735,7 @@ describe('cron', () => {
  
      it('awards user the third moon quest if login incentive is 40', () => {
        user.loginIncentives = 39;
@@ -1364,7 +1346,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(40);
        expect(user.items.quests.moon3).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1779,7 +1764,7 @@ describe('cron', () => {
+@@ -1758,7 +1743,7 @@ describe('cron', () => {
  
      it('awards user a RoyalPurple hatching potion if login incentive is 45', () => {
        user.loginIncentives = 44;
@@ -1373,7 +1355,7 @@ index a6ff60ea1..1d373a98c 100644
        expect(user.loginIncentives).to.eql(45);
        expect(user.items.hatchingPotions.RoyalPurple).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
-@@ -1787,7 +1772,7 @@ describe('cron', () => {
+@@ -1766,7 +1751,7 @@ describe('cron', () => {
  
      it('awards user a saddle if login incentive is 50', () => {
        user.loginIncentives = 49;
@@ -2385,7 +2367,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 295ff26a7..7b9cbff74 100644
+index 7002bdb5c..c24438ddc 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,7 +10,6 @@ div
@@ -2396,7 +2378,7 @@ index 295ff26a7..7b9cbff74 100644
      snackbars
      router-view(v-if="!isUserLoggedIn || isStaticPage")
      template(v-else)
-@@ -183,12 +182,9 @@ import AppFooter from './components/appFooter';
+@@ -182,12 +181,9 @@ import AppFooter from './components/appFooter';
  import notificationsDisplay from './components/notifications';
  import snackbars from './components/snackbars/notifications';
  import { mapState } from 'client/libs/store';
@@ -2409,7 +2391,7 @@ index 295ff26a7..7b9cbff74 100644
  import spellsMixin from 'client/mixins/spells';
  
  import svgClose from 'assets/svg/close.svg';
-@@ -207,7 +203,6 @@ export default {
+@@ -206,7 +202,6 @@ export default {
      snackbars,
      BuyModal,
      SelectMembersModal,
@@ -2417,7 +2399,7 @@ index 295ff26a7..7b9cbff74 100644
      bannedAccountModal,
    },
    data () {
-@@ -415,11 +410,6 @@ export default {
+@@ -414,11 +409,6 @@ export default {
        document.title = title;
      });
  
@@ -2429,7 +2411,7 @@ index 295ff26a7..7b9cbff74 100644
      if (this.isUserLoggedIn && !this.isStaticPage) {
        // Load the user and the user tasks
        Promise.all([
-@@ -427,8 +417,6 @@ export default {
+@@ -426,8 +416,6 @@ export default {
          this.$store.dispatch('tasks:fetchUserTasks'),
        ]).then(() => {
          this.$store.state.isUserLoaded = true;
@@ -2438,7 +2420,7 @@ index 295ff26a7..7b9cbff74 100644
  
          this.hideLoadingScreen();
  
-@@ -440,8 +428,6 @@ export default {
+@@ -439,8 +427,6 @@ export default {
          }
  
          this.$nextTick(() => {
@@ -2447,7 +2429,7 @@ index 295ff26a7..7b9cbff74 100644
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -490,8 +476,6 @@ export default {
+@@ -489,8 +475,6 @@ export default {
          if (data.fromRoot) return;
          const modalStack = this.$store.state.modalStack;
  
@@ -2456,7 +2438,7 @@ index 295ff26a7..7b9cbff74 100644
          // Add new modal to the stack
          const prev = modalStack[modalStack.length - 1];
          const prevId = prev ? prev.modalId : undefined;
-@@ -555,18 +539,6 @@ export default {
+@@ -554,18 +538,6 @@ export default {
  
        return true;
      },
@@ -2472,10 +2454,10 @@ index 295ff26a7..7b9cbff74 100644
 -        });
 -      }
 -    },
-     resetItemToBuy ($event) {
-       // @TODO: Do we need this? I think selecting a new item
-       // overwrites. @negue might know
-@@ -659,4 +631,3 @@ export default {
+     itemSelected (item) {
+       this.selectedItemToBuy = item;
+     },
+@@ -651,4 +623,3 @@ export default {
  <style src="assets/css/sprites/spritesmith-main-21.css"></style>
  <style src="assets/css/sprites/spritesmith-main-22.css"></style>
  <style src="assets/css/sprites.css"></style>
@@ -3036,7 +3018,7 @@ index 42d168baf..1c760270c 100644
        this.$router.push('/party');
      },
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index 6f63f305b..516840fff 100644
+index 80dc1b054..fee391143 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
 @@ -259,7 +259,6 @@ import extend from 'lodash/extend';
@@ -3047,7 +3029,7 @@ index 6f63f305b..516840fff 100644
  import membersModal from './membersModal';
  import startQuestModal from './startQuestModal';
  import questDetailsModal from './questDetailsModal';
-@@ -505,13 +504,6 @@ export default {
+@@ -500,13 +499,6 @@ export default {
        await this.$store.dispatch('guilds:join', {groupId: this.group._id, type: 'guild'});
      },
      clickLeave () {
@@ -3061,7 +3043,7 @@ index 6f63f305b..516840fff 100644
        // @TODO: Get challenges and ask to keep or remove
        if (!confirm('Are you sure you want to leave?')) return;
        let keep = true;
-@@ -528,7 +520,6 @@ export default {
+@@ -523,7 +515,6 @@ export default {
  
        if (this.isParty) {
          data.type = 'party';
@@ -4175,10 +4157,10 @@ index 3f2599850..1507bd288 100644
  
    return response.data.data;
 diff --git a/website/client/store/actions/quests.js b/website/client/store/actions/quests.js
-index ddd88cc30..ef7fd0dd5 100644
+index cff15fa53..ef7fd0dd5 100644
 --- a/website/client/store/actions/quests.js
 +++ b/website/client/store/actions/quests.js
-@@ -1,25 +1,9 @@
+@@ -1,26 +1,9 @@
  import axios from 'axios';
 -import * as Analytics from 'client/libs/analytics';
  
@@ -4187,15 +4169,16 @@ index ddd88cc30..ef7fd0dd5 100644
  
  export async function sendAction (store, payload) {
 -  // @TODO: Maybe move this to server
--  let partyData = {
--    partyID: store.state.user.data.party._id,
--    partySize: store.state.partyMembers.data.length,
--  };
--
+-  let partyData = {};
 -  if (store.state.party && store.state.party.data) {
 -    partyData = {
 -      partyID: store.state.party.data._id,
 -      partySize: store.state.party.data.memberCount,
+-    };
+-  } else {
+-    partyData = {
+-      partyID: store.state.user.data.party._id,
+-      partySize: store.state.partyMembers.data.length,
 -    };
 -  }
 -
@@ -4217,16 +4200,17 @@ index b47fce6de..4f33daf2a 100644
        credentials: isUserLoggedIn ? {
          API_ID: AUTH_SETTINGS.auth.apiId,
 diff --git a/website/common/errors/apiErrorMessages.js b/website/common/errors/apiErrorMessages.js
-index 4857be3d5..6e96f87f3 100644
+index a1550fdda..4b3dbc574 100644
 --- a/website/common/errors/apiErrorMessages.js
 +++ b/website/common/errors/apiErrorMessages.js
-@@ -20,6 +20,5 @@ module.exports = {
+@@ -20,7 +20,6 @@ module.exports = {
  
    missingPaymentId: 'Missing "req.query.paymentId"',
    missingCustomerId: 'Missing "req.query.customerId"',
 -  missingPaypalBlock: 'Missing "req.session.paypalBlock"',
    missingSubKey: 'Missing "req.query.sub"',
- };
+ 
+   messageIdRequired: '\"messageId\" must be a valid UUID.",',
 diff --git a/website/common/script/constants.js b/website/common/script/constants.js
 index 1bc330846..ff0e5f1d6 100644
 --- a/website/common/script/constants.js
@@ -5426,7 +5410,7 @@ index 760a9f584..07f2d05f7 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 7419949ea..b318aae6d 100644
+index fe705d3a1..b64b63f3c 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -204,16 +204,6 @@ api.createChallenge = {
@@ -5785,7 +5769,7 @@ index f386cba45..7235b5a09 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index d0c8f2e8b..fc8b465dc 100644
+index ac6c85583..0fb05e756 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,6 @@ import {
@@ -5796,7 +5780,7 @@ index d0c8f2e8b..fc8b465dc 100644
  import { achievements } from '../../../../website/common/';
  
  let api = {};
-@@ -497,19 +496,6 @@ api.sendPrivateMessage = {
+@@ -625,19 +624,6 @@ api.sendPrivateMessage = {
        ]);
      }
  
@@ -5816,7 +5800,7 @@ index d0c8f2e8b..fc8b465dc 100644
      res.respond(200, { message: newMessage });
    },
  };
-@@ -587,15 +573,6 @@ api.transferGems = {
+@@ -715,15 +701,6 @@ api.transferGems = {
          {name: 'X_GEMS_GIFTED', content: gemAmount},
        ]);
      }
@@ -6936,7 +6920,7 @@ index adf74bcbd..67f63b364 100644
    '/email',
    '/qr-code',
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
-index a094814fe..0bc407526 100644
+index bb1888892..0f421906e 100644
 --- a/website/server/models/challenge.js
 +++ b/website/server/models/challenge.js
 @@ -10,7 +10,6 @@ import {
@@ -6947,7 +6931,7 @@ index a094814fe..0bc407526 100644
  import { TaskQueue } from 'cwait';
  import { syncableAttrs, setNextDue } from '../libs/taskManager';
  
-@@ -324,14 +323,6 @@ schema.methods.closeChal = async function closeChal (broken = {}) {
+@@ -330,14 +329,6 @@ schema.methods.closeChal = async function closeChal (broken = {}) {
          {name: 'CHALLENGE_NAME', content: challenge.name},
        ]);
      }
@@ -7107,7 +7091,7 @@ index e3994c8e0..c6f8a4a17 100644
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index fe5beb8ed..6fc41f06f 100644
+index 3c1a035ea..5551c12c8 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -11,9 +11,6 @@ import {defaults, map, flatten, flow, compact, uniq, partialRight} from 'lodash'
@@ -7120,7 +7104,7 @@ index fe5beb8ed..6fc41f06f 100644
  
  const daysSince = common.daysSince;
  
-@@ -210,7 +207,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -211,7 +208,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
   * @param  options
   * @param  options.user  The user object who is purchasing
   * @param  options.groupId  The id of the group purchasing a subscription
@@ -7129,7 +7113,7 @@ index fe5beb8ed..6fc41f06f 100644
   * @param  options.cancellationReason  A text string to control sending an email
   *
   * @return a Promise from api.cancelSubscription()
-@@ -221,18 +218,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -222,18 +219,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
  // In summary, currently is is best practice to use this method to cancel a user subscription, rather than calling the
  // payment helper.
  schema.methods.cancelSubscription = async function cancelSubscription (options = {}) {

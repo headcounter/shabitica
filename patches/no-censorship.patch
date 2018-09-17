@@ -258,7 +258,7 @@ index cce17bc43..684e36973 100644
      let { group, members } = await createAndPopulateGroup({
        groupDetails: {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 7b9cbff74..97b57cb4e 100644
+index c24438ddc..2ecd45403 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -269,7 +269,7 @@ index 7b9cbff74..97b57cb4e 100644
      snackbars
      router-view(v-if="!isUserLoggedIn || isStaticPage")
      template(v-else)
-@@ -188,7 +187,6 @@ import notifications from 'client/mixins/notifications';
+@@ -187,7 +186,6 @@ import notifications from 'client/mixins/notifications';
  import spellsMixin from 'client/mixins/spells';
  
  import svgClose from 'assets/svg/close.svg';
@@ -277,7 +277,7 @@ index 7b9cbff74..97b57cb4e 100644
  
  const COMMUNITY_MANAGER_EMAIL = process.env.EMAILS.COMMUNITY_MANAGER_EMAIL; // eslint-disable-line
  
-@@ -203,7 +201,6 @@ export default {
+@@ -202,7 +200,6 @@ export default {
      snackbars,
      BuyModal,
      SelectMembersModal,
@@ -285,7 +285,7 @@ index 7b9cbff74..97b57cb4e 100644
    },
    data () {
      return {
-@@ -296,8 +293,6 @@ export default {
+@@ -295,8 +292,6 @@ export default {
        return response;
      }, (error) => {
        if (error.response.status >= 400) {
@@ -294,7 +294,7 @@ index 7b9cbff74..97b57cb4e 100644
          // Don't show errors from getting user details. These users have delete their account,
          // but their chat message still exists.
          let configExists = Boolean(error.response) && Boolean(error.response.config);
-@@ -451,25 +446,6 @@ export default {
+@@ -450,25 +445,6 @@ export default {
      if (loadingScreen) document.body.removeChild(loadingScreen);
    },
    methods: {

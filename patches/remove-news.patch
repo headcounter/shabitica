@@ -68,7 +68,7 @@ index 458ad12b4..1ac892e94 100644
          'QUEST_INVITATION', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
          'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
 diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
-index 1ef1d89e6..0d711ba53 100644
+index 96d097ac9..13d41945a 100644
 --- a/website/client/components/notifications.vue
 +++ b/website/client/components/notifications.vue
 @@ -95,7 +95,6 @@ import guide from 'client/mixins/guide';
@@ -87,7 +87,7 @@ index 1ef1d89e6..0d711ba53 100644
      death,
      lowHealth,
      levelUp,
-@@ -421,10 +419,6 @@ export default {
+@@ -424,10 +422,6 @@ export default {
      async handleUserNotifications (after) {
        if (this.$store.state.isRunningYesterdailies) return;
  
