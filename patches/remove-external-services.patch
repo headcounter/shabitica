@@ -152,6 +152,50 @@ index 260d57989..63df05213 100644
 -    "MIGRATION_CONNECT_STRING": "mongodb://localhost:27017/habitrpg?auto_reconnect=true"
 +    }
  }
+diff --git a/gulp/taskHelper.js b/gulp/taskHelper.js
+index 270573ba7..75d2ae759 100644
+--- a/gulp/taskHelper.js
++++ b/gulp/taskHelper.js
+@@ -2,7 +2,6 @@ import { exec }                   from 'child_process';
+ import psTree                     from 'ps-tree';
+ import nconf                      from 'nconf';
+ import net                        from 'net';
+-import { post }                   from 'superagent';
+ import { sync as glob }           from 'glob';
+ import Mocha                      from 'mocha';
+ import { resolve }                from 'path';
+@@ -79,31 +78,6 @@ export function pipe (child) {
+   });
+ }
+ 
+-/*
+- * Post request to notify configured slack channel
+- */
+-export function postToSlack (msg, config = {}) {
+-  let slackUrl = nconf.get('SLACK_URL');
+-
+-  if (!slackUrl) {
+-    console.error('No slack post url specified. Your message was:'); // eslint-disable-line no-console
+-    console.log(msg); // eslint-disable-line no-console
+-
+-    return;
+-  }
+-
+-  post(slackUrl)
+-    .send({
+-      channel: `#${config.channel || '#general'}`,
+-      username: config.username || 'gulp task',
+-      text: msg,
+-      icon_emoji: `:${config.emoji || 'gulp'}:`, // eslint-disable-line camelcase
+-    })
+-    .end((err) => {
+-      if (err) console.error('Unable to post to slack', err); // eslint-disable-line no-console
+-    });
+-}
+-
+ export function runMochaTests (files, server, cb) {
+   require('../test/helpers/globals.helper'); // eslint-disable-line global-require
+ 
 diff --git a/test/api/unit/libs/cron.test.js b/test/api/unit/libs/cron.test.js
 index 101069f4e..45db2b9bf 100644
 --- a/test/api/unit/libs/cron.test.js
@@ -5817,7 +5861,7 @@ index ac6c85583..0fb05e756 100644
      res.respond(200, {});
    },
 diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
-index b579cc386..6ed16d973 100644
+index b579cc386..a96a7db64 100644
 --- a/website/server/controllers/api-v3/quests.js
 +++ b/website/server/controllers/api-v3/quests.js
 @@ -1,6 +1,5 @@
@@ -5840,7 +5884,7 @@ index b579cc386..6ed16d973 100644
        _id: {$ne: user._id},
      })
 -      .select('auth.facebook auth.google auth.local preferences.emailNotifications profile.name pushDevices')
-+      .select('auth.local preferences.emailNotifications profile.name pushDevices')
++      .select('auth.local preferences.emailNotifications profile.name')
        .exec();
  
      group.markModified('quest');
@@ -5936,7 +5980,7 @@ index b579cc386..6ed16d973 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index 39a12edf5..feed970e6 100644
+index 39a12edf5..bdb31248e 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -23,7 +23,6 @@ import {
@@ -5982,7 +6026,15 @@ index 39a12edf5..feed970e6 100644
    },
  };
  
-@@ -619,7 +597,7 @@ api.scoreTask = {
+@@ -588,7 +566,6 @@ api.scoreTask = {
+       let fields = requiredGroupFields.concat(' managers');
+       let group = await Group.getGroup({user, groupId: task.group.id, fields});
+ 
+-      // @TODO: we can use the User.pushNotification function because we need to ensure notifications are translated
+       let managerIds = Object.keys(group.managers);
+       managerIds.push(group.leader);
+       let managers = await User.find({_id: managerIds}, 'notifications preferences').exec(); // Use this method so we can get access to notifications
+@@ -619,7 +596,7 @@ api.scoreTask = {
  
      let [delta] = common.ops.scoreTask({task, user, direction}, req);
      // Drop system (don't run on the client, as it would only be discarded since ops are sent to the API, not the results)
@@ -5991,7 +6043,7 @@ index 39a12edf5..feed970e6 100644
  
      // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
      // TODO move to common code?
-@@ -694,18 +672,6 @@ api.scoreTask = {
+@@ -694,18 +671,6 @@ api.scoreTask = {
          logger.error(e);
        }
      }
@@ -6032,7 +6084,7 @@ index 11f45a225..414afb277 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 651033919..ca25dc316 100644
+index 651033919..37c37056c 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -21,12 +21,10 @@ import {
@@ -6048,7 +6100,15 @@ index 651033919..ca25dc316 100644
  
  /**
   * @apiDefine UserNotFound
-@@ -409,8 +407,6 @@ api.deleteUser = {
+@@ -56,7 +54,6 @@ let api = {};
+  * Preferences (user selected prefs)
+  * Profile (name, photo url, blurb)
+  * Purchased (includes purchase history, gem purchased items, plans)
+- * PushDevices (identifiers for mobile devices authorized)
+  * Stats (standard RPG stats, class, buffs, xp, etc..)
+  * Tags
+  * TasksOrder (list of all ids for dailys, habits, rewards and todos)
+@@ -409,8 +406,6 @@ api.deleteUser = {
      if (user.auth.local.hashed_password && user.auth.local.email) {
        let isValidPassword = await passwordUtils.compare(user, password);
        if (!isValidPassword) throw new NotAuthorized(res.t('wrongPassword'));
@@ -6057,7 +6117,7 @@ index 651033919..ca25dc316 100644
      }
  
      let feedback = req.body.feedback;
-@@ -447,14 +443,6 @@ api.deleteUser = {
+@@ -447,14 +442,6 @@ api.deleteUser = {
        ]);
      }
  
@@ -6072,7 +6132,7 @@ index 651033919..ca25dc316 100644
      res.respond(200, {});
    },
  };
-@@ -496,8 +484,6 @@ api.getUserAnonymized = {
+@@ -496,8 +483,6 @@ api.getUserAnonymized = {
      delete user.apiToken;
      if (user.auth) {
        delete user.auth.local;
@@ -6081,7 +6141,7 @@ index 651033919..ca25dc316 100644
      }
      delete user.newMessages;
      delete user.profile;
-@@ -562,7 +548,7 @@ api.sleep = {
+@@ -562,7 +547,7 @@ api.sleep = {
    url: '/user/sleep',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6090,7 +6150,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...sleepRes);
    },
-@@ -624,7 +610,7 @@ api.buy = {
+@@ -624,7 +609,7 @@ api.buy = {
      let quantity = 1;
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
@@ -6099,7 +6159,7 @@ index 651033919..ca25dc316 100644
  
      await user.save();
      res.respond(200, ...buyRes);
-@@ -674,7 +660,7 @@ api.buyGear = {
+@@ -674,7 +659,7 @@ api.buyGear = {
    url: '/user/buy-gear/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6108,7 +6168,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...buyGearRes);
    },
-@@ -718,7 +704,7 @@ api.buyArmoire = {
+@@ -718,7 +703,7 @@ api.buyArmoire = {
      let user = res.locals.user;
      req.type = 'armoire';
      req.params.key = 'armoire';
@@ -6117,7 +6177,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...buyArmoireResponse);
    },
-@@ -760,7 +746,7 @@ api.buyHealthPotion = {
+@@ -760,7 +745,7 @@ api.buyHealthPotion = {
      let user = res.locals.user;
      req.type = 'potion';
      req.params.key = 'potion';
@@ -6126,7 +6186,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...buyHealthPotionResponse);
    },
-@@ -803,7 +789,7 @@ api.buyMysterySet = {
+@@ -803,7 +788,7 @@ api.buyMysterySet = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'mystery';
@@ -6135,7 +6195,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...buyMysterySetRes);
    },
-@@ -848,7 +834,7 @@ api.buyQuest = {
+@@ -848,7 +833,7 @@ api.buyQuest = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'quest';
@@ -6144,7 +6204,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...buyQuestRes);
    },
-@@ -1072,7 +1058,7 @@ api.changeClass = {
+@@ -1072,7 +1057,7 @@ api.changeClass = {
    url: '/user/change-class',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6153,7 +6213,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...changeClassRes);
    },
-@@ -1145,7 +1131,7 @@ api.purchase = {
+@@ -1145,7 +1130,7 @@ api.purchase = {
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
  
@@ -6162,7 +6222,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...purchaseRes);
    },
-@@ -1178,7 +1164,7 @@ api.userPurchaseHourglass = {
+@@ -1178,7 +1163,7 @@ api.userPurchaseHourglass = {
    url: '/user/purchase-hourglass/:type/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6171,7 +6231,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...purchaseHourglassRes);
    },
-@@ -1276,7 +1262,7 @@ api.userOpenMysteryItem = {
+@@ -1276,7 +1261,7 @@ api.userOpenMysteryItem = {
    url: '/user/open-mystery-item',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6180,7 +6240,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...openMysteryItemRes);
    },
-@@ -1310,7 +1296,7 @@ api.userReleasePets = {
+@@ -1310,7 +1295,7 @@ api.userReleasePets = {
    url: '/user/release-pets',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6189,7 +6249,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...releasePetsRes);
    },
-@@ -1361,7 +1347,7 @@ api.userReleaseBoth = {
+@@ -1361,7 +1346,7 @@ api.userReleaseBoth = {
    url: '/user/release-both',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6198,7 +6258,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...releaseBothRes);
    },
-@@ -1399,7 +1385,7 @@ api.userReleaseMounts = {
+@@ -1399,7 +1384,7 @@ api.userReleaseMounts = {
    url: '/user/release-mounts',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6207,7 +6267,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...releaseMountsRes);
    },
-@@ -1476,7 +1462,7 @@ api.userUnlock = {
+@@ -1476,7 +1461,7 @@ api.userUnlock = {
    url: '/user/unlock',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6216,7 +6276,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...unlockRes);
    },
-@@ -1504,7 +1490,7 @@ api.userRevive = {
+@@ -1504,7 +1489,7 @@ api.userRevive = {
    url: '/user/revive',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6225,7 +6285,7 @@ index 651033919..ca25dc316 100644
      await user.save();
      res.respond(200, ...reviveRes);
    },
-@@ -1552,7 +1538,7 @@ api.userRebirth = {
+@@ -1552,7 +1537,7 @@ api.userRebirth = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      }).exec();
  
@@ -6234,7 +6294,7 @@ index 651033919..ca25dc316 100644
  
      let toSave = tasks.map(task => task.save());
  
-@@ -1712,7 +1698,7 @@ api.userReroll = {
+@@ -1712,7 +1697,7 @@ api.userReroll = {
        ...Tasks.taskIsGroupOrChallengeQuery,
      };
      let tasks = await Tasks.Task.find(query).exec();
@@ -6243,7 +6303,7 @@ index 651033919..ca25dc316 100644
  
      let promises = tasks.map(task => task.save());
      promises.push(user.save());
-@@ -1765,12 +1751,6 @@ api.userReset = {
+@@ -1765,12 +1750,6 @@ api.userReset = {
        user.save(),
      ]);
  
@@ -6960,7 +7020,7 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index bc6a8c29e..0b70764e5 100644
+index bc6a8c29e..2e6f26ecd 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -24,16 +24,12 @@ import {
@@ -6998,7 +7058,7 @@ index bc6a8c29e..0b70764e5 100644
      _id: {$in: Object.keys(this.quest.members)},
    })
 -    .select('party.quest party._id items.quests auth preferences.emailNotifications preferences.pushNotifications pushDevices profile.name webhooks')
-+    .select('party.quest party._id items.quests auth preferences.emailNotifications pushDevices profile.name webhooks')
++    .select('party.quest party._id items.quests auth preferences.emailNotifications profile.name webhooks')
      .lean()
      .exec()
      .then(partyMembers => {
@@ -7133,10 +7193,18 @@ index 3c1a035ea..5551c12c8 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 81d7386d5..588049197 100644
+index 81d7386d5..bd9bc981f 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
-@@ -25,12 +25,6 @@ let schema = new Schema({
+@@ -3,7 +3,6 @@ import shared from '../../../common';
+ import _ from 'lodash';
+ import validator from 'validator';
+ import { schema as TagSchema } from '../tag';
+-import { schema as PushDeviceSchema } from '../pushDevice';
+ import { schema as WebhookSchema } from '../webhook';
+ import {
+   schema as UserNotificationSchema,
+@@ -25,12 +24,6 @@ let schema = new Schema({
  
    auth: {
      blocked: Boolean,
@@ -7149,3 +7217,29 @@ index 81d7386d5..588049197 100644
      local: {
        email: {
          type: String,
+@@ -481,17 +474,6 @@ let schema = new Schema({
+       weeklyRecaps: {type: Boolean, default: true},
+       onboarding: {type: Boolean, default: true},
+     },
+-    pushNotifications: {
+-      unsubscribeFromAll: {type: Boolean, default: false},
+-      newPM: {type: Boolean, default: true},
+-      wonChallenge: {type: Boolean, default: true},
+-      giftedGems: {type: Boolean, default: true},
+-      giftedSubscription: {type: Boolean, default: true},
+-      invitedParty: {type: Boolean, default: true},
+-      invitedGuild: {type: Boolean, default: true},
+-      questStarted: {type: Boolean, default: true},
+-      invitedQuest: {type: Boolean, default: true},
+-    },
+     suppressModals: {
+       levelUp: {type: Boolean, default: false},
+       hatchPet: {type: Boolean, default: false},
+@@ -574,7 +556,6 @@ let schema = new Schema({
+   extra: {type: Schema.Types.Mixed, default: () => {
+     return {};
+   }},
+-  pushDevices: [PushDeviceSchema],
+   _ABtests: {type: Schema.Types.Mixed, default: () => {
+     return {};
+   }},

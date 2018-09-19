@@ -97,7 +97,7 @@ index eab444222..9eb8e166b 100644
 -  });
  });
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index dba379691..7b1909d1c 100644
+index ea73d7107..264747338 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -10,7 +10,6 @@ import { model as Chat } from './chat';

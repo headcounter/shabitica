@@ -123,10 +123,10 @@ index 7db093af0..5e5e77a78 100644
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
          { name: 'groupPlans', path: 'group-plans', component: GroupPlansPage, meta: {requiresLogin: false}},
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 92d3ba6d7..0e89cb9ca 100644
+index 75280e934..c19ad4e8a 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -196,7 +196,6 @@ let updatablePaths = [
+@@ -195,7 +195,6 @@ let updatablePaths = [
    'flags.showTour',
    'flags.tour',
    'flags.tutorial',
@@ -135,10 +135,10 @@ index 92d3ba6d7..0e89cb9ca 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index ebd367be7..af4213bf8 100644
+index d3977f772..1ec8dd7f3 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
-@@ -216,7 +216,6 @@ let schema = new Schema({
+@@ -215,7 +215,6 @@ let schema = new Schema({
      // Used to enable weekly recap emails as users login
      lastWeeklyRecapDiscriminator: Boolean,
      onboardingEmailsPhase: String, // Keep track of the latest onboarding email sent

@@ -1,13 +1,20 @@
 Author: aszlig <aszlig@nix.build>
 Date:   Sat Mar 31 00:52:13 2018 +0200
 
-    Remove links to Trello and official Guilds
+    Remove links to irrelevant external sites
     
-    The Trello tickets are about submitting bugs and asking for features and
-    are also linking to their Trello account which we can't control.
+    There are a lot of links to external sites that are really not relevant
+    when running a self-hosted instance. For example the Chrome plugin,
+    Beeminder etc. are only referring to habitica.com so users can't use it
+    as-is.
     
-    Those official Guilds however simply do not exist on our instance and
-    thus will result in a broken link, so let's get rid of them as well.
+    Then there are a few references to Trello tickets, which is also
+    something we can't easily change or adapt to our fork, so we get rid of
+    them.
+    
+    The official instance also has a range of guilds that are referenced
+    within the source. These guilds do not exist on a self-hosted instance,
+    so let's remove them as well.
     
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: remove-external-links.patch
@@ -70,6 +77,38 @@ index b9eccf5c9..51b9bb64b 100644
              a.topbar-dropdown-item.dropdown-item(href="http://habitica.wikia.com/wiki/Contributing_to_Habitica", target='_blank') {{ $t('contributing') }}
              a.topbar-dropdown-item.dropdown-item(href="http://habitica.wikia.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
        .currency-tray.form-inline
+diff --git a/website/client/components/settings/api.vue b/website/client/components/settings/api.vue
+index 5b6627da1..5f049623f 100644
+--- a/website/client/components/settings/api.vue
++++ b/website/client/components/settings/api.vue
+@@ -15,27 +15,6 @@
+         pre.prettyprint.ml-4.mb-0(v-if="showApiToken") {{apiToken}}
+       p(v-html='$t("APITokenWarning", { hrefTechAssistanceEmail })')
+ 
+-    .section
+-      h3 {{ $t('thirdPartyApps') }}
+-      ul
+-        li
+-          a(target='_blank' href='https://www.beeminder.com/habitica') {{ $t('beeminder') }}
+-          br
+-          | {{ $t('beeminderDesc') }}
+-        li
+-          a(target='_blank' href='https://chrome.google.com/webstore/detail/habitrpg-chat-client/hidkdfgonpoaiannijofifhjidbnilbb') {{ $t('chromeChatExtension') }}
+-          br
+-          | {{ $t('chromeChatExtensionDesc') }}
+-        li
+-          a(target='_blank' :href='`https://oldgods.net/habitica/habitrpg_user_data_display.html?uuid=` + user._id') {{ $t('dataTool') }}
+-          br
+-          | {{ $t('dataToolDesc') }}
+-        li(v-html="$t('otherExtensions')")
+-          br
+-          | {{ $t('otherDesc') }}
+-
+-      hr
+-
+   .col-6
+     h2 {{ $t('webhooks') }}
+     table.table.table-striped
 diff --git a/website/client/components/static/faq.vue b/website/client/components/static/faq.vue
 index e2ce08aa0..5000dac10 100644
 --- a/website/client/components/static/faq.vue
@@ -131,10 +170,10 @@ index d37607d63..a5eca5b78 100644
    }
  }
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index af4213bf8..d985e58f6 100644
+index 1ec8dd7f3..1a0525972 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
-@@ -110,7 +110,6 @@ let schema = new Schema({
+@@ -109,7 +109,6 @@ let schema = new Schema({
    },
  
    contributor: {

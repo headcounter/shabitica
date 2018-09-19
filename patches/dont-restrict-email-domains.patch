@@ -55,10 +55,10 @@ index 6bc46c2d5..bd108aa72 100644
        let username = generateRandomUserName();
        let email = `${username}@example.com`;
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 588049197..ebd367be7 100644
+index bd9bc981f..d3977f772 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
-@@ -14,8 +14,6 @@ import {
+@@ -13,8 +13,6 @@ import {
  
  const Schema = mongoose.Schema;
  
@@ -67,7 +67,7 @@ index 588049197..ebd367be7 100644
  // User schema definition
  let schema = new Schema({
    apiToken: {
-@@ -31,15 +29,6 @@ let schema = new Schema({
+@@ -30,15 +28,6 @@ let schema = new Schema({
          validate: [{
            validator: validator.isEmail,
            message: shared.i18n.t('invalidEmail'),

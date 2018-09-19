@@ -186,8 +186,14 @@ stdenv.mkDerivation rec {
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
 
   # Kill off files we do not want to have, most of them because they redirect
-  # to external services:
+  # to external services. Note that shell patterns such as *, ? and [] are
+  # allowed here.
   filesToKill = [
+    ".github"
+    "Dockerfile"
+    "database_reports"
+    "gulp/gulp-transifex-test.js"
+    "package-lock.json"
     "scripts/paypalBillingSetup.js"
     "test/api/unit/libs/analyticsService.test.js"
     "test/api/unit/libs/payments/amazon"
@@ -202,9 +208,12 @@ stdenv.mkDerivation rec {
     "test/api/v3/integration/news/GET-news.test.js"
     "test/api/v3/integration/news/POST-news_tell_me_later.test.js"
     "test/api/v3/integration/payments"
+    "test/api/v3/integration/user/*-user_push_device.test.js"
     "test/api/v3/integration/user/auth/DELETE-user_auth_social_network.test.js"
     "test/api/v3/integration/user/auth/POST-user_auth_pusher.test.js"
     "test/api/v3/integration/user/auth/POST-user_auth_social.test.js"
+    "website/client/assets/svg/amazonpay.svg"
+    "website/client/assets/svg/credit-card.svg"
     "website/client/components/achievements/newStuff.vue"
     "website/client/components/auth/authForm.vue"
     "website/client/components/bannedAccountModal.vue"
@@ -227,8 +236,11 @@ stdenv.mkDerivation rec {
     "website/client/libs/payments.js"
     "website/client/libs/staffList.js"
     "website/client/mixins/payments.js"
+    "website/common/locales/*/communityguidelines.json"
+    "website/common/locales/*/merch.json"
     "website/server/controllers/api-v3/iap.js"
     "website/server/controllers/api-v3/news.js"
+    "website/server/controllers/api-v3/pushNotifications.js"
     "website/server/controllers/top-level/payments/amazon.js"
     "website/server/controllers/top-level/payments/iap.js"
     "website/server/controllers/top-level/payments/paypal.js"
@@ -251,14 +263,13 @@ stdenv.mkDerivation rec {
     "website/server/libs/slack.js"
     "website/server/middlewares/analytics.js"
     "website/server/middlewares/static.js"
+    "website/server/models/pushDevice.js"
     "website/static/emails"
     "website/static/merch"
     "website/static/presskit"
   ];
 
-  prePatch = lib.concatMapStrings (path: ''
-    rm -r ${lib.escapeShellArg path}
-  '') filesToKill;
+  prePatch = lib.concatMapStringsSep "\n" (path: "rm -r ${path}") filesToKill;
 
   # We don't want to have anything in the code referencing any of these
   # words/regexes:
@@ -293,6 +304,7 @@ stdenv.mkDerivation rec {
     "play.*api"
     "play.*store"
     "press.\\?kit"
+    "pushdev"
     "pushnotif"
     "showbailey"
     "slack"
@@ -344,28 +356,33 @@ stdenv.mkDerivation rec {
     "updateStats([^,]*,[^,)]*,"
   ];
 
+  # Certain paths trigger false-positives on canaries, so let's exclude them
+  # from the canary search. Shell patterns can be used here and behave like
+  # documented in the -path option of find(1). Note that * will also match
+  # slashes.
   excludedCanaryPaths = let
     mkExclude = path: "-path ${lib.escapeShellArg "./${path}"} -prune";
   in lib.concatMapStringsSep " -o " mkExclude [
-    ".github"
-    "Dockerfile"
-    "database_reports"
-    "gulp"
+    "*.mp3"
+    "*.ogg"
+    "*.png"
     "migrations"
-    "node_modules"
-    "package-lock.json"
     "test"
-    "website/README.md"
-    "website/client/assets"
-    "website/client/components/settings/api.vue"
-    "website/client/components/static/privacy.vue"
-    "website/client/components/static/terms.vue"
-    "website/common/locales"
-    "website/raw_sprites"
-    "website/server/libs/bannedWords.js"
-    "website/static/audio"
-    "website/static/merch"
-    "website/static/presskit"
+    "website/common/locales" # TODO: Remove me!
+  ];
+
+  # These patterns apply to the result of the grep for 'disallowedCanaries' and
+  # filter out everything that we'd consider false-positive. Be sure to be very
+  # selective about the patterns here and include parts of the file names if
+  # possible.
+  excludedCanaryPatterns = lib.concatStringsSep "\\|" [
+    "[Aa]pple.\\?[Pp]icking"
+    "api-v3/groups\\.js:.*await payments.createSubscription"
+    "api-v3/groups\\.js:import payments from"
+    "static/privacy\\.vue:.*doesn't use any analytics"
+    "static/terms\\.vue:.*such as Google Chrome"
+    "top-level/pages\\.js:// All.*except.*api and payments"
+    "user/methods\\.js:schema\\.statics\\.pushNotification ="
   ];
 
   # Change all habitica.com URLs to use BASE_URL and all hardcoded email
@@ -391,22 +408,17 @@ stdenv.mkDerivation rec {
 
     echo "checking whether we have external services in the code..." >&2
     extServices="$(
-      eval find . $excludedCanaryPaths -o -type f \
-        -exec grep -Hi '"$disallowedCanaries"' {} + || :
+      eval "find . $excludedCanaryPaths -o -type f \
+        -exec grep -Hi \"\$disallowedCanaries\" {} +" || :
     )"
 
     # Hardcode version in the server (see hardcoded-server-version.patch).
     substituteInPlace website/server/middlewares/response.js \
       --subst-var-by HABITICA_VERSION "$version"
 
-    extServicesWithoutFalsePositives="$(echo "$extServices" \
-      | grep -v 'top-level/pages\.js:// All' \
-      | grep -v 'api-v3/tasks\.js: *//.*pushNotif' \
-      | grep -v 'user/schema\.js: *pushNotifications:' \
-      | grep -v 'user/methods\.js:schema\.statics\.pushNotification' \
-      | grep -v 'api-v3/groups.js:.*payments' \
-      | grep -v 'backgrounds.js:.*[Aa]pple.\?[Pp]icking' \
-      || :)"
+    extServicesWithoutFalsePositives="$(
+      echo "$extServices" | grep -v "$excludedCanaryPatterns" || :
+    )"
 
     if [ -n "$extServicesWithoutFalsePositives" ]; then
       echo "FATAL: We still have occurences of external services here:" >&2
