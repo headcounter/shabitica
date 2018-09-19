@@ -10,10 +10,10 @@ Date:   Thu May 3 06:29:02 2018 +0200
     Filename: systemd-notify.patch
 
 diff --git a/package.json b/package.json
-index 3b16ae34c..dd221272d 100644
+index 6d9b993e3..1be564518 100644
 --- a/package.json
 +++ b/package.json
-@@ -69,6 +69,7 @@
+@@ -68,6 +68,7 @@
      "pug": "^2.0.3",
      "rimraf": "^2.4.3",
      "sass-loader": "^7.0.0",

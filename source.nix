@@ -354,7 +354,6 @@ stdenv.mkDerivation rec {
     "migrations"
     "node_modules"
     "package-lock.json"
-    "package.json"
     "test"
     "website/README.md"
     "website/client/assets"
