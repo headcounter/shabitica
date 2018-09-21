@@ -55,7 +55,7 @@ index 6bc46c2d5..bd108aa72 100644
        let username = generateRandomUserName();
        let email = `${username}@example.com`;
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index bd9bc981f..d3977f772 100644
+index a0d36e99e..ec57eebbb 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -13,8 +13,6 @@ import {

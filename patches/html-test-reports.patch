@@ -63,7 +63,7 @@ index 000000000..347c750ab
 +  "mochaSimpleHtmlReporterReporterOptions": {"output": "test-report.html"}
 +}
 diff --git a/package.json b/package.json
-index 10a9c3412..4943e7378 100644
+index 10215d501..1be5a4380 100644
 --- a/package.json
 +++ b/package.json
 @@ -110,9 +110,9 @@
@@ -80,11 +80,11 @@ index 10a9c3412..4943e7378 100644
      "coverage": "COVERAGE=true mocha --require register-handlers.js --reporter html-cov > coverage.html; open coverage.html",
      "sprites": "gulp sprites:compile",
 @@ -161,6 +161,8 @@
-     "karma-webpack": "^3.0.0",
+     "karma-webpack": "^3.0.5",
      "lcov-result-merger": "^3.0.0",
      "mocha": "^5.1.1",
 +    "mocha-multi-reporters": "^1.1.7",
 +    "mocha-simple-html-reporter": "^1.1.0",
      "monk": "^6.0.6",
      "nightwatch": "^0.9.21",
-     "puppeteer": "^1.4.0",
+     "puppeteer": "^1.8.0",

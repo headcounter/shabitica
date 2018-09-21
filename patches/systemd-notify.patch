@@ -10,13 +10,13 @@ Date:   Thu May 3 06:29:02 2018 +0200
     Filename: systemd-notify.patch
 
 diff --git a/package.json b/package.json
-index 6d9b993e3..1be564518 100644
+index 1e9feba97..7446b6746 100644
 --- a/package.json
 +++ b/package.json
 @@ -68,6 +68,7 @@
      "pug": "^2.0.3",
      "rimraf": "^2.4.3",
-     "sass-loader": "^7.0.0",
+     "sass-loader": "^7.1.0",
 +    "sd-notify": "^2.3.0",
      "shelljs": "^0.8.2",
      "superagent": "^3.8.3",

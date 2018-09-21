@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.60.4";
+  version = "4.61.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0l5ayl6372b6pxq0zzw2g5f8bpvg9milfj2blhby2f4bx9h663cr";
+    sha256 = "13agpv6h85sm00sh05mmaghh2mxb07lmsmg594a8cw0p5gwqljxw";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -181,6 +181,9 @@ stdenv.mkDerivation rec {
 
     # Use image proxy for profile photos.
     patches/profile-photo-imageproxy.patch
+
+    # Building of bcrypt package fail because it doesn't bundle node-pre-gyp.
+    patches/fix-bcrypt-dependency.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

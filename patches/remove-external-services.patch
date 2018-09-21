@@ -6980,7 +6980,7 @@ index adf74bcbd..67f63b364 100644
    '/email',
    '/qr-code',
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
-index bb1888892..0f421906e 100644
+index da9436f79..0095aea65 100644
 --- a/website/server/models/challenge.js
 +++ b/website/server/models/challenge.js
 @@ -10,7 +10,6 @@ import {
@@ -7020,7 +7020,7 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index bc6a8c29e..2e6f26ecd 100644
+index b06c5bf2c..5bb0be734 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -24,16 +24,12 @@ import {
@@ -7123,12 +7123,12 @@ index bc6a8c29e..2e6f26ecd 100644
  
  export let model = mongoose.model('Group', schema);
 diff --git a/website/server/models/subscriptionPlan.js b/website/server/models/subscriptionPlan.js
-index e3994c8e0..c6f8a4a17 100644
+index da20c4a25..5521c6449 100644
 --- a/website/server/models/subscriptionPlan.js
 +++ b/website/server/models/subscriptionPlan.js
 @@ -7,18 +7,18 @@ export let schema = new mongoose.Schema({
    subscriptionId: String,
-   owner: {type: String, ref: 'User', validate: [validator.isUUID, 'Invalid uuid.']},
+   owner: {type: String, ref: 'User', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']},
    quantity: {type: Number, default: 1},
 -  paymentMethod: String, // enum: ['Paypal', 'Stripe', 'Gift', 'Amazon Payments', 'Google', '']}
 -  customerId: String, // Billing Agreement Id in case of Amazon Payments
@@ -7193,7 +7193,7 @@ index 3c1a035ea..5551c12c8 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 81d7386d5..bd9bc981f 100644
+index 1082f5911..a0d36e99e 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -3,7 +3,6 @@ import shared from '../../../common';
