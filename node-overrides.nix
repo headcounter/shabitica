@@ -47,8 +47,6 @@
 
   main.pageres = drv: {
     nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ phantomjs2 ];
-    # XXX: For PhantomJS 2 with NixOS 17.09:
-    QT_QPA_PLATFORM = "offscreen";
   };
 
   main.sd-notify = drv: {
