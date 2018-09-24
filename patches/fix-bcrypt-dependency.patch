@@ -14,7 +14,7 @@ Date:   Fri Sep 21 21:31:07 2018 +0200
     Filename: fix-bcrypt-dependency.patch
 
 diff --git a/package.json b/package.json
-index 7446b6746..f786c506e 100644
+index 464b5507a..fe4ff939c 100644
 --- a/package.json
 +++ b/package.json
 @@ -21,7 +21,7 @@

@@ -4068,30 +4068,27 @@ index 4dd3d9be8..d213fb545 100644
      },
    },
 diff --git a/website/client/router.js b/website/client/router.js
-index 6368e3974..242cb646f 100644
+index a7c53c18f..242cb646f 100644
 --- a/website/client/router.js
 +++ b/website/client/router.js
 @@ -1,7 +1,6 @@
  import Vue from 'vue';
  import VueRouter from 'vue-router';
  import getStore from 'client/store';
--// import * as Analytics from 'client/libs/analytics';
+-import * as Analytics from 'client/libs/analytics';
  
  // import EmptyView from './components/emptyView';
  
-@@ -344,16 +343,6 @@ router.beforeEach(function routerGuard (to, from, next) {
+@@ -344,13 +343,6 @@ router.beforeEach(function routerGuard (to, from, next) {
      });
    }
  
--
--  /*
 -  Analytics.track({
 -    hitType: 'pageview',
 -    eventCategory: 'navigation',
 -    eventAction: 'navigate',
 -    page: to.name || to.path,
 -  });
--  */
 -
    next();
  });
