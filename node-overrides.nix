@@ -1,4 +1,4 @@
-{ lib, fetchurl, substituteAll
+{ super, lib, fetchurl, substituteAll, runCommand
 , libsass, libjpeg, optipng, gifsicle, pkgconfig, phantomjs2, systemd
 , chromedriver, chromium
 
@@ -53,6 +53,41 @@
 
   main.sd-notify = drv: {
     buildInputs = (drv.buildInputs or []) ++ [ systemd ];
+  };
+
+  # We don't want to load fonts from Google, but instead ship it ourselves.
+  main.apidoc = drv: {
+    googleFonts = runCommand "google-fonts" {
+      name = "google-fonts";
+      outputHashAlgo = "sha256";
+      outputHash = "0wv0g891lniv1jghwrlzzf2yllfay7snqk1w916la09nsh6a6l69";
+      outputHashMode = "recursive";
+      nativeBuildInputs = [ super.extra.google-fonts-offline ];
+
+      fontURL = "https://fonts.googleapis.com/css?family="
+              + "Source+Code+Pro%7CSource+Sans+Pro:n4,n6,n7";
+    } ''
+      mkdir "$out"
+      cd "$out"
+      goofoffline outCss=fonts.css "$fontURL"
+    '';
+
+    preRebuild = (drv.preRebuild or "") + ''
+      rm template/vendor/webfontloader.js
+      rm template/vendor/prettify/run_prettify.js
+
+      cp -t template/fonts "$googleFonts/fonts/"*
+      sed -i -e '/<\/head>/i \
+        <link rel="stylesheet" href="fonts/fonts.css" media="all">
+      ' template/index.html
+
+      sed -i -e '/function \+loadGoogleFontCss.*{/ {
+        :l; N; /^\( *\).*\n\1[^ ]/!bl; d
+      }' -e '/loadGoogleFontCss/d' -e '/webfontloader/d' template/main.js
+
+      echo "checking whether anything refers to Google URLs..." >&2
+      ! grep -ri '//[^ ]*google' template
+    '';
   };
 
   main.gulp-imagemin = drv: {

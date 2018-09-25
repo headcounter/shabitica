@@ -9,18 +9,23 @@ let
     '';
   });
 
-  mkOverrides = cat: packages: let
-    withoutLocks = lib.mapAttrs (lib.const removeLock) packages;
-    overrides = (callPackage ./node-overrides.nix {}).${cat} or {};
+  super = let
+    removeLocks = lib.mapAttrs (lib.const removeLock);
+  in lib.mapAttrs (lib.const removeLocks) (import ./generated {
+    inherit (stdenv) system;
+    inherit pkgs;
+  });
+
+  mkOverrides = cat: pkgset: let
+    overrides = (callPackage ./node-overrides.nix {
+      inherit super;
+    }).${cat} or {};
     mkOverride = olist: let
       listLen = lib.length olist;
       override = (lib.head olist).overrideAttrs (lib.last olist);
     in if listLen == 1 then lib.head olist
        else if listLen == 2 then override
        else throw "Unknown override list with length ${toString listLen}.";
-  in lib.zipAttrsWith (lib.const mkOverride) [ withoutLocks overrides ];
+  in lib.zipAttrsWith (lib.const mkOverride) [ pkgset overrides ];
 
-in lib.mapAttrs mkOverrides (import ./generated {
-  inherit (stdenv) system;
-  inherit pkgs;
-})
+in lib.mapAttrs mkOverrides super
