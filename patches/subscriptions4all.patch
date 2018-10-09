@@ -224,26 +224,26 @@ index b1d374925..9160226c5 100644
    });
  
    describe('bulk purchasing', () => {
-diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 07f2d05f7..23142097a 100644
---- a/website/server/controllers/api-v3/auth.js
-+++ b/website/server/controllers/api-v3/auth.js
-@@ -139,6 +139,13 @@ api.registerLocal = {
-           passwordHashMethod: 'bcrypt',
-         },
+diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
+index 38079a871..c0546a83b 100644
+--- a/website/server/libs/auth/index.js
++++ b/website/server/libs/auth/index.js
+@@ -121,6 +121,13 @@ async function registerLocal (req, res, { isV3 = false }) {
+         passwordHashMethod: 'bcrypt',
        },
-+      'purchased.plan': {
-+        planId: 'basic',
-+        customerId: 'habitrpg',
-+        dateCreated: new Date(),
-+        dateUpdated: new Date(),
-+        gemsBought: 0,
-+      },
-       preferences: {
-         language: req.language,
-       },
+     },
++    'purchased.plan': {
++      planId: 'basic',
++      customerId: 'habitrpg',
++      dateCreated: new Date(),
++      dateUpdated: new Date(),
++      gemsBought: 0,
++    },
+     preferences: {
+       language: req.language,
+     },
 diff --git a/website/server/libs/payments/groupPayments.js b/website/server/libs/payments/groupPayments.js
-index 94f1d71c1..3df10cf9f 100644
+index 2e37e98d4..d615d4326 100644
 --- a/website/server/libs/payments/groupPayments.js
 +++ b/website/server/libs/payments/groupPayments.js
 @@ -10,8 +10,6 @@ import {
@@ -304,18 +304,18 @@ index 4da6587e5..ca7d23a19 100644
  
    let now = moment();
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 5551c12c8..9d3f3b861 100644
+index 2a943440a..30f383adf 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
-@@ -10,7 +10,6 @@ import {
- import {defaults, map, flatten, flow, compact, uniq, partialRight} from 'lodash';
- import {model as UserNotification} from '../userNotification';
+@@ -15,7 +15,6 @@ import {
+ import { defaults, map, flatten, flow, compact, uniq, partialRight } from 'lodash';
+ import { model as UserNotification } from '../userNotification';
  import schema from './schema';
 -import payments from '../../libs/payments/payments';
+ import * as inboxLib from '../../libs/inbox';
  
  const daysSince = common.daysSince;
- 
-@@ -202,27 +201,6 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -227,27 +226,6 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
    return userStatsJSON;
  };
  
@@ -343,7 +343,7 @@ index 5551c12c8..9d3f3b861 100644
  schema.methods.daysUserHasMissed = function daysUserHasMissed (now, req = {}) {
    // If the user's timezone has changed (due to travel or daylight savings),
    // cron can be triggered twice in one day, so we check for that and use
-@@ -328,18 +306,7 @@ async function getUserGroupData (user) {
+@@ -353,18 +331,7 @@ async function getUserGroupData (user) {
  // User is allowed to buy gems if no group has `leaderOnly.getGems` === true or if
  // its the group leader
  schema.methods.canGetGems = async function canObtainGems () {

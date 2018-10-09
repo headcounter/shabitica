@@ -122,11 +122,11 @@ index 7db093af0..5e5e77a78 100644
          { name: 'faq', path: 'faq', component: FAQPage, meta: {requiresLogin: false}},
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
          { name: 'groupPlans', path: 'group-plans', component: GroupPlansPage, meta: {requiresLogin: false}},
-diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 75280e934..c19ad4e8a 100644
---- a/website/server/controllers/api-v3/user.js
-+++ b/website/server/controllers/api-v3/user.js
-@@ -195,7 +195,6 @@ let updatablePaths = [
+diff --git a/website/server/libs/user/index.js b/website/server/libs/user/index.js
+index 5737a9ed6..c4321265c 100644
+--- a/website/server/libs/user/index.js
++++ b/website/server/libs/user/index.js
+@@ -39,7 +39,6 @@ const updatablePaths = [
    'flags.showTour',
    'flags.tour',
    'flags.tutorial',
@@ -135,7 +135,7 @@ index 75280e934..c19ad4e8a 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index ec57eebbb..50773cb89 100644
+index 20d693957..48790282d 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -215,7 +215,6 @@ let schema = new Schema({

@@ -18,7 +18,7 @@ Date:   Tue Mar 27 05:37:18 2018 +0200
     Filename: one-admin-mailaddr.patch
 
 diff --git a/config.json.example b/config.json.example
-index 2c7e1f0e2..43f22cc9b 100644
+index 641f208ed..06b9dcdae 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -15,11 +15,5 @@
@@ -133,22 +133,20 @@ index cf04a520a..5bfbbd7ef 100644
  };
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index a87a1075c..9bacbd469 100644
+index 215631cdb..3bd9cb634 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
-@@ -20,8 +20,8 @@ import { send as sendEmail } from '../../libs/email';
- import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs/password';
+@@ -21,7 +21,7 @@ import {
+ } from '../../libs/auth';
  
  const BASE_URL = nconf.get('BASE_URL');
 -const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
--const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
 +const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
-+const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
- const USERNAME_LENGTH_MIN = 1;
- const USERNAME_LENGTH_MAX = 20;
+ 
+ let api = {};
  
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 7d819f83c..fa548bea4 100644
+index becd3d2ee..4695993f9 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -18,7 +18,7 @@ import { getMatchesByWordArray } from '../../libs/stringUtils';
@@ -161,7 +159,7 @@ index 7d819f83c..fa548bea4 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 7235b5a09..141a3f0f3 100644
+index 51a87b9c8..bebfe20f2 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,7 +22,7 @@ import common from '../../../common';
@@ -174,10 +172,10 @@ index 7235b5a09..141a3f0f3 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 37c37056c..75280e934 100644
+index aacb92b6d..0d7dd4dc7 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -24,7 +24,7 @@ import {
+@@ -23,7 +23,7 @@ import * as userLib from '../../libs/user';
  import nconf from 'nconf';
  import get from 'lodash/get';
  
@@ -186,12 +184,25 @@ index 37c37056c..75280e934 100644
  
  /**
   * @apiDefine UserNotFound
+diff --git a/website/server/libs/auth/utils.js b/website/server/libs/auth/utils.js
+index f1b7be3a1..f5785583c 100644
+--- a/website/server/libs/auth/utils.js
++++ b/website/server/libs/auth/utils.js
+@@ -2,7 +2,7 @@ import nconf from 'nconf';
+ 
+ import { NotAuthorized } from '../errors';
+ 
+-const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
++const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
+ 
+ function loginRes (user, req, res) {
+   if (user.auth.blocked) throw new NotAuthorized(res.t('accountSuspended', {communityManagerEmail: COMMUNITY_MANAGER_EMAIL, userId: user._id}));
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index 48de1142c..30eeef4e2 100644
+index 8ae2d5a46..0acfbd979 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
 @@ -11,8 +11,8 @@ import { model as Group } from '../../models/group';
- import { model as Chat } from '../../models/chat';
+ import { chatModel as Chat } from '../../models/message';
  import apiError from '../apiError';
  
 -const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');

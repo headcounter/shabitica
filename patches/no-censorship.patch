@@ -258,7 +258,7 @@ index cce17bc43..684e36973 100644
      let { group, members } = await createAndPopulateGroup({
        groupDetails: {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index c24438ddc..2ecd45403 100644
+index bc58c02e6..1a8c6e083 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -269,7 +269,7 @@ index c24438ddc..2ecd45403 100644
      snackbars
      router-view(v-if="!isUserLoggedIn || isStaticPage")
      template(v-else)
-@@ -187,7 +186,6 @@ import notifications from 'client/mixins/notifications';
+@@ -184,7 +183,6 @@ import notifications from 'client/mixins/notifications';
  import spellsMixin from 'client/mixins/spells';
  
  import svgClose from 'assets/svg/close.svg';
@@ -277,7 +277,7 @@ index c24438ddc..2ecd45403 100644
  
  const COMMUNITY_MANAGER_EMAIL = process.env.EMAILS.COMMUNITY_MANAGER_EMAIL; // eslint-disable-line
  
-@@ -202,7 +200,6 @@ export default {
+@@ -199,7 +197,6 @@ export default {
      snackbars,
      BuyModal,
      SelectMembersModal,
@@ -285,7 +285,7 @@ index c24438ddc..2ecd45403 100644
    },
    data () {
      return {
-@@ -295,8 +292,6 @@ export default {
+@@ -293,8 +290,6 @@ export default {
        return response;
      }, (error) => {
        if (error.response.status >= 400) {
@@ -294,7 +294,7 @@ index c24438ddc..2ecd45403 100644
          // Don't show errors from getting user details. These users have delete their account,
          // but their chat message still exists.
          let configExists = Boolean(error.response) && Boolean(error.response.config);
-@@ -450,25 +445,6 @@ export default {
+@@ -457,25 +452,6 @@ export default {
      if (loadingScreen) document.body.removeChild(loadingScreen);
    },
    methods: {
@@ -321,12 +321,12 @@ index c24438ddc..2ecd45403 100644
        // Manage modals
        this.$root.$on('bv::show::modal', (modalId, data = {}) => {
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index fa548bea4..ee61b27a0 100644
+index 4695993f9..ed04baa85 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -3,7 +3,6 @@ import { model as Group } from '../../models/group';
  import { model as User } from '../../models/user';
- import { model as Chat } from '../../models/chat';
+ import { chatModel as Chat } from '../../models/message';
  import {
 -  BadRequest,
    NotFound,
@@ -355,7 +355,7 @@ index fa548bea4..ee61b27a0 100644
  /**
   * @api {get} /api/v3/groups/:groupId/chat Get chat messages from a group
   * @apiName GetChat
-@@ -80,10 +70,6 @@ api.getChat = {
+@@ -78,10 +68,6 @@ api.getChat = {
    },
  };
  
@@ -366,7 +366,7 @@ index fa548bea4..ee61b27a0 100644
  /**
   * @api {post} /api/v3/groups/:groupId/chat Post chat message to a group
   * @apiName PostChat
-@@ -118,50 +104,12 @@ api.postChat = {
+@@ -114,50 +100,12 @@ api.postChat = {
  
      let group = await Group.getGroup({user, groupId});
  
@@ -417,3 +417,62 @@ index fa548bea4..ee61b27a0 100644
      const chatRes = await Group.toJSONCleanChat(group, user);
      const lastClientMsg = req.query.previousMsg;
      chatUpdated = lastClientMsg && group.chat && group.chat[0] && group.chat[0].id !== lastClientMsg ? true : false;
+diff --git a/website/server/libs/user/index.js b/website/server/libs/user/index.js
+index c4321265c..c65a19904 100644
+--- a/website/server/libs/user/index.js
++++ b/website/server/libs/user/index.js
+@@ -6,7 +6,6 @@ import {
+   NotAuthorized,
+ } from '../../libs/errors';
+ import { model as User } from '../../models/user';
+-import {nameContainsSlur} from './validation';
+ 
+ 
+ export async function get (req, res, { isV3 = false }) {
+@@ -113,7 +112,6 @@ export async function update (req, res, { isV3 = false }) {
+     const newName = req.body['profile.name'];
+     if (newName === null) throw new BadRequest(res.t('invalidReqParams'));
+     if (newName.length > 30) throw new BadRequest(res.t('displaynameIssueLength'));
+-    if (nameContainsSlur(newName)) throw new BadRequest(res.t('displaynameIssueSlur'));
+   }
+ 
+   _.each(req.body, (val, key) => {
+diff --git a/website/server/libs/user/validation.js b/website/server/libs/user/validation.js
+index a56446bc9..4a9c994c3 100644
+--- a/website/server/libs/user/validation.js
++++ b/website/server/libs/user/validation.js
+@@ -1,25 +1,3 @@
+-import bannedSlurs from '../bannedSlurs';
+-import {getMatchesByWordArray} from '../stringUtils';
+-import forbiddenUsernames from '../forbiddenUsernames';
+-
+-const bannedSlurRegexs = bannedSlurs.map((word) => new RegExp(`.*${word}.*`, 'i'));
+-
+-export function nameContainsSlur (username) {
+-  for (let i = 0; i < bannedSlurRegexs.length; i += 1) {
+-    const regEx = bannedSlurRegexs[i];
+-    const match = username.match(regEx);
+-    if (match !== null && match[0] !== null) {
+-      return true;
+-    }
+-  }
+-  return false;
+-}
+-
+-function usernameIsForbidden (username) {
+-  const forbidddenWordsMatched = getMatchesByWordArray(username, forbiddenUsernames);
+-  return forbidddenWordsMatched.length > 0;
+-}
+-
+ const invalidCharsRegex = new RegExp('[^a-z0-9_-]', 'i');
+ function usernameContainsInvalidCharacters (username) {
+   let match = username.match(invalidCharsRegex);
+@@ -30,8 +8,6 @@ export function verifyUsername (username, res) {
+   let issues = [];
+   if (username.length < 1 || username.length > 20) issues.push(res.t('usernameIssueLength'));
+   if (usernameContainsInvalidCharacters(username)) issues.push(res.t('usernameIssueInvalidCharacters'));
+-  if (nameContainsSlur(username)) issues.push(res.t('usernameIssueSlur'));
+-  if (usernameIsForbidden(username)) issues.push(res.t('usernameIssueForbidden'));
+ 
+   return issues;
+ }

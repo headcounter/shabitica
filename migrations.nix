@@ -53,4 +53,21 @@
       assertEqual(challenge_habit['history'][1]['scoredDown'], 0)
     '';
   }
+  { file = "archive/2018/20180811_inboxOutsideUser.js";
+    testScript = ''
+      spec = getuser('bar', api_version=3)
+
+      messages = spec.api.inbox.messages.get()
+      assertEqual(len(messages), 1)
+      assertIn('text', messages[0])
+      assertEqual(messages[0]['text'], "Hello Bar!")
+
+      spec = getuser('bar', api_version=4)
+
+      user_record = spec.api.user.get()
+      assertIn('inbox', user_record)
+      assertIn('messages', user_record['inbox'])
+      assertDictEqual({}, user_record['inbox']['messages'])
+    '';
+  }
 ]

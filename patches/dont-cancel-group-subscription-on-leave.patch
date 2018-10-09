@@ -10,7 +10,7 @@ Date:   Mon Apr 2 04:50:12 2018 +0200
     Filename: dont-cancel-group-subscription-on-leave.patch
 
 diff --git a/test/api/unit/models/group.test.js b/test/api/unit/models/group.test.js
-index 30bdda62d..588df1adf 100644
+index bdba9158e..e39e263d8 100644
 --- a/test/api/unit/models/group.test.js
 +++ b/test/api/unit/models/group.test.js
 @@ -834,10 +834,14 @@ describe('Group Model', () => {
@@ -97,10 +97,10 @@ index eab444222..9eb8e166b 100644
 -  });
  });
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 1746ad354..7e98b01ea 100644
+index 296a986d2..270e13ed8 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
-@@ -10,7 +10,6 @@ import { model as Chat } from './chat';
+@@ -14,7 +14,6 @@ import {
  import * as Tasks from './task';
  import validator from 'validator';
  import { removeFromArray } from '../libs/collectionManipulators';
@@ -108,7 +108,7 @@ index 1746ad354..7e98b01ea 100644
  import {
    groupChatReceivedWebhook,
    questActivityWebhook,
-@@ -1222,10 +1221,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1132,10 +1131,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  

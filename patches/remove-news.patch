@@ -38,7 +38,7 @@ index fc6bcbaa6..9155977e4 100644
    methods: {
      ...mapActions({
 diff --git a/website/client/components/header/notificationsDropdown.vue b/website/client/components/header/notificationsDropdown.vue
-index 458ad12b4..1ac892e94 100644
+index 3132f9e9b..ce7f12616 100644
 --- a/website/client/components/header/notificationsDropdown.vue
 +++ b/website/client/components/header/notificationsDropdown.vue
 @@ -79,7 +79,6 @@ import MessageCount from './messageCount';
@@ -49,7 +49,7 @@ index 458ad12b4..1ac892e94 100644
  import GROUP_TASK_NEEDS_WORK from './notifications/groupTaskNeedsWork';
  import GUILD_INVITATION from './notifications/guildInvitation';
  import PARTY_INVITATION from './notifications/partyInvitation';
-@@ -99,7 +98,7 @@ export default {
+@@ -100,7 +99,7 @@ export default {
      MenuDropdown,
      MessageCount,
      // One component for each type
@@ -58,7 +58,7 @@ index 458ad12b4..1ac892e94 100644
      GUILD_INVITATION, PARTY_INVITATION, CHALLENGE_INVITATION,
      QUEST_INVITATION, GROUP_TASK_APPROVAL, GROUP_TASK_APPROVED,
      UNALLOCATED_STATS_POINTS, NEW_MYSTERY_ITEMS, CARD_RECEIVED,
-@@ -122,7 +121,7 @@ export default {
+@@ -124,7 +123,7 @@ export default {
        // listed in the order they should appear in the notifications panel.
        // NOTE: Those not listed here won't be shown in the notification panel!
        handledNotifications: [
@@ -99,7 +99,7 @@ index 96d097ac9..13d41945a 100644
  
        let notificationsToRead = [];
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index 8a0a7ccb5..53f0a392f 100644
+index 78003783b..d7d84d87d 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -76,7 +76,6 @@
@@ -110,7 +110,7 @@ index 8a0a7ccb5..53f0a392f 100644
          button.btn.btn-primary.mr-2.mb-2(@click='openRestoreModal()', popover-trigger='mouseenter', popover-placement='right', :popover="$t('fixValPop')") {{ $t('fixVal') }}
          button.btn.btn-primary.mb-2(v-if='user.preferences.disableClasses == true', @click='changeClassForUser(false)',
            popover-trigger='mouseenter', popover-placement='right', :popover="$t('enableClassPop')") {{ $t('enableClass') }}
-@@ -284,9 +283,6 @@ export default {
+@@ -357,9 +356,6 @@ export default {
        // User.set({'flags.showTour':true});
        // Guide.goto('intro', 0, true);
      },
@@ -188,11 +188,11 @@ index d87fd8862..640f45648 100644
  export async function rebirth () {
    let result = await axios.post('/api/v4/user/rebirth');
  
-diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 40c4e4d58..7f36b0e61 100644
---- a/website/server/controllers/api-v3/user.js
-+++ b/website/server/controllers/api-v3/user.js
-@@ -198,7 +198,6 @@ let updatablePaths = [
+diff --git a/website/server/libs/user/index.js b/website/server/libs/user/index.js
+index c65a19904..526fa4ac9 100644
+--- a/website/server/libs/user/index.js
++++ b/website/server/libs/user/index.js
+@@ -41,7 +41,6 @@ const updatablePaths = [
    'flags.welcomed',
    'flags.cardReceived',
    'flags.warnedLowHealth',
@@ -201,7 +201,7 @@ index 40c4e4d58..7f36b0e61 100644
    'achievements',
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 22897252d..6edc89e79 100644
+index aa4e3d7f1..3f2487163 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -195,7 +195,6 @@ let schema = new Schema({

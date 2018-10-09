@@ -18,7 +18,7 @@ Date:   Tue Mar 27 05:37:16 2018 +0200
     Filename: mailer-daemon.patch
 
 diff --git a/config.json.example b/config.json.example
-index 63df05213..2c7e1f0e2 100644
+index c807daf3a..641f208ed 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -15,23 +15,8 @@
@@ -47,14 +47,14 @@ index 63df05213..2c7e1f0e2 100644
          "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
          "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
 diff --git a/package.json b/package.json
-index 8438cf2c4..76940c03a 100644
+index b5014ff4b..040fbbf36 100644
 --- a/package.json
 +++ b/package.json
 @@ -59,7 +59,6 @@
-     "morgan": "^1.9.1",
+     "morgan": "^1.7.0",
      "nconf": "^0.10.0",
-     "node-sass": "^4.9.3",
--    "nodemailer": "^4.6.8",
+     "node-sass": "^4.9.0",
+-    "nodemailer": "^4.6.4",
      "ora": "^2.1.0",
      "pageres": "^4.1.1",
      "passport": "^0.4.0",

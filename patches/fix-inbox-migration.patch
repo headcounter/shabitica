@@ -1,0 +1,69 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Oct 10 03:17:50 2018 +0200
+
+    Fix inbox migration script
+    
+    We don't use inbox.messages anymore within the user collection, so there
+    really is no need to set it to an empty object. Other than that the
+    migration script also sets a new attribute 'migration', which we also
+    don't really need because first of all we have tests for migrations and
+    second, if the migration should still fail, we can manually check
+    whether inbox.messages has been migrated already.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: fix-inbox-migration.patch
+
+diff --git a/migrations/20180811_inboxOutsideUser.js b/migrations/20180811_inboxOutsideUser.js
+index 942782dd5..e000f905a 100644
+--- a/migrations/20180811_inboxOutsideUser.js
++++ b/migrations/20180811_inboxOutsideUser.js
+@@ -1,7 +1,3 @@
+-const migrationName = '20180811_inboxOutsideUser.js';
+-const authorName = 'paglias'; // in case script author needs to know when their ...
+-const authorUuid = 'ed4c688c-6652-4a92-9d03-a5a79844174a'; // ... own data is done
+-
+ /*
+  * Move inbox messages from the user model to their own collection
+  */
+@@ -15,9 +11,7 @@ const dbInboxes = monk(connectionString).get('inboxes', { castIds: false });
+ const dbUsers = monk(connectionString).get('users', { castIds: false });
+ 
+ function processUsers (lastId) {
+-  let query = {
+-    migration: {$ne: migrationName},
+-  };
++  let query = {};
+ 
+   if (lastId) {
+     query._id = {
+@@ -37,7 +31,6 @@ function processUsers (lastId) {
+     });
+ }
+ 
+-let progressCount = 1000;
+ let count = 0;
+ let msgCount = 0;
+ 
+@@ -60,10 +53,6 @@ function updateUsers (users) {
+ function updateUser (user) {
+   count++;
+ 
+-  if (count % progressCount === 0) console.warn(`${count  } ${  user._id}`);
+-  if (msgCount % progressCount === 0) console.warn(`${msgCount  } messages processed`);
+-  if (user._id === authorUuid) console.warn(`${authorName  } being processed`);
+-
+   const oldInboxMessages = user.inbox.messages || {};
+   const oldInboxMessagesIds = Object.keys(oldInboxMessages);
+ 
+@@ -87,10 +76,7 @@ function updateUser (user) {
+   return dbInboxes.insert(newInboxMessages)
+     .then(() => {
+       return dbUsers.update({_id: user._id}, {
+-        $set: {
+-          migration: migrationName,
+-          'inbox.messages': {},
+-        },
++        $unset: {'inbox.messages': 1},
+       });
+     })
+     .catch((err) => {

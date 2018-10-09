@@ -14,27 +14,27 @@ Date:   Tue Mar 27 05:37:23 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: allow-register-first.patch
 
-diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 9bacbd469..c11403c10 100644
---- a/website/server/controllers/api-v3/auth.js
-+++ b/website/server/controllers/api-v3/auth.js
-@@ -153,15 +153,17 @@ api.registerLocal = {
-       },
-     };
+diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
+index 36de03790..89088a350 100644
+--- a/website/server/libs/auth/index.js
++++ b/website/server/libs/auth/index.js
+@@ -135,15 +135,17 @@ async function registerLocal (req, res, { isV3 = false }) {
+     },
+   };
  
-+    let hasUsers = Boolean(await User.findOne().exec());
++  let hasUsers = Boolean(await User.findOne().exec());
 +
-     newUser = new User(newUser);
-     newUser.registeredThrough = req.headers['x-client']; // Not saved, used to create the correct tasks based on the device used
+   newUser = new User(newUser);
+   newUser.registeredThrough = req.headers['x-client']; // Not saved, used to create the correct tasks based on the device used
  
-     // we check for partyInvite for backward compatibility
-     if (req.query.groupInvite || req.query.partyInvite) {
-       let success = await _handleGroupInvitation(newUser, req.query.groupInvite || req.query.partyInvite);
--      if (!success)
-+      if (hasUsers && !success)
-         throw new NotAuthorized(res.t('inviteOnly'));
--    } else {
-+    } else if (hasUsers) {
+   // we check for partyInvite for backward compatibility
+   if (req.query.groupInvite || req.query.partyInvite) {
+     let success = await _handleGroupInvitation(newUser, req.query.groupInvite || req.query.partyInvite);
+-    if (!success)
++    if (hasUsers && !success)
        throw new NotAuthorized(res.t('inviteOnly'));
-     }
+-  } else {
++  } else if (hasUsers) {
+     throw new NotAuthorized(res.t('inviteOnly'));
+   }
  

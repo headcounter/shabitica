@@ -1,0 +1,86 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Oct 10 05:55:14 2018 +0200
+
+    Fix API documentation
+    
+    Just a few syntax errors and typos, but enough to let Habitipy parsing
+    fail.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: fix-apidoc-errors.patch
+
+diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
+index 01ddb5370..8b025cfd3 100644
+--- a/website/server/controllers/api-v3/members.js
++++ b/website/server/controllers/api-v3/members.js
+@@ -31,14 +31,14 @@ let api = {};
+  *
+  * @apiSuccess {Object} data The member object
+  *
+- * @apiSuccess (Object) data.inbox Basic information about person's inbox
+- * @apiSuccess (Object) data.stats Includes current stats and buffs
+- * @apiSuccess (Object) data.profile Includes name
+- * @apiSuccess (Object) data.preferences Includes info about appearance and public prefs
+- * @apiSuccess (Object) data.party Includes basic info about current party and quests
+- * @apiSuccess (Object) data.items Basic inventory information includes quests, food, potions, eggs, gear, special items
+- * @apiSuccess (Object) data.achievements Lists current achievements
+- * @apiSuccess (Object) data.auth Includes latest timestamps
++ * @apiSuccess {Object} data.inbox Basic information about person's inbox
++ * @apiSuccess {Object} data.stats Includes current stats and buffs
++ * @apiSuccess {Object} data.profile Includes name
++ * @apiSuccess {Object} data.preferences Includes info about appearance and public prefs
++ * @apiSuccess {Object} data.party Includes basic info about current party and quests
++ * @apiSuccess {Object} data.items Basic inventory information includes quests, food, potions, eggs, gear, special items
++ * @apiSuccess {Object} data.achievements Lists current achievements
++ * @apiSuccess {Object} data.auth Includes latest timestamps
+  *
+  * @apiSuccessExample {json} Success-Response:
+  * {
+diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
+index b058df749..c9ab4d5b7 100644
+--- a/website/server/controllers/api-v3/user.js
++++ b/website/server/controllers/api-v3/user.js
+@@ -59,7 +59,7 @@ let api = {};
+  * Tags
+  * TasksOrder (list of all ids for dailys, habits, rewards and todos)
+  *
+- * @apiParam (Query) {UUID} userFields A list of comma separated user fields to be returned instead of the entire document. Notifications are always returned.
++ * @apiParam (Query) {String} [userFields] A list of comma separated user fields to be returned instead of the entire document. Notifications are always returned.
+  *
+  * @apiExample {curl} Example use:
+  * curl -i https://habitica.com/api/v3/user?userFields=achievements,items.mounts
+diff --git a/website/server/controllers/api-v3/webhook.js b/website/server/controllers/api-v3/webhook.js
+index 094e28008..a39b05ce3 100644
+--- a/website/server/controllers/api-v3/webhook.js
++++ b/website/server/controllers/api-v3/webhook.js
+@@ -31,7 +31,7 @@ let api = {};
+  * @apiParam (Body) {String} url The webhook's URL
+  * @apiParam (Body) {String} [label] A label to remind you what this webhook does
+  * @apiParam (Body) {Boolean} [enabled=true] If the webhook should be enabled
+- * @apiParam (Body) {Sring="taskActivity","groupChatReceived","userActivity"} [type="taskActivity"] The webhook's type.
++ * @apiParam (Body) {String="taskActivity","groupChatReceived","userActivity"} [type="taskActivity"] The webhook's type.
+  * @apiParam (Body) {Object} [options] The webhook's options. Wil differ depending on type. Required for `groupChatReceived` type. If a webhook supports options, the default values are displayed in the examples below
+  * @apiParamExample {json} Task Activity Example
+  *   {
+@@ -105,7 +105,7 @@ api.addWebhook = {
+  * @apiParam (Body) {String} [url] The webhook's URL
+  * @apiParam (Body) {String} [label] A label to remind you what this webhook does
+  * @apiParam (Body) {Boolean} [enabled] If the webhook should be enabled
+- * @apiParam (Body) {Sring="taskActivity","groupChatReceived"} [type] The webhook's type.
++ * @apiParam (Body) {String="taskActivity","groupChatReceived"} [type] The webhook's type.
+  * @apiParam (Body) {Object} [options] The webhook's options. Wil differ depending on type. The options are enumerated in the [add webhook examples](#api-Webhook-UserAddWebhook).
+  * @apiParamExample {json} Update Enabled and Type Properties
+  *   {
+diff --git a/website/server/controllers/api-v4/user.js b/website/server/controllers/api-v4/user.js
+index 75dbe4449..8ff399aa2 100644
+--- a/website/server/controllers/api-v4/user.js
++++ b/website/server/controllers/api-v4/user.js
+@@ -36,7 +36,7 @@ const api = {};
+  * Tags
+  * TasksOrder (list of all ids for dailys, habits, rewards and todos)
+  *
+- * @apiParam (Query) {UUID} userFields A list of comma separated user fields to be returned instead of the entire document. Notifications are always returned.
++ * @apiParam (Query) {String} [userFields] A list of comma separated user fields to be returned instead of the entire document. Notifications are always returned.
+  *
+  * @apiExample {curl} Example use:
+  * curl -i https://habitica.com/api/v3/user?userFields=achievements,items.mounts

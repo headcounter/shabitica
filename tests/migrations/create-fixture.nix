@@ -100,6 +100,11 @@ in runInMachine {
         'password': newuser_bar['apiToken'],
       })
 
+      foo.members.send_private_message.post(
+        message='Hello Bar!',
+        toUserId=newuser_bar['id']
+      )
+
       reply = foo.tasks.user.post(
         type='habit',
         text='Test Habit',

@@ -3,7 +3,7 @@
 {
   name = "shabitica-migration";
 
-  machine = { pkgs, ... }: {
+  machine = { config, pkgs, ... }: {
     imports = [ common ];
     shabitica.hostName = "localhost";
 
@@ -45,7 +45,9 @@
         name = "migration-test-runner";
 
         propagatedBuildInputs = let
-          habitipy = pkgs.python3Packages.callPackage ./habitipy.nix {};
+          habitipy = pkgs.python3Packages.callPackage ./habitipy.nix {
+            shabiticaSource = config.shabitica.packages.source;
+          };
         in lib.singleton habitipy;
 
         src = pkgs.runCommand "migration-test-runner-source" {} ''

@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.62.0";
+  version = "4.65.2";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "10ki100fpdwqkbn7x1vcx57wgzibx2x8kjhi7wlgbwvvbjpchqqy";
+    sha256 = "1lfybyfib37if4llvz9ljsg7zzcsi87bh99cr34jyqpxzc02rzdd";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -165,9 +165,9 @@ stdenv.mkDerivation rec {
     # Allow to purchase gems using gold via the gem icon in the menu.
     patches/buy-gems-via-menu.patch
 
-    # The connection string of these migrations is hardcoded, so let's re-use
+    # The connection string of some migrations is hardcoded, so let's re-use
     # the info from Mongoose.
-    patches/fix-connection-info-for-task-history-migration.patch
+    patches/fix-connection-info-for-migrations.patch
 
     # Don't handle anything from Spritely specially (which also removes all
     # references to Spritely, see the canary below).
@@ -182,8 +182,23 @@ stdenv.mkDerivation rec {
     # Use image proxy for profile photos.
     patches/profile-photo-imageproxy.patch
 
-    # Building of bcrypt package fail because it doesn't bundle node-pre-gyp.
-    patches/fix-bcrypt-dependency.patch
+    # The chat model has been refactored in version 4.62.2 and is now residing
+    # in the same source file as other messages.
+    patches/fix-import-of-chat-model.patch
+
+    # Get rid of artifacts (such as empty objects or other cruft) for the inbox
+    # migration.
+    patches/fix-inbox-migration.patch
+
+    # Fix a few API documentation errors necessary to let Habitipy parsing
+    # succeed. Upstream PR: https://github.com/HabitRPG/habitica/pull/10749
+    patches/fix-apidoc-errors.patch
+
+    # A few fixes for the inbox migration script plus moving it to the archive.
+    #
+    # Cherry-picked from:
+    # https://github.com/HabitRPG/habitica/commit/a35f04be46283568ae55494
+    patches/fix-and-archive-inbox-migration.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -249,9 +264,11 @@ stdenv.mkDerivation rec {
     "website/server/controllers/top-level/payments/paypal.js"
     "website/server/controllers/top-level/payments/stripe.js"
     "website/server/libs/analyticsService.js"
+    "website/server/libs/auth/social.js"
     "website/server/libs/aws.js"
     "website/server/libs/bannedSlurs.js"
     "website/server/libs/bannedWords.js"
+    "website/server/libs/forbiddenUsernames.js"
     "website/server/libs/guildsAllowingBannedWords.js"
     "website/server/libs/inAppPurchases.js"
     "website/server/libs/payments/amazon.js"

@@ -10,10 +10,10 @@ Date:   Tue Mar 27 07:32:57 2018 +0200
     Filename: dont-restrict-email-domains.patch
 
 diff --git a/test/api/v3/integration/user/auth/POST-register_local.test.js b/test/api/v3/integration/user/auth/POST-register_local.test.js
-index 6bc46c2d5..bd108aa72 100644
+index 46a4b5ea7..37db4402c 100644
 --- a/test/api/v3/integration/user/auth/POST-register_local.test.js
 +++ b/test/api/v3/integration/user/auth/POST-register_local.test.js
-@@ -372,40 +372,6 @@ describe('POST /user/auth/local/register', () => {
+@@ -389,40 +389,6 @@ describe('POST /user/auth/local/register', () => {
        expect(user.auth.local.email).to.equal(email.toLowerCase());
      });
  
@@ -55,7 +55,7 @@ index 6bc46c2d5..bd108aa72 100644
        let username = generateRandomUserName();
        let email = `${username}@example.com`;
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index a0d36e99e..ec57eebbb 100644
+index d173115ba..20d693957 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -13,8 +13,6 @@ import {

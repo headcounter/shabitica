@@ -14,10 +14,10 @@ Date:   Tue Mar 27 05:37:27 2018 +0200
     Filename: always-permit-group-leader-change.patch
 
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 1b721e1f6..d37607d63 100644
+index 9625fb145..d81d5df86 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -402,8 +402,6 @@ api.updateGroup = {
+@@ -394,8 +394,6 @@ api.updateGroup = {
      if (group.leader !== user._id && group.type === 'party') throw new NotAuthorized(res.t('messageGroupOnlyLeaderCanUpdate'));
      else if (group.leader !== user._id && !user.contributor.admin) throw new NotAuthorized(res.t('messageGroupOnlyLeaderCanUpdate'));
  
@@ -27,10 +27,10 @@ index 1b721e1f6..d37607d63 100644
  
      let savedGroup = await group.save();
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 024c35b67..1746ad354 100644
+index 309c073bb..296a986d2 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
-@@ -18,7 +18,6 @@ import {
+@@ -22,7 +22,6 @@ import {
  import {
    InternalServerError,
    BadRequest,
@@ -38,7 +38,7 @@ index 024c35b67..1746ad354 100644
  } from '../libs/errors';
  import baseModel from '../libs/baseModel';
  import { sendTxn as sendTxnEmail } from '../libs/email';
-@@ -1189,14 +1188,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1099,14 +1098,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
    let group = this;
    let update = {};
  

@@ -1,7 +1,7 @@
 Author: aszlig <aszlig@nix.build>
 Date:   Thu Jun 28 15:26:53 2018 +0200
 
-    migration/task-history: Reuse Mongoose conn info
+    migrations: Reuse Mongoose connection info
     
     Instead of using the hardcoded default values for Monk, let's actually
     use the info from Mongoose to connect to the database using Monk.
@@ -10,8 +10,26 @@ Date:   Thu Jun 28 15:26:53 2018 +0200
     sockets so we don't need any auth information.
     
     Signed-off-by: aszlig <aszlig@nix.build>
-    Filename: fix-connection-info-for-task-history-migration.patch
+    Filename: fix-connection-info-for-migrations.patch
 
+diff --git a/migrations/20180811_inboxOutsideUser.js b/migrations/20180811_inboxOutsideUser.js
+index 29a106182..942782dd5 100644
+--- a/migrations/20180811_inboxOutsideUser.js
++++ b/migrations/20180811_inboxOutsideUser.js
+@@ -6,11 +6,11 @@ const authorUuid = 'ed4c688c-6652-4a92-9d03-a5a79844174a'; // ... own data is do
+  * Move inbox messages from the user model to their own collection
+  */
+ 
++const mongoose = require('mongoose');
+ const monk = require('monk');
+-const nconf = require('nconf');
+ 
+ const Inbox = require('../website/server/models/message').inboxModel;
+-const connectionString = nconf.get('MIGRATION_CONNECT_STRING'); // FOR TEST DATABASE
++const connectionString = `mongodb://${mongoose.connection.host}`;
+ const dbInboxes = monk(connectionString).get('inboxes', { castIds: false });
+ const dbUsers = monk(connectionString).get('users', { castIds: false });
+ 
 diff --git a/migrations/tasks/habits-one-history-entry-per-day-challenges.js b/migrations/tasks/habits-one-history-entry-per-day-challenges.js
 index dcb05f48b..12e55ecb7 100644
 --- a/migrations/tasks/habits-one-history-entry-per-day-challenges.js
