@@ -22,7 +22,29 @@ let
   }) pkgs runInMachine;
   inherit (pkgs) lib;
 
-  habitipy = pkgs.python3Packages.callPackage ./habitipy.nix {};
+  habitipy = pkgs.python3Packages.buildPythonPackage rec {
+    pname = "habitipy";
+    version = "0.1.18";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "ASMfreaK";
+      repo = "habitipy";
+      rev = "v${version}";
+      sha256 = "1p79vvr9nlsg7d4md0r0pn43snmspjr5kgdjflm87slqwrv2zmkq";
+    };
+
+    propagatedBuildInputs = [
+      pkgs.python3Packages.plumbum
+      pkgs.python3Packages.requests
+    ];
+
+    doCheck = true;
+    preCheck = "export HOME=\"$PWD\"";
+    checkInputs = [
+      pkgs.python3Packages.aiohttp pkgs.python3Packages.responses
+      pkgs.python3Packages.hypothesis
+    ];
+  };
 
 in runInMachine {
   drv = pkgs.runCommand "habitica-migration-fixture" {
