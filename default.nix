@@ -26,10 +26,6 @@ let
     NIX_LDFLAGS = lib.toList (drv.NIX_LDFLAGS or []) ++ [ "-lsystemd" ];
   });
 
-  shabitica = pkgs.callPackages ./shabitica.nix {
-    shabiticaConfig = cfg.config;
-  };
-
   hostIsFqdn = builtins.match ".+\\..+" cfg.hostName != null;
   isFqdnTxt = "builtins.match \".+\\\\..+\" config.shabitica.hostName != null";
 
@@ -50,7 +46,7 @@ let
   # accordingly.
   shabiticaSandboxPaths = pkgs.runCommand "shabitica-sandbox-paths" {
     closureInfo = pkgs.closureInfo {
-      rootPaths = [ shabitica.server pkgs.coreutils ];
+      rootPaths = [ cfg.packages.server pkgs.coreutils ];
     };
   } ''
     mkdir -p "$out/lib/systemd/system"
@@ -154,7 +150,7 @@ in autoCalledOr {
 
     staticPath = lib.mkOption {
       type = lib.types.path;
-      default = shabitica.client;
+      default = cfg.packages.client;
       defaultText = lib.literalExample "shabitica.client";
       readOnly = true;
       description = "The path to the static assets of Shabitica.";
@@ -162,7 +158,7 @@ in autoCalledOr {
 
     apiDocPath = lib.mkOption {
       type = lib.types.path;
-      default = shabitica.apidoc;
+      default = cfg.packages.apidoc;
       defaultText = lib.literalExample "shabitica.apidoc";
       readOnly = true;
       description = "The path to the API documentation.";
@@ -199,6 +195,22 @@ in autoCalledOr {
     config = lib.mkOption {
       type = with lib.types; attrsOf (either int str);
       description = "Configuration options to pass to Shabitica.";
+    };
+
+    packages = lib.mkOption {
+      type = lib.types.attrsOf lib.types.package;
+      default = pkgs.callPackages ./shabitica.nix {
+        shabiticaConfig = cfg.config;
+      };
+      defaultText = "pkgs.callPackages ./shabitica.nix {"
+                  + " shabiticaConfig = config.shabitica.config; "
+                  + "}";
+      internal = true;
+      readOnly = true;
+      description = ''
+        The internal components of Shabitica (server, client, migrator,
+        etc...).
+      '';
     };
   };
 
@@ -375,7 +387,7 @@ in autoCalledOr {
         script = ''
           if query-db-version needs-update; then
             for ver in $(query-db-version new-versions); do
-              ${shabitica.migrator}/bin/migrate "$ver"
+              ${cfg.packages.migrator}/bin/migrate "$ver"
             done
           fi
         '';
@@ -438,7 +450,7 @@ in autoCalledOr {
           Type = "notify";
           TimeoutStartSec = "10min";
           NotifyAccess = "all";
-          ExecStart = "${shabitica.server}/bin/shabitica-server";
+          ExecStart = "${cfg.packages.server}/bin/shabitica-server";
           User = "shabitica";
           Group = "shabitica";
           EnvironmentFile = "/var/lib/shabitica/secrets.env";
