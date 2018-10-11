@@ -1,0 +1,228 @@
+Author: Matteo Pagliazzi <matteopagliazzi@gmail.com>
+Date:   Wed Sep 19 17:50:23 2018 +0200
+
+    Fix UUID validation in models
+    
+    This is a cherry-pick from the following upstream commit:
+    
+    https://github.com/HabitRPG/habitica/pull/10701/commits/ca441f92647ad3f4
+    
+    The change landed as a squased commit in the develop branch and the
+    whole squashed commit got reverted, so instead of cherry-picking the
+    squash-merge I'm just picking this individual commit.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: fix-uuid-validation.patch
+
+diff --git a/website/server/libs/baseModel.js b/website/server/libs/baseModel.js
+index bdac19931..4a8bf4b09 100644
+--- a/website/server/libs/baseModel.js
++++ b/website/server/libs/baseModel.js
+@@ -8,7 +8,7 @@ module.exports = function baseModel (schema, options = {}) {
+       _id: {
+         type: String,
+         default: uuid,
+-        validate: [validator.isUUID, 'Invalid uuid.'],
++        validate: [(v) => validator.isUUID(v), 'Invalid uuid.'],
+       },
+     });
+   }
+diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
+index 0f421906e..0095aea65 100644
+--- a/website/server/models/challenge.js
++++ b/website/server/models/challenge.js
+@@ -30,8 +30,8 @@ let schema = new Schema({
+     todos: [{type: String, ref: 'Task'}],
+     rewards: [{type: String, ref: 'Task'}],
+   },
+-  leader: {type: String, ref: 'User', validate: [validator.isUUID, 'Invalid uuid.'], required: true},
+-  group: {type: String, ref: 'Group', validate: [validator.isUUID, 'Invalid uuid.'], required: true},
++  leader: {type: String, ref: 'User', validate: [(v) => validator.isUUID(v), 'Invalid uuid.'], required: true},
++  group: {type: String, ref: 'Group', validate: [(v) => validator.isUUID(v), 'Invalid uuid.'], required: true},
+   memberCount: {type: Number, default: 0},
+   prize: {type: Number, default: 0, min: 0},
+   categories: [{
+diff --git a/website/server/models/group.js b/website/server/models/group.js
+index 270e13ed8..eff6edb95 100644
+--- a/website/server/models/group.js
++++ b/website/server/models/group.js
+@@ -66,7 +66,7 @@ export let schema = new Schema({
+   name: {type: String, required: true},
+   summary: {type: String, maxlength: MAX_SUMMARY_SIZE_FOR_GUILDS},
+   description: String,
+-  leader: {type: String, ref: 'User', validate: [validator.isUUID, 'Invalid uuid.'], required: true},
++  leader: {type: String, ref: 'User', validate: [(v) => validator.isUUID(v), 'Invalid uuid.'], required: true},
+   type: {type: String, enum: ['guild', 'party'], required: true},
+   privacy: {type: String, enum: ['private', 'public'], default: 'private', required: true},
+   chat: Array, // Used for backward compatibility, but messages aren't stored here
+diff --git a/website/server/models/iapPurchaseReceipt.js b/website/server/models/iapPurchaseReceipt.js
+index b29bd9042..077ada1a1 100644
+--- a/website/server/models/iapPurchaseReceipt.js
++++ b/website/server/models/iapPurchaseReceipt.js
+@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
+ export let schema = new Schema({
+   _id: {type: String, required: true}, // Use a custom string as _id
+   consumed: {type: Boolean, default: false, required: true},
+-  userId: {type: String, ref: 'User', required: true, validate: [validator.isUUID, 'Invalid uuid.']},
++  userId: {type: String, ref: 'User', required: true, validate: [(v) => validator.isUUID(v), 'Invalid uuid.']},
+ }, {
+   strict: true,
+   minimize: false, // So empty objects are returned
+diff --git a/website/server/models/subscriptionPlan.js b/website/server/models/subscriptionPlan.js
+index c6f8a4a17..5521c6449 100644
+--- a/website/server/models/subscriptionPlan.js
++++ b/website/server/models/subscriptionPlan.js
+@@ -5,7 +5,7 @@ import validator from 'validator';
+ export let schema = new mongoose.Schema({
+   planId: String,
+   subscriptionId: String,
+-  owner: {type: String, ref: 'User', validate: [validator.isUUID, 'Invalid uuid.']},
++  owner: {type: String, ref: 'User', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']},
+   quantity: {type: Number, default: 1},
+   paymentMethod: String, // enum: ['Gift', '']}
+   customerId: String,
+diff --git a/website/server/models/tag.js b/website/server/models/tag.js
+index 12940c4be..48de27c6a 100644
+--- a/website/server/models/tag.js
++++ b/website/server/models/tag.js
+@@ -9,7 +9,7 @@ export let schema = new Schema({
+   id: {
+     type: String,
+     default: uuid,
+-    validate: [validator.isUUID, 'Invalid uuid.'],
++    validate: [(v) => validator.isUUID(v), 'Invalid uuid.'],
+     required: true,
+   },
+   name: {type: String, required: true},
+diff --git a/website/server/models/task.js b/website/server/models/task.js
+index 7614f4690..0cc120b32 100644
+--- a/website/server/models/task.js
++++ b/website/server/models/task.js
+@@ -76,7 +76,7 @@ export let TaskSchema = new Schema({
+   },
+   tags: [{
+     type: String,
+-    validate: [validator.isUUID, 'Invalid uuid.'],
++    validate: [(v) => validator.isUUID(v), 'Invalid uuid.'],
+   }],
+   value: {type: Number, default: 0, required: true}, // redness or cost for rewards Required because it must be settable (for rewards)
+   priority: {
+@@ -89,26 +89,26 @@ export let TaskSchema = new Schema({
+     ],
+   },
+   attribute: {type: String, default: 'str', enum: ['str', 'con', 'int', 'per']},
+-  userId: {type: String, ref: 'User', validate: [validator.isUUID, 'Invalid uuid.']}, // When not set it belongs to a challenge
++  userId: {type: String, ref: 'User', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']}, // When not set it belongs to a challenge
+ 
+   challenge: {
+     shortName: {type: String},
+-    id: {type: String, ref: 'Challenge', validate: [validator.isUUID, 'Invalid uuid.']}, // When set (and userId not set) it's the original task
+-    taskId: {type: String, ref: 'Task', validate: [validator.isUUID, 'Invalid uuid.']}, // When not set but challenge.id defined it's the original task
++    id: {type: String, ref: 'Challenge', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']}, // When set (and userId not set) it's the original task
++    taskId: {type: String, ref: 'Task', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']}, // When not set but challenge.id defined it's the original task
+     broken: {type: String, enum: ['CHALLENGE_DELETED', 'TASK_DELETED', 'UNSUBSCRIBED', 'CHALLENGE_CLOSED', 'CHALLENGE_TASK_NOT_FOUND']}, // CHALLENGE_TASK_NOT_FOUND comes from v3 migration
+     winner: String, // user.profile.name of the winner
+   },
+ 
+   group: {
+-    id: {type: String, ref: 'Group', validate: [validator.isUUID, 'Invalid uuid.']},
++    id: {type: String, ref: 'Group', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']},
+     broken: {type: String, enum: ['GROUP_DELETED', 'TASK_DELETED', 'UNSUBSCRIBED']},
+-    assignedUsers: [{type: String, ref: 'User', validate: [validator.isUUID, 'Invalid uuid.']}],
+-    taskId: {type: String, ref: 'Task', validate: [validator.isUUID, 'Invalid uuid.']},
++    assignedUsers: [{type: String, ref: 'User', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']}],
++    taskId: {type: String, ref: 'Task', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']},
+     approval: {
+       required: {type: Boolean, default: false},
+       approved: {type: Boolean, default: false},
+       dateApproved: {type: Date},
+-      approvingUser: {type: String, ref: 'User', validate: [validator.isUUID, 'Invalid uuid.']},
++      approvingUser: {type: String, ref: 'User', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']},
+       requested: {type: Boolean, default: false},
+       requestedDate: {type: Date},
+     },
+@@ -117,7 +117,7 @@ export let TaskSchema = new Schema({
+ 
+   reminders: [{
+     _id: false,
+-    id: {type: String, validate: [validator.isUUID, 'Invalid uuid.'], default: shared.uuid, required: true},
++    id: {type: String, validate: [(v) => validator.isUUID(v), 'Invalid uuid.'], default: shared.uuid, required: true},
+     startDate: {type: Date},
+     time: {type: Date, required: true},
+   }],
+@@ -265,7 +265,7 @@ let dailyTodoSchema = () => {
+       completed: {type: Boolean, default: false},
+       text: {type: String, required: false, default: ''}, // required:false because it can be empty on creation
+       _id: false,
+-      id: {type: String, default: shared.uuid, required: true, validate: [validator.isUUID, 'Invalid uuid.']},
++      id: {type: String, default: shared.uuid, required: true, validate: [(v) => validator.isUUID(v), 'Invalid uuid.']},
+       linkId: {type: String},
+     }],
+   };
+diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
+index 3f2487163..f19bed013 100644
+--- a/website/server/models/user/schema.js
++++ b/website/server/models/user/schema.js
+@@ -353,7 +353,7 @@ let schema = new Schema({
+     return {};
+   }},
+ 
+-  challenges: [{type: String, ref: 'Challenge', validate: [validator.isUUID, 'Invalid uuid.']}],
++  challenges: [{type: String, ref: 'Challenge', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']}],
+ 
+   invitations: {
+     // Using an array without validation because otherwise mongoose treat this as a subdocument and applies _id by default
+@@ -370,7 +370,7 @@ let schema = new Schema({
+         type: String,
+         ref: 'Group',
+         required: true,
+-        validate: [validator.isUUID, 'Invalid uuid.'],
++        validate: [(v) => validator.isUUID(v), 'Invalid uuid.'],
+       },
+       name: {
+         type: String,
+@@ -380,15 +380,15 @@ let schema = new Schema({
+         type: String,
+         ref: 'User',
+         required: true,
+-        validate: [validator.isUUID, 'Invalid uuid.'],
++        validate: [(v) => validator.isUUID(v), 'Invalid uuid.'],
+       },
+     }],
+   },
+ 
+-  guilds: [{type: String, ref: 'Group', validate: [validator.isUUID, 'Invalid uuid.']}],
++  guilds: [{type: String, ref: 'Group', validate: [(v) => validator.isUUID(v), 'Invalid uuid.']}],
+ 
+   party: {
+-    _id: {type: String, validate: [validator.isUUID, 'Invalid uuid.'], ref: 'Group'},
++    _id: {type: String, validate: [(v) => validator.isUUID(v), 'Invalid uuid.'], ref: 'Group'},
+     order: {type: String, default: 'level'},
+     orderAscending: {type: String, default: 'ascending'},
+     quest: {
+diff --git a/website/server/models/userNotification.js b/website/server/models/userNotification.js
+index 15b4cec4d..6ad7264e0 100644
+--- a/website/server/models/userNotification.js
++++ b/website/server/models/userNotification.js
+@@ -39,7 +39,7 @@ export let schema = new Schema({
+   id: {
+     type: String,
+     default: uuid,
+-    validate: [validator.isUUID, 'Invalid uuid.'],
++    validate: [(v) => validator.isUUID(v), 'Invalid uuid.'],
+     // @TODO: Add these back once we figure out the issue with notifications
+     // See Fix for https://github.com/HabitRPG/habitica/issues/9923
+     // required: true,
+diff --git a/website/server/models/webhook.js b/website/server/models/webhook.js
+index 09dd6dd15..54bfb5d6d 100644
+--- a/website/server/models/webhook.js
++++ b/website/server/models/webhook.js
+@@ -34,7 +34,7 @@ export let schema = new Schema({
+   id: {
+     type: String,
+     required: true,
+-    validate: [validator.isUUID, shared.i18n.t('invalidWebhookId')],
++    validate: [(v) => validator.isUUID(v), shared.i18n.t('invalidWebhookId')],
+     default: uuid,
+   },
+   type: {

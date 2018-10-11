@@ -199,6 +199,12 @@ stdenv.mkDerivation rec {
     # Cherry-picked from:
     # https://github.com/HabitRPG/habitica/commit/a35f04be46283568ae55494
     patches/fix-and-archive-inbox-migration.patch
+
+    # Fix UUID validation in models.
+    #
+    # Cherry-picked from:
+    # https://github.com/HabitRPG/habitica/pull/10701/commits/ca441f92647ad3f4
+    patches/fix-uuid-validation.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
