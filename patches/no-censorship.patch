@@ -257,6 +257,172 @@ index cce17bc43..684e36973 100644
    it('does not error when sending a message to a private guild with a user with revoked chat', async () => {
      let { group, members } = await createAndPopulateGroup({
        groupDetails: {
+diff --git a/test/api/v3/integration/user/PUT-user.test.js b/test/api/v3/integration/user/PUT-user.test.js
+index bef5ec25d..6c7f49a28 100644
+--- a/test/api/v3/integration/user/PUT-user.test.js
++++ b/test/api/v3/integration/user/PUT-user.test.js
+@@ -86,14 +86,6 @@ describe('PUT /user', () => {
+         error: 'BadRequest',
+         message: t('displaynameIssueLength'),
+       });
+-
+-      await expect(user.put('/user', {
+-        'profile.name': 'TESTPLACEHOLDERSLURWORDHERE',
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: t('displaynameIssueSlur'),
+-      });
+     });
+   });
+ 
+diff --git a/test/api/v4/user/auth/POST-user_verify_username.test.js b/test/api/v4/user/auth/POST-user_verify_username.test.js
+index c17b789a4..041a41820 100644
+--- a/test/api/v4/user/auth/POST-user_verify_username.test.js
++++ b/test/api/v4/user/auth/POST-user_verify_username.test.js
+@@ -38,34 +38,34 @@ describe('POST /user/auth/verify-username', async () => {
+       });
+     });
+ 
+-    it('errors if username is a slur', async () => {
++    it('works if username is a slur', async () => {
+       await expect(user.post(ENDPOINT, {
+-        username: 'TESTPLACEHOLDERSLURWORDHERE',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
++        username: 'cunt',
++      })).to.eventually.eql({ isUsable: true });
+     });
+ 
+-    it('errors if username contains a slur', async () => {
++    it('works if username contains a slur', async () => {
+       await expect(user.post(ENDPOINT, {
+-        username: 'TESTPLACEHOLDERSLURWORDHERE_otherword',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
++        username: 'cunt_otherword',
++      })).to.eventually.eql({ isUsable: true });
+       await expect(user.post(ENDPOINT, {
+-        username: 'something_TESTPLACEHOLDERSLURWORDHERE',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
++        username: 'something_cunt',
++      })).to.eventually.eql({ isUsable: true });
+       await expect(user.post(ENDPOINT, {
+-        username: 'somethingTESTPLACEHOLDERSLURWORDHEREotherword',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
++        username: 'sthingcuntotherword',
++      })).to.eventually.eql({ isUsable: true });
+     });
+ 
+-    it('errors if username is not allowed', async () => {
++    it('works if username is not allowed', async () => {
+       await expect(user.post(ENDPOINT, {
+         username: 'support',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueForbidden')] });
++      })).to.eventually.eql({ isUsable: true });
+     });
+ 
+-    it('errors if username is not allowed regardless of casing', async () => {
++    it('works if username is not allowed regardless of casing', async () => {
+       await expect(user.post(ENDPOINT, {
+-        username: 'SUppORT',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueForbidden')] });
++        username: 'AdMiN',
++      })).to.eventually.eql({ isUsable: true });
+     });
+ 
+     it('errors if username has incorrect length', async () => {
+diff --git a/test/api/v4/user/auth/PUT-user_update_username.test.js b/test/api/v4/user/auth/PUT-user_update_username.test.js
+index 26a622cf0..fcf95505c 100644
+--- a/test/api/v4/user/auth/PUT-user_update_username.test.js
++++ b/test/api/v4/user/auth/PUT-user_update_username.test.js
+@@ -133,58 +133,48 @@ describe('PUT /user/auth/update-username', async () => {
+       });
+     });
+ 
+-    it('errors if new username is a slur', async () => {
+-      await expect(user.put(ENDPOINT, {
+-        username: 'TESTPLACEHOLDERSLURWORDHERE',
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: [t('usernameIssueLength'), t('usernameIssueSlur')].join(' '),
++    it('works if new username is a slur', async () => {
++      let newUsername = 'cunt';
++      let response = await user.put(ENDPOINT, {
++        username: newUsername,
+       });
++      expect(response).to.eql({ username: newUsername });
+     });
+ 
+-    it('errors if new username contains a slur', async () => {
+-      await expect(user.put(ENDPOINT, {
+-        username: 'TESTPLACEHOLDERSLURWORDHERE_otherword',
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: [t('usernameIssueLength'), t('usernameIssueSlur')].join(' '),
++    it('works if new username contains a slur', async () => {
++      let newUsername = 'cunt_otherword';
++      let response = await user.put(ENDPOINT, {
++        username: newUsername,
+       });
+-      await expect(user.put(ENDPOINT, {
+-        username: 'something_TESTPLACEHOLDERSLURWORDHERE',
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: [t('usernameIssueLength'), t('usernameIssueSlur')].join(' '),
++      expect(response).to.eql({ username: newUsername });
++
++      newUsername = 'something_cunt';
++      response = await user.put(ENDPOINT, {
++        username: newUsername,
+       });
+-      await expect(user.put(ENDPOINT, {
+-        username: 'somethingTESTPLACEHOLDERSLURWORDHEREotherword',
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: [t('usernameIssueLength'), t('usernameIssueSlur')].join(' '),
++      expect(response).to.eql({ username: newUsername });
++
++      newUsername = 'sthingcuntotherword';
++      response = await user.put(ENDPOINT, {
++        username: newUsername,
+       });
++      expect(response).to.eql({ username: newUsername });
+     });
+ 
+-    it('errors if new username is not allowed', async () => {
+-      await expect(user.put(ENDPOINT, {
+-        username: 'support',
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: t('usernameIssueForbidden'),
++    it('works if new username is not allowed', async () => {
++      let newUsername = 'support';
++      let response = await user.put(ENDPOINT, {
++        username: newUsername,
+       });
++      expect(response).to.eql({ username: newUsername });
+     });
+ 
+-    it('errors if new username is not allowed regardless of casing', async () => {
+-      await expect(user.put(ENDPOINT, {
+-        username: 'SUppORT',
+-      })).to.eventually.be.rejected.and.eql({
+-        code: 400,
+-        error: 'BadRequest',
+-        message: t('usernameIssueForbidden'),
++    it('works if new username is not allowed regardless of casing', async () => {
++      let newUsername = 'AdMiN';
++      let response = await user.put(ENDPOINT, {
++        username: newUsername,
+       });
++      expect(response).to.eql({ username: newUsername });
+     });
+ 
+     it('errors if username has incorrect length', async () => {
 diff --git a/website/client/app.vue b/website/client/app.vue
 index bc58c02e6..1a8c6e083 100644
 --- a/website/client/app.vue
