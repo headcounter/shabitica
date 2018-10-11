@@ -18,18 +18,19 @@
         SPEC = json.load(open('${./spec.json}'))
 
         class UserSpec:
-          def __init__(self, spec):
+          def __init__(self, spec, api_version):
             for name, value in spec.items():
               setattr(self, name, value)
+            apiver = ['api', 'v' + str(api_version)]
             self.api = Habitipy({
               'url': 'http://localhost',
               'login': self.apiUser,
               'password': self.apiToken,
-            })
+            }, current=apiver)
 
         class MigrationTest(unittest.TestCase):
-          def getuser(self, name):
-            return UserSpec(SPEC[name])
+          def getuser(self, name, api_version=3):
+            return UserSpec(SPEC[name], api_version)
 
           def runTest(self):
             scopevars = {key: getattr(self, key) for key in dir(self)}

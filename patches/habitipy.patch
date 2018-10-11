@@ -1,0 +1,61 @@
+commit 963d67164c42625779a434674e137d7e2aa8f217
+Author: aszlig <aszlig@nix.build>
+Date:   Thu Oct 11 05:20:48 2018 +0200
+
+    Fix parsing API endpoints without type
+    
+    If there is no specific type specified for an @apiParam, the parsing
+    fails because it tries to find '=' within the type variable and if it is
+    None, it can't iterate to find the equals sign.
+    
+    So whenever the type_ group from the regex now is None, we just set the
+    parsed type to None and also make sure we handle this properly when
+    rendering the docstring.
+    
+    In more recent versions of Habitica the following @apiParam was
+    introduced, which exactly triggers this problem:
+    
+    @apiParam (Query) [dueDate] type Optional date to use for computing the
+                                     nextDue field for each returned task.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+
+diff --git a/habitipy/api.py b/habitipy/api.py
+index 3f30bac..8a14597 100644
+--- a/habitipy/api.py
++++ b/habitipy/api.py
+@@ -425,15 +425,19 @@ class Param:
+         else:
+             self.field = self.field[0]
+             self.path = []
+-        self.type = type_[1:-1] if len(type_) > 2 else type_
+-        if '=' in self.type:
+-            self.type, self.possible_values = self.type.split('=')
+-            self.possible_values = list(map(
+-                lambda s: s if s[0] != '"' else s[1:-1],
+-                self.possible_values.split(',')))
++        if type_:
++            self.type = type_[1:-1] if len(type_) > 2 else type_
++            if '=' in self.type:
++                self.type, self.possible_values = self.type.split('=')
++                self.possible_values = list(map(
++                    lambda s: s if s[0] != '"' else s[1:-1],
++                    self.possible_values.split(',')))
++            else:
++                self.possible_values = []
++            self.type = self.type.lower()
+         else:
++            self.type = None
+             self.possible_values = []
+-        self.type = self.type.lower()
+         self.description = description
+ 
+     def validate(self, obj):
+@@ -451,6 +455,6 @@ class Param:
+         opt = 'optional' if self.is_optional else ''
+         can_be = ' '.join(self.possible_values) if self.possible_values else ''
+         can_be = 'one of [{}]'.format(can_be) if can_be else ''
+-        type_ = 'of type "' + self.type + '"'
++        type_ = 'of type "' + str(self.type) + '"'
+         res = ' '.join([opt, '"' + self.field + '"', default, type_, can_be, '\n'])
+         return res.replace('  ', ' ').lstrip()

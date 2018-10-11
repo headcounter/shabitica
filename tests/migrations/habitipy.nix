@@ -1,25 +1,31 @@
-# NOTE: If you change anything in this file, be sure it stays
-# backwards-compatible with the nixpkgs revision used in
-# create-fixture.nix.
-#
-# You can check this by issuing the following command:
-#
-#   nix-build --no-out-link create-fixture.nix
-#
 { buildPythonPackage, lib, fetchFromGitHub
 , plumbum, requests, aiohttp, responses, hypothesis
+
+, shabiticaSource ? null
 }:
 
 buildPythonPackage rec {
   pname = "habitipy";
-  version = "0.1.18";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "ASMfreaK";
     repo = "habitipy";
     rev = "v${version}";
-    sha256 = "1p79vvr9nlsg7d4md0r0pn43snmspjr5kgdjflm87slqwrv2zmkq";
+    sha256 = "1kmkiryyfr4r5p2qgspg5raxkivl1yahyb0v42wryn4s93hv83qf";
   };
+
+  patches = lib.singleton ../../patches/habitipy.patch;
+
+  # Update the API documentation to the current version of the Shabitica source
+  # code so that we have all available API endpoints.
+  postPatch = let
+    apiPath = "${shabiticaSource}/website/server/controllers";
+  in lib.optionalString (shabiticaSource != null) ''
+    find ${lib.escapeShellArg apiPath} \
+      -type f -exec sed -ne 's/^.*\(@api\)/\1/; T; s/  / /g; p' {} + \
+      > habitipy/apidoc.txt
+  '';
 
   propagatedBuildInputs = [ plumbum requests ];
 
