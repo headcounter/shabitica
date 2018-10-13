@@ -57,10 +57,10 @@
 
   # We don't want to load fonts from Google, but instead ship it ourselves.
   main.apidoc = drv: {
-    googleFonts = runCommand "google-fonts" {
-      name = "google-fonts";
+    # FIXME: This is not deterministic, find a better way...
+    googleFonts = runCommand "google-fonts-apidoc" {
       outputHashAlgo = "sha256";
-      outputHash = "0wv0g891lniv1jghwrlzzf2yllfay7snqk1w916la09nsh6a6l69";
+      outputHash = "1kkv6nrswzxcfdyyx46r6238ss89xj5nayji8jgr590lca1bi1sy";
       outputHashMode = "recursive";
       nativeBuildInputs = [ super.extra.google-fonts-offline ];
 

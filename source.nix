@@ -457,7 +457,6 @@ stdenv.mkDerivation rec {
 
   # FIXME: This is not deterministic, find a better way...
   googleFonts = runCommand "google-fonts" {
-    name = "google-fonts";
     outputHashAlgo = "sha256";
     outputHash = "101y0ksz6n3yw4flfn91w9f9npb299c8bck42lrjk7hh6vlcf3s1";
     outputHashMode = "recursive";
