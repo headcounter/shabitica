@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 57464ef94..c807daf3a 100644
+index 81cd66622..c807daf3a 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -4,16 +4,6 @@
@@ -60,7 +60,7 @@ index 57464ef94..c807daf3a 100644
      "NODE_DB_URI":"mongodb://localhost/habitrpg",
      "TEST_DB_URI":"mongodb://localhost/habitrpg_test",
      "NODE_ENV":"development",
-@@ -31,90 +21,20 @@
+@@ -31,91 +21,20 @@
      "SMTP_HOST":"example.com",
      "SMTP_PORT": 587,
      "SMTP_TLS": true,
@@ -72,6 +72,7 @@ index 57464ef94..c807daf3a 100644
 -    "NEW_RELIC_API_KEY":"NEW_RELIC_API_KEY",
 -    "GA_ID": "GA_ID",
 -    "AMPLITUDE_KEY": "AMPLITUDE_KEY",
+-    "AMPLITUDE_SECRET": "AMPLITUDE_SECRET",
 -    "AMAZON_PAYMENTS": {
 -        "SELLER_ID": "SELLER_ID",
 -        "CLIENT_ID": "CLIENT_ID",
@@ -2456,7 +2457,7 @@ index ca5c502e1..cf04a520a 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 9f1680eef..bc58c02e6 100644
+index 658324195..c98f77d40 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,7 +10,6 @@ div
@@ -2488,7 +2489,7 @@ index 9f1680eef..bc58c02e6 100644
      bannedAccountModal,
    },
    data () {
-@@ -411,10 +406,6 @@ export default {
+@@ -401,10 +396,6 @@ export default {
      this.$store.watch(state => state.title, (title) => {
        document.title = title;
      });
@@ -2499,7 +2500,7 @@ index 9f1680eef..bc58c02e6 100644
  
      if (this.isUserLoggedIn && !this.isStaticPage) {
        // Load the user and the user tasks
-@@ -423,8 +414,6 @@ export default {
+@@ -413,8 +404,6 @@ export default {
          this.$store.dispatch('tasks:fetchUserTasks'),
        ]).then(() => {
          this.$store.state.isUserLoaded = true;
@@ -2508,7 +2509,7 @@ index 9f1680eef..bc58c02e6 100644
  
          this.hideLoadingScreen();
  
-@@ -444,8 +433,6 @@ export default {
+@@ -434,8 +423,6 @@ export default {
          }
  
          this.$nextTick(() => {
@@ -2517,7 +2518,7 @@ index 9f1680eef..bc58c02e6 100644
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -495,8 +482,6 @@ export default {
+@@ -485,8 +472,6 @@ export default {
          if (data.fromRoot) return;
          const modalStack = this.$store.state.modalStack;
  
@@ -2526,7 +2527,7 @@ index 9f1680eef..bc58c02e6 100644
          // Add new modal to the stack
          const prev = modalStack[modalStack.length - 1];
          const prevId = prev ? prev.modalId : undefined;
-@@ -560,18 +545,6 @@ export default {
+@@ -550,18 +535,6 @@ export default {
  
        return true;
      },
@@ -2545,7 +2546,7 @@ index 9f1680eef..bc58c02e6 100644
      itemSelected (item) {
        this.selectedItemToBuy = item;
      },
-@@ -632,10 +605,6 @@ export default {
+@@ -622,10 +595,6 @@ export default {
          contentPlacement = this.$refs.restingBanner.clientHeight;
        }
        this.bannerHeight = contentPlacement;
@@ -2556,7 +2557,7 @@ index 9f1680eef..bc58c02e6 100644
      },
    },
  };
-@@ -670,4 +639,3 @@ export default {
+@@ -660,4 +629,3 @@ export default {
  <style src="assets/css/sprites/spritesmith-main-22.css"></style>
  <style src="assets/css/sprites/spritesmith-main-23.css"></style>
  <style src="assets/css/sprites.css"></style>
@@ -3680,7 +3681,7 @@ index cfcf1fa02..4dd4105b5 100644
 -        a(href='https://geo.itunes.apple.com/us/app/habitica/id994882113?mt=8', style='display:inline-block;overflow:hidden;background:url(http://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg#svgView) no-repeat;background-size:100%;width:152px;height:45px;margin-left:20px;image-rendering:auto')
  </template>
 diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
-index 667172b64..68d62bd34 100644
+index 9d17a17fb..4f148b29c 100644
 --- a/website/client/components/static/header.vue
 +++ b/website/client/components/static/header.vue
 @@ -21,8 +21,6 @@
@@ -3692,7 +3693,7 @@ index 667172b64..68d62bd34 100644
          li.nav-item.dropdown
            a.nav-link.dropdown-toggle(v-once) {{ $t('learnMore') }}
            .dropdown-menu
-@@ -154,7 +152,6 @@
+@@ -158,7 +156,6 @@
  <script>
  import logo from 'assets/svg/logo.svg';
  import purpleLogo from 'assets/svg/purple-logo.svg';
@@ -3700,7 +3701,7 @@ index 667172b64..68d62bd34 100644
  
  export default {
    data () {
-@@ -177,21 +174,8 @@ export default {
+@@ -181,21 +178,8 @@ export default {
          return;
        }
  
@@ -3723,7 +3724,7 @@ index 667172b64..68d62bd34 100644
  };
  </script>
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index 57c7ec06a..9cafb9cef 100644
+index fa1e60431..e70d01398 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -13,15 +13,6 @@
@@ -3762,7 +3763,16 @@ index 57c7ec06a..9cafb9cef 100644
      #call-to-action.purple-4
        .container.featured
          .row.text-center
-@@ -213,37 +191,6 @@
+@@ -126,7 +104,7 @@
+ <style lang="scss" scoped>
+ @import '~client/assets/scss/colors.scss';
+ 
+-@import url('https://fonts.googleapis.com/css?family=Varela+Round');
++@import url('/static/fonts/home-fonts.css');
+ 
+   #front {
+     .form-text a {
+@@ -220,37 +198,6 @@
        font-size: 24px;
      }
  
@@ -3800,7 +3810,7 @@ index 57c7ec06a..9cafb9cef 100644
      .strike {
        display: block;
        text-align: center;
-@@ -381,31 +328,6 @@
+@@ -393,31 +340,6 @@
      }
    }
  
@@ -3832,7 +3842,7 @@ index 57c7ec06a..9cafb9cef 100644
    #call-to-action {
      .row {
        margin-top: 1em;
-@@ -541,17 +463,10 @@
+@@ -558,17 +480,10 @@
  </style>
  
  <script>
@@ -3850,7 +3860,7 @@ index 57c7ec06a..9cafb9cef 100644
    import cnet from 'assets/svg/cnet.svg';
    import fastCompany from 'assets/svg/fast-company.svg';
    import discover from 'assets/images/home/discover.svg';
-@@ -560,21 +475,14 @@
+@@ -577,21 +492,14 @@
    import lifehacker from 'assets/images/home/lifehacker.svg';
    import makeuseof from 'assets/images/home/make-use-of.svg';
    import thenewyorktimes from 'assets/images/home/the-new-york-times.svg';
@@ -3872,7 +3882,7 @@ index 57c7ec06a..9cafb9cef 100644
            cnet,
            fastCompany,
            discover,
-@@ -592,20 +500,6 @@
+@@ -609,20 +517,6 @@
          usernameIssues: [],
        };
      },
@@ -3893,7 +3903,7 @@ index 57c7ec06a..9cafb9cef 100644
      computed: {
        emailValid () {
          if (this.email.length <= 3) return false;
-@@ -687,33 +581,8 @@
+@@ -704,33 +598,8 @@
          window.location.href = redirectTo;
        },
        playButtonClick () {
@@ -4012,7 +4022,7 @@ index f3d1e65ea..d2d7d3c46 100644
      profileStats,
    },
 diff --git a/website/client/index.html b/website/client/index.html
-index 32ecee0b0..a1c28b030 100644
+index 32ecee0b0..096b62dc2 100644
 --- a/website/client/index.html
 +++ b/website/client/index.html
 @@ -6,18 +6,7 @@
@@ -4031,7 +4041,7 @@ index 32ecee0b0..a1c28b030 100644
 -    <meta name="smartbanner:button-url-google" content="https://play.google.com/store/apps/details?id=com.habitrpg.android.habitica">
 -    <meta name="smartbanner:enabled-platforms" content="android,ios">
 -    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,400i,700,700i|Roboto:400,400i,700,700i" rel="stylesheet">
-+    <link href="/static/fonts/fonts.css" rel="stylesheet">
++    <link href="/static/fonts/index-fonts.css" rel="stylesheet">
      <link rel="shortcut icon" sizes="48x48" href="/static/icons/favicon.ico">
      <link rel="shortcut icon" sizes="192x192" href="/static/icons/favicon_192x192.png">
      <link rel="mask-icon" href="/static/icons/favicon.ico">
@@ -7265,7 +7275,7 @@ index c80cec015..2a943440a 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 680ca49fa..d173115ba 100644
+index d8517a753..f755a0e49 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -3,7 +3,6 @@ import shared from '../../../common';
@@ -7307,7 +7317,7 @@ index 680ca49fa..d173115ba 100644
      suppressModals: {
        levelUp: {type: Boolean, default: false},
        hatchPet: {type: Boolean, default: false},
-@@ -577,7 +559,6 @@ let schema = new Schema({
+@@ -573,7 +555,6 @@ let schema = new Schema({
    extra: {type: Schema.Types.Mixed, default: () => {
      return {};
    }},

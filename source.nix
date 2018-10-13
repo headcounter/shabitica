@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.65.2";
+  version = "4.65.3";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1lfybyfib37if4llvz9ljsg7zzcsi87bh99cr34jyqpxzc02rzdd";
+    sha256 = "0x46ls3mxias4fkc3gi81yw2m3ka4bnczvdcbyczmlari3q39jzs";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -194,17 +194,15 @@ stdenv.mkDerivation rec {
     # succeed. Upstream PR: https://github.com/HabitRPG/habitica/pull/10749
     patches/fix-apidoc-errors.patch
 
-    # A few fixes for the inbox migration script plus moving it to the archive.
-    #
-    # Cherry-picked from:
-    # https://github.com/HabitRPG/habitica/commit/a35f04be46283568ae55494
-    patches/fix-and-archive-inbox-migration.patch
-
     # Fix UUID validation in models.
     #
     # Cherry-picked from:
     # https://github.com/HabitRPG/habitica/pull/10701/commits/ca441f92647ad3f4
     patches/fix-uuid-validation.patch
+
+    # Don't expect migrations to return a Promise so that older migration
+    # scripts work.
+    patches/revert-migration-runner-promise.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -218,6 +216,7 @@ stdenv.mkDerivation rec {
     "database_reports"
     "gulp/gulp-transifex-test.js"
     "package-lock.json"
+    "scripts/gdpr-delete-users.js"
     "scripts/paypalBillingSetup.js"
     "test/api/unit/libs/analyticsService.test.js"
     "test/api/unit/libs/payments/amazon"
@@ -456,21 +455,25 @@ stdenv.mkDerivation rec {
     cp --no-preserve=mode -rt website/static "$emojis/public/graphics/emojis"
   '';
 
+  # FIXME: This is not deterministic, find a better way...
   googleFonts = runCommand "google-fonts" {
     name = "google-fonts";
     outputHashAlgo = "sha256";
-    outputHash = "09sk5s4abrrwpxvzajc0lyq8i15p77vjr0brh8jq0pi2s2fnadi9";
+    outputHash = "101y0ksz6n3yw4flfn91w9f9npb299c8bck42lrjk7hh6vlcf3s1";
     outputHashMode = "recursive";
     nativeBuildInputs = [ nodePackages.extra.google-fonts-offline ];
     inherit src;
   } ''
-    fontURL="$(sed -n \
-      -e '/fonts\.googleapis/s/^.*href="\([^"]\+\)".*$/\1/p' \
-      "$src/website/client/index.html")"
     mkdir "$out"
-    ( cd "$out"
-      goofoffline outCss=fonts.css "$fontURL"
-    )
+    for fontsrc in index.html components/static/home.vue; do
+      fontURL="$(sed -n \
+        -e 's!^.*\(https://fonts\.googleapis\.com/[^'\'''"]\+\).*$!\1!p' \
+        "$src/website/client/$fontsrc")"
+      fontbase="$(basename "$fontsrc")"
+      ( cd "$out"
+        goofoffline outCss="''${fontbase%.*}-fonts.css" "$fontURL"
+      )
+    done
   '';
 
   emojis = fetchFromGitHub {

@@ -27,10 +27,10 @@ index a52824ec3..6bbbf889c 100644
            .svg-icon(v-html="icons.delete")
            | {{$t('delete')}}
 diff --git a/website/client/components/groups/chat.vue b/website/client/components/groups/chat.vue
-index 5babe873f..949e15061 100644
+index 9c89526fb..01faa1eb7 100644
 --- a/website/client/components/groups/chat.vue
 +++ b/website/client/components/groups/chat.vue
-@@ -26,8 +26,6 @@
+@@ -28,8 +28,6 @@
          .col-6.chat-send-actions
            button.btn.btn-secondary.send-chat.float-right(v-once, @click='sendMessage()') {{ $t('send') }}
  
@@ -39,7 +39,7 @@ index 5babe873f..949e15061 100644
        slot(
          name="additionRow",
        )
-@@ -41,14 +39,12 @@
+@@ -43,14 +41,12 @@
    import debounce from 'lodash/debounce';
  
    import autocomplete from '../chat/autoComplete';
@@ -135,7 +135,7 @@ index 5737a9ed6..c4321265c 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 20d693957..48790282d 100644
+index 8436b9d15..c777727c9 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -215,7 +215,6 @@ let schema = new Schema({

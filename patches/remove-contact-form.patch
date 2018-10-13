@@ -74,7 +74,7 @@ index ac7c28a91..b9eccf5c9 100644
        this.isUserDropdownOpen = !this.isUserDropdownOpen;
      },
 diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
-index 68d62bd34..d240ae6ac 100644
+index 4f148b29c..fefaa2089 100644
 --- a/website/client/components/static/header.vue
 +++ b/website/client/components/static/header.vue
 @@ -16,8 +16,6 @@

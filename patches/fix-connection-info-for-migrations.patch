@@ -12,17 +12,18 @@ Date:   Thu Jun 28 15:26:53 2018 +0200
     Signed-off-by: aszlig <aszlig@nix.build>
     Filename: fix-connection-info-for-migrations.patch
 
-diff --git a/migrations/20180811_inboxOutsideUser.js b/migrations/20180811_inboxOutsideUser.js
-index 29a106182..942782dd5 100644
---- a/migrations/20180811_inboxOutsideUser.js
-+++ b/migrations/20180811_inboxOutsideUser.js
-@@ -6,11 +6,11 @@ const authorUuid = 'ed4c688c-6652-4a92-9d03-a5a79844174a'; // ... own data is do
+diff --git a/migrations/archive/2018/20180811_inboxOutsideUser.js b/migrations/archive/2018/20180811_inboxOutsideUser.js
+index a58df2a4c..35da63622 100644
+--- a/migrations/archive/2018/20180811_inboxOutsideUser.js
++++ b/migrations/archive/2018/20180811_inboxOutsideUser.js
+@@ -6,12 +6,12 @@ const authorUuid = 'ed4c688c-6652-4a92-9d03-a5a79844174a'; // ... own data is do
   * Move inbox messages from the user model to their own collection
   */
  
 +const mongoose = require('mongoose');
  const monk = require('monk');
 -const nconf = require('nconf');
+ const uuid = require('uuid').v4;
  
  const Inbox = require('../website/server/models/message').inboxModel;
 -const connectionString = nconf.get('MIGRATION_CONNECT_STRING'); // FOR TEST DATABASE

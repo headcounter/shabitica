@@ -10,7 +10,7 @@ Date:   Sat Mar 31 02:10:24 2018 +0200
     Filename: remove-presskit-merch-plans.patch
 
 diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
-index d240ae6ac..1c4fc0b98 100644
+index fefaa2089..7a865e176 100644
 --- a/website/client/components/static/header.vue
 +++ b/website/client/components/static/header.vue
 @@ -5,25 +5,13 @@
@@ -44,7 +44,7 @@ index d240ae6ac..1c4fc0b98 100644
        button.btn.btn-primary.pull-right(@click='playButtonClick()', v-if='$route.name !== "home"') {{ $t('playButtonFull') }}
      router-link.btn.btn-primary.login-button.pull-right(to='/login', v-if='$route.name === "home"') {{ $t('login') }}
  </template>
-@@ -84,66 +72,10 @@
+@@ -88,66 +76,10 @@
      }
    }
  
