@@ -66,8 +66,7 @@
 
       user_record = spec.api.user.get()
       assertIn('inbox', user_record)
-      assertIn('messages', user_record['inbox'])
-      assertDictEqual({}, user_record['inbox']['messages'])
+      assertNotIn('messages', user_record['inbox'])
     '';
   }
 ]
