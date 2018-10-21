@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.65.3";
+  version = "4.65.7";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0x46ls3mxias4fkc3gi81yw2m3ka4bnczvdcbyczmlari3q39jzs";
+    sha256 = "05dhb694nd6d0rvi9fvzdy0rzih437fjsgdq5jn9pxyvqr7zimm2";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -189,10 +189,6 @@ stdenv.mkDerivation rec {
     # Get rid of artifacts (such as empty objects or other cruft) for the inbox
     # migration.
     patches/fix-inbox-migration.patch
-
-    # Fix a few API documentation errors necessary to let Habitipy parsing
-    # succeed. Upstream PR: https://github.com/HabitRPG/habitica/pull/10749
-    patches/fix-apidoc-errors.patch
 
     # Fix UUID validation in models.
     #
@@ -408,6 +404,7 @@ stdenv.mkDerivation rec {
     "static/terms\\.vue:.*such as Google Chrome"
     "top-level/pages\\.js:// All.*except.*api and payments"
     "user/methods\\.js:schema\\.statics\\.pushNotification ="
+    "rebirth\\.vue:.*b-modal#rebirth"
   ];
 
   # Change all habitica.com URLs to use BASE_URL and all hardcoded email

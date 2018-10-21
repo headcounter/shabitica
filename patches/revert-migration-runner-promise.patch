@@ -17,7 +17,7 @@ Date:   Sat Oct 13 02:40:20 2018 +0200
     Filename: revert-migration-runner-promise.patch
 
 diff --git a/migrations/migration-runner.js b/migrations/migration-runner.js
-index c607b5eac..92c5855b8 100644
+index 38901eda7..92c5855b8 100644
 --- a/migrations/migration-runner.js
 +++ b/migrations/migration-runner.js
 @@ -18,11 +18,4 @@ setUpServer();
@@ -26,10 +26,10 @@ index c607b5eac..92c5855b8 100644
  const processUsers = require('@migrationScript@');
 -processUsers()
 -  .then(function success () {
--    process.exitCode = 0;
+-    process.exit(0);
 -  })
 -  .catch(function failure (err) {
 -    console.log(err);
--    process.exitCode = 1;
+-    process.exit(1);
 -  });
 +processUsers();

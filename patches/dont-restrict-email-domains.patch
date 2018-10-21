@@ -10,7 +10,7 @@ Date:   Tue Mar 27 07:32:57 2018 +0200
     Filename: dont-restrict-email-domains.patch
 
 diff --git a/test/api/v3/integration/user/auth/POST-register_local.test.js b/test/api/v3/integration/user/auth/POST-register_local.test.js
-index 46a4b5ea7..638b385da 100644
+index 5b559aae5..22f440ee6 100644
 --- a/test/api/v3/integration/user/auth/POST-register_local.test.js
 +++ b/test/api/v3/integration/user/auth/POST-register_local.test.js
 @@ -389,38 +389,32 @@ describe('POST /user/auth/local/register', () => {

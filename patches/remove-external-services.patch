@@ -1829,7 +1829,7 @@ index 292b77e9d..0e9773150 100644
 -  });
  });
 diff --git a/test/api/v3/integration/user/auth/POST-register_local.test.js b/test/api/v3/integration/user/auth/POST-register_local.test.js
-index 1552ae835..46a4b5ea7 100644
+index c6b324825..5b559aae5 100644
 --- a/test/api/v3/integration/user/auth/POST-register_local.test.js
 +++ b/test/api/v3/integration/user/auth/POST-register_local.test.js
 @@ -440,40 +440,6 @@ describe('POST /user/auth/local/register', () => {
@@ -3393,7 +3393,7 @@ index 34838b050..a74c52e6e 100644
          .col-6
            input.form-control(type='password', v-model='password')
 diff --git a/website/client/components/settings/notifications.vue b/website/client/components/settings/notifications.vue
-index b92f6de0e..fc0b22c24 100644
+index 45504395b..06c2aa3bd 100644
 --- a/website/client/components/settings/notifications.vue
 +++ b/website/client/components/settings/notifications.vue
 @@ -3,14 +3,6 @@
@@ -3423,7 +3423,7 @@ index b92f6de0e..fc0b22c24 100644
        td
          input(type='checkbox', v-model='user.preferences.emailNotifications[notification]',
            @change='set("emailNotifications", notification)')
--      td
+-      td(v-if="onlyEmailsIds.indexOf(notification) === -1")
 -        input(type='checkbox', v-model='user.preferences.pushNotifications[notification]',
 -          @change='set("pushNotifications", notification)')
          hr
@@ -3724,7 +3724,7 @@ index 9d17a17fb..4f148b29c 100644
  };
  </script>
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index fa1e60431..e70d01398 100644
+index 7050a08e3..93437e267 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -13,15 +13,6 @@
@@ -3742,7 +3742,7 @@ index fa1e60431..e70d01398 100644
 -              span {{$t('or')}}
              .form(@keyup.enter="register()")
                p.form-text {{$t('usernameLimitations')}}
-               input#usernameInput.form-control(type='text', placeholder='Login Name', v-model='username', :class='{"input-valid": usernameValid, "input-invalid": usernameInvalid}')
+               input#usernameInput.form-control(type='text', :placeholder='$t("username")', v-model='username', :class='{"input-valid": usernameValid, "input-invalid": usernameInvalid}')
 @@ -81,19 +72,6 @@
        .container-fluid
          .pixel-horizontal-2.svg-icon(v-html='icons.pixelHorizontal2')
@@ -5525,7 +5525,7 @@ index 7acc406a4..8a441b55e 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 73d41e295..51a87b9c8 100644
+index 11bdc40e8..178f5dc66 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -18,13 +18,7 @@ import {
@@ -5542,7 +5542,7 @@ index 73d41e295..51a87b9c8 100644
  import apiError from '../../libs/apiError';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
-@@ -150,22 +144,6 @@ api.createGroup = {
+@@ -146,22 +140,6 @@ api.createGroup = {
        profile: {name: user.profile.name},
      };
  
@@ -5565,7 +5565,7 @@ index 73d41e295..51a87b9c8 100644
      res.respond(201, response); // do not remove chat flags data as we've just created the group
    },
  };
-@@ -198,54 +176,6 @@ api.createGroupPlan = {
+@@ -194,54 +172,6 @@ api.createGroupPlan = {
      let results = await Promise.all([user.save(), group.save()]);
      let savedGroup = results[1];
  
@@ -5620,7 +5620,7 @@ index 73d41e295..51a87b9c8 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -623,10 +553,7 @@ api.joinGroup = {
+@@ -615,10 +545,7 @@ api.joinGroup = {
  
      promises = await Promise.all(promises);
  
@@ -5632,7 +5632,7 @@ index 73d41e295..51a87b9c8 100644
  
      let response = await Group.toJSONCleanChat(promises[0], user);
      let leader = await User.findById(response.leader).select(nameFields).exec();
-@@ -634,22 +561,6 @@ api.joinGroup = {
+@@ -626,22 +553,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -5655,7 +5655,7 @@ index 73d41e295..51a87b9c8 100644
      res.respond(200, response);
    },
  };
-@@ -784,12 +695,7 @@ api.leaveGroup = {
+@@ -776,12 +687,7 @@ api.leaveGroup = {
        user.guilds.splice(guildIndex, 1);
      }
  
@@ -5669,7 +5669,7 @@ index 73d41e295..51a87b9c8 100644
      res.respond(200, {});
    },
  };
-@@ -890,12 +796,6 @@ api.removeGroupMember = {
+@@ -882,12 +788,6 @@ api.removeGroupMember = {
          removeFromArray(member.guilds, group._id);
        }
        if (isInGroup === 'party') {
@@ -5682,7 +5682,7 @@ index 73d41e295..51a87b9c8 100644
          member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
        }
  
-@@ -926,8 +826,7 @@ api.removeGroupMember = {
+@@ -918,8 +818,7 @@ api.removeGroupMember = {
      ]);
  
      if (isInGroup && group.hasNotCancelled())  {
@@ -5692,7 +5692,7 @@ index 73d41e295..51a87b9c8 100644
      }
  
      res.respond(200, {});
-@@ -1007,19 +906,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -999,19 +898,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -5712,7 +5712,7 @@ index 73d41e295..51a87b9c8 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1035,8 +921,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1027,8 +913,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},
@@ -5721,7 +5721,7 @@ index 73d41e295..51a87b9c8 100644
    ]})
      .select({_id: true, 'preferences.emailNotifications': true})
      .exec();
-@@ -1199,16 +1083,6 @@ api.inviteToGroup = {
+@@ -1191,16 +1075,6 @@ api.inviteToGroup = {
        results.push(...emailResults);
      }
  
@@ -5739,7 +5739,7 @@ index 73d41e295..51a87b9c8 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index ff09a2cd8..010aed668 100644
+index 4e77b5163..cacd030e6 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,6 @@ import {
@@ -5906,7 +5906,7 @@ index fd4a724b6..6a705e8bd 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index 0ee33b26a..c05914aca 100644
+index 524669d3a..e5bb0b7a1 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -23,7 +23,6 @@ import {
@@ -5969,7 +5969,7 @@ index 0ee33b26a..c05914aca 100644
  
      // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
      // TODO move to common code?
-@@ -682,18 +659,6 @@ api.scoreTask = {
+@@ -670,18 +647,6 @@ api.scoreTask = {
          logger.error(e);
        }
      }
@@ -6010,7 +6010,7 @@ index 69f050ad3..79aae8c5e 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index a52de6b76..aacb92b6d 100644
+index 6b7047089..2812a4539 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -18,14 +18,12 @@ import {
@@ -6236,7 +6236,7 @@ index 607562aca..621203cc5 100644
  api.registerLocal = {
    method: 'POST',
 diff --git a/website/server/controllers/api-v4/user.js b/website/server/controllers/api-v4/user.js
-index 01cc9e703..75dbe4449 100644
+index 77183bdf9..8ff399aa2 100644
 --- a/website/server/controllers/api-v4/user.js
 +++ b/website/server/controllers/api-v4/user.js
 @@ -32,7 +32,6 @@ const api = {};
@@ -6512,7 +6512,7 @@ index 1e06d24d5..8ae2d5a46 100644
      return message;
    }
 diff --git a/website/server/libs/cron.js b/website/server/libs/cron.js
-index 309198763..51ecaae46 100644
+index 5106b013e..f56fbb659 100644
 --- a/website/server/libs/cron.js
 +++ b/website/server/libs/cron.js
 @@ -85,12 +85,12 @@ function grantEndOfTheMonthPerks (user, now) {
@@ -6562,8 +6562,8 @@ index 309198763..51ecaae46 100644
 -
  function awardLoginIncentives (user) {
    if (user.loginIncentives > MAX_INCENTIVES) return;
-   // A/B test 2016-12-21: Should we deliver notifications for upcoming incentives on days when users don't receive rewards?
-@@ -250,7 +224,7 @@ function awardLoginIncentives (user) {
+ 
+@@ -248,7 +222,7 @@ function awardLoginIncentives (user) {
  
  // Perform various beginning-of-day reset actions.
  export function cron (options = {}) {
@@ -6572,7 +6572,7 @@ index 309198763..51ecaae46 100644
    let _progress = {down: 0, up: 0, collectedItems: 0};
  
    // Record pre-cron values of HP and MP to show notifications later
-@@ -475,9 +449,7 @@ export function cron (options = {}) {
+@@ -473,9 +447,7 @@ export function cron (options = {}) {
      mp: user.stats.mp - beforeCronStats.mp - (oldCronNotif ? oldCronNotif.data.mp : 0),
    });
  
@@ -7102,7 +7102,7 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 15f880fd7..044faa0c5 100644
+index e2939278e..72b4f6ef6 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,16 +28,12 @@ import {
@@ -7182,8 +7182,8 @@ index 15f880fd7..044faa0c5 100644
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  
-@@ -1424,7 +1397,7 @@ schema.methods.hasNotCancelled = function hasNotCancelled () {
-   return this.isSubscribed() && !plan.dateTerminated;
+@@ -1429,7 +1402,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+   return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
 -schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember) {
@@ -7191,7 +7191,7 @@ index 15f880fd7..044faa0c5 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1433,12 +1406,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1438,12 +1411,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;
@@ -7233,7 +7233,7 @@ index e3994c8e0..c6f8a4a17 100644
      count: {type: Number, default: 0},
      offset: {type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index c80cec015..2a943440a 100644
+index 28a51fb15..70486c462 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -17,9 +17,6 @@ import { model as UserNotification } from '../userNotification';
@@ -7246,7 +7246,7 @@ index c80cec015..2a943440a 100644
  
  const daysSince = common.daysSince;
  
-@@ -236,7 +233,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -241,7 +238,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
   * @param  options
   * @param  options.user  The user object who is purchasing
   * @param  options.groupId  The id of the group purchasing a subscription
@@ -7255,7 +7255,7 @@ index c80cec015..2a943440a 100644
   * @param  options.cancellationReason  A text string to control sending an email
   *
   * @return a Promise from api.cancelSubscription()
-@@ -247,18 +244,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -252,18 +249,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
  // In summary, currently is is best practice to use this method to cancel a user subscription, rather than calling the
  // payment helper.
  schema.methods.cancelSubscription = async function cancelSubscription (options = {}) {

@@ -12,7 +12,7 @@ Date:   Tue Mar 27 05:37:13 2018 +0200
     Filename: invite-only.patch
 
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index e70d01398..194038a6d 100644
+index 93437e267..20d7ef908 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -5,7 +5,7 @@

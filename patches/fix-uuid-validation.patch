@@ -43,7 +43,7 @@ index 0f421906e..0095aea65 100644
    prize: {type: Number, default: 0, min: 0},
    categories: [{
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 270e13ed8..eff6edb95 100644
+index 2f69e08f6..1a73852bb 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -66,7 +66,7 @@ export let schema = new Schema({
