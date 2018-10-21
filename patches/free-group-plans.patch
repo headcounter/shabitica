@@ -14,7 +14,7 @@ Date:   Tue Mar 27 05:37:23 2018 +0200
     Filename: free-group-plans.patch
 
 diff --git a/test/api/unit/models/group.test.js b/test/api/unit/models/group.test.js
-index 19613448a..2c879abfd 100644
+index 19613448a..f01f3ca51 100644
 --- a/test/api/unit/models/group.test.js
 +++ b/test/api/unit/models/group.test.js
 @@ -1,4 +1,3 @@
@@ -98,7 +98,7 @@ index 19613448a..2c879abfd 100644
      });
  
      context('hasNotCancelled', () => {
-@@ -1940,20 +1913,6 @@ describe('Group Model', () => {
+@@ -1940,46 +1913,14 @@ describe('Group Model', () => {
  
          expect(party.hasNotCancelled()).to.be.true;
        });
@@ -119,7 +119,12 @@ index 19613448a..2c879abfd 100644
      });
  
      context('hasCancelled', () => {
-@@ -1966,20 +1925,6 @@ describe('Group Model', () => {
+-      it('returns false if group does not have customer id', () => {
+-        expect(party.hasCancelled()).to.be.false;
+-      });
+-
+       it('returns false if group does not have plan.dateTerminated', () => {
+         party.purchased.plan.customerId = 'test-id';
  
          expect(party.hasCancelled()).to.be.false;
        });

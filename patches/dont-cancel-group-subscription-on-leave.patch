@@ -10,7 +10,7 @@ Date:   Mon Apr 2 04:50:12 2018 +0200
     Filename: dont-cancel-group-subscription-on-leave.patch
 
 diff --git a/test/api/unit/models/group.test.js b/test/api/unit/models/group.test.js
-index 2c879abfd..db4e135be 100644
+index f01f3ca51..116260b03 100644
 --- a/test/api/unit/models/group.test.js
 +++ b/test/api/unit/models/group.test.js
 @@ -834,10 +834,14 @@ describe('Group Model', () => {
