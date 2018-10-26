@@ -180,8 +180,8 @@ let
         "hostfwd=tcp:127.0.0.1:3022-:22"
       ];
     in [
-      "-net nic,vlan=0,model=virtio"
-      "-net user,vlan=0,${devOpts}\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
+      "-device virtio-net-pci,netdev=vlan0"
+      "-netdev user,id=vlan0,${devOpts}\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
     ];
 
     virtualisation.qemu.options = [ "-device virtio-rng-pci" ];
