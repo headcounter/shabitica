@@ -201,7 +201,7 @@ index c65a19904..526fa4ac9 100644
    'achievements',
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 13e4d46d0..93e213cf8 100644
+index 172f494b5..6e358d153 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -195,7 +195,6 @@ let schema = new Schema({

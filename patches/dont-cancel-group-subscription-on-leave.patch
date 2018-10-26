@@ -97,7 +97,7 @@ index eab444222..9eb8e166b 100644
 -  });
  });
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 38d9a91e7..2f69e08f6 100644
+index 9464f2a92..6cd0fcd31 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -14,7 +14,6 @@ import {
@@ -108,7 +108,7 @@ index 38d9a91e7..2f69e08f6 100644
  import {
    groupChatReceivedWebhook,
    questActivityWebhook,
-@@ -1132,10 +1131,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1133,10 +1132,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  

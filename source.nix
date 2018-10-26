@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.65.7";
+  version = "4.67.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "05dhb694nd6d0rvi9fvzdy0rzih437fjsgdq5jn9pxyvqr7zimm2";
+    sha256 = "1qxs21nq33g784i5hj7r3gdzxar4sg7kbzhn22cjxkfrj0zz8pd7";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -190,12 +190,6 @@ stdenv.mkDerivation rec {
     # migration.
     patches/fix-inbox-migration.patch
 
-    # Fix UUID validation in models.
-    #
-    # Cherry-picked from:
-    # https://github.com/HabitRPG/habitica/pull/10701/commits/ca441f92647ad3f4
-    patches/fix-uuid-validation.patch
-
     # Don't expect migrations to return a Promise so that older migration
     # scripts work.
     patches/revert-migration-runner-promise.patch
@@ -229,7 +223,6 @@ stdenv.mkDerivation rec {
     "test/api/v3/integration/payments"
     "test/api/v3/integration/user/*-user_push_device.test.js"
     "test/api/v3/integration/user/auth/DELETE-user_auth_social_network.test.js"
-    "test/api/v3/integration/user/auth/POST-user_auth_pusher.test.js"
     "test/api/v3/integration/user/auth/POST-user_auth_social.test.js"
     "website/client/assets/svg/amazonpay.svg"
     "website/client/assets/svg/credit-card.svg"
@@ -279,7 +272,6 @@ stdenv.mkDerivation rec {
     "website/server/libs/payments/stripe"
     "website/server/libs/payments/stripe.js"
     "website/server/libs/pushNotifications.js"
-    "website/server/libs/pusher.js"
     "website/server/libs/queue/index.js"
     "website/server/libs/slack.js"
     "website/server/middlewares/analytics.js"

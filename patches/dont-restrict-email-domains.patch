@@ -108,7 +108,7 @@ index b75c9b4c5..8bdf4dd4c 100644
  
      it('requires a password', async () => {
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index f755a0e49..8436b9d15 100644
+index c85d07c76..ce0b41f66 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -13,8 +13,6 @@ import {
@@ -122,7 +122,7 @@ index f755a0e49..8436b9d15 100644
    apiToken: {
 @@ -30,15 +28,6 @@ let schema = new Schema({
          validate: [{
-           validator: validator.isEmail,
+           validator: (v) => validator.isEmail(v),
            message: shared.i18n.t('invalidEmail'),
 -        }, {
 -          validator (email) {

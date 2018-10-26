@@ -14,10 +14,10 @@ Date:   Tue Mar 27 05:37:09 2018 +0200
     Filename: subscriptions4all.patch
 
 diff --git a/test/api/unit/libs/payments/payments.test.js b/test/api/unit/libs/payments/payments.test.js
-index a7f5b5bed..648e90122 100644
+index 3e14cc172..86cd51df6 100644
 --- a/test/api/unit/libs/payments/payments.test.js
 +++ b/test/api/unit/libs/payments/payments.test.js
-@@ -425,83 +425,6 @@ describe('payments/index', () => {
+@@ -438,83 +438,6 @@ describe('payments/index', () => {
      });
    });
  
@@ -276,7 +276,7 @@ index 2e37e98d4..d615d4326 100644
      plan = member.purchased.plan.toObject();
      let extraMonths = Number(plan.extraMonths);
 diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
-index 4da6587e5..ca7d23a19 100644
+index 5e69c3fdb..c26d4263e 100644
 --- a/website/server/libs/payments/subscriptions.js
 +++ b/website/server/libs/payments/subscriptions.js
 @@ -15,9 +15,6 @@ import {
@@ -289,7 +289,7 @@ index 4da6587e5..ca7d23a19 100644
  function revealMysteryItems (user) {
    const pushedItems = [];
  
-@@ -204,12 +201,7 @@ async function cancelSubscription (data) {
+@@ -205,12 +202,7 @@ async function cancelSubscription (data) {
  
      await this.cancelGroupUsersSubscription(group);
    } else {

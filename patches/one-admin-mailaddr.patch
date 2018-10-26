@@ -60,7 +60,7 @@ index 153bc3bd0..a0b90dbc8 100644
        // expect(messages[0].id).to.eql(skillMsg.id);
        // expect(messages[0].flagCount).to.eql(0);
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index ec6294635..c2e476d88 100644
+index fcc282bc5..4bc84704f 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
 @@ -266,7 +266,7 @@ describe('Post /groups/:groupId/invite', () => {
@@ -133,10 +133,10 @@ index cf04a520a..5bfbbd7ef 100644
  };
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 215631cdb..3bd9cb634 100644
+index 2a2b6bb07..df7bf7777 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
-@@ -21,7 +21,7 @@ import {
+@@ -20,7 +20,7 @@ import {
  } from '../../libs/auth';
  
  const BASE_URL = nconf.get('BASE_URL');

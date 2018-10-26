@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 81cd66622..c807daf3a 100644
+index 4916a1a78..c807daf3a 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -4,16 +4,6 @@
@@ -60,7 +60,7 @@ index 81cd66622..c807daf3a 100644
      "NODE_DB_URI":"mongodb://localhost/habitrpg",
      "TEST_DB_URI":"mongodb://localhost/habitrpg_test",
      "NODE_ENV":"development",
-@@ -31,91 +21,20 @@
+@@ -31,85 +21,20 @@
      "SMTP_HOST":"example.com",
      "SMTP_PORT": 587,
      "SMTP_TLS": true,
@@ -122,12 +122,6 @@ index 81cd66622..c807daf3a 100644
          "USERNAME": "admin",
          "PASSWORD": "password"
      },
--    "PUSHER": {
--        "ENABLED": "false",
--        "APP_ID": "appId",
--        "KEY": "key",
--        "SECRET": "secret"
--    },
 -    "SLACK": {
 -        "FLAGGING_URL": "https://hooks.slack.com/services/id/id/id",
 -        "FLAGGING_FOOTER_LINK": "https://habitrpg.github.io/flag-o-rama/",
@@ -1436,7 +1430,7 @@ index fe2fafd08..23989fbf3 100644
        let attachEmail = requireAgain(pathToEmailLib);
        let getUserInfo = attachEmail.getUserInfo;
 diff --git a/test/api/unit/libs/payments/payments.test.js b/test/api/unit/libs/payments/payments.test.js
-index c63bd8982..a7f5b5bed 100644
+index 82fb3daba..3e14cc172 100644
 --- a/test/api/unit/libs/payments/payments.test.js
 +++ b/test/api/unit/libs/payments/payments.test.js
 @@ -2,8 +2,6 @@ import moment from 'moment';
@@ -1530,7 +1524,7 @@ index c63bd8982..a7f5b5bed 100644
      });
  
      context('Block subscription perks', () => {
-@@ -641,11 +585,6 @@ describe('payments/index', () => {
+@@ -654,11 +598,6 @@ describe('payments/index', () => {
          expect(user.sendMessage).to.be.calledWith(recipient, { receiverMsg: msg, senderMsg: msg, save: false });
        });
  
@@ -3153,10 +3147,10 @@ index 80dc1b054..fee391143 100644
        }
  
 diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
-index 848f14dd0..84ed4a636 100644
+index 79a7f6d31..14294066a 100644
 --- a/website/client/components/groups/groupPlan.vue
 +++ b/website/client/components/groups/groupPlan.vue
-@@ -45,16 +45,6 @@ div
+@@ -46,16 +46,6 @@ div
                .number 3
                .name Each Individual Group Member
  
@@ -3173,7 +3167,7 @@ index 848f14dd0..84ed4a636 100644
      .container.col-6.offset-3.create-option(v-if='!upgradingGroup._id')
        .row
          h1.col-12.text-center.purple-header Create your Group today!
-@@ -97,14 +87,6 @@ div
+@@ -98,14 +88,6 @@ div
          button.btn.btn-secondary.form-control(@click='createGroup()', :value="$t('createGroupPlan')")
        .form-group
          button.btn.btn-primary.btn-lg.btn-block(@click="createGroup()", :disabled="!newGroupIsReady") {{ $t('createGroupPlan') }}
@@ -3188,7 +3182,7 @@ index 848f14dd0..84ed4a636 100644
  </template>
  
  <style lang="scss" scoped>
-@@ -142,26 +124,6 @@ div
+@@ -143,26 +125,6 @@ div
      .payment-providers {
        width: 350px;
      }
@@ -3215,7 +3209,7 @@ index 848f14dd0..84ed4a636 100644
    }
  
    .header {
-@@ -321,20 +283,16 @@ div
+@@ -331,20 +293,16 @@ div
  </style>
  
  <script>
@@ -3237,7 +3231,7 @@ index 848f14dd0..84ed4a636 100644
          positiveIcon,
        }),
        PAGES: {
-@@ -342,10 +300,6 @@ export default {
+@@ -352,10 +310,6 @@ export default {
          UPGRADE_GROUP: 'upgrade-group',
          PAY: 'pay',
        },
@@ -3248,7 +3242,7 @@ index 848f14dd0..84ed4a636 100644
        paymentMethod: '',
        newGroup: {
          type: 'guild',
-@@ -396,14 +350,6 @@ export default {
+@@ -406,14 +360,6 @@ export default {
        } else {
          paymentData.groupToCreate = this.newGroup;
        }
@@ -3951,7 +3945,7 @@ index 34ff15ca5..e5dd03e02 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index febfd8efe..302e9cee4 100644
+index 459fd97cc..12e1d0938 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
 @@ -500,7 +500,6 @@ import moment from 'moment';
@@ -4205,7 +4199,7 @@ index 968c92766..c01ce0030 100644
    window.location.href = '/logout-server';
  }
 diff --git a/website/client/store/actions/chat.js b/website/client/store/actions/chat.js
-index def822e6a..ecdd7573a 100644
+index 12e23a34b..966f1d3ec 100644
 --- a/website/client/store/actions/chat.js
 +++ b/website/client/store/actions/chat.js
 @@ -1,5 +1,4 @@
@@ -5201,10 +5195,10 @@ index bbf59c7b2..1363281cc 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index a21464f21..215631cdb 100644
+index a7671d3f1..2a2b6bb07 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
-@@ -6,22 +6,17 @@ import {
+@@ -5,7 +5,6 @@ import {
    authWithHeaders,
  } from '../../middlewares/auth';
  import { model as User } from '../../models/user';
@@ -5212,12 +5206,7 @@ index a21464f21..215631cdb 100644
  import {
    NotAuthorized,
    BadRequest,
--  NotFound,
- } from '../../libs/errors';
- import * as passwordUtils from '../../libs/password';
- import { send as sendEmail } from '../../libs/email';
--import pusher from '../../libs/pusher';
- import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs/password';
+@@ -16,9 +15,7 @@ import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs
  import { encrypt } from '../../libs/encryption';
  import {
    loginRes,
@@ -5227,7 +5216,7 @@ index a21464f21..215631cdb 100644
    registerLocal,
  } from '../../libs/auth';
  
-@@ -32,7 +27,7 @@ let api = {};
+@@ -29,7 +26,7 @@ let api = {};
  
  /**
   * @api {post} /api/v3/user/auth/local/register Register
@@ -5236,7 +5225,7 @@ index a21464f21..215631cdb 100644
   * @apiName UserRegisterLocal
   * @apiGroup User
   *
-@@ -41,7 +36,7 @@ let api = {};
+@@ -38,7 +35,7 @@ let api = {};
   * @apiParam (Body) {String} password Password for the new user
   * @apiParam (Body) {String} confirmPassword Password confirmation
   *
@@ -5245,7 +5234,7 @@ index a21464f21..215631cdb 100644
   */
  api.registerLocal = {
    method: 'POST',
-@@ -117,99 +112,10 @@ api.loginLocal = {
+@@ -114,30 +111,10 @@ api.loginLocal = {
        await user.save();
      }
  
@@ -5273,79 +5262,10 @@ index a21464f21..215631cdb 100644
 -  },
 -};
 -
--/*
-- * @apiIgnore Private route
-- * @api {post} /api/v3/user/auth/pusher Pusher.com authentication
-- * @apiDescription Authentication for Pusher.com private and presence channels
-- * @apiName UserAuthPusher
-- * @apiGroup User
-- *
-- * @apiParam (Body) {String} socket_id A unique identifier for the specific client connection to Pusher
-- * @apiParam (Body) {String} channel_name The name of the channel being subscribed to
-- *
-- * @apiSuccess {String} auth The authentication token
-- */
--api.pusherAuth = {
--  method: 'POST',
--  middlewares: [authWithHeaders()],
--  url: '/user/auth/pusher',
--  async handler (req, res) {
--    let user = res.locals.user;
--
--    req.checkBody('socket_id').notEmpty();
--    req.checkBody('channel_name').notEmpty();
--
--    let validationErrors = req.validationErrors();
--    if (validationErrors) throw validationErrors;
--
--    let socketId = req.body.socket_id;
--    let channelName = req.body.channel_name;
--
--    // Channel names are in the form of {presence|private}-{group|...}-{resourceId}
--    let [channelType, resourceType, ...resourceId] = channelName.split('-');
--
--    if (['presence'].indexOf(channelType) === -1) { // presence is used only for parties, private for guilds
--      throw new BadRequest('Invalid Pusher channel type.');
--    }
--
--    if (resourceType !== 'group') { // only groups are supported
--      throw new BadRequest('Invalid Pusher resource type.');
--    }
--
--    resourceId = resourceId.join('-'); // the split at the beginning had split resourceId too
--    if (!validator.isUUID(String(resourceId))) {
--      throw new BadRequest('Invalid Pusher resource id, must be a UUID.');
--    }
--
--    // Only the user's party is supported for now
--    if (user.party._id !== resourceId) {
--      throw new NotFound('Resource id must be the user\'s party.');
--    }
--
--    let authResult;
--
--    // Max 100 members for presence channel - parties only
--    if (channelType === 'presence') {
--      let presenceData = {
--        user_id: user._id, // eslint-disable-line camelcase
--        // Max 1KB
--        user_info: {}, // eslint-disable-line camelcase
--      };
--
--      authResult = pusher.authenticate(socketId, channelName, presenceData);
--    } else {
--      authResult = pusher.authenticate(socketId, channelName);
--    }
--
--    // Not using res.respond because Pusher requires a different response format
--    res.status(200).json(authResult);
--  },
--};
--
  /**
   * @api {put} /api/v3/user/auth/update-username Update username
   * @apiDescription Update the username of a local user
-@@ -463,33 +369,4 @@ api.resetPasswordSetNewOne = {
+@@ -391,33 +368,4 @@ api.resetPasswordSetNewOne = {
    },
  };
  
@@ -5470,19 +5390,18 @@ index 6405eb59a..61818c6e9 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index b5cf41d48..becd3d2ee 100644
+index 95f6f405f..becd3d2ee 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
-@@ -9,8 +9,6 @@ import {
+@@ -9,7 +9,6 @@ import {
  } from '../../libs/errors';
  import { removeFromArray } from '../../libs/collectionManipulators';
  import { getUserInfo, getGroupUrl, sendTxn } from '../../libs/email';
 -import slack from '../../libs/slack';
--import pusher from '../../libs/pusher';
  import { getAuthorEmailFromMessage } from '../../libs/chat';
  import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
  import nconf from 'nconf';
-@@ -143,14 +141,6 @@ api.postChat = {
+@@ -142,14 +141,6 @@ api.postChat = {
  
        sendTxn(FLAG_REPORT_EMAILS, 'slur-report-to-mods', report);
  
@@ -5497,20 +5416,6 @@ index b5cf41d48..becd3d2ee 100644
        throw new BadRequest(res.t('bannedSlurUsed'));
      }
  
-@@ -186,13 +176,6 @@ api.postChat = {
- 
-     await Promise.all(toSave);
- 
--    // @TODO: rethink if we want real-time
--    if (group.privacy === 'private' && group.type === 'party') {
--      // req.body.pusherSocketId is sent from official clients to identify the sender user's real time socket
--      // see https://pusher.com/docs/server_api_guide/server_excluding_recipients
--      pusher.trigger(`presence-group-${group._id}`, 'new-chat', newChatMessage, req.body.pusherSocketId);
--    }
--
-     if (chatUpdated) {
-       res.respond(200, {chat: chatRes.chat});
-     } else {
 diff --git a/website/server/controllers/api-v3/coupon.js b/website/server/controllers/api-v3/coupon.js
 index 7acc406a4..8a441b55e 100644
 --- a/website/server/controllers/api-v3/coupon.js
@@ -5525,15 +5430,14 @@ index 7acc406a4..8a441b55e 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 11bdc40e8..178f5dc66 100644
+index cf8bc4a03..178f5dc66 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -18,13 +18,7 @@ import {
+@@ -18,12 +18,7 @@ import {
  import { removeFromArray } from '../../libs/collectionManipulators';
  import { sendTxn as sendTxnEmail } from '../../libs/email';
  import { encrypt } from '../../libs/encryption';
 -import { sendNotification as sendPushNotification } from '../../libs/pushNotifications';
--import pusher from '../../libs/pusher';
  import common from '../../../common';
 -import payments from '../../libs/payments/payments';
 -import stripePayments from '../../libs/payments/stripe';
@@ -5542,7 +5446,7 @@ index 11bdc40e8..178f5dc66 100644
  import apiError from '../../libs/apiError';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
-@@ -146,22 +140,6 @@ api.createGroup = {
+@@ -145,22 +140,6 @@ api.createGroup = {
        profile: {name: user.profile.name},
      };
  
@@ -5565,7 +5469,7 @@ index 11bdc40e8..178f5dc66 100644
      res.respond(201, response); // do not remove chat flags data as we've just created the group
    },
  };
-@@ -194,54 +172,6 @@ api.createGroupPlan = {
+@@ -193,54 +172,6 @@ api.createGroupPlan = {
      let results = await Promise.all([user.save(), group.save()]);
      let savedGroup = results[1];
  
@@ -5620,7 +5524,7 @@ index 11bdc40e8..178f5dc66 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -615,10 +545,7 @@ api.joinGroup = {
+@@ -614,10 +545,7 @@ api.joinGroup = {
  
      promises = await Promise.all(promises);
  
@@ -5632,7 +5536,7 @@ index 11bdc40e8..178f5dc66 100644
  
      let response = await Group.toJSONCleanChat(promises[0], user);
      let leader = await User.findById(response.leader).select(nameFields).exec();
-@@ -626,22 +553,6 @@ api.joinGroup = {
+@@ -625,22 +553,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -5655,7 +5559,7 @@ index 11bdc40e8..178f5dc66 100644
      res.respond(200, response);
    },
  };
-@@ -776,12 +687,7 @@ api.leaveGroup = {
+@@ -775,12 +687,7 @@ api.leaveGroup = {
        user.guilds.splice(guildIndex, 1);
      }
  
@@ -5669,20 +5573,7 @@ index 11bdc40e8..178f5dc66 100644
      res.respond(200, {});
    },
  };
-@@ -882,12 +788,6 @@ api.removeGroupMember = {
-         removeFromArray(member.guilds, group._id);
-       }
-       if (isInGroup === 'party') {
--        // Tell the realtime clients that a user is being removed
--        // If the user that is being removed is still connected, they'll get disconnected automatically
--        pusher.trigger(`presence-group-${group._id}`, 'user-removed', {
--          userId: user._id,
--        });
--
-         member.party._id = undefined; // TODO remove quest information too? Use group.leave()?
-       }
- 
-@@ -918,8 +818,7 @@ api.removeGroupMember = {
+@@ -911,8 +818,7 @@ api.removeGroupMember = {
      ]);
  
      if (isInGroup && group.hasNotCancelled())  {
@@ -5692,7 +5583,7 @@ index 11bdc40e8..178f5dc66 100644
      }
  
      res.respond(200, {});
-@@ -999,19 +898,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
+@@ -992,19 +898,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
      sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
    }
  
@@ -5712,7 +5603,7 @@ index 11bdc40e8..178f5dc66 100644
    let userInvited = await userToInvite.save();
    if (group.type === 'guild') {
      return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1027,8 +913,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
+@@ -1020,8 +913,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
  
    let userToContact = await User.findOne({$or: [
      {'auth.local.email': invite.email},
@@ -5721,7 +5612,7 @@ index 11bdc40e8..178f5dc66 100644
    ]})
      .select({_id: true, 'preferences.emailNotifications': true})
      .exec();
-@@ -1191,16 +1075,6 @@ api.inviteToGroup = {
+@@ -1184,16 +1075,6 @@ api.inviteToGroup = {
        results.push(...emailResults);
      }
  
@@ -6214,10 +6105,10 @@ index 6b7047089..2812a4539 100644
      res.respond(200, ...reviveRes);
    },
 diff --git a/website/server/controllers/api-v4/auth.js b/website/server/controllers/api-v4/auth.js
-index 607562aca..621203cc5 100644
+index 5b8d8540a..c3e6007f5 100644
 --- a/website/server/controllers/api-v4/auth.js
 +++ b/website/server/controllers/api-v4/auth.js
-@@ -116,7 +116,7 @@ api.verifyUsername = {
+@@ -129,7 +129,7 @@ api.verifyUsername = {
  
  /**
   * @api {post} /api/v4/user/auth/local/register Register
@@ -6226,7 +6117,7 @@ index 607562aca..621203cc5 100644
   * @apiName UserRegisterLocal
   * @apiGroup User
   *
-@@ -125,7 +125,7 @@ api.verifyUsername = {
+@@ -138,7 +138,7 @@ api.verifyUsername = {
   * @apiParam (Body) {String} password Password for the new user
   * @apiParam (Body) {String} confirmPassword Password confirmation
   *
@@ -6774,7 +6665,7 @@ index da3e189d7..57b9a64b0 100644
  
  api.addSubscriptionToGroupUsers = addSubscriptionToGroupUsers;
 diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
-index 82e9a30d7..4da6587e5 100644
+index 9757d1696..5e69c3fdb 100644
 --- a/website/server/libs/payments/subscriptions.js
 +++ b/website/server/libs/payments/subscriptions.js
 @@ -1,8 +1,6 @@
@@ -6794,7 +6685,7 @@ index 82e9a30d7..4da6587e5 100644
  
  // @TODO: Abstract to shared/constant
  const JOINED_GROUP_PLAN = 'joined group plan';
-@@ -54,9 +51,6 @@ async function createSubscription (data) {
+@@ -55,9 +52,6 @@ async function createSubscription (data) {
    let today = new Date();
    let plan;
    let group;
@@ -6804,7 +6695,7 @@ index 82e9a30d7..4da6587e5 100644
    let emailType = 'subscription-begins';
  
    //  If we are buying a group subscription
-@@ -73,10 +67,7 @@ async function createSubscription (data) {
+@@ -74,10 +68,7 @@ async function createSubscription (data) {
      }
  
      recipient = group;
@@ -6815,7 +6706,7 @@ index 82e9a30d7..4da6587e5 100644
      recipient.purchased.plan.quantity = data.sub.quantity;
  
      await this.addSubscriptionToGroupUsers(group);
-@@ -108,9 +99,7 @@ async function createSubscription (data) {
+@@ -109,9 +100,7 @@ async function createSubscription (data) {
        paymentMethod: data.paymentMethod,
        extraMonths: Number(plan.extraMonths) + _dateDiff(today, plan.dateTerminated),
        dateTerminated: null,
@@ -6826,7 +6717,7 @@ index 82e9a30d7..4da6587e5 100644
        nextPaymentProcessing: data.nextPaymentProcessing,
        nextBillingDate: data.nextBillingDate,
        additionalData: data.additionalData,
-@@ -146,19 +135,6 @@ async function createSubscription (data) {
+@@ -147,19 +136,6 @@ async function createSubscription (data) {
      txnEmail(data.user, emailType);
    }
  
@@ -6846,7 +6737,7 @@ index 82e9a30d7..4da6587e5 100644
    if (!group) data.user.purchased.txnCount++;
  
    if (data.gift) {
-@@ -193,48 +169,17 @@ async function createSubscription (data) {
+@@ -194,48 +170,17 @@ async function createSubscription (data) {
          {name: 'X_MONTHS_SUBSCRIPTION', content: months},
        ]);
      }
@@ -6895,7 +6786,7 @@ index 82e9a30d7..4da6587e5 100644
    let emailType;
    let emailMergeData = [];
    let sendEmail = true;
-@@ -296,20 +241,6 @@ async function cancelSubscription (data) {
+@@ -297,20 +242,6 @@ async function cancelSubscription (data) {
    }
  
    if (sendEmail) txnEmail(data.user, emailType, emailMergeData);
@@ -7062,7 +6953,7 @@ index adf74bcbd..67f63b364 100644
    '/email',
    '/qr-code',
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
-index bb1888892..0f421906e 100644
+index d0f02c41c..36d34547a 100644
 --- a/website/server/models/challenge.js
 +++ b/website/server/models/challenge.js
 @@ -10,7 +10,6 @@ import {
@@ -7102,15 +6993,14 @@ index c973ffb76..2d96d9217 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index e2939278e..72b4f6ef6 100644
+index ee47849ce..00ca92426 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
-@@ -28,16 +28,12 @@ import {
+@@ -28,15 +28,12 @@ import {
  import baseModel from '../libs/baseModel';
  import { sendTxn as sendTxnEmail } from '../libs/email';
  import nconf from 'nconf';
 -import { sendNotification as sendPushNotification } from '../libs/pushNotifications';
--import pusher from '../libs/pusher';
  import {
    syncableAttrs,
  } from '../libs/taskManager';
@@ -7122,20 +7012,7 @@ index e2939278e..72b4f6ef6 100644
  import { getGroupChat } from '../libs/chat/group-chat';
  import { model as UserNotification } from './userNotification';
  
-@@ -522,12 +518,6 @@ schema.methods.sendChat = function sendChat (message, user, metaData) {
-     User.update(query, lastSeenUpdateAddNew, {multi: true}).exec();
-   });
- 
--  // If the message being sent is a system message (not gone through the api.postChat controller)
--  // then notify Pusher about it (only parties for now)
--  if (newMessage.uuid === 'system' && this.privacy === 'private' && this.type === 'party') {
--    pusher.trigger(`presence-group-${this._id}`, 'new-chat', newMessage);
--  }
--
-   return newChatMessage;
- };
- 
-@@ -571,7 +561,7 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -564,7 +561,7 @@ schema.methods.startQuest = async function startQuest (user) {
    await User.find({
      _id: {$in: Object.keys(this.quest.members)},
    })
@@ -7144,7 +7021,7 @@ index e2939278e..72b4f6ef6 100644
      .lean()
      .exec()
      .then(partyMembers => {
-@@ -635,8 +625,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -628,8 +625,6 @@ schema.methods.startQuest = async function startQuest (user) {
    await newMessage.save();
  
    const membersToEmail = [];
@@ -7153,7 +7030,7 @@ index e2939278e..72b4f6ef6 100644
  
    // send notifications and webhooks in the background without blocking
    members.forEach(member => {
-@@ -645,15 +633,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -638,15 +633,6 @@ schema.methods.startQuest = async function startQuest (user) {
        if (member.preferences.emailNotifications.questStarted !== false) {
          membersToEmail.push(member);
        }
@@ -7169,20 +7046,7 @@ index e2939278e..72b4f6ef6 100644
      }
  
      // Send webhooks
-@@ -1160,12 +1139,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
-     promises.push(User.update({_id: user._id}, {$pull: {guilds: group._id}}).exec());
-   } else {
-     promises.push(User.update({_id: user._id}, {$set: {party: {}}}).exec());
--    // Tell the realtime clients that a user has left
--    // If the user that left is still connected, they'll get disconnected
--    pusher.trigger(`presence-group-${group._id}`, 'user-left', {
--      userId: user._id,
--    });
--
-     update.$unset = {[`quest.members.${user._id}`]: 1};
-   }
- 
-@@ -1429,7 +1402,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+@@ -1417,7 +1403,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
    return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
@@ -7191,7 +7055,7 @@ index e2939278e..72b4f6ef6 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1438,12 +1411,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1426,12 +1412,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;
@@ -7205,12 +7069,12 @@ index e2939278e..72b4f6ef6 100644
  
  export let model = mongoose.model('Group', schema);
 diff --git a/website/server/models/subscriptionPlan.js b/website/server/models/subscriptionPlan.js
-index e3994c8e0..c6f8a4a17 100644
+index 86609cfa4..ac56db1cb 100644
 --- a/website/server/models/subscriptionPlan.js
 +++ b/website/server/models/subscriptionPlan.js
 @@ -7,18 +7,18 @@ export let schema = new mongoose.Schema({
    subscriptionId: String,
-   owner: {type: String, ref: 'User', validate: [validator.isUUID, 'Invalid uuid.']},
+   owner: {type: String, ref: 'User', validate: [v => validator.isUUID(v), 'Invalid uuid.']},
    quantity: {type: Number, default: 1},
 -  paymentMethod: String, // enum: ['Paypal', 'Stripe', 'Gift', 'Amazon Payments', 'Google', '']}
 -  customerId: String, // Billing Agreement Id in case of Amazon Payments
@@ -7275,7 +7139,7 @@ index 28a51fb15..70486c462 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index d8517a753..f755a0e49 100644
+index 4ce701ecb..c85d07c76 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -3,7 +3,6 @@ import shared from '../../../common';

@@ -83,7 +83,7 @@ in {
     "coupon-code" = nodePackages."coupon-code-^0.4.5";
     "cross-env" = nodePackages."cross-env-^5.1.5";
     "css-loader" = nodePackages."css-loader-^0.28.11";
-    "csv-stringify" = nodePackages."csv-stringify-^3.0.0";
+    "csv-stringify" = nodePackages."csv-stringify-^4.3.1";
     cwait = nodePackages."cwait-^1.1.1";
     "domain-middleware" = nodePackages."domain-middleware-~0.1.0";
     express = nodePackages."express-^4.16.3";
@@ -105,10 +105,10 @@ in {
     js2xmlparser = nodePackages."js2xmlparser-^3.0.0";
     lodash = nodePackages."lodash-^4.17.10";
     "merge-stream" = nodePackages."merge-stream-^1.0.0";
-    "method-override" = nodePackages."method-override-^2.3.5";
+    "method-override" = nodePackages."method-override-^3.0.0";
     moment = nodePackages."moment-^2.22.1";
     "moment-recur" = nodePackages."moment-recur-^1.0.7";
-    mongoose = nodePackages."mongoose-^5.1.3";
+    mongoose = nodePackages."mongoose-^5.3.4";
     morgan = nodePackages."morgan-^1.7.0";
     nconf = nodePackages."nconf-^0.10.0";
     "node-sass" = nodePackages."node-sass-^4.9.0";
