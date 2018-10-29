@@ -170,7 +170,7 @@ index 51ff986f4..0c9c78603 100644
    }
  }
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index eba1f9a9c..172f494b5 100644
+index 6bd7cec47..79d76e54a 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -109,7 +109,6 @@ let schema = new Schema({
@@ -179,5 +179,5 @@ index eba1f9a9c..172f494b5 100644
    contributor: {
 -    // 1-9, see https://trello.com/c/wkFzONhE/277-contributor-gear https://github.com/HabitRPG/habitica/issues/3801
      level: {
-       type: Number,
+       $type: Number,
        min: 0,

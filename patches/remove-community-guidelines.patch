@@ -135,14 +135,14 @@ index 5737a9ed6..c4321265c 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index ce0b41f66..eba1f9a9c 100644
+index 4ae4f7784..6bd7cec47 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -215,7 +215,6 @@ let schema = new Schema({
      // Used to enable weekly recap emails as users login
      lastWeeklyRecapDiscriminator: Boolean,
      onboardingEmailsPhase: String, // Keep track of the latest onboarding email sent
--    communityGuidelinesAccepted: {type: Boolean, default: false},
-     cronCount: {type: Number, default: 0},
-     welcomed: {type: Boolean, default: false},
-     armoireEnabled: {type: Boolean, default: true},
+-    communityGuidelinesAccepted: {$type: Boolean, default: false},
+     cronCount: {$type: Number, default: 0},
+     welcomed: {$type: Boolean, default: false},
+     armoireEnabled: {$type: Boolean, default: true},

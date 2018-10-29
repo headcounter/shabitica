@@ -613,7 +613,7 @@ index 5567e7f79..170d579dc 100644
  
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 00ca92426..bd4e3e700 100644
+index 68525db0a..1961aaf66 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -1,4 +1,3 @@
@@ -621,7 +621,7 @@ index 00ca92426..bd4e3e700 100644
  import mongoose from 'mongoose';
  import {
    model as User,
-@@ -1388,19 +1387,16 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
+@@ -1389,19 +1388,16 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
  };
  
  schema.methods.isSubscribed = function isSubscribed () {
