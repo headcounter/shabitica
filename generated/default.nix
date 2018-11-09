@@ -24,7 +24,7 @@ in {
     "eslint-plugin-mocha" = nodePackages."eslint-plugin-mocha-^5.0.0";
     "eventsource-polyfill" = nodePackages."eventsource-polyfill-^0.9.6";
     "expect.js" = nodePackages."expect.js-^0.3.1";
-    "http-proxy-middleware" = nodePackages."http-proxy-middleware-^0.19.0";
+    "http-proxy-middleware" = nodePackages."http-proxy-middleware-^0.18.0";
     istanbul = nodePackages."istanbul-^1.1.0-alpha.1";
     karma = nodePackages."karma-^3.0.0";
     "karma-babel-preprocessor" = nodePackages."karma-babel-preprocessor-^7.0.0";
@@ -48,7 +48,7 @@ in {
     puppeteer = nodePackages."puppeteer-^1.4.0";
     "require-again" = nodePackages."require-again-^2.0.0";
     "selenium-server" = nodePackages."selenium-server-^3.12.0";
-    sinon = nodePackages."sinon-^6.3.5";
+    sinon = nodePackages."sinon-^4.5.0";
     "sinon-chai" = nodePackages."sinon-chai-^3.0.0";
     "sinon-stub-promise" = nodePackages."sinon-stub-promise-^4.0.0";
     "webpack-bundle-analyzer" = nodePackages."webpack-bundle-analyzer-^2.12.0";
@@ -95,7 +95,7 @@ in {
     gulp = nodePackages."gulp-^4.0.0";
     "gulp-babel" = nodePackages."gulp-babel-^7.0.1";
     "gulp-imagemin" = nodePackages."gulp-imagemin-^4.1.0";
-    "gulp-nodemon" = nodePackages."gulp-nodemon-^2.4.1";
+    "gulp-nodemon" = nodePackages."gulp-nodemon-^2.2.1";
     "gulp.spritesmith" = nodePackages."gulp.spritesmith-^6.9.0";
     "habitica-markdown" = nodePackages."habitica-markdown-^1.3.0";
     "html-webpack-plugin" = nodePackages."html-webpack-plugin-^3.2.0";
@@ -112,7 +112,7 @@ in {
     morgan = nodePackages."morgan-^1.7.0";
     nconf = nodePackages."nconf-^0.10.0";
     "node-sass" = nodePackages."node-sass-^4.9.0";
-    ora = nodePackages."ora-^3.0.0";
+    ora = nodePackages."ora-^2.1.0";
     pageres = nodePackages."pageres-^4.1.1";
     passport = nodePackages."passport-^0.4.0";
     "popper.js" = nodePackages."popper.js-^1.14.3";
