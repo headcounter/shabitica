@@ -13,10 +13,10 @@ Date:   Fri Jun 29 23:09:04 2018 +0200
     Filename: remove-spritely.patch
 
 diff --git a/website/client/components/settings/api.vue b/website/client/components/settings/api.vue
-index 5f049623f..dc4d7685e 100644
+index ccacd0f28..c4ef9acf9 100644
 --- a/website/client/components/settings/api.vue
 +++ b/website/client/components/settings/api.vue
-@@ -64,12 +64,6 @@ export default {
+@@ -65,12 +65,6 @@ export default {
        showApiToken: false,
      };
    },
@@ -29,7 +29,7 @@ index 5f049623f..dc4d7685e 100644
    computed: {
      ...mapState({user: 'user.data', credentials: 'credentials'}),
      apiToken () {
-@@ -77,15 +71,6 @@ export default {
+@@ -78,15 +72,6 @@ export default {
      },
    },
    methods: {

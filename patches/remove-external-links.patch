@@ -78,7 +78,7 @@ index b9eccf5c9..51b9bb64b 100644
              a.topbar-dropdown-item.dropdown-item(href="http://habitica.wikia.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
        .currency-tray.form-inline
 diff --git a/website/client/components/settings/api.vue b/website/client/components/settings/api.vue
-index 5b6627da1..5f049623f 100644
+index 291c3640f..ccacd0f28 100644
 --- a/website/client/components/settings/api.vue
 +++ b/website/client/components/settings/api.vue
 @@ -15,27 +15,6 @@
@@ -108,7 +108,7 @@ index 5b6627da1..5f049623f 100644
 -
    .col-6
      h2 {{ $t('webhooks') }}
-     table.table.table-striped
+     p(v-html="$t('webhooksInfo')")
 diff --git a/website/client/components/static/faq.vue b/website/client/components/static/faq.vue
 index e2ce08aa0..5000dac10 100644
 --- a/website/client/components/static/faq.vue
@@ -170,7 +170,7 @@ index 51ff986f4..0c9c78603 100644
    }
  }
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 6bd7cec47..79d76e54a 100644
+index 356ba59c7..dbd3a2508 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -109,7 +109,6 @@ let schema = new Schema({

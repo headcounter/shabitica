@@ -108,7 +108,7 @@ index b75c9b4c5..8bdf4dd4c 100644
  
      it('requires a password', async () => {
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 969f12bbe..4ae4f7784 100644
+index cbe23ab4b..d4d2df2c4 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -13,8 +13,6 @@ import {

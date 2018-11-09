@@ -3387,7 +3387,7 @@ index 34838b050..a74c52e6e 100644
          .col-6
            input.form-control(type='password', v-model='password')
 diff --git a/website/client/components/settings/notifications.vue b/website/client/components/settings/notifications.vue
-index 45504395b..06c2aa3bd 100644
+index 2b4966a8c..c12e72f9c 100644
 --- a/website/client/components/settings/notifications.vue
 +++ b/website/client/components/settings/notifications.vue
 @@ -3,14 +3,6 @@
@@ -3945,7 +3945,7 @@ index 34ff15ca5..e5dd03e02 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index 459fd97cc..12e1d0938 100644
+index 5f743a0d4..7f64f7006 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
 @@ -500,7 +500,6 @@ import moment from 'moment';
@@ -7139,7 +7139,7 @@ index 28a51fb15..70486c462 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 3909c0dd5..969f12bbe 100644
+index 42871628c..cbe23ab4b 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -3,7 +3,6 @@ import shared from '../../../common';
@@ -7163,9 +7163,9 @@ index 3909c0dd5..969f12bbe 100644
      local: {
        email: {
          $type: String,
-@@ -482,17 +475,6 @@ let schema = new Schema({
-       weeklyRecaps: {$type: Boolean, default: true},
+@@ -483,18 +476,6 @@ let schema = new Schema({
        onboarding: {$type: Boolean, default: true},
+       majorUpdates: {$type: Boolean, default: true},
      },
 -    pushNotifications: {
 -      unsubscribeFromAll: {$type: Boolean, default: false},
@@ -7177,11 +7177,12 @@ index 3909c0dd5..969f12bbe 100644
 -      invitedGuild: {$type: Boolean, default: true},
 -      questStarted: {$type: Boolean, default: true},
 -      invitedQuest: {$type: Boolean, default: true},
+-      majorUpdates: {$type: Boolean, default: true},
 -    },
      suppressModals: {
        levelUp: {$type: Boolean, default: false},
        hatchPet: {$type: Boolean, default: false},
-@@ -573,7 +555,6 @@ let schema = new Schema({
+@@ -575,7 +556,6 @@ let schema = new Schema({
    extra: {$type: Schema.Types.Mixed, default: () => {
      return {};
    }},

@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:02 2018 +0200
     Filename: strip-dependencies.patch
 
 diff --git a/package.json b/package.json
-index fa5d3592a..a843cee2c 100644
+index a3cc9e87c..7c548324e 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,14 +4,9 @@
-   "version": "4.67.1",
+   "version": "4.69.2",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@slack/client": "^3.8.1",
@@ -29,7 +29,7 @@ index fa5d3592a..a843cee2c 100644
      "axios-progress-bar": "^1.2.0",
      "babel-core": "^6.26.3",
 @@ -50,10 +45,8 @@
-     "gulp-nodemon": "^2.2.1",
+     "gulp-nodemon": "^2.4.1",
      "gulp.spritesmith": "^6.9.0",
      "habitica-markdown": "^1.3.0",
 -    "hellojs": "^1.15.1",
@@ -46,7 +46,7 @@ index fa5d3592a..a843cee2c 100644
 -    "node-gcm": "^1.0.2",
      "node-sass": "^4.9.0",
      "nodemailer": "^4.6.4",
-     "ora": "^2.1.0",
+     "ora": "^3.0.0",
      "pageres": "^4.1.1",
      "passport": "^0.4.0",
 -    "passport-facebook": "^2.0.0",

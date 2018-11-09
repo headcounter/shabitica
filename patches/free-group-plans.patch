@@ -14,7 +14,7 @@ Date:   Tue Mar 27 05:37:23 2018 +0200
     Filename: free-group-plans.patch
 
 diff --git a/test/api/unit/models/group.test.js b/test/api/unit/models/group.test.js
-index 19613448a..f01f3ca51 100644
+index e965ca29f..24c5e8c54 100644
 --- a/test/api/unit/models/group.test.js
 +++ b/test/api/unit/models/group.test.js
 @@ -1,4 +1,3 @@
@@ -260,7 +260,7 @@ index 7674d4b6f..82c2825f4 100644
    .col-12
      router-view
 diff --git a/website/client/components/group-plans/taskInformation.vue b/website/client/components/group-plans/taskInformation.vue
-index 01aeb6c3e..d4b20ce7a 100644
+index b65b216a1..1524a1a69 100644
 --- a/website/client/components/group-plans/taskInformation.vue
 +++ b/website/client/components/group-plans/taskInformation.vue
 @@ -1,6 +1,5 @@
