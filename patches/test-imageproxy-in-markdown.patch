@@ -15,10 +15,10 @@ Date:   Sat Aug 4 23:09:37 2018 +0200
     Filename: test-imageproxy-in-markdown.patch
 
 diff --git a/test/client/e2e/specs/test.js b/test/client/e2e/specs/test.js
-index f43964476..cf3fdf2ac 100644
+index f43964476..8898b7c0d 100644
 --- a/test/client/e2e/specs/test.js
 +++ b/test/client/e2e/specs/test.js
-@@ -15,4 +15,33 @@ module.exports = {
+@@ -15,4 +15,32 @@ module.exports = {
        .assert.containsText('h1', 'Motivate yourself to achieve your goals.')
        .end();
    },
@@ -37,8 +37,7 @@ index f43964476..cf3fdf2ac 100644
 +      .useCss()
 +      .waitForElementVisible('.welcome-section', 50000)
 +      .click('#avatar-modal .btn-primary')
-+      .waitForElementVisible('.welcome-section', 50000)
-+      .click('.next')
++      .waitForElementVisible('.avatar-section.page-2', 50000)
 +      .click('.next')
 +      .click('.next')
 +      .waitForElementVisible('.introjs-donebutton', 50000)
