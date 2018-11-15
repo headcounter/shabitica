@@ -369,6 +369,43 @@ index 987f7bd55..dc5efa212 100644
      });
  
      it('errors if username has incorrect length', async () => {
+diff --git a/test/api/v4/user/auth/POST-user_verify_display_name.test.js b/test/api/v4/user/auth/POST-user_verify_display_name.test.js
+index 8fa1b9d5b..b040578b6 100644
+--- a/test/api/v4/user/auth/POST-user_verify_display_name.test.js
++++ b/test/api/v4/user/auth/POST-user_verify_display_name.test.js
+@@ -30,22 +30,22 @@ describe('POST /user/auth/verify-display-name', async () => {
+       });
+     });
+ 
+-    it('errors if display name is a slur', async () => {
++    it('works if display name is a slur', async () => {
+       await expect(user.post(ENDPOINT, {
+-        displayName: 'TESTPLACEHOLDERSLURWORDHERE',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('displaynameIssueSlur')] });
++        displayName: 'cunt',
++      })).to.eventually.eql({ isUsable: true });
+     });
+ 
+-    it('errors if display name contains a slur', async () => {
++    it('works if display name contains a slur', async () => {
+       await expect(user.post(ENDPOINT, {
+-        displayName: 'TESTPLACEHOLDERSLURWORDHERE_otherword',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('displaynameIssueLength'), t('displaynameIssueSlur')] });
++        displayName: 'cunt_otherword',
++      })).to.eventually.eql({ isUsable: true });
+       await expect(user.post(ENDPOINT, {
+-        displayName: 'something_TESTPLACEHOLDERSLURWORDHERE',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('displaynameIssueLength'), t('displaynameIssueSlur')] });
++        displayName: 'something_cunt',
++      })).to.eventually.eql({ isUsable: true });
+       await expect(user.post(ENDPOINT, {
+-        displayName: 'somethingTESTPLACEHOLDERSLURWORDHEREotherword',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('displaynameIssueLength'), t('displaynameIssueSlur')] });
++        displayName: 'somethingcuntotherword',
++      })).to.eventually.eql({ isUsable: true });
+     });
+ 
+     it('errors if display name has incorrect length', async () => {
 diff --git a/test/api/v4/user/auth/POST-user_verify_username.test.js b/test/api/v4/user/auth/POST-user_verify_username.test.js
 index c17b789a4..041a41820 100644
 --- a/test/api/v4/user/auth/POST-user_verify_username.test.js
