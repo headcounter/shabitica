@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.69.2";
+  version = "4.70.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "04kjvw0v5xq5xkbbaawdspgdnhrh9m42r57dfarixlhfzr0avq93";
+    sha256 = "13v7lx4nxy4jsj9zzm9m9i28qxgwn1dpssr2l3p4kcdxpyp3hdla";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -392,6 +392,7 @@ stdenv.mkDerivation rec {
     "[Aa]pple.\\?[Pp]icking"
     "api-v3/groups\\.js:.*await payments.createSubscription"
     "api-v3/groups\\.js:import payments from"
+    "auth.js:.*function verifyDisplayName.*{"
     "static/privacy\\.vue:.*doesn't use any analytics"
     "static/terms\\.vue:.*such as Google Chrome"
     "top-level/pages\\.js:// All.*except.*api and payments"

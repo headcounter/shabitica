@@ -276,64 +276,10 @@ index bef5ec25d..6c7f49a28 100644
      });
    });
  
-diff --git a/test/api/v4/user/auth/POST-user_verify_username.test.js b/test/api/v4/user/auth/POST-user_verify_username.test.js
-index c17b789a4..041a41820 100644
---- a/test/api/v4/user/auth/POST-user_verify_username.test.js
-+++ b/test/api/v4/user/auth/POST-user_verify_username.test.js
-@@ -38,34 +38,34 @@ describe('POST /user/auth/verify-username', async () => {
-       });
-     });
- 
--    it('errors if username is a slur', async () => {
-+    it('works if username is a slur', async () => {
-       await expect(user.post(ENDPOINT, {
--        username: 'TESTPLACEHOLDERSLURWORDHERE',
--      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
-+        username: 'cunt',
-+      })).to.eventually.eql({ isUsable: true });
-     });
- 
--    it('errors if username contains a slur', async () => {
-+    it('works if username contains a slur', async () => {
-       await expect(user.post(ENDPOINT, {
--        username: 'TESTPLACEHOLDERSLURWORDHERE_otherword',
--      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
-+        username: 'cunt_otherword',
-+      })).to.eventually.eql({ isUsable: true });
-       await expect(user.post(ENDPOINT, {
--        username: 'something_TESTPLACEHOLDERSLURWORDHERE',
--      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
-+        username: 'something_cunt',
-+      })).to.eventually.eql({ isUsable: true });
-       await expect(user.post(ENDPOINT, {
--        username: 'somethingTESTPLACEHOLDERSLURWORDHEREotherword',
--      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
-+        username: 'sthingcuntotherword',
-+      })).to.eventually.eql({ isUsable: true });
-     });
- 
--    it('errors if username is not allowed', async () => {
-+    it('works if username is not allowed', async () => {
-       await expect(user.post(ENDPOINT, {
-         username: 'support',
--      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueForbidden')] });
-+      })).to.eventually.eql({ isUsable: true });
-     });
- 
--    it('errors if username is not allowed regardless of casing', async () => {
-+    it('works if username is not allowed regardless of casing', async () => {
-       await expect(user.post(ENDPOINT, {
--        username: 'SUppORT',
--      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueForbidden')] });
-+        username: 'AdMiN',
-+      })).to.eventually.eql({ isUsable: true });
-     });
- 
-     it('errors if username has incorrect length', async () => {
-diff --git a/test/api/v4/user/auth/PUT-user_update_username.test.js b/test/api/v4/user/auth/PUT-user_update_username.test.js
-index 26a622cf0..fcf95505c 100644
---- a/test/api/v4/user/auth/PUT-user_update_username.test.js
-+++ b/test/api/v4/user/auth/PUT-user_update_username.test.js
+diff --git a/test/api/v3/integration/user/auth/PUT-user_update_username.test.js b/test/api/v3/integration/user/auth/PUT-user_update_username.test.js
+index 987f7bd55..dc5efa212 100644
+--- a/test/api/v3/integration/user/auth/PUT-user_update_username.test.js
++++ b/test/api/v3/integration/user/auth/PUT-user_update_username.test.js
 @@ -133,58 +133,48 @@ describe('PUT /user/auth/update-username', async () => {
        });
      });
@@ -420,6 +366,60 @@ index 26a622cf0..fcf95505c 100644
 +        username: newUsername,
        });
 +      expect(response).to.eql({ username: newUsername });
+     });
+ 
+     it('errors if username has incorrect length', async () => {
+diff --git a/test/api/v4/user/auth/POST-user_verify_username.test.js b/test/api/v4/user/auth/POST-user_verify_username.test.js
+index c17b789a4..041a41820 100644
+--- a/test/api/v4/user/auth/POST-user_verify_username.test.js
++++ b/test/api/v4/user/auth/POST-user_verify_username.test.js
+@@ -38,34 +38,34 @@ describe('POST /user/auth/verify-username', async () => {
+       });
+     });
+ 
+-    it('errors if username is a slur', async () => {
++    it('works if username is a slur', async () => {
+       await expect(user.post(ENDPOINT, {
+-        username: 'TESTPLACEHOLDERSLURWORDHERE',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
++        username: 'cunt',
++      })).to.eventually.eql({ isUsable: true });
+     });
+ 
+-    it('errors if username contains a slur', async () => {
++    it('works if username contains a slur', async () => {
+       await expect(user.post(ENDPOINT, {
+-        username: 'TESTPLACEHOLDERSLURWORDHERE_otherword',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
++        username: 'cunt_otherword',
++      })).to.eventually.eql({ isUsable: true });
+       await expect(user.post(ENDPOINT, {
+-        username: 'something_TESTPLACEHOLDERSLURWORDHERE',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
++        username: 'something_cunt',
++      })).to.eventually.eql({ isUsable: true });
+       await expect(user.post(ENDPOINT, {
+-        username: 'somethingTESTPLACEHOLDERSLURWORDHEREotherword',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueLength'), t('usernameIssueSlur')] });
++        username: 'sthingcuntotherword',
++      })).to.eventually.eql({ isUsable: true });
+     });
+ 
+-    it('errors if username is not allowed', async () => {
++    it('works if username is not allowed', async () => {
+       await expect(user.post(ENDPOINT, {
+         username: 'support',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueForbidden')] });
++      })).to.eventually.eql({ isUsable: true });
+     });
+ 
+-    it('errors if username is not allowed regardless of casing', async () => {
++    it('works if username is not allowed regardless of casing', async () => {
+       await expect(user.post(ENDPOINT, {
+-        username: 'SUppORT',
+-      })).to.eventually.eql({ isUsable: false, issues: [t('usernameIssueForbidden')] });
++        username: 'AdMiN',
++      })).to.eventually.eql({ isUsable: true });
      });
  
      it('errors if username has incorrect length', async () => {
@@ -604,7 +604,7 @@ index c4321265c..c65a19904 100644
  
    _.each(req.body, (val, key) => {
 diff --git a/website/server/libs/user/validation.js b/website/server/libs/user/validation.js
-index a56446bc9..4a9c994c3 100644
+index 097ef70cd..ba850aa01 100644
 --- a/website/server/libs/user/validation.js
 +++ b/website/server/libs/user/validation.js
 @@ -1,25 +1,3 @@
@@ -633,7 +633,15 @@ index a56446bc9..4a9c994c3 100644
  const invalidCharsRegex = new RegExp('[^a-z0-9_-]', 'i');
  function usernameContainsInvalidCharacters (username) {
    let match = username.match(invalidCharsRegex);
-@@ -30,8 +8,6 @@ export function verifyUsername (username, res) {
+@@ -29,7 +7,6 @@ function usernameContainsInvalidCharacters (username) {
+ export function verifyDisplayName (displayName, res) {
+   let issues = [];
+   if (displayName.length < 1 || displayName.length > 30) issues.push(res.t('displaynameIssueLength'));
+-  if (nameContainsSlur(displayName)) issues.push(res.t('displaynameIssueSlur'));
+ 
+   return issues;
+ }
+@@ -38,8 +15,6 @@ export function verifyUsername (username, res) {
    let issues = [];
    if (username.length < 1 || username.length > 20) issues.push(res.t('usernameIssueLength'));
    if (usernameContainsInvalidCharacters(username)) issues.push(res.t('usernameIssueInvalidCharacters'));

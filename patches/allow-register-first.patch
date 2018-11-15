@@ -15,10 +15,10 @@ Date:   Tue Mar 27 05:37:23 2018 +0200
     Filename: allow-register-first.patch
 
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 36de03790..89088a350 100644
+index 454146c40..764bbebf5 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
-@@ -135,15 +135,17 @@ async function registerLocal (req, res, { isV3 = false }) {
+@@ -138,15 +138,17 @@ async function registerLocal (req, res, { isV3 = false }) {
      },
    };
  

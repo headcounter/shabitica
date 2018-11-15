@@ -2878,7 +2878,7 @@ index e101c5457..be87ab840 100644
      },
    },
 diff --git a/website/client/components/auth/registerLoginReset.vue b/website/client/components/auth/registerLoginReset.vue
-index ffaa3b6c9..9466b6d9c 100644
+index d131dc76a..6a705b1c6 100644
 --- a/website/client/components/auth/registerLoginReset.vue
 +++ b/website/client/components/auth/registerLoginReset.vue
 @@ -13,15 +13,6 @@
@@ -2924,12 +2924,13 @@ index ffaa3b6c9..9466b6d9c 100644
    }
  
    #top-background {
-@@ -293,13 +264,10 @@
+@@ -293,14 +264,11 @@
  
  <script>
  import axios from 'axios';
 -import hello from 'hellojs';
  import debounce from 'lodash/debounce';
+ import isEmail from 'validator/lib/isEmail';
  
  import gryphon from 'assets/svg/gryphon.svg';
  import habiticaIcon from 'assets/svg/habitica-logo.svg';
@@ -2938,7 +2939,7 @@ index ffaa3b6c9..9466b6d9c 100644
  
  export default {
    data () {
-@@ -319,8 +287,6 @@ export default {
+@@ -320,8 +288,6 @@ export default {
      data.icons = Object.freeze({
        gryphon,
        habiticaIcon,
@@ -2947,7 +2948,7 @@ index ffaa3b6c9..9466b6d9c 100644
      });
  
      return data;
-@@ -363,13 +329,6 @@ export default {
+@@ -364,13 +330,6 @@ export default {
        return !this.passwordConfirmValid;
      },
    },
@@ -2961,7 +2962,7 @@ index ffaa3b6c9..9466b6d9c 100644
    watch: {
      $route: {
        handler () {
-@@ -480,37 +439,6 @@ export default {
+@@ -481,37 +440,6 @@ export default {
        // ALSO it's the only way to make sure language data is reloaded and correct for the logged in user
        window.location.href = redirectTo;
      },
@@ -3424,7 +3425,7 @@ index 2b4966a8c..c12e72f9c 100644
  </template>
  
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index bad881533..78003783b 100644
+index e50c72dda..4ad6cd158 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -109,12 +109,6 @@
@@ -3440,7 +3441,7 @@ index bad881533..78003783b 100644
            div(v-if='!user.auth.local.email')
              p {{ $t('addLocalAuth') }}
              .form(name='localAuth', novalidate)
-@@ -202,7 +196,6 @@
+@@ -204,7 +198,6 @@
  </style>
  
  <script>
@@ -3448,7 +3449,7 @@ index bad881533..78003783b 100644
  import moment from 'moment';
  import axios from 'axios';
  import { mapState } from 'client/libs/store';
-@@ -210,7 +203,6 @@ import debounce from 'lodash/debounce';
+@@ -212,7 +205,6 @@ import debounce from 'lodash/debounce';
  import restoreModal from './restoreModal';
  import resetModal from './resetModal';
  import deleteModal from './deleteModal';
@@ -3456,7 +3457,7 @@ index bad881533..78003783b 100644
  import changeClass from  '../../../common/script/ops/changeClass';
  import notificationsMixin from '../../mixins/notifications';
  // @TODO: this needs our window.env fix
-@@ -236,7 +228,6 @@ export default {
+@@ -238,7 +230,6 @@ export default {
      }
  
      return {
@@ -3464,7 +3465,7 @@ index bad881533..78003783b 100644
        party: {},
        // Made available by the server as a script
        availableFormats: ['MM/dd/yyyy', 'dd/MM/yyyy', 'yyyy/MM/dd'],
-@@ -256,7 +247,6 @@ export default {
+@@ -259,7 +250,6 @@ export default {
      };
    },
    mounted () {
@@ -3472,7 +3473,7 @@ index bad881533..78003783b 100644
      // @TODO: We may need to request the party here
      this.party = this.$store.state.party;
      this.newDayStart = this.user.preferences.dayStart;
-@@ -264,12 +254,6 @@ export default {
+@@ -267,12 +257,6 @@ export default {
      this.temporaryDisplayName = this.user.profile.name;
      this.emailUpdates.newEmail = this.user.auth.local.email || null;
      this.localAuth.username = this.user.auth.local.username || null;
@@ -3485,7 +3486,7 @@ index bad881533..78003783b 100644
  
      const focusID = this.$route.query.focus;
      if (focusID !== undefined && focusID !== null) {
-@@ -376,19 +360,6 @@ export default {
+@@ -411,19 +395,6 @@ export default {
      showBailey () {
        this.$root.$emit('bv::show::modal', 'new-stuff');
      },
@@ -3505,7 +3506,7 @@ index bad881533..78003783b 100644
      calculateNextCron () {
        let nextCron = moment().hours(this.newDayStart).minutes(0).seconds(0).milliseconds(0);
  
-@@ -445,19 +416,6 @@ export default {
+@@ -480,19 +451,6 @@ export default {
      openDeleteModal () {
        this.$root.$emit('bv::show::modal', 'delete');
      },
@@ -3718,7 +3719,7 @@ index 9d17a17fb..4f148b29c 100644
  };
  </script>
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index 7050a08e3..93437e267 100644
+index a6acf92a5..018018077 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -13,15 +13,6 @@
@@ -3836,12 +3837,13 @@ index 7050a08e3..93437e267 100644
    #call-to-action {
      .row {
        margin-top: 1em;
-@@ -558,17 +480,10 @@
+@@ -558,18 +480,11 @@
  </style>
  
  <script>
 -  import hello from 'hellojs';
    import debounce from 'lodash/debounce';
+   import isEmail from 'validator/lib/isEmail';
 -  import googlePlay from 'assets/images/home/google-play-badge.svg';
 -  import iosAppStore from 'assets/images/home/ios-app-store.svg';
 -  import iphones from 'assets/images/home/iphones.svg';
@@ -3854,7 +3856,7 @@ index 7050a08e3..93437e267 100644
    import cnet from 'assets/svg/cnet.svg';
    import fastCompany from 'assets/svg/fast-company.svg';
    import discover from 'assets/images/home/discover.svg';
-@@ -577,21 +492,14 @@
+@@ -578,21 +493,14 @@
    import lifehacker from 'assets/images/home/lifehacker.svg';
    import makeuseof from 'assets/images/home/make-use-of.svg';
    import thenewyorktimes from 'assets/images/home/the-new-york-times.svg';
@@ -3876,7 +3878,7 @@ index 7050a08e3..93437e267 100644
            cnet,
            fastCompany,
            discover,
-@@ -609,20 +517,6 @@
+@@ -610,20 +518,6 @@
          usernameIssues: [],
        };
      },
@@ -3897,7 +3899,7 @@ index 7050a08e3..93437e267 100644
      computed: {
        emailValid () {
          if (this.email.length <= 3) return false;
-@@ -704,33 +598,8 @@
+@@ -701,33 +595,8 @@
          window.location.href = redirectTo;
        },
        playButtonClick () {
@@ -3965,10 +3967,10 @@ index 5f743a0d4..7f64f7006 100644
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
        const crit = tmp.crit;
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index f3d1e65ea..d2d7d3c46 100644
+index 9d4c61544..57aa2ce6d 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
-@@ -75,14 +75,12 @@ div
+@@ -76,14 +76,12 @@ div
                .progress
                  .progress-bar(role='progressbar', :aria-valuenow='incentivesProgress', aria-valuemin='0', aria-valuemax='100', :style='{width: incentivesProgress + "%"}')
                    span.sr-only {{ incentivesProgress }}% {{$t('complete')}}
@@ -3983,7 +3985,7 @@ index f3d1e65ea..d2d7d3c46 100644
            .form-group
              label {{ $t('displayName') }}
              input.form-control(type='text', :placeholder="$t('fullName')", v-model='editingProfile.name')
-@@ -93,15 +91,6 @@ div
+@@ -94,15 +92,6 @@ div
              label {{ $t('about') }}
              textarea.form-control(rows=5, :placeholder="$t('displayBlurbPlaceholder')", v-model='editingProfile.blurb')
              // include ../../shared/formatting-help
@@ -3999,7 +4001,7 @@ index f3d1e65ea..d2d7d3c46 100644
  
          .col-12.text-center
            button.btn.btn-primary(@click='save()') {{ $t("save") }}
-@@ -310,7 +299,6 @@ import { mapState } from 'client/libs/store';
+@@ -317,7 +306,6 @@ import { mapState } from 'client/libs/store';
  import cloneDeep from 'lodash/cloneDeep';
  
  import MemberDetails from '../memberDetails';
@@ -4007,7 +4009,7 @@ index f3d1e65ea..d2d7d3c46 100644
  import markdown from 'client/directives/markdown';
  import achievementsLib from '../../../common/script/libs/achievements';
  // @TODO: EMAILS.COMMUNITY_MANAGER_EMAIL
-@@ -335,7 +323,6 @@ export default {
+@@ -342,7 +330,6 @@ export default {
      markdown,
    },
    components: {
@@ -4159,7 +4161,7 @@ index a7c53c18f..242cb646f 100644
  });
  
 diff --git a/website/client/store/actions/auth.js b/website/client/store/actions/auth.js
-index 968c92766..c01ce0030 100644
+index fad46d295..f2f56d68f 100644
 --- a/website/client/store/actions/auth.js
 +++ b/website/client/store/actions/auth.js
 @@ -1,7 +1,6 @@
@@ -4170,7 +4172,7 @@ index 968c92766..c01ce0030 100644
  
  export async function register (store, params) {
    let url = '/api/v4/user/auth/local/register';
-@@ -55,27 +54,7 @@ export async function verifyUsername (store, params) {
+@@ -64,27 +63,7 @@ export async function verifyDisplayName (store, params) {
    return result.data.data;
  }
  
@@ -4242,7 +4244,7 @@ index 12e23a34b..966f1d3ec 100644
      message: payload.message,
    });
 diff --git a/website/client/store/actions/guilds.js b/website/client/store/actions/guilds.js
-index 3f2599850..1507bd288 100644
+index ea4e68044..b4eda8714 100644
 --- a/website/client/store/actions/guilds.js
 +++ b/website/client/store/actions/guilds.js
 @@ -1,7 +1,6 @@
@@ -4722,7 +4724,7 @@ index e3d6c1062..5bd6cf4b5 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buyMarketGear.js b/website/common/script/ops/buy/buyMarketGear.js
-index 13408b18b..6b936c662 100644
+index 3636685f0..a9fd6f0db 100644
 --- a/website/common/script/ops/buy/buyMarketGear.js
 +++ b/website/common/script/ops/buy/buyMarketGear.js
 @@ -16,8 +16,8 @@ import { AbstractGoldItemOperation } from './abstractBuyOperation';
@@ -5195,7 +5197,7 @@ index bbf59c7b2..1363281cc 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index a7671d3f1..2a2b6bb07 100644
+index 15d9fa8ec..bc9aeb533 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -5,7 +5,6 @@ import {
@@ -5206,16 +5208,15 @@ index a7671d3f1..2a2b6bb07 100644
  import {
    NotAuthorized,
    BadRequest,
-@@ -16,9 +15,7 @@ import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs
+@@ -16,8 +15,6 @@ import { validatePasswordResetCodeAndFindUser, convertToBcrypt} from '../../libs
  import { encrypt } from '../../libs/encryption';
  import {
    loginRes,
 -  hasBackupAuth,
-   hasLocalAuth,
 -  loginSocial,
    registerLocal,
  } from '../../libs/auth';
- 
+ import {verifyUsername} from '../../libs/user/validation';
 @@ -29,7 +26,7 @@ let api = {};
  
  /**
@@ -5265,7 +5266,7 @@ index a7671d3f1..2a2b6bb07 100644
  /**
   * @api {put} /api/v3/user/auth/update-username Update username
   * @apiDescription Update the username of a local user
-@@ -391,33 +368,4 @@ api.resetPasswordSetNewOne = {
+@@ -408,33 +385,4 @@ api.resetPasswordSetNewOne = {
    },
  };
  
@@ -5430,14 +5431,12 @@ index 7acc406a4..8a441b55e 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index cf8bc4a03..178f5dc66 100644
+index e17362c0f..329ba99ee 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -18,12 +18,7 @@ import {
- import { removeFromArray } from '../../libs/collectionManipulators';
- import { sendTxn as sendTxnEmail } from '../../libs/email';
- import { encrypt } from '../../libs/encryption';
--import { sendNotification as sendPushNotification } from '../../libs/pushNotifications';
+@@ -22,10 +22,6 @@ import {
+   inviteByUserName,
+ } from '../../libs/invites';
  import common from '../../../common';
 -import payments from '../../libs/payments/payments';
 -import stripePayments from '../../libs/payments/stripe';
@@ -5446,7 +5445,7 @@ index cf8bc4a03..178f5dc66 100644
  import apiError from '../../libs/apiError';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
-@@ -145,22 +140,6 @@ api.createGroup = {
+@@ -147,22 +143,6 @@ api.createGroup = {
        profile: {name: user.profile.name},
      };
  
@@ -5469,7 +5468,7 @@ index cf8bc4a03..178f5dc66 100644
      res.respond(201, response); // do not remove chat flags data as we've just created the group
    },
  };
-@@ -193,54 +172,6 @@ api.createGroupPlan = {
+@@ -195,54 +175,6 @@ api.createGroupPlan = {
      let results = await Promise.all([user.save(), group.save()]);
      let savedGroup = results[1];
  
@@ -5524,7 +5523,7 @@ index cf8bc4a03..178f5dc66 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -614,10 +545,7 @@ api.joinGroup = {
+@@ -616,10 +548,7 @@ api.joinGroup = {
  
      promises = await Promise.all(promises);
  
@@ -5536,7 +5535,7 @@ index cf8bc4a03..178f5dc66 100644
  
      let response = await Group.toJSONCleanChat(promises[0], user);
      let leader = await User.findById(response.leader).select(nameFields).exec();
-@@ -625,22 +553,6 @@ api.joinGroup = {
+@@ -627,22 +556,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -5559,7 +5558,7 @@ index cf8bc4a03..178f5dc66 100644
      res.respond(200, response);
    },
  };
-@@ -775,12 +687,7 @@ api.leaveGroup = {
+@@ -777,12 +690,7 @@ api.leaveGroup = {
        user.guilds.splice(guildIndex, 1);
      }
  
@@ -5573,7 +5572,7 @@ index cf8bc4a03..178f5dc66 100644
      res.respond(200, {});
    },
  };
-@@ -911,8 +818,7 @@ api.removeGroupMember = {
+@@ -913,8 +821,7 @@ api.removeGroupMember = {
      ]);
  
      if (isInGroup && group.hasNotCancelled())  {
@@ -5583,37 +5582,8 @@ index cf8bc4a03..178f5dc66 100644
      }
  
      res.respond(200, {});
-@@ -992,19 +898,6 @@ async function _inviteByUUID (uuid, group, inviter, req, res) {
-     sendTxnEmail(userToInvite, `invited-${groupTemplate}`, emailVars);
-   }
- 
--  if (userToInvite.preferences.pushNotifications[`invited${groupLabel}`] !== false) {
--    let identifier = group.type === 'guild' ? 'invitedGuild' : 'invitedParty';
--    sendPushNotification(
--      userToInvite,
--      {
--        title: group.name,
--        message: res.t(identifier),
--        identifier,
--        payload: {groupID: group._id, publicGuild},
--      }
--    );
--  }
--
-   let userInvited = await userToInvite.save();
-   if (group.type === 'guild') {
-     return userInvited.invitations.guilds[userToInvite.invitations.guilds.length - 1];
-@@ -1020,8 +913,6 @@ async function _inviteByEmail (invite, group, inviter, req, res) {
- 
-   let userToContact = await User.findOne({$or: [
-     {'auth.local.email': invite.email},
--    {'auth.facebook.emails.value': invite.email},
--    {'auth.google.emails.value': invite.email},
-   ]})
-     .select({_id: true, 'preferences.emailNotifications': true})
-     .exec();
-@@ -1184,16 +1075,6 @@ api.inviteToGroup = {
-       results.push(...emailResults);
+@@ -1057,16 +964,6 @@ api.inviteToGroup = {
+       results.push(...usernameResults);
      }
  
 -    let analyticsObject = {
@@ -5630,7 +5600,7 @@ index cf8bc4a03..178f5dc66 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index 4e77b5163..cacd030e6 100644
+index 1723c925b..fbd2dacba 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,6 @@ import {
@@ -5641,7 +5611,7 @@ index 4e77b5163..cacd030e6 100644
  import { achievements } from '../../../../website/common/';
  
  let api = {};
-@@ -617,19 +616,6 @@ api.sendPrivateMessage = {
+@@ -648,19 +647,6 @@ api.sendPrivateMessage = {
        ]);
      }
  
@@ -5661,7 +5631,7 @@ index 4e77b5163..cacd030e6 100644
      res.respond(200, {message: messageSent});
    },
  };
-@@ -708,15 +694,6 @@ api.transferGems = {
+@@ -739,15 +725,6 @@ api.transferGems = {
          {name: 'X_GEMS_GIFTED', content: gemAmount},
        ]);
      }
@@ -6105,10 +6075,10 @@ index 6b7047089..2812a4539 100644
      res.respond(200, ...reviveRes);
    },
 diff --git a/website/server/controllers/api-v4/auth.js b/website/server/controllers/api-v4/auth.js
-index 5b8d8540a..c3e6007f5 100644
+index 05f8b6dd9..55514c027 100644
 --- a/website/server/controllers/api-v4/auth.js
 +++ b/website/server/controllers/api-v4/auth.js
-@@ -129,7 +129,7 @@ api.verifyUsername = {
+@@ -56,7 +56,7 @@ api.verifyUsername = {
  
  /**
   * @api {post} /api/v4/user/auth/local/register Register
@@ -6117,7 +6087,7 @@ index 5b8d8540a..c3e6007f5 100644
   * @apiName UserRegisterLocal
   * @apiGroup User
   *
-@@ -138,7 +138,7 @@ api.verifyUsername = {
+@@ -65,7 +65,7 @@ api.verifyUsername = {
   * @apiParam (Body) {String} password Password for the new user
   * @apiParam (Body) {String} confirmPassword Password confirmation
   *
@@ -6127,10 +6097,10 @@ index 5b8d8540a..c3e6007f5 100644
  api.registerLocal = {
    method: 'POST',
 diff --git a/website/server/controllers/api-v4/user.js b/website/server/controllers/api-v4/user.js
-index 77183bdf9..8ff399aa2 100644
+index 2474c31dc..75f689079 100644
 --- a/website/server/controllers/api-v4/user.js
 +++ b/website/server/controllers/api-v4/user.js
-@@ -32,7 +32,6 @@ const api = {};
+@@ -33,7 +33,6 @@ const api = {};
   * Preferences (user selected prefs)
   * Profile (name, photo url, blurb)
   * Purchased (includes purchase history, gem purchased items, plans)
@@ -6237,7 +6207,7 @@ index 70cb25a91..f4ce1fdc4 100644
   * @api {get} /export/inbox.html Export user private messages as HTML document
   * @apiName ExportUserPrivateMessages
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index f783c59b4..38079a871 100644
+index 1cdcf3fd2..36601632c 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -7,12 +7,10 @@ import * as passwordUtils from '../../libs/password';
@@ -6275,7 +6245,7 @@ index f783c59b4..38079a871 100644
  
    req.checkBody({
      username: {
-@@ -140,19 +126,8 @@ async function registerLocal (req, res, { isV3 = false }) {
+@@ -143,19 +129,8 @@ async function registerLocal (req, res, { isV3 = false }) {
      },
    };
  
@@ -6297,7 +6267,7 @@ index f783c59b4..38079a871 100644
  
    // we check for partyInvite for backward compatibility
    if (req.query.groupInvite || req.query.partyInvite) {
-@@ -185,24 +160,11 @@ async function registerLocal (req, res, { isV3 = false }) {
+@@ -186,24 +161,11 @@ async function registerLocal (req, res, { isV3 = false }) {
        if (!existingUser) sendTxnEmail(savedUser, 'welcome');
      });
  
@@ -6498,6 +6468,58 @@ index 62d8feabc..744c29af7 100644
      }
    }
  
+diff --git a/website/server/libs/invites/index.js b/website/server/libs/invites/index.js
+index d5225338e..7616855f2 100644
+--- a/website/server/libs/invites/index.js
++++ b/website/server/libs/invites/index.js
+@@ -1,7 +1,6 @@
+ import _ from 'lodash';
+ 
+ import { encrypt } from '../encryption';
+-import { sendNotification as sendPushNotification } from '../pushNotifications';
+ import {
+   NotFound,
+   BadRequest,
+@@ -16,22 +15,6 @@ import {
+   model as Group,
+ } from '../../models/group';
+ 
+-function sendInvitePushNotification (userToInvite, groupLabel, group, publicGuild, res) {
+-  if (userToInvite.preferences.pushNotifications[`invited${groupLabel}`] === false) return;
+-
+-  const identifier = group.type === 'guild' ? 'invitedGuild' : 'invitedParty';
+-
+-  sendPushNotification(
+-    userToInvite,
+-    {
+-      title: group.name,
+-      message: res.t(identifier),
+-      identifier,
+-      payload: {groupID: group._id, publicGuild},
+-    }
+-  );
+-}
+-
+ function sendInviteEmail (userToInvite, groupLabel, group, inviter) {
+   if (userToInvite.preferences.emailNotifications[`invited${groupLabel}`] === false) return;
+   const groupTemplate = group.type === 'guild' ? 'guild' : 'party';
+@@ -111,7 +94,6 @@ async function addInvitationToUser (userToInvite, group, inviter, res) {
+ 
+   const groupLabel = group.type === 'guild' ? 'Guild' : 'Party';
+   sendInviteEmail(userToInvite, groupLabel, group, inviter);
+-  sendInvitePushNotification(userToInvite, groupLabel, group, publicGuild, res);
+ 
+   const userInvited = await userToInvite.save();
+   if (group.type === 'guild') {
+@@ -147,8 +129,6 @@ async function inviteByEmail (invite, group, inviter, req, res) {
+ 
+   let userToContact = await User.findOne({$or: [
+     {'auth.local.email': invite.email},
+-    {'auth.facebook.emails.value': invite.email},
+-    {'auth.google.emails.value': invite.email},
+   ]})
+     .select({_id: true, 'preferences.emailNotifications': true})
+     .exec();
 diff --git a/website/server/libs/logger.js b/website/server/libs/logger.js
 index 75d58c936..d5d95a634 100644
 --- a/website/server/libs/logger.js
@@ -6881,7 +6903,7 @@ index 1274e16d2..5737a9ed6 100644
      rebirthRes[0].user = await rebirthRes[0].user.toJSONWithInbox();
    }
 diff --git a/website/server/middlewares/appRoutes.js b/website/server/middlewares/appRoutes.js
-index 5fe0408a8..3ca3baaa6 100644
+index 5819c7231..ce018e771 100644
 --- a/website/server/middlewares/appRoutes.js
 +++ b/website/server/middlewares/appRoutes.js
 @@ -1,6 +1,5 @@
@@ -6993,7 +7015,7 @@ index 2d99143b6..7326ae0b1 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 1064213db..68525db0a 100644
+index 8876e03db..e13fb8246 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {
@@ -7012,7 +7034,7 @@ index 1064213db..68525db0a 100644
  import { getGroupChat } from '../libs/chat/group-chat';
  import { model as UserNotification } from './userNotification';
  
-@@ -565,7 +562,7 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -578,7 +575,7 @@ schema.methods.startQuest = async function startQuest (user) {
    await User.find({
      _id: {$in: Object.keys(this.quest.members)},
    })
@@ -7021,7 +7043,7 @@ index 1064213db..68525db0a 100644
      .lean()
      .exec()
      .then(partyMembers => {
-@@ -629,8 +626,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -642,8 +639,6 @@ schema.methods.startQuest = async function startQuest (user) {
    await newMessage.save();
  
    const membersToEmail = [];
@@ -7030,7 +7052,7 @@ index 1064213db..68525db0a 100644
  
    // send notifications and webhooks in the background without blocking
    members.forEach(member => {
-@@ -639,15 +634,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -652,15 +647,6 @@ schema.methods.startQuest = async function startQuest (user) {
        if (member.preferences.emailNotifications.questStarted !== false) {
          membersToEmail.push(member);
        }
@@ -7046,7 +7068,7 @@ index 1064213db..68525db0a 100644
      }
  
      // Send webhooks
-@@ -1418,7 +1404,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+@@ -1431,7 +1417,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
    return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
@@ -7055,7 +7077,7 @@ index 1064213db..68525db0a 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1427,12 +1413,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1440,12 +1426,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;
@@ -7097,7 +7119,7 @@ index c26f03bd6..5cf501473 100644
      count: {$type: Number, default: 0},
      offset: {$type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 28a51fb15..70486c462 100644
+index 9bf3a5e97..5f80832e5 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -17,9 +17,6 @@ import { model as UserNotification } from '../userNotification';
@@ -7110,7 +7132,7 @@ index 28a51fb15..70486c462 100644
  
  const daysSince = common.daysSince;
  
-@@ -241,7 +238,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -244,7 +241,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
   * @param  options
   * @param  options.user  The user object who is purchasing
   * @param  options.groupId  The id of the group purchasing a subscription
@@ -7119,7 +7141,7 @@ index 28a51fb15..70486c462 100644
   * @param  options.cancellationReason  A text string to control sending an email
   *
   * @return a Promise from api.cancelSubscription()
-@@ -252,18 +249,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -255,18 +252,7 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
  // In summary, currently is is best practice to use this method to cancel a user subscription, rather than calling the
  // payment helper.
  schema.methods.cancelSubscription = async function cancelSubscription (options = {}) {

@@ -60,10 +60,10 @@ index 153bc3bd0..a0b90dbc8 100644
        // expect(messages[0].id).to.eql(skillMsg.id);
        // expect(messages[0].flagCount).to.eql(0);
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index fcc282bc5..4bc84704f 100644
+index 56f823675..848ced7f1 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
-@@ -266,7 +266,7 @@ describe('Post /groups/:groupId/invite', () => {
+@@ -333,7 +333,7 @@ describe('Post /groups/:groupId/invite', () => {
          .to.eventually.be.rejected.and.eql({
            code: 401,
            error: 'NotAuthorized',
@@ -133,11 +133,11 @@ index cf04a520a..5bfbbd7ef 100644
  };
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 2a2b6bb07..df7bf7777 100644
+index bc9aeb533..217a0d19a 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -20,7 +20,7 @@ import {
- } from '../../libs/auth';
+ import {verifyUsername} from '../../libs/user/validation';
  
  const BASE_URL = nconf.get('BASE_URL');
 -const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
@@ -159,10 +159,10 @@ index becd3d2ee..4695993f9 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 178f5dc66..5567e7f79 100644
+index 329ba99ee..56fcde8d9 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -22,7 +22,7 @@ import common from '../../../common';
+@@ -25,7 +25,7 @@ import common from '../../../common';
  import apiError from '../../libs/apiError';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;

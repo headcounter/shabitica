@@ -11,26 +11,26 @@ Date:   Fri Mar 30 20:29:49 2018 +0200
     Filename: remove-community-guidelines.patch
 
 diff --git a/website/client/components/chat/chatCard.vue b/website/client/components/chat/chatCard.vue
-index a52824ec3..6bbbf889c 100644
+index f992148b2..b216db793 100644
 --- a/website/client/components/chat/chatCard.vue
 +++ b/website/client/components/chat/chatCard.vue
 @@ -22,10 +22,9 @@ div
-         span.action(v-if='!inbox', @click='copyAsTodo(msg)')
-           .svg-icon(v-html="icons.copy")
-           | {{$t('copyAsTodo')}}
--        span.action(v-if='!inbox && user.flags.communityGuidelinesAccepted && msg.uuid !== "system"', @click='report(msg)')
-+        span.action(v-if='!inbox && msg.uuid !== "system"', @click='report(msg)')
-           .svg-icon(v-html="icons.report")
-           | {{$t('report')}}
--          // @TODO make flagging/reporting work in the inbox. NOTE: it must work even if the communityGuidelines are not accepted and it MUST work for messages that you have SENT as well as received. -- Alys
-         span.action(v-if='msg.uuid === user._id || inbox || user.contributor.admin', @click='remove()')
-           .svg-icon(v-html="icons.delete")
-           | {{$t('delete')}}
+       .action.d-flex.align-items-center(v-if='!inbox', @click='copyAsTodo(msg)')
+         .svg-icon(v-html="icons.copy")
+         div {{$t('copyAsTodo')}}
+-      .action.d-flex.align-items-center(v-if='!inbox && user.flags.communityGuidelinesAccepted && msg.uuid !== "system"', @click='report(msg)')
++      .action.d-flex.align-items-center(v-if='!inbox && msg.uuid !== "system"', @click='report(msg)')
+         .svg-icon(v-html="icons.report")
+         div {{$t('report')}}
+-        // @TODO make flagging/reporting work in the inbox. NOTE: it must work even if the communityGuidelines are not accepted and it MUST work for messages that you have SENT as well as received. -- Alys
+       .action.d-flex.align-items-center(v-if='msg.uuid === user._id || inbox || user.contributor.admin', @click='remove()')
+         .svg-icon(v-html="icons.delete")
+         | {{$t('delete')}}
 diff --git a/website/client/components/groups/chat.vue b/website/client/components/groups/chat.vue
-index 9c89526fb..01faa1eb7 100644
+index 0f6b23164..3e944e247 100644
 --- a/website/client/components/groups/chat.vue
 +++ b/website/client/components/groups/chat.vue
-@@ -28,8 +28,6 @@
+@@ -29,8 +29,6 @@
          .col-6.chat-send-actions
            button.btn.btn-secondary.send-chat.float-right(v-once, @click='sendMessage()') {{ $t('send') }}
  
@@ -39,7 +39,7 @@ index 9c89526fb..01faa1eb7 100644
        slot(
          name="additionRow",
        )
-@@ -43,14 +41,12 @@
+@@ -44,14 +42,12 @@
    import debounce from 'lodash/debounce';
  
    import autocomplete from '../chat/autoComplete';
@@ -90,10 +90,10 @@ index 08bb0a384..d38eca6d3 100644
              router-link(to="/groups/guild/f2db2a7f-13c5-454d-b3ee-ea1f5089e601") {{ $t('lookingForGroup') }}
            li
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index d2d7d3c46..47f6782de 100644
+index 57aa2ce6d..019c369cb 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
-@@ -79,8 +79,6 @@ div
+@@ -80,8 +80,6 @@ div
        .row(v-if='editing')
          h1 {{$t('editProfile')}}
          .col-12

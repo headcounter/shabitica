@@ -1,7 +1,7 @@
 Author: aszlig <aszlig@nix.build>
 Date:   Wed Apr 11 14:32:43 2018 +0200
 
-    Remove everyhing about and around news
+    Remove everything about and around news
     
     People can read the upstream news from their blog anyway and most of the
     time those news are related to community activity that is not related to
@@ -68,10 +68,18 @@ index 3132f9e9b..ce7f12616 100644
          'QUEST_INVITATION', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
          'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
 diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
-index 1d8e76974..35607981a 100644
+index 840462efb..6a8da14aa 100644
 --- a/website/client/components/notifications.vue
 +++ b/website/client/components/notifications.vue
-@@ -97,7 +97,6 @@ import guide from 'client/mixins/guide';
+@@ -5,7 +5,6 @@ div
+     @run-cron="runYesterDailiesAction()",
+   )
+   armoire-empty
+-  new-stuff
+   death
+   low-health
+   level-up
+@@ -98,7 +97,6 @@ import guide from 'client/mixins/guide';
  
  import yesterdailyModal from './yesterdailyModal';
  import welcomeModal from './achievements/welcome';
@@ -79,7 +87,7 @@ index 1d8e76974..35607981a 100644
  import death from './achievements/death';
  import lowHealth from './achievements/lowHealth';
  import levelUp from './achievements/levelUp';
-@@ -164,7 +163,6 @@ export default {
+@@ -166,7 +164,6 @@ export default {
      joinedChallenge,
      invitedFriend,
      welcomeModal,
@@ -87,19 +95,19 @@ index 1d8e76974..35607981a 100644
      death,
      lowHealth,
      levelUp,
-@@ -520,10 +518,6 @@ export default {
-     async handleUserNotifications (after) {
-       if (this.$store.state.isRunningYesterdailies) return;
+@@ -420,10 +417,6 @@ export default {
+         return this.$root.$emit('bv::show::modal', 'avatar-modal');
+       }
  
 -      if (this.user.flags.newStuff) {
--        this.$root.$emit('bv::show::modal', 'new-stuff');
+-        return this.$root.$emit('bv::show::modal', 'new-stuff');
 -      }
 -
-       if (!after || after.length === 0 || !Array.isArray(after)) return;
- 
-       let notificationsToRead = [];
+       if (this.user.stats.hp <= 0) {
+         return this.showDeathModal();
+       }
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index 78003783b..d7d84d87d 100644
+index 4ad6cd158..d135f67f5 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -76,7 +76,6 @@
@@ -110,7 +118,7 @@ index 78003783b..d7d84d87d 100644
          button.btn.btn-primary.mr-2.mb-2(@click='openRestoreModal()', popover-trigger='mouseenter', popover-placement='right', :popover="$t('fixValPop')") {{ $t('fixVal') }}
          button.btn.btn-primary.mb-2(v-if='user.preferences.disableClasses == true', @click='changeClassForUser(false)',
            popover-trigger='mouseenter', popover-placement='right', :popover="$t('enableClassPop')") {{ $t('enableClass') }}
-@@ -357,9 +356,6 @@ export default {
+@@ -392,9 +391,6 @@ export default {
        // User.set({'flags.showTour':true});
        // Guide.goto('intro', 0, true);
      },
@@ -173,7 +181,7 @@ index 01855b7e4..90690af04 100644
          { name: 'privacy', path: 'privacy', component: PrivacyPage, meta: {requiresLogin: false}},
          { name: 'terms', path: 'terms', component: TermsPage, meta: {requiresLogin: false}},
 diff --git a/website/client/store/actions/user.js b/website/client/store/actions/user.js
-index 9ae2ef3f3..b903d3dd7 100644
+index d15bd3e80..184f1bc7c 100644
 --- a/website/client/store/actions/user.js
 +++ b/website/client/store/actions/user.js
 @@ -131,11 +131,6 @@ export function openMysteryItem () {
@@ -212,3 +220,15 @@ index dbd3a2508..37bd32095 100644
      rewrite: {$type: Boolean, default: true},
      classSelected: {$type: Boolean, default: false},
      mathUpdates: Boolean,
+diff --git a/website/server/models/userNotification.js b/website/server/models/userNotification.js
+index acb280b16..7cdab6e53 100644
+--- a/website/server/models/userNotification.js
++++ b/website/server/models/userNotification.js
+@@ -28,7 +28,6 @@ const NOTIFICATION_TYPES = [
+   'NEW_MYSTERY_ITEMS',
+   'UNALLOCATED_STATS_POINTS',
+   'NEW_INBOX_MESSAGE',
+-  'NEW_STUFF',
+   'NEW_CHAT_MESSAGE',
+   'LEVELED_UP',
+ ];

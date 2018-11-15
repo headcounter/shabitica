@@ -225,7 +225,7 @@ index b1d374925..9160226c5 100644
  
    describe('bulk purchasing', () => {
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 38079a871..c0546a83b 100644
+index 36601632c..2a34ef05c 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -121,6 +121,13 @@ async function registerLocal (req, res, { isV3 = false }) {
@@ -304,7 +304,7 @@ index 5e69c3fdb..c26d4263e 100644
  
    let now = moment();
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 70486c462..dd5457c91 100644
+index 5f80832e5..33360a553 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -15,7 +15,6 @@ import {
@@ -315,7 +315,7 @@ index 70486c462..dd5457c91 100644
  import * as inboxLib from '../../libs/inbox';
  
  const daysSince = common.daysSince;
-@@ -232,27 +231,6 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
+@@ -235,27 +234,6 @@ schema.statics.addComputedStatsToJSONObj = function addComputedStatsToUserJSONOb
    return userStatsJSON;
  };
  
@@ -343,7 +343,7 @@ index 70486c462..dd5457c91 100644
  schema.methods.daysUserHasMissed = function daysUserHasMissed (now, req = {}) {
    // If the user's timezone has changed (due to travel or daylight savings),
    // cron can be triggered twice in one day, so we check for that and use
-@@ -358,18 +336,7 @@ async function getUserGroupData (user) {
+@@ -361,18 +339,7 @@ async function getUserGroupData (user) {
  // User is allowed to buy gems if no group has `leaderOnly.getGems` === true or if
  // its the group leader
  schema.methods.canGetGems = async function canObtainGems () {

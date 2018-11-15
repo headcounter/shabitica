@@ -22,7 +22,7 @@ index 620ac3405..0ae909d5f 100644
 +    "INVITE_ONLY": "true"
  }
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 89088a350..384196bb3 100644
+index 764bbebf5..5dc9fc83b 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -13,7 +13,9 @@ import { model as Group } from '../../models/group';
@@ -35,7 +35,7 @@ index 89088a350..384196bb3 100644
  const USERNAME_LENGTH_MIN = 1;
  const USERNAME_LENGTH_MAX = 20;
  
-@@ -143,9 +145,9 @@ async function registerLocal (req, res, { isV3 = false }) {
+@@ -146,9 +148,9 @@ async function registerLocal (req, res, { isV3 = false }) {
    // we check for partyInvite for backward compatibility
    if (req.query.groupInvite || req.query.partyInvite) {
      let success = await _handleGroupInvitation(newUser, req.query.groupInvite || req.query.partyInvite);
