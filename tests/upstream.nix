@@ -46,6 +46,17 @@ let
 
   runTests = cat: lib.mapAttrs (name: mkTest "${cat}-${name}");
 
+  # In newer nixpkgs, the pkgs attribute needs to be passed to testing.nix, so
+  # in order to stay compatible with older nixpkgs, we only pass it if it is
+  # required.
+  testingLib = let
+    mainExpr = import "${nixpkgs}/nixos/lib/testing.nix";
+  in mainExpr ({
+    inherit (pkgs) system;
+  } // lib.optionalAttrs ((builtins.functionArgs mainExpr) ? pkgs) {
+    inherit pkgs;
+  });
+
 in lib.mapAttrs runTests {
   basic = {
     sanity.target = "sanity";
@@ -64,9 +75,7 @@ in lib.mapAttrs runTests {
     integration-v4.useDB = true;
   };
 } // {
-  client.e2e = (import "${nixpkgs}/nixos/lib/testing.nix" {
-    inherit (pkgs) system;
-  }).runInMachine {
+  client.e2e = testingLib.runInMachine {
     drv = shabitica.mkCommonBuild {
       name = "test-client-e2e";
       nativeBuildInputs = lib.attrValues shabitica.nodePackages.dev;
