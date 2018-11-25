@@ -146,7 +146,7 @@ index bc9aeb533..217a0d19a 100644
  let api = {};
  
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index becd3d2ee..4695993f9 100644
+index f886e13b5..81f6e7a5a 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -18,7 +18,7 @@ import { getMatchesByWordArray } from '../../libs/stringUtils';

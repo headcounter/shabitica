@@ -2089,7 +2089,7 @@ index 9f04c4d6b..01fcc829d 100644
  
      it('does not increase hp above 50', () => {
 diff --git a/test/common/ops/buy/buyMarketGear.js b/test/common/ops/buy/buyMarketGear.js
-index 444579e78..04f9c208d 100644
+index f54633121..67305e116 100644
 --- a/test/common/ops/buy/buyMarketGear.js
 +++ b/test/common/ops/buy/buyMarketGear.js
 @@ -12,15 +12,14 @@ import {
@@ -3947,10 +3947,10 @@ index 34ff15ca5..e5dd03e02 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index 5f743a0d4..7f64f7006 100644
+index cc9d377f2..401690653 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
-@@ -500,7 +500,6 @@ import moment from 'moment';
+@@ -501,7 +501,6 @@ import moment from 'moment';
  import axios from 'axios';
  import scoreTask from 'common/script/ops/scoreTask';
  import Vue from 'vue';
@@ -3958,7 +3958,7 @@ index 5f743a0d4..7f64f7006 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import negativeIcon from 'assets/svg/negative.svg';
-@@ -717,7 +716,6 @@ export default {
+@@ -718,7 +717,6 @@ export default {
  
        if (task.group.approval.required) task.group.approval.requested = true;
  
@@ -4724,7 +4724,7 @@ index e3d6c1062..5bd6cf4b5 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buyMarketGear.js b/website/common/script/ops/buy/buyMarketGear.js
-index 3636685f0..a9fd6f0db 100644
+index 5f8728bf5..7660de1c4 100644
 --- a/website/common/script/ops/buy/buyMarketGear.js
 +++ b/website/common/script/ops/buy/buyMarketGear.js
 @@ -16,8 +16,8 @@ import { AbstractGoldItemOperation } from './abstractBuyOperation';
@@ -5391,7 +5391,7 @@ index 6405eb59a..61818c6e9 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 95f6f405f..becd3d2ee 100644
+index cb73d2ada..f886e13b5 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -9,7 +9,6 @@ import {
@@ -6975,7 +6975,7 @@ index adf74bcbd..67f63b364 100644
    '/email',
    '/qr-code',
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
-index 2bb773f92..739fb663d 100644
+index 492b0592d..f0cc9f418 100644
 --- a/website/server/models/challenge.js
 +++ b/website/server/models/challenge.js
 @@ -10,7 +10,6 @@ import {
@@ -6986,7 +6986,7 @@ index 2bb773f92..739fb663d 100644
  import { TaskQueue } from 'cwait';
  import { syncableAttrs, setNextDue } from '../libs/taskManager';
  
-@@ -331,14 +330,6 @@ schema.methods.closeChal = async function closeChal (broken = {}) {
+@@ -342,14 +341,6 @@ schema.methods.closeChal = async function closeChal (broken = {}) {
          {name: 'CHALLENGE_NAME', content: challenge.name},
        ]);
      }
@@ -7015,7 +7015,7 @@ index 2d99143b6..7326ae0b1 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 8876e03db..e13fb8246 100644
+index 1bae6115f..f25d12708 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {
@@ -7034,7 +7034,7 @@ index 8876e03db..e13fb8246 100644
  import { getGroupChat } from '../libs/chat/group-chat';
  import { model as UserNotification } from './userNotification';
  
-@@ -578,7 +575,7 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -582,7 +579,7 @@ schema.methods.startQuest = async function startQuest (user) {
    await User.find({
      _id: {$in: Object.keys(this.quest.members)},
    })
@@ -7043,7 +7043,7 @@ index 8876e03db..e13fb8246 100644
      .lean()
      .exec()
      .then(partyMembers => {
-@@ -642,8 +639,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -646,8 +643,6 @@ schema.methods.startQuest = async function startQuest (user) {
    await newMessage.save();
  
    const membersToEmail = [];
@@ -7052,7 +7052,7 @@ index 8876e03db..e13fb8246 100644
  
    // send notifications and webhooks in the background without blocking
    members.forEach(member => {
-@@ -652,15 +647,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -656,15 +651,6 @@ schema.methods.startQuest = async function startQuest (user) {
        if (member.preferences.emailNotifications.questStarted !== false) {
          membersToEmail.push(member);
        }
@@ -7068,7 +7068,7 @@ index 8876e03db..e13fb8246 100644
      }
  
      // Send webhooks
-@@ -1431,7 +1417,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+@@ -1444,7 +1430,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
    return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
@@ -7077,7 +7077,7 @@ index 8876e03db..e13fb8246 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1440,12 +1426,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1453,12 +1439,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;

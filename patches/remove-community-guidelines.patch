@@ -11,7 +11,7 @@ Date:   Fri Mar 30 20:29:49 2018 +0200
     Filename: remove-community-guidelines.patch
 
 diff --git a/website/client/components/chat/chatCard.vue b/website/client/components/chat/chatCard.vue
-index f992148b2..b216db793 100644
+index e058050a7..d1b7d54f5 100644
 --- a/website/client/components/chat/chatCard.vue
 +++ b/website/client/components/chat/chatCard.vue
 @@ -22,10 +22,9 @@ div
@@ -27,7 +27,7 @@ index f992148b2..b216db793 100644
          .svg-icon(v-html="icons.delete")
          | {{$t('delete')}}
 diff --git a/website/client/components/groups/chat.vue b/website/client/components/groups/chat.vue
-index 0f6b23164..3e944e247 100644
+index 8575f42c9..c5656c6b2 100644
 --- a/website/client/components/groups/chat.vue
 +++ b/website/client/components/groups/chat.vue
 @@ -29,8 +29,6 @@

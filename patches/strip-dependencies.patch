@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:02 2018 +0200
     Filename: strip-dependencies.patch
 
 diff --git a/package.json b/package.json
-index 4fa6d3402..6d96da612 100644
+index 8228e7d3a..a07620ace 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,14 +4,9 @@
-   "version": "4.70.0",
+   "version": "4.73.1",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@slack/client": "^3.8.1",
@@ -63,7 +63,7 @@ index 4fa6d3402..6d96da612 100644
 -    "short-uuid": "^3.0.0",
 -    "smartbanner.js": "^1.9.1",
 -    "stripe": "^5.9.0",
-     "superagent": "^3.8.3",
+     "superagent": "^4.0.0",
      "svg-inline-loader": "^0.8.0",
      "svg-url-loader": "^2.3.2",
      "svgo": "^1.0.5",

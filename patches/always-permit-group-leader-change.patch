@@ -27,7 +27,7 @@ index ceb1da1bd..3005f9927 100644
  
      let savedGroup = await group.save();
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 6a36323e7..7f9762230 100644
+index dd965145c..26be48bab 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -22,7 +22,6 @@ import {
@@ -38,7 +38,7 @@ index 6a36323e7..7f9762230 100644
  } from '../libs/errors';
  import baseModel from '../libs/baseModel';
  import { sendTxn as sendTxnEmail } from '../libs/email';
-@@ -1113,14 +1112,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1117,14 +1116,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
    let group = this;
    let update = {};
  
