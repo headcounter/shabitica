@@ -6,13 +6,13 @@ let
   nodePackages = import ./all-deps.nix { inherit pkgs system; };
 in {
   dev = {
-    "@vue/test-utils" = nodePackages."@vue/test-utils-^1.0.0-beta.16";
+    "@vue/test-utils" = nodePackages."@vue/test-utils-^1.0.0-beta.19";
     "babel-plugin-istanbul" = nodePackages."babel-plugin-istanbul-^4.1.6";
     "babel-plugin-syntax-object-rest-spread" = nodePackages."babel-plugin-syntax-object-rest-spread-^6.13.0";
     chai = nodePackages."chai-^4.1.2";
     "chai-as-promised" = nodePackages."chai-as-promised-^7.1.1";
     chalk = nodePackages."chalk-^2.4.1";
-    chromedriver = nodePackages."chromedriver-^2.38.3";
+    chromedriver = nodePackages."chromedriver-^2.40.0";
     "connect-history-api-fallback" = nodePackages."connect-history-api-fallback-^1.1.0";
     coveralls = nodePackages."coveralls-^3.0.1";
     "cross-spawn" = nodePackages."cross-spawn-^6.0.5";
@@ -24,7 +24,7 @@ in {
     "eslint-plugin-mocha" = nodePackages."eslint-plugin-mocha-^5.0.0";
     "eventsource-polyfill" = nodePackages."eventsource-polyfill-^0.9.6";
     "expect.js" = nodePackages."expect.js-^0.3.1";
-    "http-proxy-middleware" = nodePackages."http-proxy-middleware-^0.18.0";
+    "http-proxy-middleware" = nodePackages."http-proxy-middleware-^0.19.0";
     istanbul = nodePackages."istanbul-^1.1.0-alpha.1";
     karma = nodePackages."karma-^3.0.0";
     "karma-babel-preprocessor" = nodePackages."karma-babel-preprocessor-^7.0.0";
@@ -45,10 +45,10 @@ in {
     monk = nodePackages."monk-^6.0.6";
     nightwatch = nodePackages."nightwatch-^0.9.21";
     "nightwatch-html-reporter" = nodePackages."nightwatch-html-reporter-^2.0.5";
-    puppeteer = nodePackages."puppeteer-^1.4.0";
+    puppeteer = nodePackages."puppeteer-^1.5.0";
     "require-again" = nodePackages."require-again-^2.0.0";
     "selenium-server" = nodePackages."selenium-server-^3.12.0";
-    sinon = nodePackages."sinon-^4.5.0";
+    sinon = nodePackages."sinon-^6.3.5";
     "sinon-chai" = nodePackages."sinon-chai-^3.0.0";
     "sinon-stub-promise" = nodePackages."sinon-stub-promise-^4.0.0";
     "webpack-bundle-analyzer" = nodePackages."webpack-bundle-analyzer-^2.12.0";
@@ -81,7 +81,7 @@ in {
     compression = nodePackages."compression-^1.7.2";
     "cookie-session" = nodePackages."cookie-session-^1.2.0";
     "coupon-code" = nodePackages."coupon-code-^0.4.5";
-    "cross-env" = nodePackages."cross-env-^5.1.5";
+    "cross-env" = nodePackages."cross-env-^5.2.0";
     "css-loader" = nodePackages."css-loader-^0.28.11";
     "csv-stringify" = nodePackages."csv-stringify-^4.3.1";
     cwait = nodePackages."cwait-^1.1.1";
@@ -94,8 +94,8 @@ in {
     got = nodePackages."got-^9.0.0";
     gulp = nodePackages."gulp-^4.0.0";
     "gulp-babel" = nodePackages."gulp-babel-^7.0.1";
-    "gulp-imagemin" = nodePackages."gulp-imagemin-^4.1.0";
-    "gulp-nodemon" = nodePackages."gulp-nodemon-^2.2.1";
+    "gulp-imagemin" = nodePackages."gulp-imagemin-^5.0.3";
+    "gulp-nodemon" = nodePackages."gulp-nodemon-^2.4.1";
     "gulp.spritesmith" = nodePackages."gulp.spritesmith-^6.9.0";
     "habitica-markdown" = nodePackages."habitica-markdown-^1.3.0";
     "html-webpack-plugin" = nodePackages."html-webpack-plugin-^3.2.0";
@@ -111,8 +111,8 @@ in {
     mongoose = nodePackages."mongoose-^5.3.4";
     morgan = nodePackages."morgan-^1.7.0";
     nconf = nodePackages."nconf-^0.10.0";
-    "node-sass" = nodePackages."node-sass-^4.9.0";
-    ora = nodePackages."ora-^2.1.0";
+    "node-sass" = nodePackages."node-sass-<=4.10.0";
+    ora = nodePackages."ora-^3.0.0";
     pageres = nodePackages."pageres-^4.1.1";
     passport = nodePackages."passport-^0.4.0";
     "popper.js" = nodePackages."popper.js-^1.14.3";
@@ -120,10 +120,10 @@ in {
     "ps-tree" = nodePackages."ps-tree-^1.0.0";
     pug = nodePackages."pug-^2.0.3";
     rimraf = nodePackages."rimraf-^2.4.3";
-    "sass-loader" = nodePackages."sass-loader-^7.0.0";
+    "sass-loader" = nodePackages."sass-loader-^7.0.3";
     "sd-notify" = nodePackages."sd-notify-^2.3.1";
     shelljs = nodePackages."shelljs-^0.8.2";
-    superagent = nodePackages."superagent-^3.8.3";
+    superagent = nodePackages."superagent-^4.0.0";
     "svg-inline-loader" = nodePackages."svg-inline-loader-^0.8.0";
     "svg-url-loader" = nodePackages."svg-url-loader-^2.3.2";
     svgo = nodePackages."svgo-^1.0.5";
@@ -145,8 +145,8 @@ in {
     vuedraggable = nodePackages."vuedraggable-^2.15.0";
     "vuejs-datepicker" = nodePackages."vuejs-datepicker-git://github.com/habitrpg/vuejs-datepicker.git#5d237615463a84a23dd6f3f77c6ab577d68593ec";
     webpack = nodePackages."webpack-^3.12.0";
-    "webpack-merge" = nodePackages."webpack-merge-^4.0.0";
-    winston = nodePackages."winston-^2.4.2";
+    "webpack-merge" = nodePackages."webpack-merge-^4.1.3";
+    winston = nodePackages."winston-^2.4.3";
     xml2js = nodePackages."xml2js-^0.4.4";
   };
 }

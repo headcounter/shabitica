@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.73.2";
+  version = "4.74.5";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1a377aqla615kkfnzgcxfm5gpxvsjnhazdwjrb2zl8j867f0h70n";
+    sha256 = "19jqxbvip7c0lj5bcj4a2p2vmjba74f8hfw1i1blr3h8nqh0b970";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -193,6 +193,9 @@ stdenv.mkDerivation rec {
     # Don't expect migrations to return a Promise so that older migration
     # scripts work.
     patches/revert-migration-runner-promise.patch
+
+    # Pin to version 4.10.0 because otherwise CSS imports do not work.
+    patches/node-sass-4.10.0.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

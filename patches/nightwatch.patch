@@ -16,7 +16,7 @@ Date:   Thu Apr 5 07:56:12 2018 +0200
     Filename: nightwatch.patch
 
 diff --git a/package.json b/package.json
-index 281895954..e4d38726d 100644
+index 01d5c0c74..c17461399 100644
 --- a/package.json
 +++ b/package.json
 @@ -165,6 +165,7 @@
@@ -24,7 +24,7 @@ index 281895954..e4d38726d 100644
      "monk": "^6.0.6",
      "nightwatch": "^0.9.21",
 +    "nightwatch-html-reporter": "^2.0.5",
-     "puppeteer": "^1.4.0",
+     "puppeteer": "^1.5.0",
      "require-again": "^2.0.0",
      "selenium-server": "^3.12.0",
 diff --git a/test/client/e2e/nightwatch.conf.js b/test/client/e2e/nightwatch.conf.js

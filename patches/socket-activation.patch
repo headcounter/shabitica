@@ -10,7 +10,7 @@ Date:   Tue Mar 27 05:37:06 2018 +0200
     Filename: socket-activation.patch
 
 diff --git a/package.json b/package.json
-index a07620ace..6bf412b9e 100644
+index 7006b2a02..6a69f1072 100644
 --- a/package.json
 +++ b/package.json
 @@ -75,6 +75,7 @@
@@ -22,7 +22,7 @@ index a07620ace..6bf412b9e 100644
      "upgrade": "^1.1.0",
      "url-loader": "^1.0.0",
 diff --git a/website/server/server.js b/website/server/server.js
-index f33192903..834becb87 100644
+index 6f717f711..d704cdb1a 100644
 --- a/website/server/server.js
 +++ b/website/server/server.js
 @@ -2,6 +2,7 @@ import nconf from 'nconf';
@@ -31,9 +31,9 @@ index f33192903..834becb87 100644
  import http from 'http';
 +import systemdSocket from 'systemd-socket';
  
- try {
-   // @TODO: May need to remove - testing
-@@ -37,7 +38,7 @@ import './models/user';
+ const server = http.createServer();
+ const app = express();
+@@ -26,7 +27,7 @@ import './models/user';
  attachMiddlewares(app, server);
  
  server.on('request', app);

@@ -13,15 +13,15 @@ Date:   Tue Mar 27 05:37:21 2018 +0200
     Filename: kill-footer.patch
 
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index be87ab840..f7d16fe8b 100644
+index 3b88826cf..45c2bb125 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
-@@ -2,101 +2,6 @@
+@@ -2,96 +2,6 @@
  .row.footer-row
    buy-gems-modal(v-if='user')
    //modify-inventory(v-if="isUserLoaded")
--  footer.col-12(:class="{expanded: isExpandedFooter}")
--    .row(v-if="isExpandedFooter")
+-  footer.col-12.expanded
+-    .row
 -      .col-12.col-md-2
 -        h3 {{ $t('footerCompany') }}
 -        ul
@@ -106,11 +106,6 @@ index be87ab840..f7d16fe8b 100644
 -      .col-12.col-md-2.text-center
 -        .logo.svg-icon(v-html='icons.gryphon')
 -      .col-12.col-md-5.text-right
--        template(v-if="!isExpandedFooter")
--          span
--            a(:href="getDataDisplayToolUrl", target='_blank') {{ $t('dataDisplayTool') }}
--          span.ml-4
--            a(target="_blanck", href="/static/community-guidelines") {{ $t('communityGuidelines') }}
 -        span.ml-4
 -          a(target="_blanck", href="/static/privacy") {{ $t('privacy') }}
 -        span.ml-4
@@ -118,7 +113,7 @@ index be87ab840..f7d16fe8b 100644
  </template>
  
  <style lang="scss" scoped>
-@@ -177,25 +82,6 @@
+@@ -165,25 +75,6 @@
    .heart svg {
      margin-top: .1em;
    }

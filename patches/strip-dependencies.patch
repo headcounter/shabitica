@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:02 2018 +0200
     Filename: strip-dependencies.patch
 
 diff --git a/package.json b/package.json
-index 8228e7d3a..a07620ace 100644
+index 72c93d3f0..7006b2a02 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,14 +4,9 @@
-   "version": "4.73.1",
+   "version": "4.74.5",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@slack/client": "^3.8.1",
@@ -58,7 +58,7 @@ index 8228e7d3a..a07620ace 100644
      "ps-tree": "^1.0.0",
 @@ -82,15 +70,11 @@
      "rimraf": "^2.4.3",
-     "sass-loader": "^7.0.0",
+     "sass-loader": "^7.0.3",
      "shelljs": "^0.8.2",
 -    "short-uuid": "^3.0.0",
 -    "smartbanner.js": "^1.9.1",
@@ -68,24 +68,15 @@ index 8228e7d3a..a07620ace 100644
      "svg-url-loader": "^2.3.2",
      "svgo": "^1.0.5",
      "svgo-loader": "^2.1.0",
--    "universal-analytics": "^0.4.16",
+-    "universal-analytics": "^0.4.17",
      "update": "^0.7.4",
      "upgrade": "^1.1.0",
      "url-loader": "^1.0.0",
 @@ -109,7 +93,6 @@
      "webpack": "^3.12.0",
-     "webpack-merge": "^4.0.0",
-     "winston": "^2.4.2",
+     "webpack-merge": "^4.1.3",
+     "winston": "^2.4.3",
 -    "winston-loggly-bulk": "^2.0.2",
      "xml2js": "^0.4.4"
    },
    "private": true,
-@@ -191,7 +174,6 @@
-     "webpack-hot-middleware": "^2.22.2"
-   },
-   "optionalDependencies": {
--    "memwatch-next": "^0.3.0",
--    "node-rdkafka": "^2.3.0"
-+    "memwatch-next": "^0.3.0"
-   }
- }

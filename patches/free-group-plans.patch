@@ -613,7 +613,7 @@ index 56fcde8d9..ceb1da1bd 100644
  
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index f25d12708..dd965145c 100644
+index 7a86b5b9e..b691eb7cd 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -1,4 +1,3 @@

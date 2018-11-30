@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 4916a1a78..c807daf3a 100644
+index a7ba44372..c807daf3a 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -4,16 +4,6 @@
@@ -60,7 +60,7 @@ index 4916a1a78..c807daf3a 100644
      "NODE_DB_URI":"mongodb://localhost/habitrpg",
      "TEST_DB_URI":"mongodb://localhost/habitrpg_test",
      "NODE_ENV":"development",
-@@ -31,85 +21,20 @@
+@@ -31,86 +21,20 @@
      "SMTP_HOST":"example.com",
      "SMTP_PORT": 587,
      "SMTP_TLS": true,
@@ -77,7 +77,8 @@ index 4916a1a78..c807daf3a 100644
 -        "SELLER_ID": "SELLER_ID",
 -        "CLIENT_ID": "CLIENT_ID",
 -        "MWS_KEY": "",
--        "MWS_SECRET": ""
+-        "MWS_SECRET": "",
+-        "MODE": "sandbox"
 -    },
      "FLAG_REPORT_EMAIL": "email@mod.com,email2@mod.com",
      "EMAIL_SERVER": {
@@ -2416,10 +2417,10 @@ index ca098d0a9..4f9bee934 100644
          target: DEV_BASE_URL,
          changeOrigin: true,
 diff --git a/webpack/config/prod.env.js b/webpack/config/prod.env.js
-index ca5c502e1..cf04a520a 100644
+index fd784d87e..cf04a520a 100644
 --- a/webpack/config/prod.env.js
 +++ b/webpack/config/prod.env.js
-@@ -12,21 +12,10 @@ setupNconf(configFile);
+@@ -12,23 +12,10 @@ setupNconf(configFile);
  
  // To avoid stringifying more data then we need,
  // items from `env` used on the client will have to be specified in this array
@@ -2430,6 +2431,7 @@ index ca5c502e1..cf04a520a 100644
 -
 -const AMAZON_SELLER_ID = nconf.get('AMAZON_PAYMENTS:SELLER_ID') || nconf.get('AMAZON_PAYMENTS_SELLER_ID');
 -const AMAZON_CLIENT_ID = nconf.get('AMAZON_PAYMENTS:CLIENT_ID') || nconf.get('AMAZON_PAYMENTS_CLIENT_ID');
+-const AMAZON_MODE = nconf.get('AMAZON_PAYMENTS:MODE') || nconf.get('AMAZON_PAYMENTS_MODE');
  
  let env = {
    NODE_ENV: '"production"',
@@ -2437,11 +2439,12 @@ index ca5c502e1..cf04a520a 100644
 -  AMAZON_PAYMENTS: {
 -    SELLER_ID: `"${AMAZON_SELLER_ID}"`,
 -    CLIENT_ID: `"${AMAZON_CLIENT_ID}"`,
+-    MODE: `"${AMAZON_MODE}"`,
 -  },
    EMAILS: {
      COMMUNITY_MANAGER_EMAIL: `"${nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL')}"`,
      TECH_ASSISTANCE_EMAIL: `"${nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL')}"`,
-@@ -34,7 +23,7 @@ let env = {
+@@ -36,7 +23,7 @@ let env = {
    },
  };
  
@@ -2748,13 +2751,13 @@ index de65914ea..ab38d5546 100644
      close () {
        this.$root.$emit('bv::hide::modal', 'won-challenge');
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index e101c5457..be87ab840 100644
+index 1567cf3fc..3b88826cf 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -4,11 +4,6 @@
    //modify-inventory(v-if="isUserLoaded")
-   footer.col-12(:class="{expanded: isExpandedFooter}")
-     .row(v-if="isExpandedFooter")
+   footer.col-12.expanded
+     .row
 -      .col-12.col-md-2
 -        h3
 -          a(href='https://itunes.apple.com/us/app/habitica/id994882113?ls=1&mt=8', target='_blank') {{ $t('mobileIOS') }}
@@ -2787,7 +2790,7 @@ index e101c5457..be87ab840 100644
          .row
            .col-12.col-md-8 {{ $t('donateText3') }}
            .col-12.col-md-4
-@@ -150,32 +135,6 @@
+@@ -138,32 +123,6 @@
      margin-bottom: .5em;
    }
  
@@ -2820,7 +2823,7 @@ index e101c5457..be87ab840 100644
    .logo {
      width: 24px;
      height: 24px;
-@@ -219,11 +178,6 @@
+@@ -207,11 +166,6 @@
      margin-top: .1em;
    }
  
@@ -2832,7 +2835,7 @@ index e101c5457..be87ab840 100644
    footer {
      &.expanded {
        padding-left: 6em;
-@@ -248,31 +202,22 @@
+@@ -236,31 +190,22 @@
  import axios from 'axios';
  import moment from 'moment';
  import { mapState } from 'client/libs/store';
@@ -2864,7 +2867,7 @@ index e101c5457..be87ab840 100644
          heart,
        }),
        debugMenuShown: false,
-@@ -371,12 +316,6 @@ export default {
+@@ -356,12 +301,6 @@ export default {
        this.$root.$emit('bv::show::modal', 'modify-inventory');
      },
      donate () {
@@ -3947,10 +3950,10 @@ index 34ff15ca5..e5dd03e02 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index cc9d377f2..401690653 100644
+index 16a03ed68..a43d30132 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
-@@ -501,7 +501,6 @@ import moment from 'moment';
+@@ -506,7 +506,6 @@ import moment from 'moment';
  import axios from 'axios';
  import scoreTask from 'common/script/ops/scoreTask';
  import Vue from 'vue';
@@ -3958,7 +3961,7 @@ index cc9d377f2..401690653 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import negativeIcon from 'assets/svg/negative.svg';
-@@ -718,7 +717,6 @@ export default {
+@@ -723,7 +722,6 @@ export default {
  
        if (task.group.approval.required) task.group.approval.requested = true;
  
@@ -4201,7 +4204,7 @@ index fad46d295..f2f56d68f 100644
    window.location.href = '/logout-server';
  }
 diff --git a/website/client/store/actions/chat.js b/website/client/store/actions/chat.js
-index 12e23a34b..966f1d3ec 100644
+index 0bb568a86..966f1d3ec 100644
 --- a/website/client/store/actions/chat.js
 +++ b/website/client/store/actions/chat.js
 @@ -1,5 +1,4 @@
@@ -4210,7 +4213,7 @@ index 12e23a34b..966f1d3ec 100644
  
  export async function getChat (store, payload) {
    let response = await axios.get(`/api/v4/groups/${payload.groupId}/chat`);
-@@ -16,32 +15,6 @@ export async function postChat (store, payload) {
+@@ -16,13 +15,6 @@ export async function postChat (store, payload) {
      url += `?previousMsg=${payload.previousMsg}`;
    }
  
@@ -4218,25 +4221,6 @@ index 12e23a34b..966f1d3ec 100644
 -    Analytics.updateUser({
 -      partyID: group.id,
 -      partySize: group.memberCount,
--    });
--  }
--
--  if (group.privacy === 'public') {
--    Analytics.track({
--      hitType: 'event',
--      eventCategory: 'behavior',
--      eventAction: 'group chat',
--      groupType: group.type,
--      privacy: group.privacy,
--      groupName: group.name,
--    });
--  } else {
--    Analytics.track({
--      hitType: 'event',
--      eventCategory: 'behavior',
--      eventAction: 'group chat',
--      groupType: group.type,
--      privacy: group.privacy,
 -    });
 -  }
 -
@@ -5391,7 +5375,7 @@ index 6405eb59a..61818c6e9 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index cb73d2ada..f886e13b5 100644
+index 64afb56c0..8cc797d4a 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -9,7 +9,6 @@ import {
@@ -5402,7 +5386,16 @@ index cb73d2ada..f886e13b5 100644
  import { getAuthorEmailFromMessage } from '../../libs/chat';
  import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
  import nconf from 'nconf';
-@@ -142,14 +141,6 @@ api.postChat = {
+@@ -83,8 +82,6 @@ function getBannedWordsFromText (message) {
+   return getMatchesByWordArray(message, bannedWords);
+ }
+ 
+-
+-const mentionRegex = new RegExp('\\B@[-\\w]+', 'g');
+ /**
+  * @api {post} /api/v3/groups/:groupId/chat Post chat message to a group
+  * @apiName PostChat
+@@ -144,14 +141,6 @@ api.postChat = {
  
        sendTxn(FLAG_REPORT_EMAILS, 'slur-report-to-mods', report);
  
@@ -5417,6 +5410,34 @@ index cb73d2ada..f886e13b5 100644
        throw new BadRequest(res.t('bannedSlurUsed'));
      }
  
+@@ -191,27 +180,6 @@ api.postChat = {
+ 
+     await Promise.all(toSave);
+ 
+-    let analyticsObject = {
+-      uuid: user._id,
+-      hitType: 'event',
+-      category: 'behavior',
+-      groupType: group.type,
+-      privacy: group.privacy,
+-      headers: req.headers,
+-    };
+-
+-    const mentions = req.body.message.match(mentionRegex);
+-    if (mentions) {
+-      analyticsObject.mentionsCount = mentions.length;
+-    } else {
+-      analyticsObject.mentionsCount = 0;
+-    }
+-    if (group.privacy === 'public') {
+-      analyticsObject.groupName = group.name;
+-    }
+-
+-    res.analytics.track('group chat', analyticsObject);
+-
+     if (chatUpdated) {
+       res.respond(200, {chat: chatRes.chat});
+     } else {
 diff --git a/website/server/controllers/api-v3/coupon.js b/website/server/controllers/api-v3/coupon.js
 index 7acc406a4..8a441b55e 100644
 --- a/website/server/controllers/api-v3/coupon.js
@@ -7015,7 +7036,7 @@ index 2d99143b6..7326ae0b1 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 1bae6115f..f25d12708 100644
+index 9a0d4c2d2..7a86b5b9e 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {

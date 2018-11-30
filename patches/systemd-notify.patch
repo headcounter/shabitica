@@ -10,19 +10,19 @@ Date:   Thu May 3 06:29:02 2018 +0200
     Filename: systemd-notify.patch
 
 diff --git a/package.json b/package.json
-index e4d38726d..f5f40fcd6 100644
+index c17461399..25e60ab19 100644
 --- a/package.json
 +++ b/package.json
 @@ -68,6 +68,7 @@
      "pug": "^2.0.3",
      "rimraf": "^2.4.3",
-     "sass-loader": "^7.0.0",
+     "sass-loader": "^7.0.3",
 +    "sd-notify": "^2.3.1",
      "shelljs": "^0.8.2",
      "superagent": "^4.0.0",
      "svg-inline-loader": "^0.8.0",
 diff --git a/website/server/server.js b/website/server/server.js
-index 834becb87..1dea4727d 100644
+index d704cdb1a..03dc694f5 100644
 --- a/website/server/server.js
 +++ b/website/server/server.js
 @@ -3,6 +3,7 @@ import logger from './libs/logger';
@@ -31,9 +31,9 @@ index 834becb87..1dea4727d 100644
  import systemdSocket from 'systemd-socket';
 +import notify from 'sd-notify';
  
- try {
-   // @TODO: May need to remove - testing
-@@ -40,6 +41,7 @@ attachMiddlewares(app, server);
+ const server = http.createServer();
+ const app = express();
+@@ -29,6 +30,7 @@ attachMiddlewares(app, server);
  server.on('request', app);
  server.listen(systemdSocket() || app.get('port'), () => {
    logger.info(`Express server listening on port ${app.get('port')}`);

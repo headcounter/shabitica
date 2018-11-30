@@ -11,10 +11,10 @@ Date:   Fri Mar 30 20:29:49 2018 +0200
     Filename: remove-community-guidelines.patch
 
 diff --git a/website/client/components/chat/chatCard.vue b/website/client/components/chat/chatCard.vue
-index e058050a7..d1b7d54f5 100644
+index dd5de80a9..3a4c33c46 100644
 --- a/website/client/components/chat/chatCard.vue
 +++ b/website/client/components/chat/chatCard.vue
-@@ -22,10 +22,9 @@ div
+@@ -23,10 +23,9 @@ div
        .action.d-flex.align-items-center(v-if='!inbox', @click='copyAsTodo(msg)')
          .svg-icon(v-html="icons.copy")
          div {{$t('copyAsTodo')}}
