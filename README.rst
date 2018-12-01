@@ -188,6 +188,6 @@ Ideas
 .. _Nix: https://nixos.org/nix/
 .. _NixOS configuration: https://nixos.org/nixos/manual/index.html#sec-configuration-file
 .. _NixOS: https://nixos.org/
-.. _manual: https://headcounter.org/hydra/job/shabitica/nixos-18.03/manual/latest/download
+.. _manual: https://headcounter.org/hydra/job/shabitica/nixos-unstable/manual/latest/download
 .. _network namespace: https://en.wikipedia.org/wiki/Linux_namespaces#Network_(net)
 .. _sendmail: http://www.postfix.org/sendmail.1.html
