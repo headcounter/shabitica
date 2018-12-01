@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, pkgs }:
+{ stdenv, lib, callPackage, pkgs, nodejs ? pkgs.nodejs }:
 
 let
   # We need to remove package-lock.json files for all node modules, otherwise
@@ -13,7 +13,7 @@ let
     removeLocks = lib.mapAttrs (lib.const removeLock);
   in lib.mapAttrs (lib.const removeLocks) (import ./generated {
     inherit (stdenv) system;
-    inherit pkgs;
+    inherit pkgs nodejs;
   });
 
   mkOverrides = cat: pkgset: let

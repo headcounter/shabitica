@@ -1,4 +1,4 @@
-{ lib, pkgs, stdenv, makeWrapper, writeText, jq, nodejs-8_x
+{ lib, pkgs, stdenv, makeWrapper, writeText, jq
 
 , shabiticaConfig ? {
     NODE_ENV = "production";
@@ -8,7 +8,19 @@
 }:
 
 let
-  nodePackages = callPackage ./node-packages.nix {};
+  # XXX: Backwards-compatibility for NixOS 18.03.
+  nodejs = pkgs.nodejs-10_x or (let
+    builderSrc = "${pkgs.path}/pkgs/development/web/nodejs/nodejs.nix";
+  in (pkgs.callPackage builderSrc {}) {
+    enableNpm = true;
+    version = "10.12.0";
+    patches = [];
+    sha256 = "1r0aqcxafha13ks8586x77n77zi88db259cpaix0y1ivdh6qkkfr";
+  });
+
+  nodePackages = callPackage ./node-packages.nix {
+    inherit nodejs;
+  };
 
   callPackage = lib.callPackageWith (pkgs // {
     inherit callPackage nodePackages shabiticaConfig;
@@ -56,7 +68,7 @@ let
       runHook postBuild
     '';
 
-    nativeBuildInputs = [ nodejs-8_x ] ++ (attrs.nativeBuildInputs or []);
+    nativeBuildInputs = [ nodejs ] ++ (attrs.nativeBuildInputs or []);
 
     buildInputs = (lib.attrValues nodePackages.main) ++ [
       nodePackages.dev.babel-plugin-istanbul
@@ -152,7 +164,7 @@ in rec {
       mv "$migPath" "$migDir/$migFile"
 
       makeWrapper \
-        ${lib.escapeShellArg "${nodejs-8_x}/bin/node"} "$migDir/run.sh" \
+        ${lib.escapeShellArg "${nodejs}/bin/node"} "$migDir/run.sh" \
         --add-flags "$migOutDir/runner.js" \
         --set NODE_ENV production \
         --set NODE_PATH "$runtimeNodePath" \
@@ -220,7 +232,7 @@ in rec {
       cp -rdT website/common/errors "$out/libexec/shabitica/common/errors"
 
       makeWrapper \
-        ${lib.escapeShellArg "${nodejs-8_x}/bin/node"} \
+        ${lib.escapeShellArg "${nodejs}/bin/node"} \
         "$out/bin/shabitica-server" \
         --add-flags "$out/libexec/shabitica/server/index.js" \
         --set NODE_ENV production \

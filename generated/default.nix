@@ -1,9 +1,10 @@
 { pkgs ? import <nixpkgs> { inherit system; }
 , system ? builtins.currentSystem
+, nodejs ? pkgs.nodejs
 }:
 
 let
-  nodePackages = import ./all-deps.nix { inherit pkgs system; };
+  nodePackages = import ./all-deps.nix { inherit pkgs system nodejs; };
 in {
   dev = {
     "@vue/test-utils" = nodePackages."@vue/test-utils-^1.0.0-beta.19";

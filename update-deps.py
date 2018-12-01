@@ -39,7 +39,7 @@ def generate(depmap):
         json.dump(flattened, fp)
         fp.flush()
         cmd = [
-            'node2nix', '-8',
+            'node2nix', '--nodejs-10',
             '-e', os.path.join(OUTPUT_DIR, 'node-env.nix'),
             '-i', fp.name,
             '-o', os.path.join(OUTPUT_DIR, 'node-packages.nix'),
@@ -49,11 +49,15 @@ def generate(depmap):
 
 
 def generate_depmap_expr(depmap):
-    pkgs_arg = "pkgs ? import <nixpkgs> { inherit system; }"
-    system_arg = "system ? builtins.currentSystem"
-    fun_head = '{ ' + '\n, '.join([pkgs_arg, system_arg]) + '\n}:\n\n'
+    args = [
+        "pkgs ? import <nixpkgs> { inherit system; }",
+        "system ? builtins.currentSystem",
+        "nodejs ? pkgs.nodejs"
+    ]
+    fun_head = '{ ' + '\n, '.join(args) + '\n}:\n\n'
 
-    alldeps = "import ./" + COMPOSITION_FILENAME + " { inherit pkgs system; }"
+    alldeps = "import ./" + COMPOSITION_FILENAME
+    alldeps += " { inherit pkgs system nodejs; }"
     letexpr = "let\n  nodePackages = {};\nin ".format(alldeps)
 
     return fun_head + letexpr + nix_expr.py2nix(depmap)
