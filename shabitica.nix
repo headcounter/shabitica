@@ -11,7 +11,20 @@ let
   # XXX: Backwards-compatibility for NixOS 18.03.
   nodejs = pkgs.nodejs-10_x or (let
     buildSrc = "${toString pkgs.path}/pkgs/development/web/nodejs/nodejs.nix";
-  in (pkgs.callPackage buildSrc {}) {
+  in (pkgs.callPackage buildSrc {
+    openssl = pkgs.openssl_1_1_0;
+    libuv = pkgs.libuv.overrideAttrs (lib.const rec {
+      version = "1.23.1";
+      name = "libuv-${version}";
+
+      src = pkgs.fetchFromGitHub {
+        owner = "libuv";
+        repo = "libuv";
+        rev = "v${version}";
+        sha256 = "14h8dcyx81sbckbgmqhagncyz8s6z6qzpx0fy8p79whq5hb3f4jg";
+      };
+    });
+  }) {
     enableNpm = true;
     version = "10.12.0";
     patches = [];
