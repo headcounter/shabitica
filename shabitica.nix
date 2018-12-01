@@ -10,8 +10,8 @@
 let
   # XXX: Backwards-compatibility for NixOS 18.03.
   nodejs = pkgs.nodejs-10_x or (let
-    builderSrc = "${pkgs.path}/pkgs/development/web/nodejs/nodejs.nix";
-  in (pkgs.callPackage builderSrc {}) {
+    buildSrc = "${toString pkgs.path}/pkgs/development/web/nodejs/nodejs.nix";
+  in (pkgs.callPackage buildSrc {}) {
     enableNpm = true;
     version = "10.12.0";
     patches = [];
