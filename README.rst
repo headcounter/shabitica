@@ -87,6 +87,13 @@ While the source tree can be obtained by cloning this repository (or using
 ``fetchGit``/``fetchTarball``), it's recommended to use one of the Hydra
 channels, which only contain the latest *tested* version of the source code.
 
+If you're on NixOS 18.09, you can add the channel via:
+
+.. code-block:: sh-session
+
+  # nix-channel --add https://headcounter.org/hydra/channel/custom/shabitica/nixos-18.09/shabitica
+  # nix-channel --update shabitica
+
 If you're on NixOS 18.03, you can add the channel via:
 
 .. code-block:: sh-session
