@@ -11,7 +11,7 @@ Date:   Fri Mar 30 20:29:49 2018 +0200
     Filename: remove-community-guidelines.patch
 
 diff --git a/website/client/components/chat/chatCard.vue b/website/client/components/chat/chatCard.vue
-index dd5de80a9..3a4c33c46 100644
+index edebbe831..15e34a663 100644
 --- a/website/client/components/chat/chatCard.vue
 +++ b/website/client/components/chat/chatCard.vue
 @@ -23,10 +23,9 @@ div
@@ -102,19 +102,19 @@ index 57aa2ce6d..019c369cb 100644
            .form-group
              label {{ $t('displayName') }}
              input.form-control(type='text', :placeholder="$t('fullName')", v-model='editingProfile.name')
-diff --git a/website/client/router.js b/website/client/router.js
-index 7db093af0..5e5e77a78 100644
---- a/website/client/router.js
-+++ b/website/client/router.js
-@@ -13,7 +13,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'./components/stati
+diff --git a/website/client/router/index.js b/website/client/router/index.js
+index c0f752678..9fbfa04e2 100644
+--- a/website/client/router/index.js
++++ b/website/client/router/index.js
+@@ -10,7 +10,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'client/components/
  
- const AppPage = () => import(/* webpackChunkName: "static" */'./components/static/app');
- const ClearBrowserDataPage = () => import(/* webpackChunkName: "static" */'./components/static/clearBrowserData');
--const CommunityGuidelinesPage = () => import(/* webpackChunkName: "static" */'./components/static/communityGuidelines');
- const FAQPage = () => import(/* webpackChunkName: "static" */'./components/static/faq');
- const FeaturesPage = () => import(/* webpackChunkName: "static" */'./components/static/features');
- const GroupPlansPage = () => import(/* webpackChunkName: "static" */'./components/static/groupPlans');
-@@ -245,7 +244,6 @@ const router = new VueRouter({
+ const AppPage = () => import(/* webpackChunkName: "static" */'client/components/static/app');
+ const ClearBrowserDataPage = () => import(/* webpackChunkName: "static" */'client/components/static/clearBrowserData');
+-const CommunityGuidelinesPage = () => import(/* webpackChunkName: "static" */'client/components/static/communityGuidelines');
+ const FAQPage = () => import(/* webpackChunkName: "static" */'client/components/static/faq');
+ const FeaturesPage = () => import(/* webpackChunkName: "static" */'client/components/static/features');
+ const GroupPlansPage = () => import(/* webpackChunkName: "static" */'client/components/static/groupPlans');
+@@ -242,7 +241,6 @@ const router = new VueRouter({
        children: [
          { name: 'app', path: 'app', component: AppPage, meta: {requiresLogin: false}},
          { name: 'clearBrowserData', path: 'clear-browser-data', component: ClearBrowserDataPage, meta: {requiresLogin: false}},

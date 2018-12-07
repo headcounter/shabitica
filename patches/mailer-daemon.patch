@@ -18,36 +18,42 @@ Date:   Tue Mar 27 05:37:16 2018 +0200
     Filename: mailer-daemon.patch
 
 diff --git a/config.json.example b/config.json.example
-index c807daf3a..641f208ed 100644
+index 549316bc4..30009586c 100644
 --- a/config.json.example
 +++ b/config.json.example
-@@ -15,23 +15,8 @@
-     "SESSION_SECRET_KEY": "1234567891234567891234567891234567891234567891234567891234567891",
-     "SESSION_SECRET_IV": "12345678912345678912345678912345",
-     "ADMIN_EMAIL": "you@example.com",
--    "SMTP_USER":"user@example.com",
--    "SMTP_PASS":"password",
--    "SMTP_SERVICE":"Gmail",
--    "SMTP_HOST":"example.com",
--    "SMTP_PORT": 587,
--    "SMTP_TLS": true,
-+    "MAILER_SOCKET": "/run/habitica/mailer.sock",
-     "FLAG_REPORT_EMAIL": "email@mod.com,email2@mod.com",
--    "EMAIL_SERVER": {
--        "url": "http://example.com",
--        "authUser": "user",
--        "authPassword": "password"
--    },
--    "SITE_HTTP_AUTH": {
--        "ENABLED": "false",
--        "USERNAME": "admin",
--        "PASSWORD": "password"
--    },
-     "EMAILS" : {
-         "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
-         "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
+@@ -7,13 +7,11 @@
+   "EMAILS_COMMUNITY_MANAGER_EMAIL": "admin@habitica.com",
+   "EMAILS_PRESS_ENQUIRY_EMAIL": "admin@habitica.com",
+   "EMAILS_TECH_ASSISTANCE_EMAIL": "admin@habitica.com",
+-  "EMAIL_SERVER_AUTH_PASSWORD": "password",
+-  "EMAIL_SERVER_AUTH_USER": "user",
+-  "EMAIL_SERVER_URL": "http://example.com",
+   "ENABLE_CONSOLE_LOGS_IN_PROD": "false",
+   "ENABLE_CONSOLE_LOGS_IN_TEST": "false",
+   "FLAG_REPORT_EMAIL": "email@example.com, email2@example.com",
+   "IGNORE_REDIRECT": "true",
++  "MAILER_SOCKET": "/run/habitica/mailer.sock",
+   "MAINTENANCE_MODE": "false",
+   "NODE_DB_URI": "mongodb://localhost/habitrpg",
+   "NODE_ENV": "development",
+@@ -22,15 +20,6 @@
+   "SESSION_SECRET": "YOUR SECRET HERE",
+   "SESSION_SECRET_IV": "12345678912345678912345678912345",
+   "SESSION_SECRET_KEY": "1234567891234567891234567891234567891234567891234567891234567891",
+-  "SITE_HTTP_AUTH_ENABLED": "false",
+-  "SITE_HTTP_AUTH_PASSWORD": "password",
+-  "SITE_HTTP_AUTH_USERNAME": "admin",
+-  "SMTP_HOST": "example.com",
+-  "SMTP_PASS": "password",
+-  "SMTP_PORT": 587,
+-  "SMTP_SERVICE": "Gmail",
+-  "SMTP_TLS": "true",
+-  "SMTP_USER": "user@example.com",
+   "TEST_DB_URI": "mongodb://localhost/habitrpg_test",
+   "WEB_CONCURRENCY": 1
+ }
 diff --git a/package.json b/package.json
-index 6a69f1072..3543434b3 100644
+index c5e395a7d..1eeb99a96 100644
 --- a/package.json
 +++ b/package.json
 @@ -59,7 +59,6 @@
@@ -131,7 +137,7 @@ index 23989fbf3..b043db942 100644
          body: {
            data: {
 diff --git a/website/server/libs/email.js b/website/server/libs/email.js
-index 744c29af7..a6d71bc7f 100644
+index 9d3d029cf..a6d71bc7f 100644
 --- a/website/server/libs/email.js
 +++ b/website/server/libs/email.js
 @@ -1,4 +1,3 @@
@@ -144,10 +150,10 @@ index 744c29af7..a6d71bc7f 100644
  
  const IS_PROD = nconf.get('IS_PROD');
 -const EMAIL_SERVER = {
--  url: nconf.get('EMAIL_SERVER:url'),
+-  url: nconf.get('EMAIL_SERVER_URL'),
 -  auth: {
--    user: nconf.get('EMAIL_SERVER:authUser'),
--    password: nconf.get('EMAIL_SERVER:authPassword'),
+-    user: nconf.get('EMAIL_SERVER_AUTH_USER'),
+-    password: nconf.get('EMAIL_SERVER_AUTH_PASSWORD'),
 -  },
 -};
 +const MAILER_SOCKET = nconf.get('MAILER_SOCKET');

@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.75.0";
+  version = "4.75.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0j4vpjrf0kk3zw1pf49qaa9mzxqjfsxd216r8n0dracwb5nyxj4f";
+    sha256 = "099aakac5h1d9gqrbdpnipzwlhw3q0z13zfwrvfgy6vkw6abcbc4";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -239,12 +239,14 @@ stdenv.mkDerivation rec {
     "website/client/components/payments/amazonModal.vue"
     "website/client/components/payments/buyGemsModal.vue"
     "website/client/components/payments/sendGemsModal.vue"
+    "website/client/components/payments/successModal.vue"
     "website/client/components/static/communityGuidelines.vue"
     "website/client/components/static/contact.vue"
     "website/client/components/static/groupPlans.vue"
     "website/client/components/static/merch.vue"
     "website/client/components/static/newStuff.vue"
     "website/client/components/static/pressKit.vue"
+    "website/client/router/handleRedirect.js"
     "website/client/libs/analytics.js"
     "website/client/libs/logging.js"
     "website/client/libs/modform.js"
@@ -275,7 +277,6 @@ stdenv.mkDerivation rec {
     "website/server/libs/payments/stripe"
     "website/server/libs/payments/stripe.js"
     "website/server/libs/pushNotifications.js"
-    "website/server/libs/queue/index.js"
     "website/server/libs/slack.js"
     "website/server/middlewares/analytics.js"
     "website/server/middlewares/static.js"

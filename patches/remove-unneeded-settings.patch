@@ -40,21 +40,21 @@ index 68366e110..9f8b08f3f 100644
      router-link.nav-link(:to="{name: 'notifications'}", :class="{'active': $route.name === 'notifications'}") {{ $t('notifications') }}
  
    .col-12
-diff --git a/website/client/router.js b/website/client/router.js
-index 4937d0d3c..01855b7e4 100644
---- a/website/client/router.js
-+++ b/website/client/router.js
-@@ -33,9 +33,7 @@ const Settings = () => import(/* webpackChunkName: "settings" */'./components/se
- const API = () => import(/* webpackChunkName: "settings" */'./components/settings/api');
- const DataExport = () => import(/* webpackChunkName: "settings" */'./components/settings/dataExport');
- const Notifications = () => import(/* webpackChunkName: "settings" */'./components/settings/notifications');
--const PromoCode = () => import(/* webpackChunkName: "settings" */'./components/settings/promoCode');
- const Site = () => import(/* webpackChunkName: "settings" */'./components/settings/site');
--const Subscription = () => import(/* webpackChunkName: "settings" */'./components/settings/subscription');
+diff --git a/website/client/router/index.js b/website/client/router/index.js
+index 1291dc910..fe9379e64 100644
+--- a/website/client/router/index.js
++++ b/website/client/router/index.js
+@@ -30,9 +30,7 @@ const Settings = () => import(/* webpackChunkName: "settings" */'client/componen
+ const API = () => import(/* webpackChunkName: "settings" */'client/components/settings/api');
+ const DataExport = () => import(/* webpackChunkName: "settings" */'client/components/settings/dataExport');
+ const Notifications = () => import(/* webpackChunkName: "settings" */'client/components/settings/notifications');
+-const PromoCode = () => import(/* webpackChunkName: "settings" */'client/components/settings/promoCode');
+ const Site = () => import(/* webpackChunkName: "settings" */'client/components/settings/site');
+-const Subscription = () => import(/* webpackChunkName: "settings" */'client/components/settings/subscription');
  
  // Hall
- const HallPage = () => import(/* webpackChunkName: "hall" */'./components/hall/index');
-@@ -216,16 +214,6 @@ const router = new VueRouter({
+ const HallPage = () => import(/* webpackChunkName: "hall" */'client/components/hall/index');
+@@ -213,16 +211,6 @@ const router = new VueRouter({
                path: 'data-export',
                component: DataExport,
              },

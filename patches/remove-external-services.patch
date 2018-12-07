@@ -40,113 +40,85 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index a7ba44372..c807daf3a 100644
+index 94c5c7b04..549316bc4 100644
 --- a/config.json.example
 +++ b/config.json.example
-@@ -4,16 +4,6 @@
-     "IP":"0.0.0.0",
-     "WEB_CONCURRENCY":1,
-     "BASE_URL":"http://localhost:3000",
--    "FACEBOOK_KEY":"123456789012345",
--    "FACEBOOK_SECRET":"aaaabbbbccccddddeeeeffff00001111",
--    "GOOGLE_CLIENT_ID":"123456789012345",
--    "GOOGLE_CLIENT_SECRET":"aaaabbbbccccddddeeeeffff00001111",
--    "PLAY_API": {
--      "CLIENT_ID": "aaaabbbbccccddddeeeeffff00001111",
--      "CLIENT_SECRET": "aaaabbbbccccddddeeeeffff00001111",
--      "ACCESS_TOKEN":"aaaabbbbccccddddeeeeffff00001111",
--      "REFRESH_TOKEN":"aaaabbbbccccddddeeeeffff00001111"
--    },
-     "NODE_DB_URI":"mongodb://localhost/habitrpg",
-     "TEST_DB_URI":"mongodb://localhost/habitrpg_test",
-     "NODE_ENV":"development",
-@@ -31,86 +21,20 @@
-     "SMTP_HOST":"example.com",
-     "SMTP_PORT": 587,
-     "SMTP_TLS": true,
--    "STRIPE_API_KEY":"aaaabbbbccccddddeeeeffff00001111",
--    "STRIPE_PUB_KEY":"22223333444455556666777788889999",
--    "NEW_RELIC_LICENSE_KEY":"NEW_RELIC_LICENSE_KEY",
--    "NEW_RELIC_NO_CONFIG_FILE":"true",
--    "NEW_RELIC_APPLICATION_ID":"NEW_RELIC_APPLICATION_ID",
--    "NEW_RELIC_API_KEY":"NEW_RELIC_API_KEY",
--    "GA_ID": "GA_ID",
--    "AMPLITUDE_KEY": "AMPLITUDE_KEY",
--    "AMPLITUDE_SECRET": "AMPLITUDE_SECRET",
--    "AMAZON_PAYMENTS": {
--        "SELLER_ID": "SELLER_ID",
--        "CLIENT_ID": "CLIENT_ID",
--        "MWS_KEY": "",
--        "MWS_SECRET": "",
--        "MODE": "sandbox"
--    },
-     "FLAG_REPORT_EMAIL": "email@mod.com,email2@mod.com",
-     "EMAIL_SERVER": {
-         "url": "http://example.com",
-         "authUser": "user",
-         "authPassword": "password"
-     },
--    "S3":{
--        "bucket":"bucket",
--        "accessKeyId":"accessKeyId",
--        "secretAccessKey":"secretAccessKey"
--    },
--    "SLACK_URL": "https://hooks.slack.com/services/some-url",
--    "TRANSIFEX_SLACK_CHANNEL": "transifex",
--    "PAYPAL":{
--        "billing_plans": {
--            "basic_earned":"basic_earned",
--            "basic_3mo":"basic_3mo",
--            "basic_6mo":"basic_6mo",
--            "google_6mo":"google_6mo",
--            "basic_12mo":"basic_12mo"
--        },
--        "mode":"sandbox",
--        "client_id":"client_id",
--        "client_secret":"client_secret",
--        "experience_profile_id": ""
--    },
--    "IAP_GOOGLE_KEYDIR": "/path/to/google/public/key/dir/",
--    "LOGGLY_TOKEN": "token",
--    "LOGGLY_CLIENT_TOKEN": "token",
--    "LOGGLY_ACCOUNT": "account",
--    "PUSH_CONFIGS": {
--        "GCM_SERVER_API_KEY": "",
--        "APN_ENABLED": "false",
--        "APN_KEY_ID": "xxxxxxxxxx",
--        "APN_KEY": "xxxxxxxxxx",
--        "APN_TEAM_ID": "aaabbbcccd",
--        "FCM_SERVER_API_KEY": ""
--    },
-     "SITE_HTTP_AUTH": {
-         "ENABLED": "false",
-         "USERNAME": "admin",
-         "PASSWORD": "password"
-     },
--    "SLACK": {
--        "FLAGGING_URL": "https://hooks.slack.com/services/id/id/id",
--        "FLAGGING_FOOTER_LINK": "https://habitrpg.github.io/flag-o-rama/",
--        "SUBSCRIPTIONS_URL": "https://hooks.slack.com/services/id/id/id"
--    },
--    "ITUNES_SHARED_SECRET": "aaaabbbbccccddddeeeeffff00001111",
-     "EMAILS" : {
-         "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
-         "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
-         "PRESS_ENQUIRY_EMAIL" : "admin@habitica.com"
--    },
--    "LOGGLY" : {
--        "TOKEN" : "example-token",
--        "SUBDOMAIN" : "exmaple-subdomain"
--    },
--    "KAFKA": {
--      "GROUP_ID": "",
--      "CLOUDKARAFKA_BROKERS": "",
--      "CLOUDKARAFKA_USERNAME": "",
--      "CLOUDKARAFKA_PASSWORD": "",
--      "CLOUDKARAFKA_TOPIC_PREFIX": ""
--    },
--    "MIGRATION_CONNECT_STRING": "mongodb://localhost:27017/habitrpg?auto_reconnect=true"
-+    }
+@@ -1,12 +1,5 @@
+ {
+   "ADMIN_EMAIL": "you@example.com",
+-  "AMAZON_PAYMENTS_CLIENT_ID": "CLIENT_ID",
+-  "AMAZON_PAYMENTS_MODE": "sandbox",
+-  "AMAZON_PAYMENTS_MWS_KEY": "MWS_KEY",
+-  "AMAZON_PAYMENTS_MWS_SECRET": "MWS_SECRET",
+-  "AMAZON_PAYMENTS_SELLER_ID": "SELLER_ID",
+-  "AMPLITUDE_KEY": "AMPLITUDE_KEY",
+-  "AMPLITUDE_SECRET": "AMPLITUDE_SECRET",
+   "BASE_URL": "http://localhost:3000",
+   "CRON_SAFE_MODE": "false",
+   "CRON_SEMI_SAFE_MODE": "false",
+@@ -19,63 +12,25 @@
+   "EMAIL_SERVER_URL": "http://example.com",
+   "ENABLE_CONSOLE_LOGS_IN_PROD": "false",
+   "ENABLE_CONSOLE_LOGS_IN_TEST": "false",
+-  "FACEBOOK_KEY": "123456789012345",
+-  "FACEBOOK_SECRET": "aaaabbbbccccddddeeeeffff00001111",
+   "FLAG_REPORT_EMAIL": "email@example.com, email2@example.com",
+-  "GA_ID": "GA_ID",
+-  "GOOGLE_CLIENT_ID": "123456789012345",
+-  "GOOGLE_CLIENT_SECRET": "aaaabbbbccccddddeeeeffff00001111",
+-  "IAP_GOOGLE_KEYDIR": "/path/to/google/public/key/dir/",
+   "IGNORE_REDIRECT": "true",
+-  "ITUNES_SHARED_SECRET": "aaaabbbbccccddddeeeeffff00001111",
+-  "LOGGLY_CLIENT_TOKEN": "token",
+-  "LOGGLY_SUBDOMAIN": "example-subdomain",
+-  "LOGGLY_TOKEN": "example-token",
+   "MAINTENANCE_MODE": "false",
+   "NODE_DB_URI": "mongodb://localhost/habitrpg",
+   "NODE_ENV": "development",
+   "PATH": "bin:node_modules/.bin:/usr/local/bin:/usr/bin:/bin",
+-  "PAYPAL_BILLING_PLANS_basic_12mo": "basic_12mo",
+-  "PAYPAL_BILLING_PLANS_basic_3mo": "basic_3mo",
+-  "PAYPAL_BILLING_PLANS_basic_6mo": "basic_6mo",
+-  "PAYPAL_BILLING_PLANS_basic_earned": "basic_earned",
+-  "PAYPAL_BILLING_PLANS_google_6mo": "google_6mo",
+-  "PAYPAL_CLIENT_ID": "client_id",
+-  "PAYPAL_CLIENT_SECRET": "client_secret",
+-  "PAYPAL_EXPERIENCE_PROFILE_ID": "xp_profile_id",
+-  "PAYPAL_MODE": "sandbox",
+-  "PLAY_API_ACCESS_TOKEN": "aaaabbbbccccddddeeeeffff00001111",
+-  "PLAY_API_CLIENT_ID": "aaaabbbbccccddddeeeeffff00001111",
+-  "PLAY_API_CLIENT_SECRET": "aaaabbbbccccddddeeeeffff00001111",
+-  "PLAY_API_REFRESH_TOKEN": "aaaabbbbccccddddeeeeffff00001111",
+   "PORT": 3000,
+-  "PUSH_CONFIGS_APN_ENABLED": "false",
+-  "PUSH_CONFIGS_APN_KEY": "xxxxxxxxxx",
+-  "PUSH_CONFIGS_APN_KEY_ID": "xxxxxxxxxx",
+-  "PUSH_CONFIGS_APN_TEAM_ID": "aaabbbcccd",
+-  "PUSH_CONFIGS_FCM_SERVER_API_KEY": "aaabbbcccd",
+-  "S3_ACCESS_KEY_ID": "accessKeyId",
+-  "S3_BUCKET": "bucket",
+-  "S3_SECRET_ACCESS_KEY": "secretAccessKey",
+   "SESSION_SECRET": "YOUR SECRET HERE",
+   "SESSION_SECRET_IV": "12345678912345678912345678912345",
+   "SESSION_SECRET_KEY": "1234567891234567891234567891234567891234567891234567891234567891",
+   "SITE_HTTP_AUTH_ENABLED": "false",
+   "SITE_HTTP_AUTH_PASSWORD": "password",
+   "SITE_HTTP_AUTH_USERNAME": "admin",
+-  "SLACK_FLAGGING_FOOTER_LINK": "https://habitrpg.github.io/flag-o-rama/",
+-  "SLACK_FLAGGING_URL": "https://hooks.slack.com/services/id/id/id",
+-  "SLACK_SUBSCRIPTIONS_URL": "https://hooks.slack.com/services/id/id/id",
+-  "SLACK_URL": "https://hooks.slack.com/services/some-url",
+   "SMTP_HOST": "example.com",
+   "SMTP_PASS": "password",
+   "SMTP_PORT": 587,
+   "SMTP_SERVICE": "Gmail",
+   "SMTP_TLS": "true",
+   "SMTP_USER": "user@example.com",
+-  "STRIPE_API_KEY": "aaaabbbbccccddddeeeeffff00001111",
+-  "STRIPE_PUB_KEY": "22223333444455556666777788889999",
+   "TEST_DB_URI": "mongodb://localhost/habitrpg_test",
+-  "TRANSIFEX_SLACK_CHANNEL": "transifex",
+   "WEB_CONCURRENCY": 1
  }
 diff --git a/gulp/taskHelper.js b/gulp/taskHelper.js
 index 270573ba7..75d2ae759 100644
@@ -2417,7 +2389,7 @@ index ca098d0a9..4f9bee934 100644
          target: DEV_BASE_URL,
          changeOrigin: true,
 diff --git a/webpack/config/prod.env.js b/webpack/config/prod.env.js
-index fd784d87e..cf04a520a 100644
+index 7b8908467..1609e9296 100644
 --- a/webpack/config/prod.env.js
 +++ b/webpack/config/prod.env.js
 @@ -12,23 +12,10 @@ setupNconf(configFile);
@@ -2427,11 +2399,11 @@ index fd784d87e..cf04a520a 100644
 -// @TODO: Do we need? const CLIENT_VARS = ['language', 'isStaticPage', 'availableLanguages', 'translations',
 -//                      'FACEBOOK_KEY', 'GOOGLE_CLIENT_ID', 'NODE_ENV', 'BASE_URL', 'GA_ID',
 -//                      'AMAZON_PAYMENTS', 'STRIPE_PUB_KEY', 'AMPLITUDE_KEY',
--//                      'worldDmg', 'mods', 'IS_MOBILE', 'PUSHER:KEY', 'PUSHER:ENABLED'];
+-//                      'worldDmg', 'mods', 'IS_MOBILE'];
 -
--const AMAZON_SELLER_ID = nconf.get('AMAZON_PAYMENTS:SELLER_ID') || nconf.get('AMAZON_PAYMENTS_SELLER_ID');
--const AMAZON_CLIENT_ID = nconf.get('AMAZON_PAYMENTS:CLIENT_ID') || nconf.get('AMAZON_PAYMENTS_CLIENT_ID');
--const AMAZON_MODE = nconf.get('AMAZON_PAYMENTS:MODE') || nconf.get('AMAZON_PAYMENTS_MODE');
+-const AMAZON_SELLER_ID = nconf.get('AMAZON_PAYMENTS_SELLER_ID');
+-const AMAZON_CLIENT_ID = nconf.get('AMAZON_PAYMENTS_CLIENT_ID');
+-const AMAZON_MODE = nconf.get('AMAZON_PAYMENTS_MODE');
  
  let env = {
    NODE_ENV: '"production"',
@@ -2442,30 +2414,31 @@ index fd784d87e..cf04a520a 100644
 -    MODE: `"${AMAZON_MODE}"`,
 -  },
    EMAILS: {
-     COMMUNITY_MANAGER_EMAIL: `"${nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL')}"`,
-     TECH_ASSISTANCE_EMAIL: `"${nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL')}"`,
+     COMMUNITY_MANAGER_EMAIL: `"${nconf.get('EMAILS_COMMUNITY_MANAGER_EMAIL')}"`,
+     TECH_ASSISTANCE_EMAIL: `"${nconf.get('EMAILS_TECH_ASSISTANCE_EMAIL')}"`,
 @@ -36,7 +23,7 @@ let env = {
    },
  };
  
--'NODE_ENV BASE_URL GA_ID STRIPE_PUB_KEY FACEBOOK_KEY GOOGLE_CLIENT_ID AMPLITUDE_KEY PUSHER:KEY PUSHER:ENABLED LOGGLY_CLIENT_TOKEN'
+-'NODE_ENV BASE_URL GA_ID STRIPE_PUB_KEY FACEBOOK_KEY GOOGLE_CLIENT_ID AMPLITUDE_KEY LOGGLY_CLIENT_TOKEN'
 +'NODE_ENV BASE_URL'
    .split(' ')
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 658324195..c98f77d40 100644
+index 9e7bccbb4..603df9509 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
-@@ -10,7 +10,6 @@ div
+@@ -10,8 +10,6 @@ div
          p {{currentTip}}
    #app(:class='{"casting-spell": castingSpell}')
      banned-account-modal
 -    amazon-payments-modal(v-if='!isStaticPage')
+-    payments-success-modal
      snackbars
      router-view(v-if="!isUserLoggedIn || isStaticPage")
      template(v-else)
-@@ -179,12 +178,9 @@ import AppFooter from './components/appFooter';
+@@ -180,14 +178,9 @@ import AppFooter from './components/appFooter';
  import notificationsDisplay from './components/notifications';
  import snackbars from './components/snackbars/notifications';
  import { mapState } from 'client/libs/store';
@@ -2475,18 +2448,22 @@ index 658324195..c98f77d40 100644
  import notifications from 'client/mixins/notifications';
 -import { setup as setupPayments } from 'client/libs/payments';
 -import amazonPaymentsModal from 'client/components/payments/amazonModal';
+-import paymentsSuccessModal from 'client/components/payments/successModal';
+-
  import spellsMixin from 'client/mixins/spells';
+ import { CONSTANTS, getLocalSetting, removeLocalSetting } from 'client/libs/userlocalManager';
  
- import svgClose from 'assets/svg/close.svg';
-@@ -203,7 +199,6 @@ export default {
+@@ -207,9 +200,7 @@ export default {
      snackbars,
      BuyModal,
      SelectMembersModal,
 -    amazonPaymentsModal,
      bannedAccountModal,
+-    paymentsSuccessModal,
    },
    data () {
-@@ -401,10 +396,6 @@ export default {
+     return {
+@@ -406,10 +397,6 @@ export default {
      this.$store.watch(state => state.title, (title) => {
        document.title = title;
      });
@@ -2497,7 +2474,7 @@ index 658324195..c98f77d40 100644
  
      if (this.isUserLoggedIn && !this.isStaticPage) {
        // Load the user and the user tasks
-@@ -413,8 +404,6 @@ export default {
+@@ -418,8 +405,6 @@ export default {
          this.$store.dispatch('tasks:fetchUserTasks'),
        ]).then(() => {
          this.$store.state.isUserLoaded = true;
@@ -2506,16 +2483,20 @@ index 658324195..c98f77d40 100644
  
          this.hideLoadingScreen();
  
-@@ -434,8 +423,6 @@ export default {
+@@ -443,12 +428,9 @@ export default {
+           appState = JSON.parse(appState);
+           if (appState.paymentCompleted) {
+             removeLocalSetting(CONSTANTS.savedAppStateValues.SAVED_APP_STATE);
+-            this.$root.$emit('bv::show::modal', 'payments-success-modal');
+           }
          }
- 
          this.$nextTick(() => {
 -          // Load external scripts after the app has been rendered
 -          setupPayments();
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -485,8 +472,6 @@ export default {
+@@ -498,8 +480,6 @@ export default {
          if (data.fromRoot) return;
          const modalStack = this.$store.state.modalStack;
  
@@ -2524,7 +2505,7 @@ index 658324195..c98f77d40 100644
          // Add new modal to the stack
          const prev = modalStack[modalStack.length - 1];
          const prevId = prev ? prev.modalId : undefined;
-@@ -550,18 +535,6 @@ export default {
+@@ -563,18 +543,6 @@ export default {
  
        return true;
      },
@@ -2543,7 +2524,7 @@ index 658324195..c98f77d40 100644
      itemSelected (item) {
        this.selectedItemToBuy = item;
      },
-@@ -622,10 +595,6 @@ export default {
+@@ -635,10 +603,6 @@ export default {
          contentPlacement = this.$refs.restingBanner.clientHeight;
        }
        this.bannerHeight = contentPlacement;
@@ -2554,7 +2535,7 @@ index 658324195..c98f77d40 100644
      },
    },
  };
-@@ -660,4 +629,3 @@ export default {
+@@ -673,4 +637,3 @@ export default {
  <style src="assets/css/sprites/spritesmith-main-22.css"></style>
  <style src="assets/css/sprites/spritesmith-main-23.css"></style>
  <style src="assets/css/sprites.css"></style>
@@ -3530,7 +3511,7 @@ index e50c72dda..4ad6cd158 100644
        if (confirmationNeeded && !confirm(this.$t('changeClassConfirmCost'))) return;
        try {
 diff --git a/website/client/components/settings/subscription.vue b/website/client/components/settings/subscription.vue
-index c71ef673d..aa0512292 100644
+index da71ec2c8..aa0512292 100644
 --- a/website/client/components/settings/subscription.vue
 +++ b/website/client/components/settings/subscription.vue
 @@ -36,9 +36,6 @@
@@ -3557,7 +3538,7 @@ index c71ef673d..aa0512292 100644
 -            .col-md-4
 -              button.purchase.btn.btn-primary(@click='showStripe({subscription:subscription.key, coupon:subscription.coupon})', :disabled='!subscription.key') {{ $t('card') }}
 -            .col-md-4
--              a.purchase(:href='paypalPurchaseLink', :disabled='!subscription.key', target='_blank')
+-              a.purchase(@click="openPaypal(paypalPurchaseLink, 'subscription')", :disabled='!subscription.key')
 -                img(src='https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-small.png', :alt="$t('paypal')")
 -            .col-md-4
 -              a.btn.btn-secondary.purchase(@click="payWithAmazon()")
@@ -4053,7 +4034,7 @@ index 32ecee0b0..096b62dc2 100644
      <script type='text/javascript' src='/api/v4/i18n/browser-script'></script>
    </body>
 diff --git a/website/client/main.js b/website/client/main.js
-index 928d48bd9..5180aded1 100644
+index f6b0701dd..da68df567 100644
 --- a/website/client/main.js
 +++ b/website/client/main.js
 @@ -1,15 +1,10 @@
@@ -4063,7 +4044,7 @@ index 928d48bd9..5180aded1 100644
 -  setup as setupAnalytics,
 -} from 'client/libs/analytics';
 -import { setUpLogging } from 'client/libs/logging';
- import router from './router';
+ import router from './router/index';
  import getStore from './store';
  import StoreModule from './libs/store';
  import './filters/registerGlobals';
@@ -4137,19 +4118,39 @@ index 4dd3d9be8..d213fb545 100644
        this.$store.dispatch('user:set', ups);
      },
    },
-diff --git a/website/client/router.js b/website/client/router.js
-index a7c53c18f..242cb646f 100644
---- a/website/client/router.js
-+++ b/website/client/router.js
-@@ -1,7 +1,6 @@
+diff --git a/website/client/router/index.js b/website/client/router/index.js
+index 2052ded75..1e798dba5 100644
+--- a/website/client/router/index.js
++++ b/website/client/router/index.js
+@@ -1,8 +1,6 @@
  import Vue from 'vue';
  import VueRouter from 'vue-router';
  import getStore from 'client/store';
 -import * as Analytics from 'client/libs/analytics';
+-import handleRedirect from './handleRedirect';
  
- // import EmptyView from './components/emptyView';
+ import ParentPage from 'client/components/parentPage';
  
-@@ -344,13 +343,6 @@ router.beforeEach(function routerGuard (to, from, next) {
+@@ -277,9 +275,6 @@ const router = new VueRouter({
+         { name: 'contributors', path: 'contributors', component: HeroesPage },
+       ],
+     },
+-    // Only used to handle some redirects
+-    // See router.beforeEach
+-    { path: '/redirect/:redirect', name: 'redirect' },
+     { path: '*', redirect: { name: 'notFound' } },
+   ],
+ });
+@@ -290,8 +285,6 @@ router.beforeEach(function routerGuard (to, from, next) {
+   const isUserLoggedIn = store.state.isUserLoggedIn;
+   const routeRequiresLogin = to.meta.requiresLogin !== false;
+ 
+-  if (to.name === 'redirect') return handleRedirect(to, from, next);
+-
+   if (!isUserLoggedIn && routeRequiresLogin) {
+     // Redirect to the login page unless the user is trying to reach the
+     // root of the website, in which case show the home page.
+@@ -347,13 +340,6 @@ router.beforeEach(function routerGuard (to, from, next) {
      });
    }
  
@@ -5181,7 +5182,7 @@ index bbf59c7b2..1363281cc 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 15d9fa8ec..bc9aeb533 100644
+index 37d7f7e45..2cec2e623 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -5,7 +5,6 @@ import {
@@ -5452,7 +5453,7 @@ index 7acc406a4..8a441b55e 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index e17362c0f..329ba99ee 100644
+index 166f82e43..f2643ff20 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,10 +22,6 @@ import {
@@ -5892,25 +5893,18 @@ index 69f050ad3..79aae8c5e 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 6b7047089..2812a4539 100644
+index 641adf93c..dd27a7237 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
-@@ -18,14 +18,12 @@ import {
-   getUserInfo,
-   sendTxn as txnEmail,
- } from '../../libs/email';
--import Queue from '../../libs/queue';
- import * as inboxLib from '../../libs/inbox';
- import * as userLib from '../../libs/user';
- import nconf from 'nconf';
+@@ -24,7 +24,6 @@ import nconf from 'nconf';
  import get from 'lodash/get';
  
- const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
+ const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS_TECH_ASSISTANCE_EMAIL');
 -const DELETE_CONFIRMATION = 'DELETE';
  
  /**
   * @apiDefine UserNotFound
-@@ -57,7 +55,6 @@ let api = {};
+@@ -56,7 +55,6 @@ let api = {};
   * Preferences (user selected prefs)
   * Profile (name, photo url, blurb)
   * Purchased (includes purchase history, gem purchased items, plans)
@@ -5918,7 +5912,7 @@ index 6b7047089..2812a4539 100644
   * Stats (standard RPG stats, class, buffs, xp, etc..)
   * Tags
   * TasksOrder (list of all ids for dailys, habits, rewards and todos)
-@@ -262,8 +259,6 @@ api.deleteUser = {
+@@ -261,8 +259,6 @@ api.deleteUser = {
      if (user.auth.local.hashed_password && user.auth.local.email) {
        let isValidPassword = await passwordUtils.compare(user, password);
        if (!isValidPassword) throw new NotAuthorized(res.t('wrongPassword'));
@@ -5927,12 +5921,10 @@ index 6b7047089..2812a4539 100644
      }
  
      let feedback = req.body.feedback;
-@@ -300,14 +295,6 @@ api.deleteUser = {
+@@ -300,12 +296,6 @@ api.deleteUser = {
        ]);
      }
  
--    if (feedback) Queue.sendMessage({feedback, username: user.profile.name}, user._id);
--
 -    res.analytics.track('account delete', {
 -      uuid: user._id,
 -      hitType: 'event',
@@ -5942,7 +5934,7 @@ index 6b7047089..2812a4539 100644
      res.respond(200, {});
    },
  };
-@@ -349,8 +336,6 @@ api.getUserAnonymized = {
+@@ -347,8 +337,6 @@ api.getUserAnonymized = {
      delete user.apiToken;
      if (user.auth) {
        delete user.auth.local;
@@ -5951,7 +5943,7 @@ index 6b7047089..2812a4539 100644
      }
      delete user.newMessages;
      delete user.profile;
-@@ -414,7 +399,7 @@ api.sleep = {
+@@ -412,7 +400,7 @@ api.sleep = {
    url: '/user/sleep',
    async handler (req, res) {
      let user = res.locals.user;
@@ -5960,7 +5952,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...sleepRes);
    },
-@@ -474,7 +459,7 @@ api.buy = {
+@@ -472,7 +460,7 @@ api.buy = {
      let quantity = 1;
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
@@ -5969,7 +5961,7 @@ index 6b7047089..2812a4539 100644
  
      await user.save();
      res.respond(200, ...buyRes);
-@@ -522,7 +507,7 @@ api.buyGear = {
+@@ -520,7 +508,7 @@ api.buyGear = {
    url: '/user/buy-gear/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -5978,7 +5970,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...buyGearRes);
    },
-@@ -564,7 +549,7 @@ api.buyArmoire = {
+@@ -562,7 +550,7 @@ api.buyArmoire = {
      let user = res.locals.user;
      req.type = 'armoire';
      req.params.key = 'armoire';
@@ -5987,7 +5979,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...buyArmoireResponse);
    },
-@@ -604,7 +589,7 @@ api.buyHealthPotion = {
+@@ -602,7 +590,7 @@ api.buyHealthPotion = {
      let user = res.locals.user;
      req.type = 'potion';
      req.params.key = 'potion';
@@ -5996,7 +5988,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...buyHealthPotionResponse);
    },
-@@ -645,7 +630,7 @@ api.buyMysterySet = {
+@@ -643,7 +631,7 @@ api.buyMysterySet = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'mystery';
@@ -6005,7 +5997,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...buyMysterySetRes);
    },
-@@ -688,7 +673,7 @@ api.buyQuest = {
+@@ -686,7 +674,7 @@ api.buyQuest = {
    async handler (req, res) {
      let user = res.locals.user;
      req.type = 'quest';
@@ -6014,7 +6006,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...buyQuestRes);
    },
-@@ -902,7 +887,7 @@ api.changeClass = {
+@@ -900,7 +888,7 @@ api.changeClass = {
    url: '/user/change-class',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6023,7 +6015,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...changeClassRes);
    },
-@@ -971,7 +956,7 @@ api.purchase = {
+@@ -969,7 +957,7 @@ api.purchase = {
      if (req.body.quantity) quantity = req.body.quantity;
      req.quantity = quantity;
  
@@ -6032,7 +6024,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...purchaseRes);
    },
-@@ -1002,7 +987,7 @@ api.userPurchaseHourglass = {
+@@ -1000,7 +988,7 @@ api.userPurchaseHourglass = {
    url: '/user/purchase-hourglass/:type/:key',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6041,7 +6033,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...purchaseHourglassRes);
    },
-@@ -1096,7 +1081,7 @@ api.userOpenMysteryItem = {
+@@ -1094,7 +1082,7 @@ api.userOpenMysteryItem = {
    url: '/user/open-mystery-item',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6050,7 +6042,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...openMysteryItemRes);
    },
-@@ -1128,7 +1113,7 @@ api.userReleasePets = {
+@@ -1126,7 +1114,7 @@ api.userReleasePets = {
    url: '/user/release-pets',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6059,7 +6051,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...releasePetsRes);
    },
-@@ -1177,7 +1162,7 @@ api.userReleaseBoth = {
+@@ -1175,7 +1163,7 @@ api.userReleaseBoth = {
    url: '/user/release-both',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6068,7 +6060,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...releaseBothRes);
    },
-@@ -1213,7 +1198,7 @@ api.userReleaseMounts = {
+@@ -1211,7 +1199,7 @@ api.userReleaseMounts = {
    url: '/user/release-mounts',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6077,7 +6069,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...releaseMountsRes);
    },
-@@ -1286,7 +1271,7 @@ api.userUnlock = {
+@@ -1284,7 +1272,7 @@ api.userUnlock = {
    url: '/user/unlock',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6086,7 +6078,7 @@ index 6b7047089..2812a4539 100644
      await user.save();
      res.respond(200, ...unlockRes);
    },
-@@ -1312,7 +1297,7 @@ api.userRevive = {
+@@ -1310,7 +1298,7 @@ api.userRevive = {
    url: '/user/revive',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6130,7 +6122,7 @@ index 2474c31dc..75f689079 100644
   * Tags
   * TasksOrder (list of all ids for dailys, habits, rewards and todos)
 diff --git a/website/server/controllers/top-level/dataexport.js b/website/server/controllers/top-level/dataexport.js
-index 70cb25a91..f4ce1fdc4 100644
+index 710f620fa..f4ce1fdc4 100644
 --- a/website/server/controllers/top-level/dataexport.js
 +++ b/website/server/controllers/top-level/dataexport.js
 @@ -9,17 +9,7 @@ import _ from 'lodash';
@@ -6145,7 +6137,7 @@ index 70cb25a91..f4ce1fdc4 100644
 -  S3,
 -} from '../../libs/aws';
 -
--const S3_BUCKET = nconf.get('S3:bucket');
+-const S3_BUCKET = nconf.get('S3_BUCKET');
 -
 -const BASE_URL = nconf.get('BASE_URL');
  
@@ -6314,7 +6306,7 @@ index 1cdcf3fd2..36601632c 100644
    registerLocal,
  };
 diff --git a/website/server/libs/auth/utils.js b/website/server/libs/auth/utils.js
-index 954dfc36f..f1b7be3a1 100644
+index 588c59603..8e9265be2 100644
 --- a/website/server/libs/auth/utils.js
 +++ b/website/server/libs/auth/utils.js
 @@ -1,15 +1,8 @@
@@ -6323,7 +6315,7 @@ index 954dfc36f..f1b7be3a1 100644
  
  import { NotAuthorized } from '../errors';
  
- const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
+ const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS_COMMUNITY_MANAGER_EMAIL');
 -const translator = shortid('0123456789abcdefghijklmnopqrstuvwxyz');
 -
 -function generateUsername () {
@@ -6341,7 +6333,7 @@ index 954dfc36f..f1b7be3a1 100644
    loginRes,
  };
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index 1e06d24d5..8ae2d5a46 100644
+index ff625bfb8..635f9c501 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
 @@ -7,7 +7,6 @@ import {
@@ -6465,7 +6457,7 @@ index 5106b013e..f56fbb659 100644
    return _progress;
  }
 diff --git a/website/server/libs/email.js b/website/server/libs/email.js
-index 62d8feabc..744c29af7 100644
+index 42ec7387a..9d3d029cf 100644
 --- a/website/server/libs/email.js
 +++ b/website/server/libs/email.js
 @@ -4,7 +4,6 @@ import { TAVERN_ID } from '../models/group';
@@ -6542,7 +6534,7 @@ index d5225338e..7616855f2 100644
      .select({_id: true, 'preferences.emailNotifications': true})
      .exec();
 diff --git a/website/server/libs/logger.js b/website/server/libs/logger.js
-index 75d58c936..d5d95a634 100644
+index 7f39b3792..d5d95a634 100644
 --- a/website/server/libs/logger.js
 +++ b/website/server/libs/logger.js
 @@ -1,6 +1,5 @@
@@ -6557,8 +6549,8 @@ index 75d58c936..d5d95a634 100644
        prettyPrint: false,
      });
 -    logger.add(winston.transports.Loggly, {
--      inputToken: nconf.get('LOGGLY:TOKEN'),
--      subdomain: nconf.get('LOGGLY:SUBDOMAIN'),
+-      inputToken: nconf.get('LOGGLY_TOKEN'),
+-      subdomain: nconf.get('LOGGLY_SUBDOMAIN'),
 -      tags: ['Winston-NodeJS'],
 -      json: true,
 -    });
@@ -6625,7 +6617,7 @@ index 35d18cc70..400bf08e6 100644
    await data.user.save();
  }
 diff --git a/website/server/libs/payments/groupPayments.js b/website/server/libs/payments/groupPayments.js
-index 2ad944d71..2e37e98d4 100644
+index b63266728..2e37e98d4 100644
 --- a/website/server/libs/payments/groupPayments.js
 +++ b/website/server/libs/payments/groupPayments.js
 @@ -1,4 +1,3 @@
@@ -6641,7 +6633,7 @@ index 2ad944d71..2e37e98d4 100644
    sendTxn as txnEmail,
  } from '../email';
  
--const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
+-const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS_TECH_ASSISTANCE_EMAIL');
  const JOINED_GROUP_PLAN = 'joined group plan';
  
  function _dateDiff (earlyDate, lateDate) {

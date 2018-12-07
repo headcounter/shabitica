@@ -461,7 +461,7 @@ index c17b789a4..041a41820 100644
  
      it('errors if username has incorrect length', async () => {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index c98f77d40..a9df7d652 100644
+index 603df9509..eb7ff0f79 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -472,15 +472,15 @@ index c98f77d40..a9df7d652 100644
      snackbars
      router-view(v-if="!isUserLoggedIn || isStaticPage")
      template(v-else)
-@@ -184,7 +183,6 @@ import notifications from 'client/mixins/notifications';
- import spellsMixin from 'client/mixins/spells';
+@@ -185,7 +184,6 @@ import spellsMixin from 'client/mixins/spells';
+ import { CONSTANTS, getLocalSetting, removeLocalSetting } from 'client/libs/userlocalManager';
  
  import svgClose from 'assets/svg/close.svg';
 -import bannedAccountModal from 'client/components/bannedAccountModal';
  
  const COMMUNITY_MANAGER_EMAIL = process.env.EMAILS.COMMUNITY_MANAGER_EMAIL; // eslint-disable-line
  
-@@ -199,7 +197,6 @@ export default {
+@@ -200,7 +198,6 @@ export default {
      snackbars,
      BuyModal,
      SelectMembersModal,
@@ -488,7 +488,7 @@ index c98f77d40..a9df7d652 100644
    },
    data () {
      return {
-@@ -293,8 +290,6 @@ export default {
+@@ -294,8 +291,6 @@ export default {
        return response;
      }, (error) => {
        if (error.response.status >= 400) {
@@ -497,7 +497,7 @@ index c98f77d40..a9df7d652 100644
          // Don't show errors from getting user details. These users have delete their account,
          // but their chat message still exists.
          let configExists = Boolean(error.response) && Boolean(error.response.config);
-@@ -447,25 +442,6 @@ export default {
+@@ -455,25 +450,6 @@ export default {
      if (loadingScreen) document.body.removeChild(loadingScreen);
    },
    methods: {

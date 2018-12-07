@@ -10,17 +10,17 @@ Date:   Mon Apr 2 06:30:04 2018 +0200
     Filename: invite-only-config-option.patch
 
 diff --git a/config.json.example b/config.json.example
-index 620ac3405..0ae909d5f 100644
+index 392e83750..a57e372c9 100644
 --- a/config.json.example
 +++ b/config.json.example
-@@ -12,5 +12,6 @@
-     "CRON_SEMI_SAFE_MODE":"false",
-     "MAINTENANCE_MODE": "false",
-     "ADMIN_EMAIL": "you@example.com",
--    "MAILER_SOCKET": "/run/habitica/mailer.sock"
-+    "MAILER_SOCKET": "/run/habitica/mailer.sock",
-+    "INVITE_ONLY": "true"
- }
+@@ -7,6 +7,7 @@
+   "ENABLE_CONSOLE_LOGS_IN_PROD": "false",
+   "ENABLE_CONSOLE_LOGS_IN_TEST": "false",
+   "IGNORE_REDIRECT": "true",
++  "INVITE_ONLY": "true",
+   "MAILER_SOCKET": "/run/habitica/mailer.sock",
+   "MAINTENANCE_MODE": "false",
+   "NODE_DB_URI": "mongodb://localhost/habitrpg",
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
 index 764bbebf5..5dc9fc83b 100644
 --- a/website/server/libs/auth/index.js

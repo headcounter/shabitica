@@ -18,24 +18,24 @@ Date:   Tue Mar 27 05:37:18 2018 +0200
     Filename: one-admin-mailaddr.patch
 
 diff --git a/config.json.example b/config.json.example
-index 641f208ed..06b9dcdae 100644
+index 30009586c..9b3edd190 100644
 --- a/config.json.example
 +++ b/config.json.example
-@@ -15,11 +15,5 @@
-     "SESSION_SECRET_KEY": "1234567891234567891234567891234567891234567891234567891234567891",
-     "SESSION_SECRET_IV": "12345678912345678912345678912345",
-     "ADMIN_EMAIL": "you@example.com",
--    "MAILER_SOCKET": "/run/habitica/mailer.sock",
--    "FLAG_REPORT_EMAIL": "email@mod.com,email2@mod.com",
--    "EMAILS" : {
--        "COMMUNITY_MANAGER_EMAIL" : "admin@habitica.com",
--        "TECH_ASSISTANCE_EMAIL" : "admin@habitica.com",
--        "PRESS_ENQUIRY_EMAIL" : "admin@habitica.com"
--    }
-+    "MAILER_SOCKET": "/run/habitica/mailer.sock"
- }
+@@ -4,12 +4,8 @@
+   "CRON_SAFE_MODE": "false",
+   "CRON_SEMI_SAFE_MODE": "false",
+   "DISABLE_REQUEST_LOGGING": "true",
+-  "EMAILS_COMMUNITY_MANAGER_EMAIL": "admin@habitica.com",
+-  "EMAILS_PRESS_ENQUIRY_EMAIL": "admin@habitica.com",
+-  "EMAILS_TECH_ASSISTANCE_EMAIL": "admin@habitica.com",
+   "ENABLE_CONSOLE_LOGS_IN_PROD": "false",
+   "ENABLE_CONSOLE_LOGS_IN_TEST": "false",
+-  "FLAG_REPORT_EMAIL": "email@example.com, email2@example.com",
+   "IGNORE_REDIRECT": "true",
+   "MAILER_SOCKET": "/run/habitica/mailer.sock",
+   "MAINTENANCE_MODE": "false",
 diff --git a/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js b/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
-index 153bc3bd0..a0b90dbc8 100644
+index 98ce34d35..a0b90dbc8 100644
 --- a/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
 +++ b/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
 @@ -3,7 +3,6 @@ import {
@@ -53,21 +53,21 @@ index 153bc3bd0..a0b90dbc8 100644
 -        .to.eventually.be.rejected.and.eql({
 -          code: 400,
 -          error: 'BadRequest',
--          message: t('messageCannotFlagSystemMessages', {communityManagerEmail: config.EMAILS.COMMUNITY_MANAGER_EMAIL}),
+-          message: t('messageCannotFlagSystemMessages', {communityManagerEmail: config.EMAILS_COMMUNITY_MANAGER_EMAIL}),
 -        });
 +        .to.eventually.be.rejected;
        // let messages = await members[0].get(`/groups/${group._id}/chat`);
        // expect(messages[0].id).to.eql(skillMsg.id);
        // expect(messages[0].flagCount).to.eql(0);
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index 56f823675..848ced7f1 100644
+index f5069b387..848ced7f1 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
 @@ -333,7 +333,7 @@ describe('Post /groups/:groupId/invite', () => {
          .to.eventually.be.rejected.and.eql({
            code: 401,
            error: 'NotAuthorized',
--          message: t('inviteLimitReached', {techAssistanceEmail: nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL')}),
+-          message: t('inviteLimitReached', {techAssistanceEmail: nconf.get('EMAILS_TECH_ASSISTANCE_EMAIL')}),
 +          message: t('inviteLimitReached', {techAssistanceEmail: nconf.get('ADMIN_EMAIL')}),
          });
      });
@@ -90,42 +90,42 @@ index 1694349e5..a7785fd49 100644
  
      it('returns no error if user has active subscription', async () => {
 diff --git a/test/api/v3/integration/user/auth/POST-login-local.test.js b/test/api/v3/integration/user/auth/POST-login-local.test.js
-index dc47eead7..4c75d1733 100644
+index ad1eecb77..4c75d1733 100644
 --- a/test/api/v3/integration/user/auth/POST-login-local.test.js
 +++ b/test/api/v3/integration/user/auth/POST-login-local.test.js
 @@ -45,7 +45,7 @@ describe('POST /user/auth/local/login', () => {
      })).to.eventually.be.rejected.and.eql({
        code: 401,
        error: 'NotAuthorized',
--      message: t('accountSuspended', { communityManagerEmail: nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL'), userId: user._id }),
+-      message: t('accountSuspended', { communityManagerEmail: nconf.get('EMAILS_COMMUNITY_MANAGER_EMAIL'), userId: user._id }),
 +      message: t('accountSuspended', { communityManagerEmail: nconf.get('ADMIN_EMAIL'), userId: user._id }),
      });
    });
  
 diff --git a/test/api/v3/integration/user/auth/PUT-user_update_email.test.js b/test/api/v3/integration/user/auth/PUT-user_update_email.test.js
-index c3f306843..d8470644a 100644
+index d540dbd27..d8470644a 100644
 --- a/test/api/v3/integration/user/auth/PUT-user_update_email.test.js
 +++ b/test/api/v3/integration/user/auth/PUT-user_update_email.test.js
 @@ -71,7 +71,7 @@ describe('PUT /user/auth/update-email', () => {
        })).to.eventually.be.rejected.and.eql({
          code: 401,
          error: 'NotAuthorized',
--        message: t('cannotFulfillReq', { techAssistanceEmail: nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL') }),
+-        message: t('cannotFulfillReq', { techAssistanceEmail: nconf.get('EMAILS_TECH_ASSISTANCE_EMAIL') }),
 +        message: t('cannotFulfillReq', { techAssistanceEmail: nconf.get('ADMIN_EMAIL') }),
        });
      });
  
 diff --git a/webpack/config/prod.env.js b/webpack/config/prod.env.js
-index cf04a520a..5bfbbd7ef 100644
+index 1609e9296..5bfbbd7ef 100644
 --- a/webpack/config/prod.env.js
 +++ b/webpack/config/prod.env.js
 @@ -17,9 +17,9 @@ let env = {
    NODE_ENV: '"production"',
    // clientVars: CLIENT_VARS,
    EMAILS: {
--    COMMUNITY_MANAGER_EMAIL: `"${nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL')}"`,
--    TECH_ASSISTANCE_EMAIL: `"${nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL')}"`,
--    PRESS_ENQUIRY_EMAIL: `"${nconf.get('EMAILS:PRESS_ENQUIRY_EMAIL')}"`,
+-    COMMUNITY_MANAGER_EMAIL: `"${nconf.get('EMAILS_COMMUNITY_MANAGER_EMAIL')}"`,
+-    TECH_ASSISTANCE_EMAIL: `"${nconf.get('EMAILS_TECH_ASSISTANCE_EMAIL')}"`,
+-    PRESS_ENQUIRY_EMAIL: `"${nconf.get('EMAILS_PRESS_ENQUIRY_EMAIL')}"`,
 +    COMMUNITY_MANAGER_EMAIL: `"${nconf.get('ADMIN_EMAIL')}"`,
 +    TECH_ASSISTANCE_EMAIL: `"${nconf.get('ADMIN_EMAIL')}"`,
 +    PRESS_ENQUIRY_EMAIL: `"${nconf.get('ADMIN_EMAIL')}"`,
@@ -133,14 +133,14 @@ index cf04a520a..5bfbbd7ef 100644
  };
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index bc9aeb533..217a0d19a 100644
+index 2cec2e623..217a0d19a 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -20,7 +20,7 @@ import {
  import {verifyUsername} from '../../libs/user/validation';
  
  const BASE_URL = nconf.get('BASE_URL');
--const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
+-const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS_TECH_ASSISTANCE_EMAIL');
 +const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
  
  let api = {};
@@ -159,53 +159,53 @@ index 8cc797d4a..1a07db187 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 329ba99ee..56fcde8d9 100644
+index f2643ff20..56fcde8d9 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -25,7 +25,7 @@ import common from '../../../common';
  import apiError from '../../libs/apiError';
  
  const MAX_EMAIL_INVITES_BY_USER = 200;
--const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
+-const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS_TECH_ASSISTANCE_EMAIL');
 +const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
  
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 2812a4539..e5f700a75 100644
+index dd27a7237..36df04d1e 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -23,7 +23,7 @@ import * as userLib from '../../libs/user';
  import nconf from 'nconf';
  import get from 'lodash/get';
  
--const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS:TECH_ASSISTANCE_EMAIL');
+-const TECH_ASSISTANCE_EMAIL = nconf.get('EMAILS_TECH_ASSISTANCE_EMAIL');
 +const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
  
  /**
   * @apiDefine UserNotFound
 diff --git a/website/server/libs/auth/utils.js b/website/server/libs/auth/utils.js
-index f1b7be3a1..f5785583c 100644
+index 8e9265be2..f5785583c 100644
 --- a/website/server/libs/auth/utils.js
 +++ b/website/server/libs/auth/utils.js
 @@ -2,7 +2,7 @@ import nconf from 'nconf';
  
  import { NotAuthorized } from '../errors';
  
--const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
+-const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS_COMMUNITY_MANAGER_EMAIL');
 +const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
  
  function loginRes (user, req, res) {
    if (user.auth.blocked) throw new NotAuthorized(res.t('accountSuspended', {communityManagerEmail: COMMUNITY_MANAGER_EMAIL, userId: user._id}));
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index 8ae2d5a46..0acfbd979 100644
+index 635f9c501..0acfbd979 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
 @@ -11,8 +11,8 @@ import { model as Group } from '../../models/group';
  import { chatModel as Chat } from '../../models/message';
  import apiError from '../apiError';
  
--const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
+-const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS_COMMUNITY_MANAGER_EMAIL');
 -const FLAG_REPORT_EMAILS = nconf.get('FLAG_REPORT_EMAIL').split(',').map((email) => {
 +const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
 +const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
@@ -213,14 +213,14 @@ index 8ae2d5a46..0acfbd979 100644
  });
  const USER_AGE_FOR_FLAGGING = 3; // accounts less than this many days old don't increment flagCount
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
-index 906c8f42e..491a9145b 100644
+index ab5987b50..491a9145b 100644
 --- a/website/server/middlewares/auth.js
 +++ b/website/server/middlewares/auth.js
 @@ -7,7 +7,7 @@ import {
  import nconf from 'nconf';
  import url from 'url';
  
--const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS:COMMUNITY_MANAGER_EMAIL');
+-const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS_COMMUNITY_MANAGER_EMAIL');
 +const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
  
  function getUserFields (options, req) {

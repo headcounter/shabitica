@@ -86,19 +86,19 @@ index 4f148b29c..fefaa2089 100644
        ul.navbar-nav.mr-auto(v-else)
          router-link.nav-item(tag='li', to='/register')
            a.nav-link(v-once) {{ $t('getStarted') }}
-diff --git a/website/client/router.js b/website/client/router.js
-index a6195542b..7db093af0 100644
---- a/website/client/router.js
-+++ b/website/client/router.js
-@@ -14,7 +14,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'./components/stati
- const AppPage = () => import(/* webpackChunkName: "static" */'./components/static/app');
- const ClearBrowserDataPage = () => import(/* webpackChunkName: "static" */'./components/static/clearBrowserData');
- const CommunityGuidelinesPage = () => import(/* webpackChunkName: "static" */'./components/static/communityGuidelines');
--const ContactPage = () => import(/* webpackChunkName: "static" */'./components/static/contact');
- const FAQPage = () => import(/* webpackChunkName: "static" */'./components/static/faq');
- const FeaturesPage = () => import(/* webpackChunkName: "static" */'./components/static/features');
- const GroupPlansPage = () => import(/* webpackChunkName: "static" */'./components/static/groupPlans');
-@@ -247,7 +246,6 @@ const router = new VueRouter({
+diff --git a/website/client/router/index.js b/website/client/router/index.js
+index 76c6fd2f9..c0f752678 100644
+--- a/website/client/router/index.js
++++ b/website/client/router/index.js
+@@ -11,7 +11,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'client/components/
+ const AppPage = () => import(/* webpackChunkName: "static" */'client/components/static/app');
+ const ClearBrowserDataPage = () => import(/* webpackChunkName: "static" */'client/components/static/clearBrowserData');
+ const CommunityGuidelinesPage = () => import(/* webpackChunkName: "static" */'client/components/static/communityGuidelines');
+-const ContactPage = () => import(/* webpackChunkName: "static" */'client/components/static/contact');
+ const FAQPage = () => import(/* webpackChunkName: "static" */'client/components/static/faq');
+ const FeaturesPage = () => import(/* webpackChunkName: "static" */'client/components/static/features');
+ const GroupPlansPage = () => import(/* webpackChunkName: "static" */'client/components/static/groupPlans');
+@@ -244,7 +243,6 @@ const router = new VueRouter({
          { name: 'app', path: 'app', component: AppPage, meta: {requiresLogin: false}},
          { name: 'clearBrowserData', path: 'clear-browser-data', component: ClearBrowserDataPage, meta: {requiresLogin: false}},
          { name: 'communityGuidelines', path: 'community-guidelines', component: CommunityGuidelinesPage, meta: {requiresLogin: false}},

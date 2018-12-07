@@ -160,19 +160,19 @@ index e5dd03e02..a878ec5b7 100644
      footerId () {
        if (this.$route.name === 'plans') return;
        return 'purple-footer';
-diff --git a/website/client/router.js b/website/client/router.js
-index 01855b7e4..90690af04 100644
---- a/website/client/router.js
-+++ b/website/client/router.js
-@@ -15,7 +15,6 @@ const AppPage = () => import(/* webpackChunkName: "static" */'./components/stati
- const ClearBrowserDataPage = () => import(/* webpackChunkName: "static" */'./components/static/clearBrowserData');
- const FAQPage = () => import(/* webpackChunkName: "static" */'./components/static/faq');
- const FeaturesPage = () => import(/* webpackChunkName: "static" */'./components/static/features');
--const NewsPage = () => import(/* webpackChunkName: "static" */'./components/static/newStuff');
- const OverviewPage = () => import(/* webpackChunkName: "static" */'./components/static/overview');
- const PrivacyPage = () => import(/* webpackChunkName: "static" */'./components/static/privacy');
- const TermsPage = () => import(/* webpackChunkName: "static" */'./components/static/terms');
-@@ -233,7 +232,6 @@ const router = new VueRouter({
+diff --git a/website/client/router/index.js b/website/client/router/index.js
+index fe9379e64..70e3880e1 100644
+--- a/website/client/router/index.js
++++ b/website/client/router/index.js
+@@ -12,7 +12,6 @@ const AppPage = () => import(/* webpackChunkName: "static" */'client/components/
+ const ClearBrowserDataPage = () => import(/* webpackChunkName: "static" */'client/components/static/clearBrowserData');
+ const FAQPage = () => import(/* webpackChunkName: "static" */'client/components/static/faq');
+ const FeaturesPage = () => import(/* webpackChunkName: "static" */'client/components/static/features');
+-const NewsPage = () => import(/* webpackChunkName: "static" */'client/components/static/newStuff');
+ const OverviewPage = () => import(/* webpackChunkName: "static" */'client/components/static/overview');
+ const PrivacyPage = () => import(/* webpackChunkName: "static" */'client/components/static/privacy');
+ const TermsPage = () => import(/* webpackChunkName: "static" */'client/components/static/terms');
+@@ -230,7 +229,6 @@ const router = new VueRouter({
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
          { name: 'home', path: 'home', component: HomePage, meta: {requiresLogin: false} },
          { name: 'front', path: 'front', component: HomePage, meta: {requiresLogin: false} },
