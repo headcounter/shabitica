@@ -13,7 +13,7 @@ Date:   Tue Apr 3 05:09:43 2018 +0200
     Filename: html-test-reports.patch
 
 diff --git a/gulp/gulp-tests.js b/gulp/gulp-tests.js
-index 7a9168374..72b3c5199 100644
+index 80b331ec1..4dbf4f26f 100644
 --- a/gulp/gulp-tests.js
 +++ b/gulp/gulp-tests.js
 @@ -170,7 +170,7 @@ gulp.task('test:content:safe', gulp.series('test:prepare:build', (cb) => {
@@ -63,7 +63,7 @@ index 000000000..347c750ab
 +  "mochaSimpleHtmlReporterReporterOptions": {"output": "test-report.html"}
 +}
 diff --git a/package.json b/package.json
-index a0e210638..677bd8bcd 100644
+index cbd74dcf5..7c9656f9c 100644
 --- a/package.json
 +++ b/package.json
 @@ -110,9 +110,9 @@

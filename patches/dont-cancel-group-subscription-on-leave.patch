@@ -97,7 +97,7 @@ index eab444222..9eb8e166b 100644
 -  });
  });
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index af272eb7b..20e0d2ad0 100644
+index 20069c3b5..7bd6f6543 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -14,7 +14,6 @@ import {

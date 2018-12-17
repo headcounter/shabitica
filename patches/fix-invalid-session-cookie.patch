@@ -23,7 +23,7 @@ Date:   Mon Aug 6 08:07:39 2018 +0200
     Filename: fix-invalid-session-cookie.patch
 
 diff --git a/website/server/middlewares/index.js b/website/server/middlewares/index.js
-index c61dac982..f18333d36 100644
+index 4de5ce894..f01ef321f 100644
 --- a/website/server/middlewares/index.js
 +++ b/website/server/middlewares/index.js
 @@ -63,7 +63,7 @@ module.exports = function attachMiddlewares (app, server) {

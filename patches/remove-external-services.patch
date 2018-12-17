@@ -2426,7 +2426,7 @@ index 7b8908467..1609e9296 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 9e7bccbb4..603df9509 100644
+index a53f71c70..603df9509 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,8 +10,6 @@ div
@@ -2487,7 +2487,7 @@ index 9e7bccbb4..603df9509 100644
            appState = JSON.parse(appState);
            if (appState.paymentCompleted) {
              removeLocalSetting(CONSTANTS.savedAppStateValues.SAVED_APP_STATE);
--            this.$root.$emit('bv::show::modal', 'payments-success-modal');
+-            this.$root.$emit('habitica:payment-success', appState);
            }
          }
          this.$nextTick(() => {
@@ -3034,69 +3034,29 @@ index f9b886d54..5f2f449af 100644
    data () {
      return {
 diff --git a/website/client/components/groups/createPartyModal.vue b/website/client/components/groups/createPartyModal.vue
-index 42d168baf..1c760270c 100644
+index 6e0ea2956..21a5a75ef 100644
 --- a/website/client/components/groups/createPartyModal.vue
 +++ b/website/client/components/groups/createPartyModal.vue
-@@ -29,12 +29,6 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
-         //.option-item(v-once)
-           .svg-icon(v-html="icons.qrCode")
-           | {{$t('qrCode')}}
--        //.option-item(v-once)
--          .svg-icon.facebook(v-html="icons.facebook")
--          | Facebook
--        //.option-item(v-once)
--          .svg-icon(v-html="icons.twitter")
--          | Twitter
- </template>
- 
- <style>
-@@ -127,11 +121,6 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
-         display: inline-block;
-         vertical-align: bottom;
-       }
--
--      .facebook svg {
--        width: 15px;
--        height: 15px;
--      }
-     }
- 
-     .option-item:hover {
-@@ -144,13 +133,10 @@ b-modal#create-party-modal(title="Empty", size='lg', hide-footer=true)
+@@ -141,7 +141,6 @@ b-modal#create-party-modal(size='lg', hide-footer=true)
  
  <script>
- import { mapState } from 'client/libs/store';
--import * as Analytics from 'client/libs/analytics';
+   import { mapState } from 'client/libs/store';
+-  import * as Analytics from 'client/libs/analytics';
+   import notifications from 'client/mixins/notifications';
  
- import copyIcon from 'assets/svg/copy.svg';
- import greyBadgeIcon from 'assets/svg/grey-badge.svg';
- import qrCodeIcon from 'assets/svg/qrCode.svg';
--import facebookIcon from 'assets/svg/facebook.svg';
--import twitterIcon from 'assets/svg/twitter.svg';
+   import copyIcon from 'assets/svg/copy.svg';
+@@ -167,11 +166,6 @@ b-modal#create-party-modal(size='lg', hide-footer=true)
+         this.$store.state.party.data = party;
+         this.user.party._id = party._id;
  
- export default {
-   data () {
-@@ -159,8 +145,6 @@ export default {
-         copy: copyIcon,
-         greyBadge: greyBadgeIcon,
-         qrCode: qrCodeIcon,
--        facebook: facebookIcon,
--        twitter: twitterIcon,
-       }),
-       shareUserIdShown: false,
-     };
-@@ -181,11 +165,6 @@ export default {
-       this.$store.state.party.data = party;
-       this.user.party._id = party._id;
- 
--      Analytics.updateUser({
--        partyID: party._id,
--        partySize: 1,
--      });
+-        Analytics.updateUser({
+-          partyID: party._id,
+-          partySize: 1,
+-        });
 -
-       this.$root.$emit('bv::hide::modal', 'create-party-modal');
-       this.$router.push('/party');
-     },
+         this.$root.$emit('bv::hide::modal', 'create-party-modal');
+         this.$router.push('/party');
+       },
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
 index 80dc1b054..fee391143 100644
 --- a/website/client/components/groups/group.vue
@@ -3132,7 +3092,7 @@ index 80dc1b054..fee391143 100644
        }
  
 diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
-index 79a7f6d31..14294066a 100644
+index 9e92d0aa5..ad645020b 100644
 --- a/website/client/components/groups/groupPlan.vue
 +++ b/website/client/components/groups/groupPlan.vue
 @@ -46,16 +46,6 @@ div
@@ -3227,7 +3187,7 @@ index 79a7f6d31..14294066a 100644
        paymentMethod: '',
        newGroup: {
          type: 'guild',
-@@ -406,14 +360,6 @@ export default {
+@@ -407,14 +361,6 @@ export default {
        } else {
          paymentData.groupToCreate = this.newGroup;
        }
@@ -3511,7 +3471,7 @@ index e50c72dda..4ad6cd158 100644
        if (confirmationNeeded && !confirm(this.$t('changeClassConfirmCost'))) return;
        try {
 diff --git a/website/client/components/settings/subscription.vue b/website/client/components/settings/subscription.vue
-index da71ec2c8..aa0512292 100644
+index b76747c52..57e7ecd8d 100644
 --- a/website/client/components/settings/subscription.vue
 +++ b/website/client/components/settings/subscription.vue
 @@ -36,9 +36,6 @@
@@ -3545,7 +3505,7 @@ index da71ec2c8..aa0512292 100644
 -                img(src='https://payments.amazon.com/gp/cba/button', :alt="$t('amazonPayments')")
      .row
        .col-6
-         h2 {{ $t('giftSubscription') }}
+         h2(v-once) {{ $t('giftSubscription') }}
 @@ -112,11 +97,10 @@ import { mapState } from 'client/libs/store';
  
  import subscriptionBlocks from '../../../common/script/content/subscriptionBlocks';
@@ -4165,18 +4125,10 @@ index 2052ded75..1e798dba5 100644
  });
  
 diff --git a/website/client/store/actions/auth.js b/website/client/store/actions/auth.js
-index fad46d295..f2f56d68f 100644
+index 58af5e3be..c84241a39 100644
 --- a/website/client/store/actions/auth.js
 +++ b/website/client/store/actions/auth.js
-@@ -1,7 +1,6 @@
- import axios from 'axios';
- 
- const LOCALSTORAGE_AUTH_KEY = 'habit-mobile-settings';
--const LOCALSTORAGE_SOCIAL_AUTH_KEY = 'hello'; // Used by hello.js for social auth
- 
- export async function register (store, params) {
-   let url = '/api/v4/user/auth/local/register';
-@@ -64,27 +63,7 @@ export async function verifyDisplayName (store, params) {
+@@ -63,25 +63,6 @@ export async function verifyDisplayName (store, params) {
    return result.data.data;
  }
  
@@ -4200,10 +4152,8 @@ index fad46d295..f2f56d68f 100644
 -}
 -
  export function logout () {
-   localStorage.removeItem(LOCALSTORAGE_AUTH_KEY);
--  localStorage.removeItem(LOCALSTORAGE_SOCIAL_AUTH_KEY);
+   localStorage.clear();
    window.location.href = '/logout-server';
- }
 diff --git a/website/client/store/actions/chat.js b/website/client/store/actions/chat.js
 index 0bb568a86..966f1d3ec 100644
 --- a/website/client/store/actions/chat.js
@@ -7028,7 +6978,7 @@ index 2d99143b6..7326ae0b1 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 9a0d4c2d2..7a86b5b9e 100644
+index 258c28847..0c7b0f33d 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {
@@ -7081,7 +7031,7 @@ index 9a0d4c2d2..7a86b5b9e 100644
      }
  
      // Send webhooks
-@@ -1444,7 +1430,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+@@ -1447,7 +1433,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
    return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
@@ -7090,7 +7040,7 @@ index 9a0d4c2d2..7a86b5b9e 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1453,12 +1439,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1456,12 +1442,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;
