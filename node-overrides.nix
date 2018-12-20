@@ -60,7 +60,7 @@
     # FIXME: This is not deterministic, find a better way...
     googleFonts = runCommand "google-fonts-apidoc" {
       outputHashAlgo = "sha256";
-      outputHash = "1kkv6nrswzxcfdyyx46r6238ss89xj5nayji8jgr590lca1bi1sy";
+      outputHash = "1l2r0jfsijbhsfa0a2q5cwd6klpn2b8qwa5yyc7wb2b5g54sdmhd";
       outputHashMode = "recursive";
       nativeBuildInputs = [ super.extra.google-fonts-offline ];
 

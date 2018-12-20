@@ -452,7 +452,7 @@ stdenv.mkDerivation rec {
   # FIXME: This is not deterministic, find a better way...
   googleFonts = runCommand "google-fonts" {
     outputHashAlgo = "sha256";
-    outputHash = "101y0ksz6n3yw4flfn91w9f9npb299c8bck42lrjk7hh6vlcf3s1";
+    outputHash = "1clh809nn5n64r97vndhpgpf6c6q06lj39yxrxmcwlwk03myl65n";
     outputHashMode = "recursive";
     nativeBuildInputs = [ nodePackages.extra.google-fonts-offline ];
     inherit src;
