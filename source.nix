@@ -197,9 +197,6 @@ stdenv.mkDerivation rec {
     # Don't expect migrations to return a Promise so that older migration
     # scripts work.
     patches/revert-migration-runner-promise.patch
-
-    # Pin to version 4.10.0 because otherwise CSS imports do not work.
-    patches/node-sass-4.10.0.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

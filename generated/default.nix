@@ -112,7 +112,7 @@ in {
     mongoose = nodePackages."mongoose-^5.3.4";
     morgan = nodePackages."morgan-^1.7.0";
     nconf = nodePackages."nconf-^0.10.0";
-    "node-sass" = nodePackages."node-sass-<=4.10.0";
+    "node-sass" = nodePackages."node-sass-^4.9.0";
     ora = nodePackages."ora-^3.0.0";
     pageres = nodePackages."pageres-^4.1.1";
     passport = nodePackages."passport-^0.4.0";

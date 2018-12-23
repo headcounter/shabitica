@@ -18385,13 +18385,13 @@ in
     production = true;
     bypassCache = true;
   };
-  "node-sass-<=4.10.0" = nodeEnv.buildNodePackage {
+  "node-sass-^4.9.0" = nodeEnv.buildNodePackage {
     name = "node-sass";
     packageName = "node-sass";
-    version = "4.10.0";
+    version = "4.11.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/node-sass/-/node-sass-4.10.0.tgz";
-      sha512 = "fDQJfXszw6vek63Fe/ldkYXmRYK/QS6NbvM3i5oEo9ntPDy4XX7BcKZyTKv+/kSSxRtXXc7l+MSwEmYc0CSy6Q==";
+      url = "https://registry.npmjs.org/node-sass/-/node-sass-4.11.0.tgz";
+      sha512 = "bHUdHTphgQJZaF1LASx0kAviPH7sGlcyNhWade4eVIpFp6tsn7SV8xNMTbsQFpEV9VXpnwTTnNYlfsZXgGgmkA==";
     };
     dependencies = [
       sources."abbrev-1.1.1"

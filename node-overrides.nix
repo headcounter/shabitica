@@ -1,4 +1,4 @@
-{ super, lib, fetchurl, substituteAll, runCommand
+{ super, lib, fetchFromGitHub, substituteAll, runCommand
 , libsass, libjpeg, optipng, gifsicle, pkgconfig, phantomjs2, systemd
 , chromedriver, chromium
 
@@ -29,11 +29,13 @@
     # Thin is needed to be backwards-compatible with NixOS stable.
     newerSass = libsass.overrideAttrs (drv: rec {
       name = "libsass-${version}";
-      version = "3.5.3";
+      version = "3.5.5";
       patchPhase = "export LIBSASS_VERSION=${version}";
-      src = fetchurl {
-        url = "https://github.com/sass/libsass/archive/${version}.tar.gz";
-        sha256 = "1lfdq2ahskf9yd0m71jlx3r4n6a0dhg4wxpnwbrvj2a23k7db7zi";
+      src = fetchFromGitHub {
+        owner = "sass";
+        repo = "libsass";
+        rev = version;
+        sha256 = "0830pjcvhzxh6yixj82x5k5r1xnadjqzi16kp53213icbly0r9ma";
       };
     });
     isOutdated = lib.versionOlder libsass.version newerSass.version;
