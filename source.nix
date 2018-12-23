@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.75.5";
+  version = "4.77.5";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1h790wz5hjx6bj1s8lv2lsnlir0a0j5cwl22gp8mmxj268kvnx2q";
+    sha256 = "09clv4aqcz5fg8nh7d8flam54vlxsifraq1rhpdwcwwfzg2mcplg";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
       inherit sha256;
     };
   in [
+    # Remove the Gift 1 Get 1 Promo which is only relevant if we would have
+    # payment and would result into another nagging bar at the top.
+    patches/revert-gift-1-get-1-promo.patch
+
     # Remove payment, analytics and other external services.
     patches/remove-external-services.patch
 

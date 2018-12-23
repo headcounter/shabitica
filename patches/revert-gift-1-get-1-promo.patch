@@ -1,0 +1,412 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Sun Dec 23 05:29:13 2018 +0100
+
+    Revert "Gift 1 Get 1 Promo 2018-19"
+    
+    This reverts commit 8220199e49e6501dac25558e020cbcce81ad3950.
+    
+    I'm reverting this because this promo is only an incentive for users to
+    pay for a subscriptions. On Shabitica forever, all subscriptions are
+    free, so we don't need to have that nagging bar at the top, reminding
+    you to buy a subscription for someone else.
+    
+    The revert is only partially and only the promo parts, because the
+    commit in question not only introduces the promo but also changes the
+    way the resting banner is displayed.
+    
+    In addition, I removed the hunks for a few CSS, PNG and files we're
+    going to delete in Shabitica anyway to make this patch smaller.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: revert-gift-1-get-1-promo.patch
+
+diff --git a/test/api/unit/libs/payments/payments.test.js b/test/api/unit/libs/payments/payments.test.js
+index dbed33741..82fb3daba 100644
+--- a/test/api/unit/libs/payments/payments.test.js
++++ b/test/api/unit/libs/payments/payments.test.js
+@@ -209,7 +209,7 @@ describe('payments/index', () => {
+         await api.createSubscription(data);
+         let msg = '\`Hello recipient, sender has sent you 3 months of subscription!\`';
+ 
+-        expect(user.sendMessage).to.be.calledTwice;
++        expect(user.sendMessage).to.be.calledOnce;
+         expect(user.sendMessage).to.be.calledWith(recipient, { receiverMsg: msg, senderMsg: msg, save: false });
+       });
+ 
+@@ -247,77 +247,6 @@ describe('payments/index', () => {
+           },
+         });
+       });
+-
+-      context('Winter 2018-19 Gift-1-Get-1 Promotion', async () => {
+-        it('creates a gift subscription for purchaser and recipient if none exist', async () => {
+-          await api.createSubscription(data);
+-
+-          expect(user.items.pets['Jackalope-RoyalPurple']).to.eql(5);
+-          expect(user.purchased.plan.customerId).to.eql('Gift');
+-          expect(user.purchased.plan.dateTerminated).to.exist;
+-          expect(user.purchased.plan.dateUpdated).to.exist;
+-          expect(user.purchased.plan.dateCreated).to.exist;
+-
+-          expect(recipient.items.pets['Jackalope-RoyalPurple']).to.eql(5);
+-          expect(recipient.purchased.plan.customerId).to.eql('Gift');
+-          expect(recipient.purchased.plan.dateTerminated).to.exist;
+-          expect(recipient.purchased.plan.dateUpdated).to.exist;
+-          expect(recipient.purchased.plan.dateCreated).to.exist;
+-        });
+-
+-        it('adds extraMonths to existing subscription for purchaser and creates a gift subscription for recipient without sub', async () => {
+-          user.purchased.plan = plan;
+-
+-          expect(user.purchased.plan.extraMonths).to.eql(0);
+-
+-          await api.createSubscription(data);
+-
+-          expect(user.purchased.plan.extraMonths).to.eql(3);
+-
+-          expect(recipient.items.pets['Jackalope-RoyalPurple']).to.eql(5);
+-          expect(recipient.purchased.plan.customerId).to.eql('Gift');
+-          expect(recipient.purchased.plan.dateTerminated).to.exist;
+-          expect(recipient.purchased.plan.dateUpdated).to.exist;
+-          expect(recipient.purchased.plan.dateCreated).to.exist;
+-        });
+-
+-        it('adds extraMonths to existing subscription for recipient and creates a gift subscription for purchaser without sub', async () => {
+-          recipient.purchased.plan = plan;
+-
+-          expect(recipient.purchased.plan.extraMonths).to.eql(0);
+-
+-          await api.createSubscription(data);
+-
+-          expect(recipient.purchased.plan.extraMonths).to.eql(3);
+-
+-          expect(user.items.pets['Jackalope-RoyalPurple']).to.eql(5);
+-          expect(user.purchased.plan.customerId).to.eql('Gift');
+-          expect(user.purchased.plan.dateTerminated).to.exist;
+-          expect(user.purchased.plan.dateUpdated).to.exist;
+-          expect(user.purchased.plan.dateCreated).to.exist;
+-        });
+-
+-        it('adds extraMonths to existing subscriptions for purchaser and recipient', async () => {
+-          user.purchased.plan = plan;
+-          recipient.purchased.plan = plan;
+-
+-          expect(user.purchased.plan.extraMonths).to.eql(0);
+-          expect(recipient.purchased.plan.extraMonths).to.eql(0);
+-
+-          await api.createSubscription(data);
+-
+-          expect(user.purchased.plan.extraMonths).to.eql(3);
+-          expect(recipient.purchased.plan.extraMonths).to.eql(3);
+-        });
+-
+-        it('sends a private message about the promotion', async () => {
+-          await api.createSubscription(data);
+-          let msg = '\`Hello sender, you received 3 months of subscription as part of our holiday gift-giving promotion!\`';
+-
+-          expect(user.sendMessage).to.be.calledTwice;
+-          expect(user.sendMessage).to.be.calledWith(user, { senderMsg: msg });
+-        });
+-      });
+     });
+ 
+     context('Purchasing a subscription for self', () => {
+diff --git a/website/client/app.vue b/website/client/app.vue
+index e9cc55a68..e4a08bd52 100644
+--- a/website/client/app.vue
++++ b/website/client/app.vue
+@@ -24,12 +24,6 @@ div
+             span.resume(@click="resumeDamage()") {{ $t('resumeDamage') }}
+           .closepadding(@click="hideBanner()")
+             span.svg-icon.inline.icon-10(aria-hidden="true", v-html="icons.close")
+-        .g1g1-banner.d-flex.justify-content-center.align-items-center(v-if="!giftingHidden")
+-          .svg-icon.svg-gifts.left-gift(v-html="icons.gifts")
+-          router-link(:to="{name: 'subscription'}") {{ $t('g1g1Announcement') }}
+-          .svg-icon.svg-gifts.right-gift(v-html="icons.gifts")
+-          .closepadding(@click="hideGiftingBanner()")
+-            span.svg-icon.inline.icon-10(aria-hidden="true", v-html="icons.close")
+         notifications-display
+         app-menu
+         .container-fluid
+@@ -97,41 +91,6 @@ div
+     flex: 1 0 auto;
+   }
+ 
+-  .g1g1-banner {
+-    width: 100%;
+-    min-height: 2.5rem;
+-    background-color: #34b5c1;
+-
+-    a {
+-      color: $white;
+-      text-decoration: none;
+-      font-weight: bold;
+-    }
+-
+-    .closepadding {
+-      margin: 11px 24px;
+-      display: inline-block;
+-      position: relative;
+-      right: 0;
+-      top: 0;
+-      cursor: pointer;
+-    }
+-
+-    .left-gift {
+-      margin: auto 1rem auto auto;
+-    }
+-
+-    .right-gift {
+-      margin: auto auto auto 1rem;
+-      filter: FlipH;
+-      transform: scaleX(-1);
+-    }
+-
+-    .svg-gifts {
+-      width: 4.6rem;
+-    }
+-  }
+-
+   .notification {
+     border-radius: 1000px;
+     background-color: $green-10;
+@@ -230,9 +189,8 @@ import amazonPaymentsModal from 'client/components/payments/amazonModal';
+ import paymentsSuccessModal from 'client/components/payments/successModal';
+ 
+ import spellsMixin from 'client/mixins/spells';
+-import { CONSTANTS, getLocalSetting, removeLocalSetting, setLocalSetting } from 'client/libs/userlocalManager';
++import { CONSTANTS, getLocalSetting, removeLocalSetting } from 'client/libs/userlocalManager';
+ 
+-import gifts from 'assets/svg/gifts.svg';
+ import svgClose from 'assets/svg/close.svg';
+ import bannedAccountModal from 'client/components/bannedAccountModal';
+ 
+@@ -257,7 +215,6 @@ export default {
+     return {
+       icons: Object.freeze({
+         close: svgClose,
+-        gifts,
+       }),
+       selectedItemToBuy: null,
+       selectedSpellToBuy: null,
+@@ -269,7 +226,6 @@ export default {
+       currentTipNumber: 0,
+       bannerHidden: false,
+       bannerHeight: 0,
+-      giftingHidden: getLocalSetting(CONSTANTS.keyConstants.GIFTING_BANNER_DISPLAY) === 'dismissed',
+     };
+   },
+   computed: {
+@@ -660,10 +616,6 @@ export default {
+     hideBanner () {
+       this.bannerHidden = true;
+     },
+-    hideGiftingBanner () {
+-      setLocalSetting(CONSTANTS.keyConstants.GIFTING_BANNER_DISPLAY, 'dismissed');
+-      this.giftingHidden = true;
+-    },
+     resumeDamage () {
+       this.$store.dispatch('user:sleep');
+     },
+diff --git a/website/client/components/settings/subscription.vue b/website/client/components/settings/subscription.vue
+index 2768bf10a..b76747c52 100644
+--- a/website/client/components/settings/subscription.vue
++++ b/website/client/components/settings/subscription.vue
+@@ -90,10 +90,6 @@
+           li(v-once) {{ $t('giftSubscriptionText2') }}
+           li(v-once) {{ $t('giftSubscriptionText3') }}
+         h4(v-once) {{ $t('giftSubscriptionText4') }}
+-      .col-6
+-        h2 {{ $t('winterPromoGiftHeader') }}
+-        p {{ $t('winterPromoGiftDetails1') }}
+-        p {{ $t('winterPromoGiftDetails2') }}
+ </template>
+ 
+ <style scoped>
+diff --git a/website/client/components/snackbars/notifications.vue b/website/client/components/snackbars/notifications.vue
+index aaa33ebfd..af44e65a3 100644
+--- a/website/client/components/snackbars/notifications.vue
++++ b/website/client/components/snackbars/notifications.vue
+@@ -12,10 +12,6 @@
+     z-index: 1400; // 1400 is above modal backgrounds
+ 
+     &-top-pos {
+-      &-double {
+-        top: 145px;
+-      }
+-
+       &-normal {
+         top: 65px;
+       }
+@@ -30,7 +26,6 @@
+ <script>
+ import { mapState } from 'client/libs/store';
+ import notification from './notification';
+-import { CONSTANTS, getLocalSetting } from 'client/libs/userlocalManager';
+ 
+ export default {
+   components: {
+@@ -44,9 +39,7 @@ export default {
+     notificationsTopPos () {
+       const base = 'notifications-top-pos-';
+       let modifier = '';
+-      if (this.userSleeping && this.giftingShown) {
+-        modifier = 'double';
+-      } else if (this.userSleeping || this.giftingShown) {
++      if (this.userSleeping) {
+         modifier = 'sleeping';
+       } else {
+         modifier = 'normal';
+@@ -54,10 +47,5 @@ export default {
+       return `${base}${modifier}`;
+     },
+   },
+-  data () {
+-    return {
+-      giftingShown: getLocalSetting(CONSTANTS.keyConstants.GIFTING_BANNER_DISPLAY) !== 'dismissed',
+-    };
+-  },
+ };
+ </script>
+diff --git a/website/client/libs/userlocalManager.js b/website/client/libs/userlocalManager.js
+index 9d7b55e0b..da3e30489 100644
+--- a/website/client/libs/userlocalManager.js
++++ b/website/client/libs/userlocalManager.js
+@@ -5,7 +5,6 @@ const CONSTANTS = {
+     EQUIPMENT_DRAWER_STATE: 'equipment-drawer-state',
+     CURRENT_EQUIPMENT_DRAWER_TAB: 'current-equipment-drawer-tab',
+     STABLE_SORT_STATE: 'stable-sort-state',
+-    GIFTING_BANNER_DISPLAY: 'gifting-banner-display',
+   },
+   drawerStateValues: {
+     DRAWER_CLOSED: 'drawer-closed',
+diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
+index 345e147e5..9757d1696 100644
+--- a/website/server/libs/payments/subscriptions.js
++++ b/website/server/libs/payments/subscriptions.js
+@@ -147,88 +147,55 @@ async function createSubscription (data) {
+     txnEmail(data.user, emailType);
+   }
+ 
+-  if (!data.promo) {
+-    analytics.trackPurchase({
+-      uuid: data.user._id,
+-      groupId,
+-      itemPurchased,
+-      sku: `${data.paymentMethod.toLowerCase()}-subscription`,
+-      purchaseType,
+-      paymentMethod: data.paymentMethod,
+-      quantity: 1,
+-      gift: Boolean(data.gift),
+-      purchaseValue: block.price,
+-      headers: data.headers,
+-    });
+-  }
++  analytics.trackPurchase({
++    uuid: data.user._id,
++    groupId,
++    itemPurchased,
++    sku: `${data.paymentMethod.toLowerCase()}-subscription`,
++    purchaseType,
++    paymentMethod: data.paymentMethod,
++    quantity: 1,
++    gift: Boolean(data.gift),
++    purchaseValue: block.price,
++    headers: data.headers,
++  });
+ 
+-  if (!group && !data.promo) data.user.purchased.txnCount++;
++  if (!group) data.user.purchased.txnCount++;
+ 
+   if (data.gift) {
+     let byUserName = getUserInfo(data.user, ['name']).name;
+ 
+     // generate the message in both languages, so both users can understand it
+     let languages = [data.user.preferences.language, data.gift.member.preferences.language];
+-    if (data.promo) {
+-      let senderMsg = shared.i18n.t(`giftedSubscription${data.promo}Promo`, {
+-        username: data.gift.member.profile.name,
+-        monthCount: shared.content.subscriptionBlocks[data.gift.subscription.key].months,
+-      }, languages[0]);
+-
+-      senderMsg = `\`${senderMsg}\``;
+-      data.user.sendMessage(data.gift.member, { senderMsg });
+-    } else {
+-      let senderMsg = shared.i18n.t('giftedSubscriptionFull', {
+-        username: data.gift.member.profile.name,
+-        sender: byUserName,
+-        monthCount: shared.content.subscriptionBlocks[data.gift.subscription.key].months,
+-      }, languages[0]);
+-      senderMsg = `\`${senderMsg}\``;
+-
+-      let receiverMsg = shared.i18n.t('giftedSubscriptionFull', {
+-        username: data.gift.member.profile.name,
+-        sender: byUserName,
+-        monthCount: shared.content.subscriptionBlocks[data.gift.subscription.key].months,
+-      }, languages[1]);
+-      receiverMsg = `\`${receiverMsg}\``;
+-
+-      if (data.gift.message) {
+-        receiverMsg += ` ${data.gift.message}`;
+-        senderMsg += ` ${data.gift.message}`;
+-      }
+-
+-      data.user.sendMessage(data.gift.member, { receiverMsg, senderMsg, save: false });
++    let senderMsg = shared.i18n.t('giftedSubscriptionFull', {
++      username: data.gift.member.profile.name,
++      sender: byUserName,
++      monthCount: shared.content.subscriptionBlocks[data.gift.subscription.key].months,
++    }, languages[0]);
++    senderMsg = `\`${senderMsg}\``;
++
++    let receiverMsg = shared.i18n.t('giftedSubscriptionFull', {
++      username: data.gift.member.profile.name,
++      sender: byUserName,
++      monthCount: shared.content.subscriptionBlocks[data.gift.subscription.key].months,
++    }, languages[1]);
++    receiverMsg = `\`${receiverMsg}\``;
++
++    if (data.gift.message) {
++      receiverMsg += ` ${data.gift.message}`;
++      senderMsg += ` ${data.gift.message}`;
+     }
+ 
++    data.user.sendMessage(data.gift.member, { receiverMsg, senderMsg, save: false });
++
+     if (data.gift.member.preferences.emailNotifications.giftedSubscription !== false) {
+-      if (data.promo) {
+-        txnEmail(data.gift.member, 'gift-one-get-one', [
+-          {name: 'GIFTEE_USERNAME', content: data.promoUsername},
+-          {name: 'X_MONTHS_SUBSCRIPTION', content: months},
+-        ]);
+-      } else {
+-        txnEmail(data.gift.member, 'gifted-subscription', [
+-          {name: 'GIFTER', content: byUserName},
+-          {name: 'X_MONTHS_SUBSCRIPTION', content: months},
+-        ]);
+-      }
++      txnEmail(data.gift.member, 'gifted-subscription', [
++        {name: 'GIFTER', content: byUserName},
++        {name: 'X_MONTHS_SUBSCRIPTION', content: months},
++      ]);
+     }
+ 
+-    if (data.gift.member._id !== data.user._id) { // If sending to a user other than yourself, don't push notify, and get bonus sub for self per holiday promo
+-      let promoData = {
+-        user: data.user,
+-        gift: {
+-          member: data.user,
+-          subscription: {
+-            key: data.gift.subscription.key,
+-          },
+-        },
+-        paymentMethod: data.paymentMethod,
+-        promo: 'Winter',
+-        promoUsername: data.gift.member.auth.local.username,
+-      };
+-      await this.createSubscription(promoData);
+-
++    if (data.gift.member._id !== data.user._id) { // Only send push notifications if sending to a user other than yourself
+       if (data.gift.member.preferences.pushNotifications.giftedSubscription !== false) {
+         sendPushNotification(data.gift.member,
+           {

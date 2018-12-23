@@ -14,7 +14,7 @@ Date:   Fri Nov 30 06:10:22 2018 +0100
     Filename: node-sass-4.10.0.patch
 
 diff --git a/package.json b/package.json
-index e27a818b4..6ab9f81f3 100644
+index 882a3b699..04a96af4c 100644
 --- a/package.json
 +++ b/package.json
 @@ -58,7 +58,7 @@
