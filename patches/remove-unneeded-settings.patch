@@ -9,7 +9,7 @@ Date:   Sat Apr 7 01:42:11 2018 +0200
     Filename: remove-unneeded-settings.patch
 
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
-index 1333d3839..2fa723349 100644
+index c3912943e..ea2bede8f 100644
 --- a/website/client/components/header/userDropdown.vue
 +++ b/website/client/components/header/userDropdown.vue
 @@ -16,14 +16,7 @@ menu-dropdown.item-user(:right="true")

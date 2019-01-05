@@ -281,10 +281,10 @@ index 9d7b55e0b..da3e30489 100644
    drawerStateValues: {
      DRAWER_CLOSED: 'drawer-closed',
 diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
-index 345e147e5..9757d1696 100644
+index 228715c66..549b41d1d 100644
 --- a/website/server/libs/payments/subscriptions.js
 +++ b/website/server/libs/payments/subscriptions.js
-@@ -147,88 +147,55 @@ async function createSubscription (data) {
+@@ -148,88 +148,55 @@ async function createSubscription (data) {
      txnEmail(data.user, emailType);
    }
  

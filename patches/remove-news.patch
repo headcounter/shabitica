@@ -68,7 +68,7 @@ index 3132f9e9b..ce7f12616 100644
          'QUEST_INVITATION', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
          'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
 diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
-index 840462efb..6a8da14aa 100644
+index 8cf7e722e..ab4042907 100644
 --- a/website/client/components/notifications.vue
 +++ b/website/client/components/notifications.vue
 @@ -5,7 +5,6 @@ div

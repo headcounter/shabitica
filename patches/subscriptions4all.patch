@@ -276,7 +276,7 @@ index 2e37e98d4..d615d4326 100644
      plan = member.purchased.plan.toObject();
      let extraMonths = Number(plan.extraMonths);
 diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
-index 5e69c3fdb..c26d4263e 100644
+index 10d2a6992..e62eb5c50 100644
 --- a/website/server/libs/payments/subscriptions.js
 +++ b/website/server/libs/payments/subscriptions.js
 @@ -15,9 +15,6 @@ import {
@@ -289,7 +289,7 @@ index 5e69c3fdb..c26d4263e 100644
  function revealMysteryItems (user) {
    const pushedItems = [];
  
-@@ -205,12 +202,7 @@ async function cancelSubscription (data) {
+@@ -206,12 +203,7 @@ async function cancelSubscription (data) {
  
      await this.cancelGroupUsersSubscription(group);
    } else {

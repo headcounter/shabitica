@@ -146,14 +146,14 @@ index e2ce08aa0..5000dac10 100644
      },
      methods: {
 diff --git a/website/client/components/static/overview.vue b/website/client/components/static/overview.vue
-index cfd14c700..9f373bb87 100644
+index 586663018..7fd00b1ec 100644
 --- a/website/client/components/static/overview.vue
 +++ b/website/client/components/static/overview.vue
 @@ -8,7 +8,6 @@
          h3 {{ $t('step'+step) }}
-         p(v-markdown="$t('webStep'+step+'Text')")
+         p(v-markdown="$t('webStep'+step+'Text', stepVars[step])")
          hr
--      p(v-markdown="$t('overviewQuestions')")
+-      p(v-markdown="$t('overviewQuestions', {faqUrl: '/static/faq/', helpGuildUrl: '/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a'})")
  </template>
  
  <style lang='scss'>
