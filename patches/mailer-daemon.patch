@@ -53,7 +53,7 @@ index 549316bc4..30009586c 100644
    "WEB_CONCURRENCY": 1
  }
 diff --git a/package.json b/package.json
-index 55af6d378..8ab74d52c 100644
+index 7b75fa31e..4673c34a2 100644
 --- a/package.json
 +++ b/package.json
 @@ -59,7 +59,6 @@

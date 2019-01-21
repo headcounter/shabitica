@@ -461,7 +461,7 @@ index c17b789a4..041a41820 100644
  
      it('errors if username has incorrect length', async () => {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index a70e18acf..e413e3e6d 100644
+index 5d3f11bb5..6b9b3cdbc 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -488,7 +488,7 @@ index a70e18acf..e413e3e6d 100644
    },
    data () {
      return {
-@@ -294,8 +291,6 @@ export default {
+@@ -293,8 +290,6 @@ export default {
        return response;
      }, (error) => {
        if (error.response.status >= 400) {
@@ -497,7 +497,7 @@ index a70e18acf..e413e3e6d 100644
          // Don't show errors from getting user details. These users have delete their account,
          // but their chat message still exists.
          let configExists = Boolean(error.response) && Boolean(error.response.config);
-@@ -446,25 +441,6 @@ export default {
+@@ -445,25 +440,6 @@ export default {
      if (loadingScreen) document.body.removeChild(loadingScreen);
    },
    methods: {

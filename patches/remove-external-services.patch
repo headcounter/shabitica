@@ -2426,7 +2426,7 @@ index 7b8908467..1609e9296 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index e4a08bd52..a70e18acf 100644
+index bde06ec6d..5d3f11bb5 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,8 +10,6 @@ div
@@ -2463,7 +2463,7 @@ index e4a08bd52..a70e18acf 100644
    },
    data () {
      return {
-@@ -406,10 +397,6 @@ export default {
+@@ -405,10 +396,6 @@ export default {
      this.$store.watch(state => state.title, (title) => {
        document.title = title;
      });
@@ -2474,7 +2474,7 @@ index e4a08bd52..a70e18acf 100644
  
      if (this.isUserLoggedIn && !this.isStaticPage) {
        // Load the user and the user tasks
-@@ -418,8 +405,6 @@ export default {
+@@ -417,8 +404,6 @@ export default {
          this.$store.dispatch('tasks:fetchUserTasks'),
        ]).then(() => {
          this.$store.state.isUserLoaded = true;
@@ -2483,7 +2483,7 @@ index e4a08bd52..a70e18acf 100644
  
          this.hideLoadingScreen();
  
-@@ -435,12 +420,9 @@ export default {
+@@ -434,12 +419,9 @@ export default {
            appState = JSON.parse(appState);
            if (appState.paymentCompleted) {
              removeLocalSetting(CONSTANTS.savedAppStateValues.SAVED_APP_STATE);
@@ -2496,7 +2496,7 @@ index e4a08bd52..a70e18acf 100644
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -489,8 +471,6 @@ export default {
+@@ -488,8 +470,6 @@ export default {
          if (data.fromRoot) return;
          const modalStack = this.$store.state.modalStack;
  
@@ -2505,7 +2505,7 @@ index e4a08bd52..a70e18acf 100644
          // Add new modal to the stack
          const prev = modalStack[modalStack.length - 1];
          const prevId = prev ? prev.modalId : undefined;
-@@ -554,18 +534,6 @@ export default {
+@@ -553,18 +533,6 @@ export default {
  
        return true;
      },
@@ -2524,7 +2524,7 @@ index e4a08bd52..a70e18acf 100644
      itemSelected (item) {
        this.selectedItemToBuy = item;
      },
-@@ -652,4 +620,3 @@ export default {
+@@ -651,4 +619,3 @@ export default {
  <style src="assets/css/sprites/spritesmith-main-22.css"></style>
  <style src="assets/css/sprites/spritesmith-main-23.css"></style>
  <style src="assets/css/sprites.css"></style>
