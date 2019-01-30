@@ -196,6 +196,9 @@ stdenv.mkDerivation rec {
 
     # Removes the SKIP_SSL_CHECK_KEY option and its implementation.
     patches/remove-ssl-redirect-skip.patch
+
+    # Fix a small typo made when adding the new Mystery items in v4.81.0.
+    patches/fix-mystery-items-201901.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

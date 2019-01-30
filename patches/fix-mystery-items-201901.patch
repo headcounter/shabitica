@@ -1,0 +1,24 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Jan 30 05:54:29 2019 +0100
+
+    Fix typo in mystery items gear object for 201901
+    
+    This causes a lot of the unit tests to fail, because the .mystery
+    attribute is used to look up the main mysterySets object.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: fix-mystery-items-201901.patch
+
+diff --git a/website/common/script/content/gear/sets/mystery.js b/website/common/script/content/gear/sets/mystery.js
+index 7c4ed2cf9..4d62cc2ac 100644
+--- a/website/common/script/content/gear/sets/mystery.js
++++ b/website/common/script/content/gear/sets/mystery.js
+@@ -370,7 +370,7 @@ let body = {
+   201901: {
+     text: t('bodyMystery201901Text'),
+     notes: t('bodyMystery201901Notes'),
+-    mystery: '2019011',
++    mystery: '201901',
+     value: 0,
+   },
+ };
