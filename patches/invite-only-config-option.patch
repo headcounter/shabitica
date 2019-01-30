@@ -10,7 +10,7 @@ Date:   Mon Apr 2 06:30:04 2018 +0200
     Filename: invite-only-config-option.patch
 
 diff --git a/config.json.example b/config.json.example
-index 392e83750..a57e372c9 100644
+index bacc3ca53..9304398bd 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -7,6 +7,7 @@

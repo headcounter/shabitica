@@ -18,7 +18,7 @@ Date:   Tue Mar 27 05:37:16 2018 +0200
     Filename: mailer-daemon.patch
 
 diff --git a/config.json.example b/config.json.example
-index 549316bc4..30009586c 100644
+index a3d1ed487..fb5ea84c5 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -7,13 +7,11 @@
@@ -50,10 +50,10 @@ index 549316bc4..30009586c 100644
 -  "SMTP_TLS": "true",
 -  "SMTP_USER": "user@example.com",
    "TEST_DB_URI": "mongodb://localhost/habitrpg_test",
-   "WEB_CONCURRENCY": 1
- }
+   "WEB_CONCURRENCY": 1,
+   "SKIP_SSL_CHECK_KEY": "key"
 diff --git a/package.json b/package.json
-index 7b75fa31e..4673c34a2 100644
+index 714489024..56867d789 100644
 --- a/package.json
 +++ b/package.json
 @@ -59,7 +59,6 @@

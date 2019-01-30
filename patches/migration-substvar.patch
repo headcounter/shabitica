@@ -9,14 +9,14 @@ Date:   Wed May 2 03:15:04 2018 +0200
     Filename: migration-substvar.patch
 
 diff --git a/migrations/migration-runner.js b/migrations/migration-runner.js
-index a9430f30b..38901eda7 100644
+index c65f18def..38901eda7 100644
 --- a/migrations/migration-runner.js
 +++ b/migrations/migration-runner.js
 @@ -17,7 +17,7 @@ function setUpServer () {
  setUpServer();
  
  // Replace this with your migration
--const processUsers = require('./archive/2018/20181231_nye.js');
+-const processUsers = require('./users/mystery-items.js');
 +const processUsers = require('@migrationScript@');
  processUsers()
    .then(function success () {

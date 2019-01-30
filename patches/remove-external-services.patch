@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 94c5c7b04..549316bc4 100644
+index 2caba1844..a3d1ed487 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -1,12 +1,5 @@
@@ -56,7 +56,7 @@ index 94c5c7b04..549316bc4 100644
    "BASE_URL": "http://localhost:3000",
    "CRON_SAFE_MODE": "false",
    "CRON_SEMI_SAFE_MODE": "false",
-@@ -19,63 +12,25 @@
+@@ -19,64 +12,26 @@
    "EMAIL_SERVER_URL": "http://example.com",
    "ENABLE_CONSOLE_LOGS_IN_PROD": "false",
    "ENABLE_CONSOLE_LOGS_IN_TEST": "false",
@@ -118,7 +118,8 @@ index 94c5c7b04..549316bc4 100644
 -  "STRIPE_PUB_KEY": "22223333444455556666777788889999",
    "TEST_DB_URI": "mongodb://localhost/habitrpg_test",
 -  "TRANSIFEX_SLACK_CHANNEL": "transifex",
-   "WEB_CONCURRENCY": 1
+   "WEB_CONCURRENCY": 1,
+   "SKIP_SSL_CHECK_KEY": "key"
  }
 diff --git a/gulp/taskHelper.js b/gulp/taskHelper.js
 index 270573ba7..75d2ae759 100644
@@ -2426,7 +2427,7 @@ index 7b8908467..1609e9296 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index bde06ec6d..5d3f11bb5 100644
+index 1818dd8f1..2c2c61d11 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,8 +10,6 @@ div
@@ -2463,7 +2464,7 @@ index bde06ec6d..5d3f11bb5 100644
    },
    data () {
      return {
-@@ -405,10 +396,6 @@ export default {
+@@ -404,10 +395,6 @@ export default {
      this.$store.watch(state => state.title, (title) => {
        document.title = title;
      });
@@ -2474,7 +2475,7 @@ index bde06ec6d..5d3f11bb5 100644
  
      if (this.isUserLoggedIn && !this.isStaticPage) {
        // Load the user and the user tasks
-@@ -417,8 +404,6 @@ export default {
+@@ -416,8 +403,6 @@ export default {
          this.$store.dispatch('tasks:fetchUserTasks'),
        ]).then(() => {
          this.$store.state.isUserLoaded = true;
@@ -2483,7 +2484,7 @@ index bde06ec6d..5d3f11bb5 100644
  
          this.hideLoadingScreen();
  
-@@ -434,12 +419,9 @@ export default {
+@@ -433,12 +418,9 @@ export default {
            appState = JSON.parse(appState);
            if (appState.paymentCompleted) {
              removeLocalSetting(CONSTANTS.savedAppStateValues.SAVED_APP_STATE);
@@ -2496,7 +2497,7 @@ index bde06ec6d..5d3f11bb5 100644
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -488,8 +470,6 @@ export default {
+@@ -487,8 +469,6 @@ export default {
          if (data.fromRoot) return;
          const modalStack = this.$store.state.modalStack;
  
@@ -2505,7 +2506,7 @@ index bde06ec6d..5d3f11bb5 100644
          // Add new modal to the stack
          const prev = modalStack[modalStack.length - 1];
          const prevId = prev ? prev.modalId : undefined;
-@@ -553,18 +533,6 @@ export default {
+@@ -552,18 +532,6 @@ export default {
  
        return true;
      },
@@ -2524,7 +2525,7 @@ index bde06ec6d..5d3f11bb5 100644
      itemSelected (item) {
        this.selectedItemToBuy = item;
      },
-@@ -651,4 +619,3 @@ export default {
+@@ -650,4 +618,3 @@ export default {
  <style src="assets/css/sprites/spritesmith-main-22.css"></style>
  <style src="assets/css/sprites/spritesmith-main-23.css"></style>
  <style src="assets/css/sprites.css"></style>
@@ -2851,7 +2852,7 @@ index bd821ce71..2c445efc5 100644
      },
    },
 diff --git a/website/client/components/auth/registerLoginReset.vue b/website/client/components/auth/registerLoginReset.vue
-index d131dc76a..6a705b1c6 100644
+index 7aa7f795c..390ff25c3 100644
 --- a/website/client/components/auth/registerLoginReset.vue
 +++ b/website/client/components/auth/registerLoginReset.vue
 @@ -13,15 +13,6 @@
@@ -4693,7 +4694,7 @@ index 7e0bf0c83..0d4387ddb 100644
  
    user.purchased.plan.consecutive.trinkets--;
 diff --git a/website/common/script/ops/buy/buyQuest.js b/website/common/script/ops/buy/buyQuest.js
-index 92e5e92dc..cad76239d 100644
+index c9fb3985f..ff9f540b0 100644
 --- a/website/common/script/ops/buy/buyQuest.js
 +++ b/website/common/script/ops/buy/buyQuest.js
 @@ -10,8 +10,8 @@ import {AbstractGoldItemOperation} from './abstractBuyOperation';

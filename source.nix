@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.80.6";
+  version = "4.81.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0af827r59cz4zpcq7ayl433y1jb09xciksxsdz1c17pjs0xcrb17";
+    sha256 = "0781lyz0x6adqks0900pgcd6bk48k7icw6bss28vqmp05zp8xhkf";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -193,6 +193,9 @@ stdenv.mkDerivation rec {
     # Don't expect migrations to return a Promise so that older migration
     # scripts work.
     patches/revert-migration-runner-promise.patch
+
+    # Removes the SKIP_SSL_CHECK_KEY option and its implementation.
+    patches/remove-ssl-redirect-skip.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

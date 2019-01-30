@@ -1,0 +1,109 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Jan 30 04:54:38 2019 +0100
+
+    Remove logic and config to skip SSL redirects
+    
+    The upstream project uses a secret key for their load balancer to avoid
+    redirects to HTTPS. In our case we really don't need this feature, so
+    let's remove the implementation.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: remove-ssl-redirect-skip.patch
+
+diff --git a/config.json.example b/config.json.example
+index 9304398bd..a57e372c9 100644
+--- a/config.json.example
++++ b/config.json.example
+@@ -15,6 +15,5 @@
+   "PATH": "bin:node_modules/.bin:/usr/local/bin:/usr/bin:/bin",
+   "PORT": 3000,
+   "TEST_DB_URI": "mongodb://localhost/habitrpg_test",
+-  "WEB_CONCURRENCY": 1,
+-  "SKIP_SSL_CHECK_KEY": "key"
++  "WEB_CONCURRENCY": 1
+ }
+diff --git a/test/api/unit/middlewares/redirects.js b/test/api/unit/middlewares/redirects.js
+index fdbff0d87..d93ed5345 100644
+--- a/test/api/unit/middlewares/redirects.js
++++ b/test/api/unit/middlewares/redirects.js
+@@ -73,56 +73,6 @@ describe('redirects middleware', () => {
+ 
+       expect(res.redirect).to.have.not.been.called;
+     });
+-
+-    it('does not redirect if passed skip ssl request param is passed with corrrect key', () => {
+-      let nconfStub = sandbox.stub(nconf, 'get');
+-      nconfStub.withArgs('BASE_URL').returns('https://habitica.com');
+-      nconfStub.withArgs('IS_PROD').returns(true);
+-      nconfStub.withArgs('SKIP_SSL_CHECK_KEY').returns('test-key');
+-
+-      req.header = sandbox.stub().withArgs('x-forwarded-proto').returns('http');
+-      req.originalUrl = '/static/front';
+-      req.query.skipSSLCheck = 'test-key';
+-
+-      const attachRedirects = requireAgain(pathToRedirectsMiddleware);
+-      attachRedirects.forceSSL(req, res, next);
+-
+-      expect(res.redirect).to.have.not.been.called;
+-    });
+-
+-    it('does redirect if skip ssl request param is passed with incorrrect key', () => {
+-      let nconfStub = sandbox.stub(nconf, 'get');
+-      nconfStub.withArgs('BASE_URL').returns('https://habitica.com');
+-      nconfStub.withArgs('IS_PROD').returns(true);
+-      nconfStub.withArgs('SKIP_SSL_CHECK_KEY').returns('test-key');
+-
+-      req.header = sandbox.stub().withArgs('x-forwarded-proto').returns('http');
+-      req.originalUrl = '/static/front?skipSSLCheck=INVALID';
+-      req.query.skipSSLCheck = 'INVALID';
+-
+-      const attachRedirects = requireAgain(pathToRedirectsMiddleware);
+-      attachRedirects.forceSSL(req, res, next);
+-
+-      expect(res.redirect).to.be.calledOnce;
+-      expect(res.redirect).to.be.calledWith('https://habitica.com/static/front?skipSSLCheck=INVALID');
+-    });
+-
+-    it('does redirect if skip ssl check key is not set', () => {
+-      let nconfStub = sandbox.stub(nconf, 'get');
+-      nconfStub.withArgs('BASE_URL').returns('https://habitica.com');
+-      nconfStub.withArgs('IS_PROD').returns(true);
+-      nconfStub.withArgs('SKIP_SSL_CHECK_KEY').returns(null);
+-
+-      req.header = sandbox.stub().withArgs('x-forwarded-proto').returns('http');
+-      req.originalUrl = '/static/front';
+-      req.query.skipSSLCheck = 'INVALID';
+-
+-      const attachRedirects = requireAgain(pathToRedirectsMiddleware);
+-      attachRedirects.forceSSL(req, res, next);
+-
+-      expect(res.redirect).to.be.calledOnce;
+-      expect(res.redirect).to.be.calledWith('https://habitica.com/static/front');
+-    });
+   });
+ 
+   context('forceHabitica', () => {
+diff --git a/website/server/middlewares/redirects.js b/website/server/middlewares/redirects.js
+index 587474378..a7c2a2a56 100644
+--- a/website/server/middlewares/redirects.js
++++ b/website/server/middlewares/redirects.js
+@@ -4,9 +4,6 @@ import url from 'url';
+ const IS_PROD = nconf.get('IS_PROD');
+ const IGNORE_REDIRECT = nconf.get('IGNORE_REDIRECT') === 'true';
+ const BASE_URL = nconf.get('BASE_URL');
+-// A secret key that if passed as req.query.skipSSLCheck allows to skip
+-// the redirects to SSL, used for health checks from the load balancer
+-const SKIP_SSL_CHECK_KEY = nconf.get('SKIP_SSL_CHECK_KEY');
+ 
+ const BASE_URL_HOST = url.parse(BASE_URL).hostname;
+ 
+@@ -20,8 +17,7 @@ function isHTTP (req) {
+ }
+ 
+ export function forceSSL (req, res, next) {
+-  const skipSSLCheck = req.query.skipSSLCheck;
+-  if (isHTTP(req) && (!SKIP_SSL_CHECK_KEY || !skipSSLCheck || skipSSLCheck !== SKIP_SSL_CHECK_KEY)) {
++  if (isHTTP(req)) {
+     return res.redirect(BASE_URL + req.originalUrl);
+   }
+ 
