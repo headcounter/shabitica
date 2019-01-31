@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.81.0";
+  version = "4.81.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0781lyz0x6adqks0900pgcd6bk48k7icw6bss28vqmp05zp8xhkf";
+    sha256 = "0qzzj9alazxdcz1x2ny0iq7gqblf9kp46nxxf5xd31hbazn7d9cv";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -196,9 +196,6 @@ stdenv.mkDerivation rec {
 
     # Removes the SKIP_SSL_CHECK_KEY option and its implementation.
     patches/remove-ssl-redirect-skip.patch
-
-    # Fix a small typo made when adding the new Mystery items in v4.81.0.
-    patches/fix-mystery-items-201901.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
