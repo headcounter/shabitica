@@ -169,6 +169,21 @@ in runInMachine {
 
       bar.tasks[challenge_bar_habit_id].score['up'].post()
 
+      # Date is 2018-01-03, warp to 2019-01-20 (382 days) because the birthday
+      # gear will only be awarded when the user has logged in or has been
+      # created after 2019-01-15.
+      timewarp(33004800)
+
+      newuser_birthday2019 = first.user.auth.local.register.post(
+        username='birthday2019',
+        email='birthday2019@example.org',
+        password='snakeoil',
+        confirmPassword='snakeoil',
+      )
+
+      loggedin = newuser_birthday2019['auth']['timestamps']['loggedin']
+      assert loggedin.startswith('2019-01-20')
+
       with open('spec.json', 'w') as fp:
         json.dump({
           'foo': {
@@ -183,6 +198,10 @@ in runInMachine {
             'apiUser': newuser_bar['id'],
             'apiToken': newuser_bar['apiToken'],
             'challengeUserHabitId': challenge_bar_habit_id,
+          },
+          'birthday2019': {
+            'apiUser': newuser_birthday2019['id'],
+            'apiToken': newuser_birthday2019['apiToken'],
           }
         }, fp)
     '';

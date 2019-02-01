@@ -69,4 +69,31 @@
       assertNotIn('messages', user_record['inbox'])
     '';
   }
+  { file = "archive/2019/20190131_habit_birthday.js";
+    testScript = ''
+      spec = getuser('birthday2019')
+      user = spec.api.user.get()
+
+      assertIn('items', user)
+      assertIn('gear', user['items'])
+      assertIn('owned', user['items']['gear'])
+      assertIn('armor_special_birthday', user['items']['gear']['owned'])
+      assertFalse(user['items']['gear']['owned']['armor_special_birthday'])
+
+      assertIn('achievements', user)
+      assertIn('habitBirthdays', user['achievements'])
+      assertEqual(user['achievements']['habitBirthdays'], 1)
+
+      spec = getuser('foo')
+      user = spec.api.user.get()
+
+      assertIn('items', user)
+      assertIn('gear', user['items'])
+      assertIn('owned', user['items']['gear'])
+      assertNotIn('armor_special_birthday', user['items']['gear']['owned'])
+
+      assertIn('achievements', user)
+      assertNotIn('habitBirthdays', user['achievements'])
+    '';
+  }
 ]

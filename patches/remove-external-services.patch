@@ -2330,11 +2330,11 @@ index d1631fb27..ceb0cb7d2 100644
  
      it('buys a mount', () => {
 diff --git a/test/common/ops/buy/purchase.js b/test/common/ops/buy/purchase.js
-index fd1ab65b4..055a92598 100644
+index 65368bcba..7e1bf5960 100644
 --- a/test/common/ops/buy/purchase.js
 +++ b/test/common/ops/buy/purchase.js
 @@ -16,19 +16,16 @@ describe('shared.ops.purchase', () => {
-   const SEASONAL_FOOD = 'Meat';
+   const SEASONAL_FOOD = 'Cake_Base';
    let user;
    let goldPoints = 40;
 -  let analytics = {track () {}};
