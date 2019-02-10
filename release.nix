@@ -41,9 +41,12 @@ let
         </book>
         XML
 
-        xsltproc -o options-db.xml \
+        xsltproc -o intermediate.xml \
           "${nixpkgs}/nixos/doc/manual/options-to-docbook.xsl" \
           ${lib.escapeShellArg optsFile}
+        xsltproc -o options-db.xml \
+          "${nixpkgs}/nixos/doc/manual/postprocess-option-descriptions.xsl" \
+          intermediate.xml
 
         xsltproc -o "$dest/index.html" -nonet -xinclude \
           --param section.autolabel 1 \
