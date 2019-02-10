@@ -53,14 +53,14 @@ index a3d1ed487..fb5ea84c5 100644
    "WEB_CONCURRENCY": 1,
    "SKIP_SSL_CHECK_KEY": "key"
 diff --git a/package.json b/package.json
-index 639175206..a67628061 100644
+index 3be1195d2..925ec6872 100644
 --- a/package.json
 +++ b/package.json
 @@ -59,7 +59,6 @@
      "morgan": "^1.7.0",
      "nconf": "^0.10.0",
      "node-sass": "^4.9.0",
--    "nodemailer": "^4.6.4",
+-    "nodemailer": "^5.0.0",
      "ora": "^3.0.0",
      "pageres": "^4.1.1",
      "passport": "^0.4.0",

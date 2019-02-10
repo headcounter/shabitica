@@ -13,7 +13,7 @@ Date:   Sun Aug 19 06:56:32 2018 +0200
     Filename: profile-photo-imageproxy.patch
 
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 019c369cb..c3c5fa668 100644
+index 9ab91c2c3..052cbe7fa 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -56,7 +56,7 @@ div
@@ -25,7 +25,7 @@ index 019c369cb..c3c5fa668 100644
              p(v-else) {{ $t('noPhoto') }}
  
          .col-12.col-md-4
-@@ -392,6 +392,17 @@ export default {
+@@ -393,6 +393,17 @@ export default {
      costumeItems () {
        return this.user.items.gear.costume;
      },

@@ -2330,11 +2330,11 @@ index d1631fb27..ceb0cb7d2 100644
  
      it('buys a mount', () => {
 diff --git a/test/common/ops/buy/purchase.js b/test/common/ops/buy/purchase.js
-index 65368bcba..7e1bf5960 100644
+index fd1ab65b4..055a92598 100644
 --- a/test/common/ops/buy/purchase.js
 +++ b/test/common/ops/buy/purchase.js
 @@ -16,19 +16,16 @@ describe('shared.ops.purchase', () => {
-   const SEASONAL_FOOD = 'Cake_Base';
+   const SEASONAL_FOOD = 'Meat';
    let user;
    let goldPoints = 40;
 -  let analytics = {track () {}};
@@ -2427,7 +2427,7 @@ index 7b8908467..1609e9296 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 1818dd8f1..2c2c61d11 100644
+index 0ed4b662e..7c78fef8f 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,8 +10,6 @@ div
@@ -2525,9 +2525,9 @@ index 1818dd8f1..2c2c61d11 100644
      itemSelected (item) {
        this.selectedItemToBuy = item;
      },
-@@ -650,4 +618,3 @@ export default {
- <style src="assets/css/sprites/spritesmith-main-22.css"></style>
+@@ -651,4 +619,3 @@ export default {
  <style src="assets/css/sprites/spritesmith-main-23.css"></style>
+ <style src="assets/css/sprites/spritesmith-main-24.css"></style>
  <style src="assets/css/sprites.css"></style>
 -<style src="smartbanner.js/dist/smartbanner.min.css"></style>
 diff --git a/website/client/components/achievements/achievementFooter.vue b/website/client/components/achievements/achievementFooter.vue
@@ -3901,7 +3901,7 @@ index 16a03ed68..a43d30132 100644
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
        const crit = tmp.crit;
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 9d4c61544..57aa2ce6d 100644
+index fdf91a606..8e20496e4 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -76,14 +76,12 @@ div
@@ -3935,7 +3935,7 @@ index 9d4c61544..57aa2ce6d 100644
  
          .col-12.text-center
            button.btn.btn-primary(@click='save()') {{ $t("save") }}
-@@ -317,7 +306,6 @@ import { mapState } from 'client/libs/store';
+@@ -318,7 +307,6 @@ import { mapState } from 'client/libs/store';
  import cloneDeep from 'lodash/cloneDeep';
  
  import MemberDetails from '../memberDetails';
@@ -3943,7 +3943,7 @@ index 9d4c61544..57aa2ce6d 100644
  import markdown from 'client/directives/markdown';
  import achievementsLib from '../../../common/script/libs/achievements';
  // @TODO: EMAILS.COMMUNITY_MANAGER_EMAIL
-@@ -342,7 +330,6 @@ export default {
+@@ -343,7 +331,6 @@ export default {
      markdown,
    },
    components: {
@@ -5226,7 +5226,7 @@ index 37d7f7e45..2cec2e623 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 6405eb59a..61818c6e9 100644
+index 37f9cac92..b1ae86622 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -202,16 +202,6 @@ api.createChallenge = {

@@ -90,7 +90,7 @@ index 08bb0a384..d38eca6d3 100644
              router-link(to="/groups/guild/f2db2a7f-13c5-454d-b3ee-ea1f5089e601") {{ $t('lookingForGroup') }}
            li
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 57aa2ce6d..019c369cb 100644
+index 8e20496e4..9ab91c2c3 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -80,8 +80,6 @@ div

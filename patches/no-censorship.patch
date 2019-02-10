@@ -461,7 +461,7 @@ index c17b789a4..041a41820 100644
  
      it('errors if username has incorrect length', async () => {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 2c2c61d11..97f484ce5 100644
+index 7c78fef8f..a22383649 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
