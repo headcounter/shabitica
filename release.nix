@@ -18,6 +18,7 @@ let
       filtered = filterDoc (lib.optionAttrSetToDocList modules.options);
       optsXML = builtins.unsafeDiscardStringContext (builtins.toXML filtered);
       optsFile = builtins.toFile "options.xml" optsXML;
+      nixosVersion = builtins.readFile "${nixpkgs}/.version";
 
     in pkgs.stdenv.mkDerivation {
       name = "shabitica-options-manual";
@@ -41,12 +42,19 @@ let
         </book>
         XML
 
-        xsltproc -o intermediate.xml \
-          "${nixpkgs}/nixos/doc/manual/options-to-docbook.xsl" \
-          ${lib.escapeShellArg optsFile}
-        xsltproc -o options-db.xml \
-          "${nixpkgs}/nixos/doc/manual/postprocess-option-descriptions.xsl" \
-          intermediate.xml
+        # XXX: NixOS 18.03 compatibility
+        ${if lib.versionOlder nixosVersion "18.09" then ''
+          xsltproc -o options-db.xml \
+            "${nixpkgs}/nixos/doc/manual/options-to-docbook.xsl" \
+            ${lib.escapeShellArg optsFile}
+        '' else ''
+          xsltproc -o intermediate.xml \
+            "${nixpkgs}/nixos/doc/manual/options-to-docbook.xsl" \
+            ${lib.escapeShellArg optsFile}
+          xsltproc -o options-db.xml \
+            "${nixpkgs}/nixos/doc/manual/postprocess-option-descriptions.xsl" \
+            intermediate.xml
+        ''}
 
         xsltproc -o "$dest/index.html" -nonet -xinclude \
           --param section.autolabel 1 \
