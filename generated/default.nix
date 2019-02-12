@@ -27,7 +27,7 @@ in {
     "expect.js" = nodePackages."expect.js-^0.3.1";
     "http-proxy-middleware" = nodePackages."http-proxy-middleware-^0.19.0";
     istanbul = nodePackages."istanbul-^1.1.0-alpha.1";
-    karma = nodePackages."karma-^3.0.0";
+    karma = nodePackages."karma-^3.1.3";
     "karma-babel-preprocessor" = nodePackages."karma-babel-preprocessor-^7.0.0";
     "karma-chai-plugins" = nodePackages."karma-chai-plugins-^0.9.0";
     "karma-chrome-launcher" = nodePackages."karma-chrome-launcher-^2.2.0";
