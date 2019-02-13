@@ -25,6 +25,29 @@
     '';
   };
 
+  # Get rid of the annoying deprecation warning of moment().zone, which is
+  # spilled out everywhere.
+  #
+  # Upstream issue: https://github.com/HabitRPG/habitica/issues/10209
+  main.moment = drv: {
+    preRebuild = (drv.preRebuild or "") + ''
+      sed -i -e '/proto\.zone.*moment()\.zone is deprecated/ {
+        s/deprecate *( *'\'''[^'\''']\+'\''' *, *\([^)]\+\) *) *;/\1/
+      }' moment.js src/lib/moment/prototype.js min/moment-with-locales.js
+    '';
+  };
+
+  # Same here, but we need to apply the same changes again :-/
+  main.moment-recur = drv: {
+    preRebuild = (drv.preRebuild or "") + ''
+      sed -i -e '/proto\.zone.*moment()\.zone is deprecated/ {
+        s/deprecate *( *'\'''[^'\''']\+'\''' *, *\([^)]\+\) *) *;/\1/
+      }' node_modules/moment/moment.js \
+         node_modules/moment/src/lib/moment/prototype.js \
+         node_modules/moment/min/moment-with-locales.js
+    '';
+  };
+
   main.node-sass = drv: let
     # Thin is needed to be backwards-compatible with NixOS stable.
     newerSass = libsass.overrideAttrs (drv: rec {
