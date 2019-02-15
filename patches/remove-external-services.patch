@@ -1924,7 +1924,7 @@ index 478a2cae8..f743f02c6 100644
  
    it('adds equipment to inventory', () => {
 diff --git a/test/common/ops/buy/buyArmoire.js b/test/common/ops/buy/buyArmoire.js
-index b711bc342..aa4ddd17d 100644
+index 3c5858502..aa4ddd17d 100644
 --- a/test/common/ops/buy/buyArmoire.js
 +++ b/test/common/ops/buy/buyArmoire.js
 @@ -31,10 +31,9 @@ describe('shared.ops.buyArmoire', () => {
@@ -1966,7 +1966,7 @@ index b711bc342..aa4ddd17d 100644
  
        expect(armoireCount).to.eql(_.size(getFullArmoire()) - 2);
        expect(user.stats.gp).to.eql(100);
--      expect(analytics.track).to.be.calledOnce;
+-      expect(analytics.track).to.be.calledTwice;
      });
    });
  });
@@ -2722,7 +2722,7 @@ index de65914ea..ab38d5546 100644
      close () {
        this.$root.$emit('bv::hide::modal', 'won-challenge');
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index bd821ce71..2c445efc5 100644
+index 0859dc691..5478044a8 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -4,11 +4,6 @@
@@ -2747,7 +2747,7 @@ index bd821ce71..2c445efc5 100644
              a(href='https://www.reddit.com/r/habitrpg/', target='_blank') {{ $t('communityReddit') }}
        .col-12.col-md-6
 @@ -58,14 +51,6 @@
-                 a(href='http://habitica.wikia.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
+                 a(href='http://habitica.fandom.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
                li
                  a(href='http://devs.habitica.com/', target='_blank') {{ $t('devBlog') }}
 -          .col-6.social
@@ -3256,10 +3256,18 @@ index 9d13f2d0b..97d18ff8f 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index ed0fe4986..ac7c28a91 100644
+index 67dcb5a82..4a18ded63 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -334,7 +334,6 @@ div
+@@ -3,7 +3,6 @@ div
+   inbox-modal
+   creator-intro
+   profileModal
+-  send-gems-modal
+   b-navbar.topbar.navbar-inverse.static-top.navbar-expand-lg(type="dark", :class="navbarZIndexClass")
+     b-navbar-brand.brand
+       .logo.svg-icon.d-none.d-xl-block(v-html="icons.logo")
+@@ -335,7 +334,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -3267,7 +3275,23 @@ index ed0fe4986..ac7c28a91 100644
  import { goToModForm } from 'client/libs/modform';
  
  import gemIcon from 'assets/svg/gem.svg';
-@@ -412,14 +411,6 @@ export default {
+@@ -348,7 +346,6 @@ import creatorIntro from '../creatorIntro';
+ import InboxModal from '../userMenu/inbox.vue';
+ import notificationMenu from './notificationsDropdown';
+ import profileModal from '../userMenu/profileModal';
+-import sendGemsModal from 'client/components/payments/sendGemsModal';
+ import userDropdown from './userDropdown';
+ 
+ export default {
+@@ -357,7 +354,6 @@ export default {
+     InboxModal,
+     notificationMenu,
+     profileModal,
+-    sendGemsModal,
+     userDropdown,
+   },
+   data () {
+@@ -415,14 +411,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -3283,7 +3307,7 @@ index ed0fe4986..ac7c28a91 100644
      },
  
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
-index eaf7038f2..c3912943e 100644
+index 1c134fcbf..e4fcd3ef4 100644
 --- a/website/client/components/header/userDropdown.vue
 +++ b/website/client/components/header/userDropdown.vue
 @@ -67,7 +67,6 @@ menu-dropdown.item-user(:right="true")
@@ -3294,7 +3318,7 @@ index eaf7038f2..c3912943e 100644
  import userIcon from 'assets/svg/user.svg';
  import MenuDropdown from '../ui/customMenuDropdown';
  import axios from 'axios';
-@@ -109,14 +108,6 @@ export default {
+@@ -106,14 +105,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -3359,7 +3383,7 @@ index 2b4966a8c..c12e72f9c 100644
  </template>
  
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index e50c72dda..4ad6cd158 100644
+index 533de1ba1..caa61badc 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -109,12 +109,6 @@
@@ -3901,56 +3925,40 @@ index 16a03ed68..a43d30132 100644
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
        const crit = tmp.crit;
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index fdf91a606..8e20496e4 100644
+index cf544bfbd..ec6963874 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
-@@ -76,14 +76,12 @@ div
-               .progress
-                 .progress-bar(role='progressbar', :aria-valuenow='incentivesProgress', aria-valuemin='0', aria-valuemax='100', :style='{width: incentivesProgress + "%"}')
-                   span.sr-only {{ incentivesProgress }}% {{$t('complete')}}
--          // @TODO: Implement in V2 .social
+@@ -72,14 +72,12 @@
+             .progress
+               .progress-bar(role='progressbar', :aria-valuenow='incentivesProgress', aria-valuemin='0', aria-valuemax='100', :style='{width: incentivesProgress + "%"}')
+                 span.sr-only {{ incentivesProgress }}% {{$t('complete')}}
+-        // @TODO: Implement in V2 .social
  
-       .row(v-if='editing')
-         h1 {{$t('editProfile')}}
-         .col-12
-           .alert.alert-info.alert-sm(v-html='$t("communityGuidelinesWarning", managerEmail)')
+     .row(v-if='editing')
+       h1 {{$t('editProfile')}}
+       .col-12
+         .alert.alert-info.alert-sm(v-html='$t("communityGuidelinesWarning", managerEmail)')
  
--          // TODO use photo-upload instead: https://groups.google.com/forum/?fromgroups=#!topic/derbyjs/xMmADvxBOak
-           .form-group
-             label {{ $t('displayName') }}
-             input.form-control(type='text', :placeholder="$t('fullName')", v-model='editingProfile.name')
-@@ -94,15 +92,6 @@ div
-             label {{ $t('about') }}
-             textarea.form-control(rows=5, :placeholder="$t('displayBlurbPlaceholder')", v-model='editingProfile.blurb')
-             // include ../../shared/formatting-help
--          //- .form-group
--          //-   label Facebook
--          //-   input.form-control(type='text', placeholder="Paste your link here", v-model='editingProfile.facebook')
--          //- .form-group
--          //-   label Instagram
--          //-   input.form-control(type='text', placeholder="Paste your link here", v-model='editingProfile.instagram')
--          //- .form-group
--          //-   label Twitter
--          //-   input.form-control(type='text', placeholder="Paste your link here", v-model='editingProfile.twitter')
+-        // TODO use photo-upload instead: https://groups.google.com/forum/?fromgroups=#!topic/derbyjs/xMmADvxBOak
+         .form-group
+           label {{ $t('displayName') }}
+           input.form-control(type='text', :placeholder="$t('fullName')", v-model='editingProfile.name')
+@@ -90,15 +88,6 @@
+           label {{ $t('about') }}
+           textarea.form-control(rows=5, :placeholder="$t('displayBlurbPlaceholder')", v-model='editingProfile.blurb')
+           // include ../../shared/formatting-help
+-        //- .form-group
+-        //-   label Facebook
+-        //-   input.form-control(type='text', placeholder="Paste your link here", v-model='editingProfile.facebook')
+-        //- .form-group
+-        //-   label Instagram
+-        //-   input.form-control(type='text', placeholder="Paste your link here", v-model='editingProfile.instagram')
+-        //- .form-group
+-        //-   label Twitter
+-        //-   input.form-control(type='text', placeholder="Paste your link here", v-model='editingProfile.twitter')
  
-         .col-12.text-center
-           button.btn.btn-primary(@click='save()') {{ $t("save") }}
-@@ -318,7 +307,6 @@ import { mapState } from 'client/libs/store';
- import cloneDeep from 'lodash/cloneDeep';
- 
- import MemberDetails from '../memberDetails';
--import sendGemsModal from 'client/components/payments/sendGemsModal';
- import markdown from 'client/directives/markdown';
- import achievementsLib from '../../../common/script/libs/achievements';
- // @TODO: EMAILS.COMMUNITY_MANAGER_EMAIL
-@@ -343,7 +331,6 @@ export default {
-     markdown,
-   },
-   components: {
--    sendGemsModal,
-     MemberDetails,
-     profileStats,
-   },
+       .col-12.text-center
+         button.btn.btn-primary(@click='save()') {{ $t("save") }}
 diff --git a/website/client/index.html b/website/client/index.html
 index 32ecee0b0..096b62dc2 100644
 --- a/website/client/index.html
@@ -4069,7 +4077,7 @@ index 4dd3d9be8..d213fb545 100644
      },
    },
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index 2052ded75..1e798dba5 100644
+index 167232732..05663006b 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -1,8 +1,6 @@
@@ -4081,7 +4089,7 @@ index 2052ded75..1e798dba5 100644
  
  import ParentPage from 'client/components/parentPage';
  
-@@ -277,9 +275,6 @@ const router = new VueRouter({
+@@ -286,9 +284,6 @@ const router = new VueRouter({
          { name: 'contributors', path: 'contributors', component: HeroesPage },
        ],
      },
@@ -4091,7 +4099,7 @@ index 2052ded75..1e798dba5 100644
      { path: '*', redirect: { name: 'notFound' } },
    ],
  });
-@@ -290,8 +285,6 @@ router.beforeEach(function routerGuard (to, from, next) {
+@@ -299,8 +294,6 @@ router.beforeEach(function routerGuard (to, from, next) {
    const isUserLoggedIn = store.state.isUserLoggedIn;
    const routeRequiresLogin = to.meta.requiresLogin !== false;
  
@@ -4100,7 +4108,7 @@ index 2052ded75..1e798dba5 100644
    if (!isUserLoggedIn && routeRequiresLogin) {
      // Redirect to the login page unless the user is trying to reach the
      // root of the website, in which case show the home page.
-@@ -347,13 +340,6 @@ router.beforeEach(function routerGuard (to, from, next) {
+@@ -356,13 +349,6 @@ router.beforeEach(function routerGuard (to, from, next) {
      });
    }
  
@@ -4110,6 +4118,14 @@ index 2052ded75..1e798dba5 100644
 -    eventAction: 'navigate',
 -    page: to.name || to.path,
 -  });
+-
+   if ((to.name === 'userProfile' || to.name === 'userProfilePage') && from.name !== null) {
+     let startingPage = 'profile';
+     if (to.params.startingPage !== undefined) {
+@@ -387,7 +373,6 @@ router.beforeEach(function routerGuard (to, from, next) {
+   if (from.name === 'userProfile' || from.name === 'userProfilePage' || from.name === 'stats' || from.name === 'achievements' || from.name === 'profile') {
+     router.app.$root.$emit('bv::hide::modal', 'profile');
+   }
 -
    next();
  });
@@ -4595,7 +4611,7 @@ index 13a995060..7d86911f1 100644
        buyRes = buyOp.purchase();
        break;
 diff --git a/website/common/script/ops/buy/buyArmoire.js b/website/common/script/ops/buy/buyArmoire.js
-index 82c7868e3..c3a6051f0 100644
+index 641681584..c3a6051f0 100644
 --- a/website/common/script/ops/buy/buyArmoire.js
 +++ b/website/common/script/ops/buy/buyArmoire.js
 @@ -18,8 +18,8 @@ const YIELD_EQUIPMENT_THRESHOLD = 0.6;
@@ -4609,6 +4625,48 @@ index 82c7868e3..c3a6051f0 100644
    }
  
    multiplePurchaseAllowed () {
+@@ -68,19 +68,6 @@ export class BuyArmoireOperation extends AbstractGoldItemOperation {
+     ];
+   }
+ 
+-  _trackDropAnalytics (userId, key) {
+-    this.analytics.track(
+-      'dropped item',
+-      {
+-        uuid: userId,
+-        itemKey: key,
+-        acquireMethod: 'Armoire',
+-        category: 'behavior',
+-        headers: this.req.headers,
+-      },
+-    );
+-  }
+-
+   _gearResult (user, eligibleEquipment) {
+     eligibleEquipment.sort();
+     let drop = randomVal(eligibleEquipment);
+@@ -102,10 +89,6 @@ export class BuyArmoireOperation extends AbstractGoldItemOperation {
+ 
+     removeItemByPath(user, `gear.flat.${drop.key}`);
+ 
+-    if (this.analytics) {
+-      this._trackDropAnalytics(user._id, drop.key);
+-    }
+-
+     let armoireResp = {
+       type: 'gear',
+       dropKey: drop.key,
+@@ -126,10 +109,6 @@ export class BuyArmoireOperation extends AbstractGoldItemOperation {
+     user.items.food[drop.key] = user.items.food[drop.key] || 0;
+     user.items.food[drop.key] += 1;
+ 
+-    if (this.analytics) {
+-      this._trackDropAnalytics(user._id, drop.key);
+-    }
+-
+     return {
+       message: this.i18n('armoireFood', {
+         image: `<span class="Pet_Food_${drop.key} pull-left"></span>`,
 diff --git a/website/common/script/ops/buy/buyGem.js b/website/common/script/ops/buy/buyGem.js
 index b2ea03046..81fa5be9d 100644
 --- a/website/common/script/ops/buy/buyGem.js

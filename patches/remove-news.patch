@@ -107,7 +107,7 @@ index 8cf7e722e..ab4042907 100644
          return this.showDeathModal();
        }
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index 4ad6cd158..d135f67f5 100644
+index caa61badc..e36daa819 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -76,7 +76,6 @@
@@ -161,7 +161,7 @@ index e5dd03e02..a878ec5b7 100644
        if (this.$route.name === 'plans') return;
        return 'purple-footer';
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index fe9379e64..70e3880e1 100644
+index 983ff4e29..db9fbc0fa 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -12,7 +12,6 @@ const AppPage = () => import(/* webpackChunkName: "static" */'client/components/
@@ -172,7 +172,7 @@ index fe9379e64..70e3880e1 100644
  const OverviewPage = () => import(/* webpackChunkName: "static" */'client/components/static/overview');
  const PrivacyPage = () => import(/* webpackChunkName: "static" */'client/components/static/privacy');
  const TermsPage = () => import(/* webpackChunkName: "static" */'client/components/static/terms');
-@@ -230,7 +229,6 @@ const router = new VueRouter({
+@@ -239,7 +238,6 @@ const router = new VueRouter({
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
          { name: 'home', path: 'home', component: HomePage, meta: {requiresLogin: false} },
          { name: 'front', path: 'front', component: HomePage, meta: {requiresLogin: false} },

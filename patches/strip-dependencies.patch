@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:02 2018 +0200
     Filename: strip-dependencies.patch
 
 diff --git a/package.json b/package.json
-index 802fd7e2d..b19f06f30 100644
+index ce7f2005f..9d85afdb5 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,15 +4,9 @@
-   "version": "4.84.0",
+   "version": "4.84.3",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@slack/client": "^3.8.1",
@@ -25,7 +25,7 @@ index 802fd7e2d..b19f06f30 100644
      "apidoc": "^0.17.5",
 -    "apn": "^2.2.0",
      "autoprefixer": "^8.5.0",
--    "aws-sdk": "^2.329.0",
+-    "aws-sdk": "^2.400.0",
      "axios": "^0.18.0",
      "axios-progress-bar": "^1.2.0",
      "babel-core": "^6.26.3",
@@ -41,7 +41,7 @@ index 802fd7e2d..b19f06f30 100644
      "jquery": ">=3.0.0",
      "js2xmlparser": "^3.0.0",
 @@ -66,16 +58,11 @@
-     "mongoose": "^5.3.4",
+     "mongoose": "^5.4.11",
      "morgan": "^1.7.0",
      "nconf": "^0.10.0",
 -    "node-gcm": "^1.0.2",

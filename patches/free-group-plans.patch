@@ -549,7 +549,7 @@ index ad645020b..ba98990c2 100644
      },
    },
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index 1e798dba5..76c6fd2f9 100644
+index 05663006b..0a760836f 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -70,7 +70,6 @@ const GroupPlansAppPage = () => import(/* webpackChunkName: "guilds" */ 'client/
@@ -560,7 +560,7 @@ index 1e798dba5..76c6fd2f9 100644
  
  // Challenges
  const ChallengeIndex = () => import(/* webpackChunkName: "challenges" */ 'client/components/challenges/index');
-@@ -144,12 +143,6 @@ const router = new VueRouter({
+@@ -153,12 +152,6 @@ const router = new VueRouter({
            component: GroupPage,
            props: true,
          },

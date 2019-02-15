@@ -11,10 +11,10 @@ Date:   Fri Mar 30 20:29:49 2018 +0200
     Filename: remove-community-guidelines.patch
 
 diff --git a/website/client/components/chat/chatCard.vue b/website/client/components/chat/chatCard.vue
-index edebbe831..15e34a663 100644
+index 362a839f7..529dfc6c7 100644
 --- a/website/client/components/chat/chatCard.vue
 +++ b/website/client/components/chat/chatCard.vue
-@@ -23,10 +23,9 @@ div
+@@ -16,10 +16,9 @@ div
        .action.d-flex.align-items-center(v-if='!inbox', @click='copyAsTodo(msg)')
          .svg-icon(v-html="icons.copy")
          div {{$t('copyAsTodo')}}
@@ -69,7 +69,7 @@ index fee391143..e0d7bf7eb 100644
        if (this.isParty) {
          this.searchId = 'party';
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 08bb0a384..d38eca6d3 100644
+index 3d040479d..83501d037 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -10,7 +10,6 @@
@@ -90,20 +90,20 @@ index 08bb0a384..d38eca6d3 100644
              router-link(to="/groups/guild/f2db2a7f-13c5-454d-b3ee-ea1f5089e601") {{ $t('lookingForGroup') }}
            li
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 8e20496e4..9ab91c2c3 100644
+index ec6963874..5a16e1fcf 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
-@@ -80,8 +80,6 @@ div
-       .row(v-if='editing')
-         h1 {{$t('editProfile')}}
-         .col-12
--          .alert.alert-info.alert-sm(v-html='$t("communityGuidelinesWarning", managerEmail)')
+@@ -76,8 +76,6 @@
+     .row(v-if='editing')
+       h1 {{$t('editProfile')}}
+       .col-12
+-        .alert.alert-info.alert-sm(v-html='$t("communityGuidelinesWarning", managerEmail)')
 -
-           .form-group
-             label {{ $t('displayName') }}
-             input.form-control(type='text', :placeholder="$t('fullName')", v-model='editingProfile.name')
+         .form-group
+           label {{ $t('displayName') }}
+           input.form-control(type='text', :placeholder="$t('fullName')", v-model='editingProfile.name')
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index c0f752678..9fbfa04e2 100644
+index cd97a355f..246d9214f 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -10,7 +10,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'client/components/
@@ -114,7 +114,7 @@ index c0f752678..9fbfa04e2 100644
  const FAQPage = () => import(/* webpackChunkName: "static" */'client/components/static/faq');
  const FeaturesPage = () => import(/* webpackChunkName: "static" */'client/components/static/features');
  const GroupPlansPage = () => import(/* webpackChunkName: "static" */'client/components/static/groupPlans');
-@@ -242,7 +241,6 @@ const router = new VueRouter({
+@@ -251,7 +250,6 @@ const router = new VueRouter({
        children: [
          { name: 'app', path: 'app', component: AppPage, meta: {requiresLogin: false}},
          { name: 'clearBrowserData', path: 'clear-browser-data', component: ClearBrowserDataPage, meta: {requiresLogin: false}},

@@ -9,7 +9,7 @@ Date:   Sat Apr 7 01:42:11 2018 +0200
     Filename: remove-unneeded-settings.patch
 
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
-index c3912943e..ea2bede8f 100644
+index e4fcd3ef4..dece73205 100644
 --- a/website/client/components/header/userDropdown.vue
 +++ b/website/client/components/header/userDropdown.vue
 @@ -16,14 +16,7 @@ menu-dropdown.item-user(:right="true")
@@ -41,7 +41,7 @@ index 68366e110..9f8b08f3f 100644
  
    .col-12
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index 1291dc910..fe9379e64 100644
+index 6f072043d..983ff4e29 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -30,9 +30,7 @@ const Settings = () => import(/* webpackChunkName: "settings" */'client/componen
@@ -54,7 +54,7 @@ index 1291dc910..fe9379e64 100644
  
  // Hall
  const HallPage = () => import(/* webpackChunkName: "hall" */'client/components/hall/index');
-@@ -213,16 +211,6 @@ const router = new VueRouter({
+@@ -222,16 +220,6 @@ const router = new VueRouter({
                path: 'data-export',
                component: DataExport,
              },

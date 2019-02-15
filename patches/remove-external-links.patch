@@ -20,7 +20,7 @@ Date:   Sat Mar 31 00:52:13 2018 +0200
     Filename: remove-external-links.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index d38eca6d3..569dacecb 100644
+index 83501d037..a9a59f9be 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -101,23 +101,13 @@
@@ -34,7 +34,7 @@ index d38eca6d3..569dacecb 100644
            li
              a(href='', v-html="$t('glossary')")
            li
-             a(href='http://habitica.wikia.com/wiki/Habitica_Wiki', v-once) {{ $t('wiki') }}
+             a(href='http://habitica.fandom.com/wiki/Habitica_Wiki', v-once) {{ $t('wiki') }}
            li
              a(href='https://oldgods.net/habitrpg/habitrpg_user_data_display.html', v-once) {{ $t('dataDisplayTool') }}
 -          li
@@ -49,22 +49,22 @@ index d38eca6d3..569dacecb 100644
        sidebar-section(:title="$t('playerTiers')")
          .row
 diff --git a/website/client/components/hall/heroes.vue b/website/client/components/hall/heroes.vue
-index 41835a69e..52ba496d3 100644
+index 391a03165..d445b65ef 100644
 --- a/website/client/components/hall/heroes.vue
 +++ b/website/client/components/hall/heroes.vue
 @@ -23,10 +23,6 @@
              label {{ $t('contribLevel') }}
              input.form-control(type='number', v-model='hero.contributor.level')
              small {{ $t('contribHallText') }}
--            |&nbsp;
--            a(target='_blank', href='https://trello.com/c/wkFzONhE/277-contributor-gear') {{ $t('moreDetails') }}
--            |,&nbsp;
--            a(target='_blank', href='https://github.com/HabitRPG/habitica/issues/3801') {{ $t('moreDetails2') }}
+-              |&nbsp;
+-              a(target='_blank', href='https://trello.com/c/wkFzONhE/277-contributor-gear') {{ $t('moreDetails') }}
+-              |,&nbsp;
+-              a(target='_blank', href='https://github.com/HabitRPG/habitica/issues/3801') {{ $t('moreDetails2') }}
            .form-group
              textarea.form-control(cols=5, :placeholder="$t('contributions')", v-model='hero.contributor.contributions')
              //include ../../shared/formattiv-help
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index b9eccf5c9..51b9bb64b 100644
+index 736c4eebc..39902b31b 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -51,9 +51,6 @@ div
@@ -74,8 +74,8 @@ index b9eccf5c9..51b9bb64b 100644
 -            router-link.topbar-dropdown-item.dropdown-item(to="/groups/guild/a29da26b-37de-4a71-b0c6-48e72a900dac") {{ $t('reportBug') }}
 -            router-link.topbar-dropdown-item.dropdown-item(to="/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a") {{ $t('askAQuestion') }}
 -            a.topbar-dropdown-item.dropdown-item(href="https://trello.com/c/odmhIqyW/440-read-first-table-of-contents", target='_blank') {{ $t('requestAF') }}
-             a.topbar-dropdown-item.dropdown-item(href="http://habitica.wikia.com/wiki/Contributing_to_Habitica", target='_blank') {{ $t('contributing') }}
-             a.topbar-dropdown-item.dropdown-item(href="http://habitica.wikia.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
+             a.topbar-dropdown-item.dropdown-item(href="http://habitica.fandom.com/wiki/Contributing_to_Habitica", target='_blank') {{ $t('contributing') }}
+             a.topbar-dropdown-item.dropdown-item(href="http://habitica.fandom.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
        .currency-tray.form-inline
 diff --git a/website/client/components/settings/api.vue b/website/client/components/settings/api.vue
 index 291c3640f..ccacd0f28 100644
@@ -110,7 +110,7 @@ index 291c3640f..ccacd0f28 100644
      h2 {{ $t('webhooks') }}
      p(v-html="$t('webhooksInfo')")
 diff --git a/website/client/components/static/faq.vue b/website/client/components/static/faq.vue
-index e2ce08aa0..5000dac10 100644
+index 7a8ca6792..5000dac10 100644
 --- a/website/client/components/static/faq.vue
 +++ b/website/client/components/static/faq.vue
 @@ -3,7 +3,7 @@
@@ -141,7 +141,7 @@ index e2ce08aa0..5000dac10 100644
 -        // linkStart: '[',
 -        // linkEnd: '](/groups/guild/5481ccf3-5d2d-48a9-a871-70a7380cee5a)',
 -        // },
--        // "webFaqStillNeedHelp": "If you have a question that isn't on this list or on the [Wiki FAQ](http://habitica.wikia.com/wiki/FAQ), come ask in the <%= linkStart %>Habitica Help guild<%= linkEnd %>! We're happy to help."
+-        // "webFaqStillNeedHelp": "If you have a question that isn't on this list or on the [Wiki FAQ](http://habitica.fandom.com/wiki/FAQ), come ask in the <%= linkStart %>Habitica Help guild<%= linkEnd %>! We're happy to help."
        };
      },
      methods: {

@@ -13,21 +13,21 @@ Date:   Sun Aug 19 06:56:32 2018 +0200
     Filename: profile-photo-imageproxy.patch
 
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 9ab91c2c3..052cbe7fa 100644
+index 5a16e1fcf..7a42165e0 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
-@@ -56,7 +56,7 @@ div
-             p(v-else) {{ $t('noDescription') }}
-           .photo
-             h2 {{ $t('photo') }}
--            img.img-rendering-auto(v-if='user.profile.imageUrl', :src='user.profile.imageUrl')
-+            img.img-rendering-auto(v-if='photoUrl', :src='photoUrl')
-             p(v-else) {{ $t('noPhoto') }}
+@@ -52,7 +52,7 @@
+           p(v-else) {{ $t('noDescription') }}
+         .photo.profile-section
+           h2 {{ $t('photo') }}
+-          img.img-rendering-auto(v-if='user.profile.imageUrl', :src='user.profile.imageUrl')
++          img.img-rendering-auto(v-if='photoUrl', :src='photoUrl')
+           p(v-else) {{ $t('noPhoto') }}
  
-         .col-12.col-md-4
-@@ -393,6 +393,17 @@ export default {
-     costumeItems () {
-       return this.user.items.gear.costume;
+       .col-12.col-md-4
+@@ -471,6 +471,17 @@ export default {
+     hasClass () {
+       return this.$store.getters['members:hasClass'](this.userLoggedIn);
      },
 +    photoUrl () {
 +      let photourl = this.user.profile.imageUrl;
@@ -40,6 +40,6 @@ index 9ab91c2c3..052cbe7fa 100644
 +
 +      return photourl;
 +    },
-     user () {
-       let user = this.userLoggedIn;
- 
+   },
+   mounted () {
+     this.loadUser();

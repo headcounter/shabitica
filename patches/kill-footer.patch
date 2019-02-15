@@ -13,7 +13,7 @@ Date:   Tue Mar 27 05:37:21 2018 +0200
     Filename: kill-footer.patch
 
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index 2c445efc5..5f372e11b 100644
+index 5478044a8..5f372e11b 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -2,97 +2,6 @@
@@ -34,7 +34,7 @@ index 2c445efc5..5f372e11b 100644
 -          li
 -           router-link(to='/static/faq') {{ $t('FAQ') }}
 -          li
--            a(href='http://habitica.wikia.com/wiki/Whats_New', target='_blank') {{ $t('oldNews') }}
+-            a(href='http://habitica.fandom.com/wiki/Whats_New', target='_blank') {{ $t('oldNews') }}
 -          li
 -           router-link(to='/static/merch') {{ $t('merch') }}
 -          li
@@ -66,7 +66,7 @@ index 2c445efc5..5f372e11b 100644
 -              li
 -                a(:href="getDataDisplayToolUrl", target='_blank') {{ $t('dataDisplayTool') }}
 -              li
--                a(href='http://habitica.wikia.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
+-                a(href='http://habitica.fandom.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
 -              li
 -                a(href='http://devs.habitica.com/', target='_blank') {{ $t('devBlog') }}
 -        .row
@@ -76,7 +76,7 @@ index 2c445efc5..5f372e11b 100644
 -              .svg-icon.heart(v-html="icons.heart")
 -              .text {{ $t('companyDonate') }}
 -            .btn.btn-contribute(v-else)
--              a(href='http://habitica.wikia.com/wiki/Contributing_to_Habitica', target='_blank')
+-              a(href='http://habitica.fandom.com/wiki/Contributing_to_Habitica', target='_blank')
 -                .svg-icon.heart(v-html="icons.heart")
 -                .text {{ $t('companyContribute') }}
 -    .row
