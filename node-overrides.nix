@@ -117,19 +117,18 @@
 
   main.gulp-imagemin = drv: {
     preRebuild = (drv.preRebuild or "") + ''
-      find -type f -exec sed -i -e '
-        /new BinWrapper()/,/\.use(.*jpegtran/ {
-          s!\.dest(.*)!.dest("'${libjpeg.bin}'/bin")!
+      find -type f -exec sed -i -e '/new BinWrapper()/ {
+        n
+        /jpegtran/ {
+          :l1; n; s!\.dest(.*)!.dest("'"${libjpeg.bin}"'/bin")!; Tl1
         }
-
-        /new BinWrapper()/,/\.use(.*optipng/ {
-          s!\.dest(.*)!.dest("'${optipng}'/bin")!
+        /optipng/ {
+          :l2; n; s!\.dest(.*)!.dest("'"${optipng}"'/bin")!; Tl2
         }
-
-        /new BinWrapper()/,/\.use(.*gifsicle/ {
-          s!\.dest(.*)!.dest("'${gifsicle}'/bin")!
+        /gifsicle/ {
+          :l3; n; s!\.dest(.*)!.dest("'"${gifsicle}"'/bin")!; Tl3
         }
-      ' {} +
+      }' {} +
     '';
   };
 
