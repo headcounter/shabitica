@@ -7,7 +7,7 @@ let
   nodePackages = import ./all-deps.nix { inherit pkgs system nodejs; };
 in {
   dev = {
-    "@vue/test-utils" = nodePackages."@vue/test-utils-^1.0.0-beta.19";
+    "@vue/test-utils" = nodePackages."@vue/test-utils-^1.0.0-beta.29";
     "babel-plugin-istanbul" = nodePackages."babel-plugin-istanbul-^4.1.6";
     "babel-plugin-syntax-object-rest-spread" = nodePackages."babel-plugin-syntax-object-rest-spread-^6.13.0";
     chai = nodePackages."chai-^4.1.2";
@@ -78,7 +78,7 @@ in {
     bcrypt = nodePackages."bcrypt-^3.0.1";
     "body-parser" = nodePackages."body-parser-^1.18.3";
     bootstrap = nodePackages."bootstrap-^4.1.1";
-    "bootstrap-vue" = nodePackages."bootstrap-vue-^2.0.0-rc.9";
+    "bootstrap-vue" = nodePackages."bootstrap-vue-^2.0.0-rc.13";
     compression = nodePackages."compression-^1.7.2";
     "cookie-session" = nodePackages."cookie-session-^1.2.0";
     "coupon-code" = nodePackages."coupon-code-^0.4.5";
@@ -109,7 +109,7 @@ in {
     "method-override" = nodePackages."method-override-^3.0.0";
     moment = nodePackages."moment-^2.22.1";
     "moment-recur" = nodePackages."moment-recur-^1.0.7";
-    mongoose = nodePackages."mongoose-^5.3.4";
+    mongoose = nodePackages."mongoose-^5.4.11";
     morgan = nodePackages."morgan-^1.7.0";
     nconf = nodePackages."nconf-^0.10.0";
     "node-sass" = nodePackages."node-sass-^4.9.0";
@@ -137,12 +137,12 @@ in {
     uuid = nodePackages."uuid-^3.0.1";
     validator = nodePackages."validator-^10.5.0";
     "vinyl-buffer" = nodePackages."vinyl-buffer-^1.0.1";
-    vue = nodePackages."vue-^2.5.16";
+    vue = nodePackages."vue-^2.6.4";
     "vue-loader" = nodePackages."vue-loader-^14.2.2";
     "vue-mugen-scroll" = nodePackages."vue-mugen-scroll-^0.2.1";
     "vue-router" = nodePackages."vue-router-^3.0.0";
     "vue-style-loader" = nodePackages."vue-style-loader-^4.1.0";
-    "vue-template-compiler" = nodePackages."vue-template-compiler-^2.5.16";
+    "vue-template-compiler" = nodePackages."vue-template-compiler-^2.6.4";
     vuedraggable = nodePackages."vuedraggable-^2.15.0";
     "vuejs-datepicker" = nodePackages."vuejs-datepicker-git://github.com/habitrpg/vuejs-datepicker.git#5d237615463a84a23dd6f3f77c6ab577d68593ec";
     webpack = nodePackages."webpack-^3.12.0";
