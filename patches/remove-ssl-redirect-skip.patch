@@ -11,15 +11,16 @@ Date:   Wed Jan 30 04:54:38 2019 +0100
     Filename: remove-ssl-redirect-skip.patch
 
 diff --git a/config.json.example b/config.json.example
-index 9304398bd..a57e372c9 100644
+index 00287d062..a57e372c9 100644
 --- a/config.json.example
 +++ b/config.json.example
-@@ -15,6 +15,5 @@
+@@ -15,7 +15,5 @@
    "PATH": "bin:node_modules/.bin:/usr/local/bin:/usr/bin:/bin",
    "PORT": 3000,
    "TEST_DB_URI": "mongodb://localhost/habitrpg_test",
 -  "WEB_CONCURRENCY": 1,
--  "SKIP_SSL_CHECK_KEY": "key"
+-  "SKIP_SSL_CHECK_KEY": "key",
+-  "ENABLE_STACKDRIVER_TRACING": "false"
 +  "WEB_CONCURRENCY": 1
  }
 diff --git a/test/api/unit/middlewares/redirects.js b/test/api/unit/middlewares/redirects.js

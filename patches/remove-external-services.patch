@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 2caba1844..a3d1ed487 100644
+index 09b677841..3a31e9c95 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -1,12 +1,5 @@
@@ -119,8 +119,8 @@ index 2caba1844..a3d1ed487 100644
    "TEST_DB_URI": "mongodb://localhost/habitrpg_test",
 -  "TRANSIFEX_SLACK_CHANNEL": "transifex",
    "WEB_CONCURRENCY": 1,
-   "SKIP_SSL_CHECK_KEY": "key"
- }
+   "SKIP_SSL_CHECK_KEY": "key",
+   "ENABLE_STACKDRIVER_TRACING": "false"
 diff --git a/gulp/taskHelper.js b/gulp/taskHelper.js
 index 270573ba7..75d2ae759 100644
 --- a/gulp/taskHelper.js
@@ -6217,6 +6217,21 @@ index 710f620fa..f4ce1fdc4 100644
  /**
   * @api {get} /export/inbox.html Export user private messages as HTML document
   * @apiName ExportUserPrivateMessages
+diff --git a/website/server/index.js b/website/server/index.js
+index 1662b3301..dd434c226 100644
+--- a/website/server/index.js
++++ b/website/server/index.js
+@@ -13,10 +13,6 @@ setupNconf();
+ const nconf = require('nconf');
+ 
+ const IS_PROD = nconf.get('IS_PROD');
+-const STACKDRIVER_TRACING_ENABLED = nconf.get('ENABLE_STACKDRIVER_TRACING') === 'true';
+-if (IS_PROD && STACKDRIVER_TRACING_ENABLED) {
+-  require('@google-cloud/trace-agent').start(); // eslint-disable-line global-require
+-}
+ 
+ const cluster = require('cluster');
+ const logger = require('./libs/logger');
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
 index 1cdcf3fd2..36601632c 100644
 --- a/website/server/libs/auth/index.js

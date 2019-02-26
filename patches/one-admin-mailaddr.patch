@@ -18,7 +18,7 @@ Date:   Tue Mar 27 05:37:18 2018 +0200
     Filename: one-admin-mailaddr.patch
 
 diff --git a/config.json.example b/config.json.example
-index fb5ea84c5..2f323dbd6 100644
+index cb82930b4..9fdd842b6 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -4,12 +4,8 @@
