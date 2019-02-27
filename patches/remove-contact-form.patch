@@ -44,7 +44,7 @@ index 4cf6a7e6d..3d040479d 100644
        this.$store.dispatch('user:sleep');
      },
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 4a18ded63..736c4eebc 100644
+index bba75ced9..c69daf818 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -56,7 +56,6 @@ div

@@ -49,7 +49,7 @@ index 83501d037..a9a59f9be 100644
        sidebar-section(:title="$t('playerTiers')")
          .row
 diff --git a/website/client/components/hall/heroes.vue b/website/client/components/hall/heroes.vue
-index 391a03165..d445b65ef 100644
+index 6f6278313..f20bf241b 100644
 --- a/website/client/components/hall/heroes.vue
 +++ b/website/client/components/hall/heroes.vue
 @@ -23,10 +23,6 @@
@@ -64,7 +64,7 @@ index 391a03165..d445b65ef 100644
              textarea.form-control(cols=5, :placeholder="$t('contributions')", v-model='hero.contributor.contributions')
              //include ../../shared/formattiv-help
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 736c4eebc..39902b31b 100644
+index c69daf818..42116264f 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -51,9 +51,6 @@ div

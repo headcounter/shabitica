@@ -1,0 +1,56 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Feb 27 21:55:38 2019 +0100
+
+    Remove A/B test for welcome email
+    
+    Our goal is to have self-hosted private instances of Habitica, so A/B
+    testing is something we really don't need here. Instead of patching our
+    mailer to cope with all the foo-v2, foo-v2b and whatnot, let's just
+    remove that code from the game itself.
+    
+    This also has the advantage that we'll get a merge conflict once
+    upstream decides to introduce more A/B tests for the welcome email.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: remove-welcome-abtest.patch
+
+diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
+index 40c3319ba..5dc9fc83b 100644
+--- a/website/server/libs/auth/index.js
++++ b/website/server/libs/auth/index.js
+@@ -175,12 +175,7 @@ async function registerLocal (req, res, { isV3 = false }) {
+   EmailUnsubscription
+     .remove({email: savedUser.auth.local.email})
+     .then(() => {
+-      if (existingUser) return;
+-      if (savedUser._ABtests && savedUser._ABtests.welcomeEmailSplit) {
+-        sendTxnEmail(savedUser, savedUser._ABtests.welcomeEmailSplit);
+-      } else {
+-        sendTxnEmail(savedUser, 'welcome');
+-      }
++      if (!existingUser) sendTxnEmail(savedUser, 'welcome');
+     });
+ 
+   return null;
+diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
+index 90616326b..020dd59eb 100644
+--- a/website/server/models/user/hooks.js
++++ b/website/server/models/user/hooks.js
+@@ -128,17 +128,6 @@ function _setUpNewUser (user) {
+   user.purchased.background.violet = true;
+   user.preferences.background = 'violet';
+ 
+-  const testGroup = Math.random();
+-  if (testGroup < 0.25) {
+-    user._ABtests.welcomeEmailSplit = 'welcome-v2';
+-  } else if (testGroup < 0.5) {
+-    user._ABtests.welcomeEmailSplit = 'welcome-v2b';
+-  } else if (testGroup < 0.75) {
+-    user._ABtests.welcomeEmailSplit = 'welcome-v2c';
+-  } else {
+-    user._ABtests.welcomeEmailSplit = 'welcome-v2d';
+-  }
+-
+   if (user.registeredThrough === 'habitica-web') {
+     taskTypes = ['habit', 'daily', 'todo', 'reward', 'tag'];
+ 

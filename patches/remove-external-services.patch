@@ -3256,7 +3256,7 @@ index 9d13f2d0b..97d18ff8f 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 67dcb5a82..4a18ded63 100644
+index 8a2ade6e1..bba75ced9 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -3,7 +3,6 @@ div
@@ -3264,7 +3264,7 @@ index 67dcb5a82..4a18ded63 100644
    creator-intro
    profileModal
 -  send-gems-modal
-   b-navbar.topbar.navbar-inverse.static-top.navbar-expand-lg(type="dark", :class="navbarZIndexClass")
+   b-navbar.topbar.navbar-inverse.static-top(toggleable="lg", type="dark", :class="navbarZIndexClass")
      b-navbar-brand.brand
        .logo.svg-icon.d-none.d-xl-block(v-html="icons.logo")
 @@ -335,7 +334,6 @@ div
@@ -6233,7 +6233,7 @@ index 1662b3301..dd434c226 100644
  const cluster = require('cluster');
  const logger = require('./libs/logger');
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 1cdcf3fd2..36601632c 100644
+index 1a806ead3..c46cee795 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -7,12 +7,10 @@ import * as passwordUtils from '../../libs/password';
@@ -6293,8 +6293,8 @@ index 1cdcf3fd2..36601632c 100644
  
    // we check for partyInvite for backward compatibility
    if (req.query.groupInvite || req.query.partyInvite) {
-@@ -186,24 +161,11 @@ async function registerLocal (req, res, { isV3 = false }) {
-       if (!existingUser) sendTxnEmail(savedUser, 'welcome');
+@@ -191,24 +166,11 @@ async function registerLocal (req, res, { isV3 = false }) {
+       }
      });
  
 -  if (!existingUser) {
