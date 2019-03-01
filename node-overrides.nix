@@ -85,9 +85,12 @@
     # FIXME: This is not deterministic, find a better way...
     googleFonts = runCommand "google-fonts-apidoc" {
       outputHashAlgo = "sha256";
-      outputHash = "1l2r0jfsijbhsfa0a2q5cwd6klpn2b8qwa5yyc7wb2b5g54sdmhd";
+      outputHash = "1x0z8r8nb5pj073dyx66b25w9hxs33k07bhbj5cbgf5pyx3589x1";
       outputHashMode = "recursive";
-      nativeBuildInputs = [ super.extra.google-fonts-offline ];
+      nativeBuildInputs = [
+        super.extra.google-fonts-offline
+        super.extra.csso-cli
+      ];
 
       fontURL = "https://fonts.googleapis.com/css?family="
               + "Source+Code+Pro%7CSource+Sans+Pro:n4,n6,n7";
@@ -95,6 +98,7 @@
       mkdir "$out"
       cd "$out"
       goofoffline outCss=fonts.css "$fontURL"
+      csso fonts/fonts.css --comments none --output fonts/fonts.css
     '';
 
     preRebuild = (drv.preRebuild or "") + ''

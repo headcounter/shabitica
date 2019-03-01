@@ -458,9 +458,12 @@ stdenv.mkDerivation rec {
   # FIXME: This is not deterministic, find a better way...
   googleFonts = runCommand "google-fonts" {
     outputHashAlgo = "sha256";
-    outputHash = "1clh809nn5n64r97vndhpgpf6c6q06lj39yxrxmcwlwk03myl65n";
+    outputHash = "06izjlyrpn7zi9idyw8mi773qpc3s79rpr14b8drn32dzv4c58yf";
     outputHashMode = "recursive";
-    nativeBuildInputs = [ nodePackages.extra.google-fonts-offline ];
+    nativeBuildInputs = [
+      nodePackages.extra.google-fonts-offline
+      nodePackages.extra.csso-cli
+    ];
     inherit src;
   } ''
     mkdir "$out"
@@ -471,6 +474,8 @@ stdenv.mkDerivation rec {
       fontbase="$(basename "$fontsrc")"
       ( cd "$out"
         goofoffline outCss="''${fontbase%.*}-fonts.css" "$fontURL"
+        csso "fonts/''${fontbase%.*}-fonts.css" --comments none \
+          --output "fonts/''${fontbase%.*}-fonts.css"
       )
     done
   '';

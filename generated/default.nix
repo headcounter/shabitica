@@ -56,7 +56,10 @@ in {
     "webpack-dev-middleware" = nodePackages."webpack-dev-middleware-^2.0.5";
     "webpack-hot-middleware" = nodePackages."webpack-hot-middleware-^2.22.2";
   };
-  extra."google-fonts-offline" = nodePackages."google-fonts-offline";
+  extra = {
+    "csso-cli" = nodePackages."csso-cli";
+    "google-fonts-offline" = nodePackages."google-fonts-offline";
+  };
   main = {
     accepts = nodePackages."accepts-^1.3.5";
     apidoc = nodePackages."apidoc-^0.17.5";

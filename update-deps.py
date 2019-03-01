@@ -90,7 +90,7 @@ def main():
     depmap = {
         'main': pkgdesc['dependencies'],
         'dev': pkgdesc['devDependencies'],
-        'extra': ['google-fonts-offline'],
+        'extra': ['google-fonts-offline', 'csso-cli'],
     }
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
