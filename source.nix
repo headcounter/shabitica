@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.85.2";
+  version = "4.85.5";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0n08djma1axx9d6fv0ibsrrhdxzf97wvjl5pi0fcmki5mg2iywak";
+    sha256 = "0pf9mhhf6zlgldk00hmqy6wvwvlj425n0z7nirfaxnfy2j3diw0m";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -250,13 +250,13 @@ stdenv.mkDerivation rec {
     "website/client/components/static/merch.vue"
     "website/client/components/static/newStuff.vue"
     "website/client/components/static/pressKit.vue"
-    "website/client/router/handleRedirect.js"
     "website/client/libs/analytics.js"
     "website/client/libs/logging.js"
     "website/client/libs/modform.js"
     "website/client/libs/payments.js"
     "website/client/libs/staffList.js"
     "website/client/mixins/payments.js"
+    "website/client/router/handleRedirect.js"
     "website/common/locales/*/communityguidelines.json"
     "website/common/locales/*/merch.json"
     "website/server/controllers/api-v3/iap.js"
@@ -272,6 +272,7 @@ stdenv.mkDerivation rec {
     "website/server/libs/bannedSlurs.js"
     "website/server/libs/bannedWords.js"
     "website/server/libs/forbiddenUsernames.js"
+    "website/server/libs/gcpTraceAgent.js"
     "website/server/libs/guildsAllowingBannedWords.js"
     "website/server/libs/inAppPurchases.js"
     "website/server/libs/payments/amazon.js"
@@ -332,6 +333,7 @@ stdenv.mkDerivation rec {
     "smartbanner"
     "social"
     "spritely"
+    "stackdriver"
     "stripe[^d]"
     "transifex"
     "trello"

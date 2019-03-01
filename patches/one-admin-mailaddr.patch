@@ -213,7 +213,7 @@ index 635f9c501..0acfbd979 100644
  });
  const USER_AGE_FOR_FLAGGING = 3; // accounts less than this many days old don't increment flagCount
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
-index ab5987b50..491a9145b 100644
+index 1589fcd8b..cb239ab41 100644
 --- a/website/server/middlewares/auth.js
 +++ b/website/server/middlewares/auth.js
 @@ -7,7 +7,7 @@ import {

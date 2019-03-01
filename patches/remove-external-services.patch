@@ -6218,20 +6218,19 @@ index 710f620fa..f4ce1fdc4 100644
   * @api {get} /export/inbox.html Export user private messages as HTML document
   * @apiName ExportUserPrivateMessages
 diff --git a/website/server/index.js b/website/server/index.js
-index 1662b3301..dd434c226 100644
+index c1d6757de..825925521 100644
 --- a/website/server/index.js
 +++ b/website/server/index.js
-@@ -13,10 +13,6 @@ setupNconf();
+@@ -12,9 +12,6 @@ const setupNconf = require('./libs/setupNconf');
+ setupNconf();
  const nconf = require('nconf');
  
- const IS_PROD = nconf.get('IS_PROD');
--const STACKDRIVER_TRACING_ENABLED = nconf.get('ENABLE_STACKDRIVER_TRACING') === 'true';
--if (IS_PROD && STACKDRIVER_TRACING_ENABLED) {
--  require('@google-cloud/trace-agent').start(); // eslint-disable-line global-require
--}
- 
+-// Initialize @google-cloud/trace-agent
+-require('./libs/gcpTraceAgent');
+-
  const cluster = require('cluster');
  const logger = require('./libs/logger');
+ 
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
 index 1a806ead3..c46cee795 100644
 --- a/website/server/libs/auth/index.js
@@ -6947,6 +6946,48 @@ index 5819c7231..ce018e771 100644
  app.use(setupBody);
  
  const topLevelRouter = express.Router(); // eslint-disable-line new-cap
+diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
+index f4c301acf..1589fcd8b 100644
+--- a/website/server/middlewares/auth.js
++++ b/website/server/middlewares/auth.js
+@@ -6,7 +6,6 @@ import {
+ } from '../models/user';
+ import nconf from 'nconf';
+ import url from 'url';
+-import gcpStackdriverTracer from '../libs/gcpTraceAgent';
+ 
+ const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS_COMMUNITY_MANAGER_EMAIL');
+ 
+@@ -35,13 +34,6 @@ function getUserFields (options, req) {
+   return `notifications ${userFieldOptions.join(' ')}`;
+ }
+ 
+-// Make sure stackdriver traces are storing the user id
+-function stackdriverTraceUserId (userId) {
+-  if (gcpStackdriverTracer) {
+-    gcpStackdriverTracer.getCurrentRootSpan().addLabel('userId', userId);
+-  }
+-}
+-
+ // Strins won't be translated here because getUserLanguage has not run yet
+ 
+ // Authenticate a request through the x-api-user and x-api key header
+@@ -73,7 +65,6 @@ export function authWithHeaders (options = {}) {
+ 
+         res.locals.user = user;
+         req.session.userId = user._id;
+-        stackdriverTraceUserId(user._id);
+ 
+         return next();
+       })
+@@ -102,7 +93,6 @@ export function authWithSession (req, res, next) {
+       if (!user) throw new NotAuthorized(res.t('invalidCredentials'));
+ 
+       res.locals.user = user;
+-      stackdriverTraceUserId(user._id);
+       return next();
+     })
+     .catch(next);
 diff --git a/website/server/middlewares/cron.js b/website/server/middlewares/cron.js
 index 15a66b02b..315f1fa44 100644
 --- a/website/server/middlewares/cron.js
