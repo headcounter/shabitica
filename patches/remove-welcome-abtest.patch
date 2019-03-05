@@ -33,22 +33,24 @@ index 40c3319ba..5dc9fc83b 100644
  
    return null;
 diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
-index 90616326b..020dd59eb 100644
+index dad044441..020dd59eb 100644
 --- a/website/server/models/user/hooks.js
 +++ b/website/server/models/user/hooks.js
-@@ -128,17 +128,6 @@ function _setUpNewUser (user) {
+@@ -128,19 +128,6 @@ function _setUpNewUser (user) {
    user.purchased.background.violet = true;
    user.preferences.background = 'violet';
  
 -  const testGroup = Math.random();
--  if (testGroup < 0.25) {
+-  if (testGroup < 0.2) {
 -    user._ABtests.welcomeEmailSplit = 'welcome-v2';
--  } else if (testGroup < 0.5) {
+-  } else if (testGroup < 0.4) {
 -    user._ABtests.welcomeEmailSplit = 'welcome-v2b';
--  } else if (testGroup < 0.75) {
+-  } else if (testGroup < 0.6) {
 -    user._ABtests.welcomeEmailSplit = 'welcome-v2c';
--  } else {
+-  } else if (testGroup < 0.8) {
 -    user._ABtests.welcomeEmailSplit = 'welcome-v2d';
+-  } else {
+-    user._ABtests.welcomeEmailSplit = 'welcome';
 -  }
 -
    if (user.registeredThrough === 'habitica-web') {
