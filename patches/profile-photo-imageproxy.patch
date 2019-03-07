@@ -13,7 +13,7 @@ Date:   Sun Aug 19 06:56:32 2018 +0200
     Filename: profile-photo-imageproxy.patch
 
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 5a16e1fcf..7a42165e0 100644
+index 94b700452..6ecf68dd5 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -52,7 +52,7 @@
@@ -25,7 +25,7 @@ index 5a16e1fcf..7a42165e0 100644
            p(v-else) {{ $t('noPhoto') }}
  
        .col-12.col-md-4
-@@ -471,6 +471,17 @@ export default {
+@@ -474,6 +474,17 @@ export default {
      hasClass () {
        return this.$store.getters['members:hasClass'](this.userLoggedIn);
      },

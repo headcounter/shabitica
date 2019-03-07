@@ -13,10 +13,10 @@ Date:   Tue Mar 27 05:37:21 2018 +0200
     Filename: kill-footer.patch
 
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index 5478044a8..5f372e11b 100644
+index bb0bec4e7..dbb12a172 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
-@@ -2,97 +2,6 @@
+@@ -2,95 +2,6 @@
  .row.footer-row
    buy-gems-modal(v-if='user')
    //modify-inventory(v-if="isUserLoaded")
@@ -67,15 +67,13 @@ index 5478044a8..5f372e11b 100644
 -                a(:href="getDataDisplayToolUrl", target='_blank') {{ $t('dataDisplayTool') }}
 -              li
 -                a(href='http://habitica.fandom.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
--              li
--                a(href='http://devs.habitica.com/', target='_blank') {{ $t('devBlog') }}
 -        .row
 -          .col-12.col-md-8 {{ $t('donateText3') }}
 -          .col-12.col-md-4
--            button.btn.btn-contribute(@click="donate()", v-if="user")
+-            button.btn.btn-contribute.btn-flat(@click="donate()", v-if="user")
 -              .svg-icon.heart(v-html="icons.heart")
 -              .text {{ $t('companyDonate') }}
--            .btn.btn-contribute(v-else)
+-            .btn.btn-contribute.btn-flat(v-else)
 -              a(href='http://habitica.fandom.com/wiki/Contributing_to_Habitica', target='_blank')
 -                .svg-icon.heart(v-html="icons.heart")
 -                .text {{ $t('companyContribute') }}
@@ -114,7 +112,7 @@ index 5478044a8..5f372e11b 100644
  </template>
  
  <style lang="scss" scoped>
-@@ -166,25 +75,6 @@
+@@ -178,25 +89,6 @@
    .heart svg {
      margin-top: .1em;
    }

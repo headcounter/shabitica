@@ -146,7 +146,7 @@ index 2cec2e623..217a0d19a 100644
  let api = {};
  
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index cbb2b2537..4c3c1ccb7 100644
+index bee0f5ee8..79798efe7 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -18,7 +18,7 @@ import { getMatchesByWordArray } from '../../libs/stringUtils';
@@ -159,7 +159,7 @@ index cbb2b2537..4c3c1ccb7 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index f2643ff20..56fcde8d9 100644
+index 162047d9e..2c70e0ccd 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -25,7 +25,7 @@ import common from '../../../common';
@@ -198,7 +198,7 @@ index 8e9265be2..f5785583c 100644
  function loginRes (user, req, res) {
    if (user.auth.blocked) throw new NotAuthorized(res.t('accountSuspended', {communityManagerEmail: COMMUNITY_MANAGER_EMAIL, userId: user._id}));
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index 635f9c501..0acfbd979 100644
+index 806358dbd..6e06e122d 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
 @@ -11,8 +11,8 @@ import { model as Group } from '../../models/group';
@@ -212,6 +212,19 @@ index 635f9c501..0acfbd979 100644
    return { email, canSend: true };
  });
  const USER_AGE_FOR_FLAGGING = 3; // accounts less than this many days old don't increment flagCount
+diff --git a/website/server/libs/chatReporting/inboxChatReporter.js b/website/server/libs/chatReporting/inboxChatReporter.js
+index e8078d83c..9ce229cfc 100644
+--- a/website/server/libs/chatReporting/inboxChatReporter.js
++++ b/website/server/libs/chatReporting/inboxChatReporter.js
+@@ -11,7 +11,7 @@ import apiError from '../apiError';
+ import * as inboxLib from '../inbox';
+ import {getAuthorEmailFromMessage} from '../chat';
+ 
+-const FLAG_REPORT_EMAILS = nconf.get('FLAG_REPORT_EMAIL').split(',').map((email) => {
++const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
+   return { email, canSend: true };
+ });
+ 
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
 index 1589fcd8b..cb239ab41 100644
 --- a/website/server/middlewares/auth.js

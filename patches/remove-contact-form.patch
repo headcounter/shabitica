@@ -44,10 +44,10 @@ index 4cf6a7e6d..3d040479d 100644
        this.$store.dispatch('user:sleep');
      },
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index bba75ced9..c69daf818 100644
+index 9419f2218..79af1ef9a 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -56,7 +56,6 @@ div
+@@ -57,7 +57,6 @@ div
              a.topbar-dropdown-item.dropdown-item(href="https://trello.com/c/odmhIqyW/440-read-first-table-of-contents", target='_blank') {{ $t('requestAF') }}
              a.topbar-dropdown-item.dropdown-item(href="http://habitica.fandom.com/wiki/Contributing_to_Habitica", target='_blank') {{ $t('contributing') }}
              a.topbar-dropdown-item.dropdown-item(href="http://habitica.fandom.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
@@ -55,7 +55,7 @@ index bba75ced9..c69daf818 100644
        .currency-tray.form-inline
          .item-with-icon(v-if="userHourglasses > 0")
            .top-menu-icon.svg-icon(v-html="icons.hourglasses", v-b-tooltip.hover.bottom="$t('mysticHourglassesTooltip')")
-@@ -334,7 +333,6 @@ div
+@@ -335,7 +334,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -63,7 +63,7 @@ index bba75ced9..c69daf818 100644
  
  import gemIcon from 'assets/svg/gem.svg';
  import goldIcon from 'assets/svg/gold.svg';
-@@ -389,9 +387,6 @@ export default {
+@@ -393,9 +391,6 @@ export default {
      this.getUserGroupPlans();
    },
    methods: {

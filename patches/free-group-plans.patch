@@ -574,7 +574,7 @@ index 05663006b..0a760836f 100644
      },
      {
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 56fcde8d9..ceb1da1bd 100644
+index 2c70e0ccd..48eb5798e 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -23,6 +23,7 @@ import {
@@ -614,7 +614,7 @@ index 56fcde8d9..ceb1da1bd 100644
  
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 05a5f3855..d07061c6a 100644
+index 94086f5b2..8c1a66d24 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -1,4 +1,3 @@

@@ -1531,7 +1531,7 @@ index 28d4135e2..2deb85228 100644
        })
        .catch(done);
 diff --git a/test/api/v3/integration/chat/POST-chat.flag.test.js b/test/api/v3/integration/chat/POST-chat.flag.test.js
-index 88b41744c..322e5853a 100644
+index 723715c80..322e5853a 100644
 --- a/test/api/v3/integration/chat/POST-chat.flag.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.flag.test.js
 @@ -4,10 +4,6 @@ import {
@@ -1563,11 +1563,11 @@ index 88b41744c..322e5853a 100644
 -
 -    /* eslint-disable camelcase */
 -    expect(IncomingWebhook.prototype.send).to.be.calledWith({
--      text: `${user.profile.name} (${user.id}; language: en) flagged a message`,
+-      text: `${user.profile.name} (${user.id}; language: en) flagged a group message`,
 -      attachments: [{
 -        fallback: 'Flag Message',
 -        color: 'danger',
--        author_name: `${anotherUser.profile.name} - ${anotherUser.auth.local.email} - ${anotherUser._id}\n${timestamp}`,
+-        author_name: `@${anotherUser.auth.local.username} ${anotherUser.profile.name} (${anotherUser.auth.local.email}; ${anotherUser._id})\n${timestamp}`,
 -        title: 'Flag in Test Guild',
 -        title_link: `${BASE_URL}/groups/guild/${group._id}`,
 -        text: TEST_MESSAGE,
@@ -1595,11 +1595,11 @@ index 88b41744c..322e5853a 100644
 -
 -    /* eslint-disable camelcase */
 -    expect(IncomingWebhook.prototype.send).to.be.calledWith({
--      text: `${newUser.profile.name} (${newUser.id}; language: en) flagged a message`,
+-      text: `${newUser.profile.name} (${newUser.id}; language: en) flagged a group message`,
 -      attachments: [{
 -        fallback: 'Flag Message',
 -        color: 'danger',
--        author_name: `${newUser.profile.name} - ${newUser.auth.local.email} - ${newUser._id}\n${timestamp}`,
+-        author_name: `@${newUser.auth.local.username} ${newUser.profile.name} (${newUser.auth.local.email}; ${newUser._id})\n${timestamp}`,
 -        title: 'Flag in Test Guild',
 -        title_link: `${BASE_URL}/groups/guild/${group._id}`,
 -        text: TEST_MESSAGE,
@@ -1614,7 +1614,7 @@ index 88b41744c..322e5853a 100644
  
    it('Flags a chat when the author\'s account was deleted', async () => {
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index bd0f158b7..cce17bc43 100644
+index aa6b8c880..cce17bc43 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -1,5 +1,3 @@
@@ -1652,7 +1652,7 @@ index bd0f158b7..cce17bc43 100644
 -        attachments: [{
 -          fallback: 'Slur Message',
 -          color: 'danger',
--          author_name: `${user.profile.name} - ${user.auth.local.email} - ${user._id}`,
+-          author_name: `@${user.auth.local.username} ${user.profile.name} (${user.auth.local.email}; ${user._id})`,
 -          title: 'Slur in Test Guild',
 -          title_link: `${BASE_URL}/groups/guild/${groupWithChat.id}`,
 -          text: testSlurMessage,
@@ -1678,7 +1678,7 @@ index bd0f158b7..cce17bc43 100644
 -        attachments: [{
 -          fallback: 'Slur Message',
 -          color: 'danger',
--          author_name: `${members[0].profile.name} - ${members[0].auth.local.email} - ${members[0]._id}`,
+-          author_name: `@${members[0].auth.local.username} ${members[0].profile.name} (${members[0].auth.local.email}; ${members[0]._id})`,
 -          title: 'Slur in Party - (private party)',
 -          title_link: undefined,
 -          text: testSlurMessage,
@@ -2722,7 +2722,7 @@ index de65914ea..ab38d5546 100644
      close () {
        this.$root.$emit('bv::hide::modal', 'won-challenge');
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index 0859dc691..5478044a8 100644
+index 89d12e0ec..bb0bec4e7 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -4,11 +4,6 @@
@@ -2737,37 +2737,56 @@ index 0859dc691..5478044a8 100644
        .col-12.col-md-2
          h3 {{ $t('footerCompany') }}
          ul
-@@ -41,8 +36,6 @@
+@@ -41,10 +36,6 @@
              a(href='https://trello.com/c/odmhIqyW/440-read-first-table-of-contents', target='_blank') {{ $t('requestFeature') }}
            li(v-html='$t("communityExtensions")')
            li(v-html='$t("communityForum")')
 -          li
 -            a(href='https://www.facebook.com/Habitica', target='_blank') {{ $t('communityFacebook') }}
+-          li
+-            a(href='https://www.instagram.com/habitica', target='_blank') {{ $t('communityInstagram') }}
            li
              a(href='https://www.reddit.com/r/habitrpg/', target='_blank') {{ $t('communityReddit') }}
        .col-12.col-md-6
-@@ -58,14 +51,6 @@
-                 a(href='http://habitica.fandom.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
+@@ -58,15 +49,6 @@
+                 a(:href="getDataDisplayToolUrl", target='_blank') {{ $t('dataDisplayTool') }}
                li
-                 a(href='http://devs.habitica.com/', target='_blank') {{ $t('devBlog') }}
+                 a(href='http://habitica.fandom.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
 -          .col-6.social
 -            h3 {{ $t('footerSocial') }}
--            a.social-circle(href='https://twitter.com/habitica', target='_blank')
--              .social-icon.svg-icon(v-html='icons.twitter')
--            // TODO: Not ready yet. a.social-circle(href='https://www.instagram.com/habitica/', target='_blank')
--              .social-icon.svg-icon.instagram(v-html='icons.instagram')
--            a.social-circle(href='https://www.facebook.com/Habitica', target='_blank')
--              .social-icon.facebook.svg-icon(v-html='icons.facebook')
+-            .icons
+-              a.social-circle(href='https://twitter.com/habitica', target='_blank')
+-                .social-icon.svg-icon(v-html='icons.twitter')
+-              a.social-circle(href='https://www.instagram.com/habitica/', target='_blank')
+-                .social-icon.svg-icon.instagram(v-html='icons.instagram')
+-              a.social-circle(href='https://www.facebook.com/Habitica', target='_blank')
+-                .social-icon.facebook.svg-icon(v-html='icons.facebook')
          .row
            .col-12.col-md-8 {{ $t('donateText3') }}
            .col-12.col-md-4
-@@ -139,32 +124,6 @@
+@@ -140,51 +122,12 @@
      margin-bottom: .5em;
    }
  
 -  .social {
 -    h3 {
 -      text-align: right;
+-    }
+-  }
+-
+   .icons {
+     display: flex;
+     justify-content: flex-end;
+     flex-shrink: 1;
+   }
+ 
+-  // smaller than desktop
+-  @media only screen and (max-width: 992px) {
+-    .social-circle {
+-      height: 32px !important;
+-      width: 32px !important;
+-
+-      margin-left: 0.75em !important;
 -    }
 -  }
 -
@@ -2778,23 +2797,26 @@ index 0859dc691..5478044a8 100644
 -    background-color: #c3c0c7;
 -    display: flex;
 -    margin-left: 1em;
--    float: right;
+-
+-    &:first-child {
+-      margin-left: 0;
+-    }
+-
+-    &:hover {
+-      background-color: #a5a1ac;
+-    }
 -
 -    .social-icon {
 -      color: #e1e0e3;
 -      width: 16px;
 -      margin: auto;
 -    }
--
--    .instagram {
--      margin-top: .85em;
--    }
 -  }
 -
    .logo {
      width: 24px;
      height: 24px;
-@@ -208,11 +167,6 @@
+@@ -236,11 +179,6 @@
      margin-top: .1em;
    }
  
@@ -2806,7 +2828,7 @@ index 0859dc691..5478044a8 100644
    footer {
      &.expanded {
        padding-left: 6em;
-@@ -237,31 +191,22 @@
+@@ -265,31 +203,22 @@
  import axios from 'axios';
  import moment from 'moment';
  import { mapState } from 'client/libs/store';
@@ -2838,7 +2860,7 @@ index 0859dc691..5478044a8 100644
          heart,
        }),
        debugMenuShown: false,
-@@ -362,12 +307,6 @@ export default {
+@@ -390,12 +319,6 @@ export default {
        this.$root.$emit('bv::show::modal', 'modify-inventory');
      },
      donate () {
@@ -3256,18 +3278,18 @@ index 9d13f2d0b..97d18ff8f 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 8a2ade6e1..bba75ced9 100644
+index 04ae3439e..9419f2218 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -3,7 +3,6 @@ div
-   inbox-modal
+@@ -4,7 +4,6 @@ div
    creator-intro
    profileModal
+   report-flag-modal
 -  send-gems-modal
    b-navbar.topbar.navbar-inverse.static-top(toggleable="lg", type="dark", :class="navbarZIndexClass")
      b-navbar-brand.brand
        .logo.svg-icon.d-none.d-xl-block(v-html="icons.logo")
-@@ -335,7 +334,6 @@ div
+@@ -336,7 +335,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -3275,23 +3297,23 @@ index 8a2ade6e1..bba75ced9 100644
  import { goToModForm } from 'client/libs/modform';
  
  import gemIcon from 'assets/svg/gem.svg';
-@@ -348,7 +346,6 @@ import creatorIntro from '../creatorIntro';
+@@ -349,7 +347,6 @@ import creatorIntro from '../creatorIntro';
  import InboxModal from '../userMenu/inbox.vue';
  import notificationMenu from './notificationsDropdown';
  import profileModal from '../userMenu/profileModal';
 -import sendGemsModal from 'client/components/payments/sendGemsModal';
  import userDropdown from './userDropdown';
  
- export default {
-@@ -357,7 +354,6 @@ export default {
-     InboxModal,
+ import reportFlagModal from '../chat/reportFlagModal';
+@@ -361,7 +358,6 @@ export default {
      notificationMenu,
      profileModal,
+     reportFlagModal,
 -    sendGemsModal,
      userDropdown,
    },
    data () {
-@@ -415,14 +411,6 @@ export default {
+@@ -419,14 +415,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -3905,10 +3927,10 @@ index 34ff15ca5..e5dd03e02 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index 16a03ed68..a43d30132 100644
+index 4d7f383f4..db818b667 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
-@@ -506,7 +506,6 @@ import moment from 'moment';
+@@ -511,7 +511,6 @@ import moment from 'moment';
  import axios from 'axios';
  import scoreTask from 'common/script/ops/scoreTask';
  import Vue from 'vue';
@@ -3916,7 +3938,7 @@ index 16a03ed68..a43d30132 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import negativeIcon from 'assets/svg/negative.svg';
-@@ -723,7 +722,6 @@ export default {
+@@ -728,7 +727,6 @@ export default {
  
        if (task.group.approval.required) task.group.approval.requested = true;
  
@@ -3925,7 +3947,7 @@ index 16a03ed68..a43d30132 100644
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
        const crit = tmp.crit;
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index cf544bfbd..ec6963874 100644
+index e66208d0d..f1b03290b 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -72,14 +72,12 @@
@@ -4161,7 +4183,7 @@ index 58af5e3be..c84241a39 100644
    localStorage.clear();
    window.location.href = '/logout-server';
 diff --git a/website/client/store/actions/chat.js b/website/client/store/actions/chat.js
-index 0bb568a86..966f1d3ec 100644
+index 584db3bf7..98806066f 100644
 --- a/website/client/store/actions/chat.js
 +++ b/website/client/store/actions/chat.js
 @@ -1,5 +1,4 @@
@@ -4249,17 +4271,16 @@ index b47fce6de..4f33daf2a 100644
        credentials: isUserLoggedIn ? {
          API_ID: AUTH_SETTINGS.auth.apiId,
 diff --git a/website/common/errors/apiErrorMessages.js b/website/common/errors/apiErrorMessages.js
-index a1550fdda..4b3dbc574 100644
+index f10747b12..90804492f 100644
 --- a/website/common/errors/apiErrorMessages.js
 +++ b/website/common/errors/apiErrorMessages.js
-@@ -20,7 +20,6 @@ module.exports = {
+@@ -23,6 +23,5 @@ module.exports = {
  
    missingPaymentId: 'Missing "req.query.paymentId"',
    missingCustomerId: 'Missing "req.query.customerId"',
 -  missingPaypalBlock: 'Missing "req.session.paypalBlock"',
    missingSubKey: 'Missing "req.query.sub"',
- 
-   messageIdRequired: '\"messageId\" must be a valid UUID.",',
+ };
 diff --git a/website/common/script/constants.js b/website/common/script/constants.js
 index 1bc330846..ff0e5f1d6 100644
 --- a/website/common/script/constants.js
@@ -5284,7 +5305,7 @@ index 37d7f7e45..2cec2e623 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 37f9cac92..b1ae86622 100644
+index 82bb30116..b907397a9 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -202,16 +202,6 @@ api.createChallenge = {
@@ -5374,7 +5395,7 @@ index 37f9cac92..b1ae86622 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 3c7f5468b..cbb2b2537 100644
+index 84703ac0d..bee0f5ee8 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -9,7 +9,6 @@ import {
@@ -5385,7 +5406,7 @@ index 3c7f5468b..cbb2b2537 100644
  import { getAuthorEmailFromMessage } from '../../libs/chat';
  import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
  import nconf from 'nconf';
-@@ -83,8 +82,6 @@ function getBannedWordsFromText (message) {
+@@ -88,8 +87,6 @@ function getBannedWordsFromText (message) {
    return getMatchesByWordArray(message, bannedWords);
  }
  
@@ -5394,7 +5415,7 @@ index 3c7f5468b..cbb2b2537 100644
  /**
   * @api {post} /api/v3/groups/:groupId/chat Post chat message to a group
   * @apiName PostChat
-@@ -144,14 +141,6 @@ api.postChat = {
+@@ -149,14 +146,6 @@ api.postChat = {
  
        sendTxn(FLAG_REPORT_EMAILS, 'slur-report-to-mods', report);
  
@@ -5409,7 +5430,7 @@ index 3c7f5468b..cbb2b2537 100644
        throw new BadRequest(res.t('bannedSlurUsed'));
      }
  
-@@ -191,27 +180,6 @@ api.postChat = {
+@@ -196,27 +185,6 @@ api.postChat = {
  
      await Promise.all(toSave);
  
@@ -5451,7 +5472,7 @@ index 7acc406a4..8a441b55e 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 166f82e43..f2643ff20 100644
+index 9eef5108e..162047d9e 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,10 +22,6 @@ import {
@@ -6107,6 +6128,19 @@ index 05f8b6dd9..55514c027 100644
   */
  api.registerLocal = {
    method: 'POST',
+diff --git a/website/server/controllers/api-v4/members.js b/website/server/controllers/api-v4/members.js
+index 57a1b39dd..24cffe91d 100644
+--- a/website/server/controllers/api-v4/members.js
++++ b/website/server/controllers/api-v4/members.js
+@@ -5,7 +5,7 @@ let api = {};
+ 
+ /**
+  * @api {post} /api/v4/members/flag-private-message/:messageId Flag a private message
+- * @apiDescription An email and slack message are sent to the moderators about every flagged message.
++ * @apiDescription An email is sent to the moderators about every flagged message.
+  * @apiName FlagPrivateMessage
+  * @apiGroup Member
+  *
 diff --git a/website/server/controllers/api-v4/user.js b/website/server/controllers/api-v4/user.js
 index 2474c31dc..75f689079 100644
 --- a/website/server/controllers/api-v4/user.js
@@ -6345,30 +6379,29 @@ index 588c59603..8e9265be2 100644
    loginRes,
  };
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index ff625bfb8..635f9c501 100644
+index b41f14257..806358dbd 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
 @@ -7,7 +7,6 @@ import {
    NotFound,
  } from '../errors';
- import { getGroupUrl, sendTxn } from '../email';
+ import { sendTxn } from '../email';
 -import slack from '../slack';
  import { model as Group } from '../../models/group';
  import { chatModel as Chat } from '../../models/message';
  import apiError from '../apiError';
-@@ -49,7 +48,7 @@ export default class GroupChatReporter extends ChatReporter {
+@@ -49,22 +48,13 @@ export default class GroupChatReporter extends ChatReporter {
      return {message, group, userComment};
    }
  
 -  async notify (group, message, userComment, automatedComment = '') {
 +  async notify (group, message, userComment) {
-     await super.notify(group, message);
- 
-     const groupUrl = getGroupUrl(group);
-@@ -60,15 +59,6 @@ export default class GroupChatReporter extends ChatReporter {
-       {name: 'GROUP_URL', content: groupUrl},
+     let emailVariables = await this.getMessageVariables(group, message);
+     emailVariables = emailVariables.concat([
        {name: 'REPORTER_COMMENT', content: userComment || ''},
-     ]));
+     ]);
+ 
+     sendTxn(FLAG_REPORT_EMAILS, 'flag-report-to-mods-with-comments', emailVariables);
 -
 -    slack.sendFlagNotification({
 -      authorEmail: this.authorEmail,
@@ -6381,7 +6414,7 @@ index ff625bfb8..635f9c501 100644
    }
  
    async flagGroupMessage (group, message, increaseFlagCount) {
-@@ -95,14 +85,12 @@ export default class GroupChatReporter extends ChatReporter {
+@@ -91,14 +81,12 @@ export default class GroupChatReporter extends ChatReporter {
      let {message, group, userComment} = await this.validate();
  
      let increaseFlagCount = true;
@@ -6397,6 +6430,32 @@ index ff625bfb8..635f9c501 100644
      await this.flagGroupMessage(group, message, increaseFlagCount);
      return message;
    }
+diff --git a/website/server/libs/chatReporting/inboxChatReporter.js b/website/server/libs/chatReporting/inboxChatReporter.js
+index 207b570fd..e8078d83c 100644
+--- a/website/server/libs/chatReporting/inboxChatReporter.js
++++ b/website/server/libs/chatReporting/inboxChatReporter.js
+@@ -6,7 +6,6 @@ import {
+   BadRequest,
+ } from '../errors';
+ import { getUserInfo, sendTxn} from '../email';
+-import slack from '../slack';
+ import apiError from '../apiError';
+ 
+ import * as inboxLib from '../inbox';
+@@ -55,13 +54,6 @@ export default class InboxChatReporter extends ChatReporter {
+     ]);
+ 
+     sendTxn(FLAG_REPORT_EMAILS, 'flag-report-to-mods-with-comments', emailVariables);
+-
+-    slack.sendInboxFlagNotification({
+-      authorEmail: this.authorEmail,
+-      flagger: this.user,
+-      message,
+-      userComment,
+-    });
+   }
+ 
+   async getAuthorVariables (message) {
 diff --git a/website/server/libs/cron.js b/website/server/libs/cron.js
 index 5106b013e..f56fbb659 100644
 --- a/website/server/libs/cron.js
@@ -6855,7 +6914,7 @@ index 549b41d1d..10d2a6992 100644
  
  module.exports = {
 diff --git a/website/server/libs/setupPassport.js b/website/server/libs/setupPassport.js
-index 9f17200fd..51d872942 100644
+index 215c91daa..1d2c93339 100644
 --- a/website/server/libs/setupPassport.js
 +++ b/website/server/libs/setupPassport.js
 @@ -1,32 +1,9 @@
@@ -6867,7 +6926,7 @@ index 9f17200fd..51d872942 100644
  // Passport session setup.
  //   To support persistent login sessions, Passport needs to be able to
  //   serialize users into and deserialize users out of the session.  Typically,
- //   this will be as simple as storing the user ID when serializing, and finding
+ //   this will be as simple as storing the User ID when serializing, and finding
 -//   the user by ID when deserializing.  However, since this example does not
 -//   have a database of user records, the complete Facebook profile is serialized
 -//   and deserialized.
@@ -7082,7 +7141,7 @@ index 2d99143b6..7326ae0b1 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index cea35d21a..05a5f3855 100644
+index e8bf77e39..94086f5b2 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {

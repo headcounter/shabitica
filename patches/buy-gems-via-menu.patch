@@ -13,10 +13,10 @@ Date:   Sat Jun 23 14:25:29 2018 +0200
     Filename: buy-gems-via-menu.patch
 
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 42116264f..15f21d7da 100644
+index 3eb2ed0c9..514788bde 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -58,7 +58,7 @@ div
+@@ -59,7 +59,7 @@ div
            .top-menu-icon.svg-icon(v-html="icons.hourglasses", v-b-tooltip.hover.bottom="$t('mysticHourglassesTooltip')")
            span {{ userHourglasses }}
          .item-with-icon
@@ -25,16 +25,15 @@ index 42116264f..15f21d7da 100644
            span {{userGems}}
          .item-with-icon.gold
            .top-menu-icon.svg-icon(v-html="icons.gold", v-b-tooltip.hover.bottom="$t('gold')")
-@@ -343,6 +343,8 @@ import notificationMenu from './notificationsDropdown';
- import profileModal from '../userMenu/profileModal';
+@@ -345,6 +345,7 @@ import profileModal from '../userMenu/profileModal';
  import userDropdown from './userDropdown';
  
+ import reportFlagModal from '../chat/reportFlagModal';
 +import getItemInfo from 'common/script/libs/getItemInfo';
-+
+ 
  export default {
    components: {
-     creatorIntro,
-@@ -401,11 +403,10 @@ export default {
+@@ -405,11 +406,10 @@ export default {
      openPartyModal () {
        this.$root.$emit('bv::show::modal', 'create-party-modal');
      },

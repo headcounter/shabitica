@@ -181,10 +181,10 @@ index 983ff4e29..db9fbc0fa 100644
          { name: 'privacy', path: 'privacy', component: PrivacyPage, meta: {requiresLogin: false}},
          { name: 'terms', path: 'terms', component: TermsPage, meta: {requiresLogin: false}},
 diff --git a/website/client/store/actions/user.js b/website/client/store/actions/user.js
-index d15bd3e80..184f1bc7c 100644
+index fe6094fcc..a18fe4b7e 100644
 --- a/website/client/store/actions/user.js
 +++ b/website/client/store/actions/user.js
-@@ -131,11 +131,6 @@ export function openMysteryItem () {
+@@ -134,11 +134,6 @@ export async function openMysteryItem (store) {
    return axios.post('/api/v4/user/open-mystery-item');
  }
  
