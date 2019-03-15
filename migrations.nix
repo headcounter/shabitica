@@ -96,4 +96,20 @@
       assertNotIn('habitBirthdays', user['achievements'])
     '';
   }
+  { file = "users/pi-day.js";
+    testScript = ''
+      spec = getuser('piday2019');
+      user = spec.api.user.get()
+
+      assertIn('items', user)
+      assertIn('gear', user['items'])
+      assertIn('owned', user['items']['gear'])
+
+      assertIn('head_special_piDay', user['items']['gear']['owned'])
+      assertFalse(user['items']['gear']['owned']['head_special_piDay'])
+
+      assertIn('shield_special_piDay', user['items']['gear']['owned'])
+      assertFalse(user['items']['gear']['owned']['shield_special_piDay'])
+    '';
+  }
 ]

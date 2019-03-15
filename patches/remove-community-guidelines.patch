@@ -24,38 +24,80 @@ index 3a35fa1ac..f3aa8077b 100644
          div(v-once) {{$t('report')}}
        .action.d-flex.align-items-center(v-if='msg.uuid === user._id || inbox || user.contributor.admin', @click='remove()')
 diff --git a/website/client/components/groups/chat.vue b/website/client/components/groups/chat.vue
-index 8575f42c9..c5656c6b2 100644
+index a2df8abd3..516531302 100644
 --- a/website/client/components/groups/chat.vue
 +++ b/website/client/components/groups/chat.vue
-@@ -29,8 +29,6 @@
-         .col-6.chat-send-actions
-           button.btn.btn-secondary.send-chat.float-right(v-once, @click='sendMessage()') {{ $t('send') }}
+@@ -1,10 +1,10 @@
+ <template lang="pug">
+   .row.chat-row
+     .col-12
+-      h3.float-left.label(:class="{accepted: communityGuidelinesAccepted }") {{ label }}
++      h3.float-left.label {{ label }}
+       div.float-right(v-markdown='$t("markdownFormattingHelp")')
+ 
+-      .row(v-if="communityGuidelinesAccepted")
++      .row
+         textarea(:placeholder='placeholder',
+                   v-model='newMessage',
+                   ref='user-entry',
+@@ -23,14 +23,12 @@
+                 :caretPosition = 'caretPosition',
+                 :chat='group.chat')
  
 -      community-guidelines
 -
+       .row.chat-actions
+         .col-6.chat-receive-actions
+           button.btn.btn-secondary.float-left.fetch(v-once, @click='fetchRecentMessages()') {{ $t('fetchRecentMessages') }}
+           button.btn.btn-secondary.float-left(v-once, @click='reverseChat()') {{ $t('reverseChat') }}
+         .col-6.chat-send-actions
+-          button.btn.btn-primary.send-chat.float-right(:disabled="!communityGuidelinesAccepted", @click='sendMessage()') {{ $t('send') }}
++          button.btn.btn-primary.send-chat.float-right(@click='sendMessage()') {{ $t('send') }}
+ 
        slot(
          name="additionRow",
-       )
-@@ -44,14 +42,12 @@
+@@ -45,7 +43,6 @@
    import debounce from 'lodash/debounce';
  
    import autocomplete from '../chat/autoComplete';
 -  import communityGuidelines from './communityGuidelines';
    import chatMessage from '../chat/chatMessages';
- 
-   export default {
-     props: ['label', 'group', 'placeholder'],
+   import { mapState } from 'client/libs/store';
+   import markdownDirective from 'client/directives/markdown';
+@@ -57,7 +54,6 @@
+     },
      components: {
        autocomplete,
 -      communityGuidelines,
        chatMessage,
      },
      data () {
+@@ -81,9 +77,6 @@
+       currentLength () {
+         return this.newMessage.length;
+       },
+-      communityGuidelinesAccepted () {
+-        return this.user.flags.communityGuidelinesAccepted;
+-      },
+     },
+     methods: {
+       // https://medium.com/@_jh3y/how-to-where-s-the-caret-getting-the-xy-position-of-the-caret-a24ba372990a
+@@ -206,10 +199,6 @@
+   .chat-row {
+     position: relative;
+ 
+-    .label:not(.accepted) {
+-      color: #a5a1ac;
+-    }
+-
+     .row {
+       margin-left: 0;
+       margin-right: 0;
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index fee391143..e0d7bf7eb 100644
+index a175ea31b..a84651521 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
-@@ -391,9 +391,6 @@ export default {
+@@ -394,9 +394,6 @@ export default {
      },
    },
    methods: {

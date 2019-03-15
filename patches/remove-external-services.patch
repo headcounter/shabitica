@@ -2330,11 +2330,11 @@ index d1631fb27..ceb0cb7d2 100644
  
      it('buys a mount', () => {
 diff --git a/test/common/ops/buy/purchase.js b/test/common/ops/buy/purchase.js
-index fd1ab65b4..055a92598 100644
+index 1ec6e8107..deaf7e94e 100644
 --- a/test/common/ops/buy/purchase.js
 +++ b/test/common/ops/buy/purchase.js
 @@ -16,19 +16,16 @@ describe('shared.ops.purchase', () => {
-   const SEASONAL_FOOD = 'Meat';
+   const SEASONAL_FOOD = 'Pie_Base';
    let user;
    let goldPoints = 40;
 -  let analytics = {track () {}};
@@ -2530,6 +2530,15 @@ index 0ed4b662e..7c78fef8f 100644
  <style src="assets/css/sprites/spritesmith-main-24.css"></style>
  <style src="assets/css/sprites.css"></style>
 -<style src="smartbanner.js/dist/smartbanner.min.css"></style>
+diff --git a/website/client/assets/scss/index.scss b/website/client/assets/scss/index.scss
+index de1f6b502..f8408b281 100644
+--- a/website/client/assets/scss/index.scss
++++ b/website/client/assets/scss/index.scss
+@@ -36,4 +36,3 @@
+ @import './animals';
+ @import './iconalert';
+ @import './tiers';
+-@import './payments';
 diff --git a/website/client/components/achievements/achievementFooter.vue b/website/client/components/achievements/achievementFooter.vue
 index dd899a34b..9b5328c7c 100644
 --- a/website/client/components/achievements/achievementFooter.vue
@@ -3070,10 +3079,10 @@ index 6e0ea2956..21a5a75ef 100644
          this.$router.push('/party');
        },
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index 80dc1b054..fee391143 100644
+index 8ff4d05b6..a175ea31b 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
-@@ -259,7 +259,6 @@ import extend from 'lodash/extend';
+@@ -262,7 +262,6 @@ import extend from 'lodash/extend';
  import groupUtilities from 'client/mixins/groupsUtilities';
  import styleHelper from 'client/mixins/styleHelper';
  import { mapState } from 'client/libs/store';
@@ -3081,7 +3090,7 @@ index 80dc1b054..fee391143 100644
  import membersModal from './membersModal';
  import startQuestModal from './startQuestModal';
  import questDetailsModal from './questDetailsModal';
-@@ -500,13 +499,6 @@ export default {
+@@ -503,13 +502,6 @@ export default {
        await this.$store.dispatch('guilds:join', {groupId: this.group._id, type: 'guild'});
      },
      clickLeave () {
@@ -3095,7 +3104,7 @@ index 80dc1b054..fee391143 100644
        // @TODO: Get challenges and ask to keep or remove
        if (!confirm('Are you sure you want to leave?')) return;
        let keep = true;
-@@ -523,7 +515,6 @@ export default {
+@@ -526,7 +518,6 @@ export default {
  
        if (this.isParty) {
          data.type = 'party';
@@ -3104,91 +3113,62 @@ index 80dc1b054..fee391143 100644
        }
  
 diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
-index 9e92d0aa5..ad645020b 100644
+index 8d3034558..2561b2946 100644
 --- a/website/client/components/groups/groupPlan.vue
 +++ b/website/client/components/groups/groupPlan.vue
-@@ -46,16 +46,6 @@ div
+@@ -46,13 +46,6 @@ div
                .number 3
                .name Each Individual Group Member
  
 -          .box.payment-providers
 -            h3 Choose your payment method
--            .box.payment-button(@click='pay(PAYMENTS.STRIPE)')
--              div
--                .svg-icon.credit-card-icon(v-html="icons.group")
--                p.credit-card Credit Card
--              p Powered by Stripe
--            .box.payment-button(@click='pay(PAYMENTS.AMAZON)')
--              .svg-icon.amazon-pay-icon(v-html="icons.amazonpay")
--
+-            .payments-column
+-              button.purchase.btn.btn-primary.payment-button.payment-item(@click='pay(PAYMENTS.STRIPE)') 
+-                .svg-icon.credit-card-icon(v-html="icons.creditCardIcon")
+-                | {{ $t('card') }}
+-              amazon-button.payment-item(:amazon-data="pay(PAYMENTS.AMAZON)")
      .container.col-6.offset-3.create-option(v-if='!upgradingGroup._id')
        .row
          h1.col-12.text-center.purple-header Create your Group today!
-@@ -98,14 +88,6 @@ div
+@@ -95,14 +88,6 @@ div
          button.btn.btn-secondary.form-control(@click='createGroup()', :value="$t('createGroupPlan')")
        .form-group
          button.btn.btn-primary.btn-lg.btn-block(@click="createGroup()", :disabled="!newGroupIsReady") {{ $t('createGroupPlan') }}
 -    .col-12(v-if='activePage === PAGES.PAY')
--      .payment-providers
+-      .text-center
 -        h3 Choose your payment method
--        .box.payment-button(@click='pay(PAYMENTS.STRIPE)')
--          p Credit Card
--          p Powered by Stripe
--        .box.payment-button(@click='pay(PAYMENTS.AMAZON)')
--          | Amazon Pay
+-        .payments-column.mx-auto
+-          button.purchase.btn.btn-primary.payment-button.payment-item(@click='pay(PAYMENTS.STRIPE)') 
+-            .svg-icon.credit-card-icon(v-html="icons.creditCardIcon")
+-            | {{ $t('card') }}
+-          amazon-button.payment-item(:amazon-data="pay(PAYMENTS.AMAZON)")
  </template>
  
  <style lang="scss" scoped>
-@@ -143,26 +125,6 @@ div
-     .payment-providers {
-       width: 350px;
-     }
--
--    .credit-card {
--      font-size: 20px;
--      font-weight: bold;
--      margin-bottom: 0;
--      margin-top: .5em;
--      display: inline-block;
--    }
--
--    .credit-card-icon {
--      width: 25px;
--      display: inline-block;
--      margin-right: .5em;
--    }
--
--    .amazon-pay-icon {
--      width: 150px;
--      margin: 0 auto;
--      margin-top: .5em;
--    }
-   }
- 
-   .header {
-@@ -331,20 +293,16 @@ div
+@@ -290,22 +275,13 @@ div
  </style>
  
  <script>
 -import paymentsMixin from '../../mixins/payments';
  import { mapState } from 'client/libs/store';
- import group from 'assets/svg/group.svg';
--import amazonpay from 'assets/svg/amazonpay.svg';
  import positiveIcon from 'assets/svg/positive.svg';
+-import creditCardIcon from 'assets/svg/credit-card-icon.svg';
+-import amazonButton from 'client/components/payments/amazonButton';
  
  export default {
 -  mixins: [paymentsMixin],
-+  mixins: [],
+-  components: {
+-    amazonButton,
+-  },
    data () {
      return {
 -      amazonPayments: {},
        icons: Object.freeze({
-         group,
--        amazonpay,
+-        creditCardIcon,
          positiveIcon,
        }),
        PAGES: {
-@@ -352,10 +310,6 @@ export default {
+@@ -313,10 +289,6 @@ export default {
          UPGRADE_GROUP: 'upgrade-group',
          PAY: 'pay',
        },
@@ -3199,7 +3179,7 @@ index 9e92d0aa5..ad645020b 100644
        paymentMethod: '',
        newGroup: {
          type: 'guild',
-@@ -407,14 +361,6 @@ export default {
+@@ -368,14 +340,6 @@ export default {
        } else {
          paymentData.groupToCreate = this.newGroup;
        }
@@ -3209,7 +3189,7 @@ index 9e92d0aa5..ad645020b 100644
 -        this.showStripe(paymentData);
 -      } else if (this.paymentMethod === this.PAYMENTS.AMAZON) {
 -        paymentData.type = 'subscription';
--        this.amazonPaymentsInit(paymentData);
+-        return paymentData;
 -      }
      },
    },
@@ -3507,7 +3487,7 @@ index 533de1ba1..caa61badc 100644
        if (confirmationNeeded && !confirm(this.$t('changeClassConfirmCost'))) return;
        try {
 diff --git a/website/client/components/settings/subscription.vue b/website/client/components/settings/subscription.vue
-index b76747c52..57e7ecd8d 100644
+index 6e2a63425..b352bdd35 100644
 --- a/website/client/components/settings/subscription.vue
 +++ b/website/client/components/settings/subscription.vue
 @@ -36,9 +36,6 @@
@@ -3530,32 +3510,38 @@ index b76747c52..57e7ecd8d 100644
  
 -        .subscribe-pay(v-if='!hasSubscription || hasCanceledSubscription')
 -          h3 {{ $t('subscribeUsing') }}
--          .row.text-center
--            .col-md-4
--              button.purchase.btn.btn-primary(@click='showStripe({subscription:subscription.key, coupon:subscription.coupon})', :disabled='!subscription.key') {{ $t('card') }}
--            .col-md-4
--              a.purchase(@click="openPaypal(paypalPurchaseLink, 'subscription')", :disabled='!subscription.key')
--                img(src='https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-small.png', :alt="$t('paypal')")
--            .col-md-4
--              a.btn.btn-secondary.purchase(@click="payWithAmazon()")
--                img(src='https://payments.amazon.com/gp/cba/button', :alt="$t('amazonPayments')")
+-          .payments-column
+-            button.purchase.btn.btn-primary.payment-button.payment-item(@click='showStripe({subscription:subscription.key, coupon:subscription.coupon})', :disabled='!subscription.key') 
+-              .svg-icon.credit-card-icon(v-html="icons.creditCardIcon")
+-              | {{ $t('card') }}
+-            button.btn.payment-item.paypal-checkout.payment-button(@click="openPaypal(paypalPurchaseLink, 'subscription')", :disabled='!subscription.key')
+-              | &nbsp;
+-              img(src='~assets/images/paypal-checkout.png', :alt="$t('paypal')")
+-              | &nbsp;
+-            amazon-button.payment-item(:amazon-data="{type: 'subscription', subscription: this.subscription.key, coupon: this.subscription.coupon}")
      .row
        .col-6
          h2(v-once) {{ $t('giftSubscription') }}
-@@ -112,11 +97,10 @@ import { mapState } from 'client/libs/store';
+@@ -112,17 +97,10 @@ import { mapState } from 'client/libs/store';
  
  import subscriptionBlocks from '../../../common/script/content/subscriptionBlocks';
  import planGemLimits from '../../../common/script/libs/planGemLimits';
 -import paymentsMixin from '../../mixins/payments';
  import notificationsMixin from '../../mixins/notifications';
  
+-import amazonButton from 'client/components/payments/amazonButton';
+-import creditCardIcon from 'assets/svg/credit-card-icon.svg';
+-
  export default {
 -  mixins: [paymentsMixin, notificationsMixin],
+-  components: {
+-    amazonButton,
+-  },
 +  mixins: [notificationsMixin],
    data () {
      return {
        loading: false,
-@@ -127,14 +111,7 @@ export default {
+@@ -133,19 +111,9 @@ export default {
        subscription: {
          key: 'basic_earned',
        },
@@ -3569,8 +3555,13 @@ index b76747c52..57e7ecd8d 100644
 -        PAYPAL: 'Paypal',
          GIFT: 'Gift',
        },
+-      icons: Object.freeze({
+-        creditCardIcon,
+-      }),
      };
-@@ -171,10 +148,7 @@ export default {
+   },
+   computed: {
+@@ -180,10 +148,7 @@ export default {
        return subscriptionBlocks;
      },
      canEditCardDetails () {
@@ -3582,7 +3573,7 @@ index b76747c52..57e7ecd8d 100644
      },
      hasSubscription () {
        return Boolean(this.user.purchased.plan.customerId);
-@@ -232,28 +206,14 @@ export default {
+@@ -241,8 +206,6 @@ export default {
      },
      canCancelSubscription () {
        return (
@@ -3591,16 +3582,9 @@ index b76747c52..57e7ecd8d 100644
          !this.hasCanceledSubscription &&
          !this.hasGroupPlan
        );
-     },
+@@ -250,12 +213,7 @@ export default {
    },
    methods: {
--    payWithAmazon () {
--      this.amazonPaymentsInit({
--        type: 'subscription',
--        subscription: this.subscription.key,
--        coupon: this.subscription.coupon,
--      });
--    },
      async applyCoupon (coupon) {
 -      const response = await axios.post(`/api/v4/coupons/validate/${coupon}`);
 -
@@ -3927,10 +3911,10 @@ index 34ff15ca5..e5dd03e02 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index 4d7f383f4..db818b667 100644
+index 16a03ed68..a43d30132 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
-@@ -511,7 +511,6 @@ import moment from 'moment';
+@@ -506,7 +506,6 @@ import moment from 'moment';
  import axios from 'axios';
  import scoreTask from 'common/script/ops/scoreTask';
  import Vue from 'vue';
@@ -3938,7 +3922,7 @@ index 4d7f383f4..db818b667 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import negativeIcon from 'assets/svg/negative.svg';
-@@ -728,7 +727,6 @@ export default {
+@@ -723,7 +722,6 @@ export default {
  
        if (task.group.approval.required) task.group.approval.requested = true;
  

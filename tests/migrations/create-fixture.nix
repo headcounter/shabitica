@@ -184,6 +184,20 @@ in runInMachine {
       loggedin = newuser_birthday2019['auth']['timestamps']['loggedin']
       assert loggedin.startswith('2019-01-20')
 
+      # Same as with the birthday event, but for Pi-Day we need to warp to
+      # 2019-02-20 (31 days since 2019-01-20) to be awarded the gear.
+      timewarp(2678400)
+
+      newuser_piday2019 = first.user.auth.local.register.post(
+        username='piday2019',
+        email='piday2019@example.org',
+        password='snakeoil',
+        confirmPassword='snakeoil',
+      )
+
+      loggedin = newuser_piday2019['auth']['timestamps']['loggedin']
+      assert loggedin.startswith('2019-02-20')
+
       with open('spec.json', 'w') as fp:
         json.dump({
           'foo': {
@@ -202,6 +216,10 @@ in runInMachine {
           'birthday2019': {
             'apiUser': newuser_birthday2019['id'],
             'apiToken': newuser_birthday2019['apiToken'],
+          },
+          'piday2019': {
+            'apiUser': newuser_piday2019['id'],
+            'apiToken': newuser_piday2019['apiToken'],
           }
         }, fp)
     '';

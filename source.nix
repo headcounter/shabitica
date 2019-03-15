@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.86.1";
+  version = "4.87.2";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "0gzlnyhnbz5s841gsqjj7yww68mgmbx7k4qd59m5mvy51yv7drhf";
+    sha256 = "0pqjghmnbgpi1zdi9lawmc4vgb6l99chzl9a8z20mdh05hcy34p7";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -231,6 +231,7 @@ stdenv.mkDerivation rec {
     "test/api/v3/integration/user/*-user_push_device.test.js"
     "test/api/v3/integration/user/auth/DELETE-user_auth_social_network.test.js"
     "test/api/v3/integration/user/auth/POST-user_auth_social.test.js"
+    "website/client/assets/scss/payments.scss"
     "website/client/assets/svg/amazonpay.svg"
     "website/client/assets/svg/credit-card.svg"
     "website/client/components/achievements/newStuff.vue"
@@ -240,6 +241,7 @@ stdenv.mkDerivation rec {
     "website/client/components/group-plans/groupPlanOverviewModal.vue"
     "website/client/components/groups/communityGuidelines.vue"
     "website/client/components/header/notifications/newStuff.vue"
+    "website/client/components/payments/amazonButton.vue"
     "website/client/components/payments/amazonModal.vue"
     "website/client/components/payments/buyGemsModal.vue"
     "website/client/components/payments/sendGemsModal.vue"

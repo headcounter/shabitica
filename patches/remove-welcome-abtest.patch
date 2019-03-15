@@ -33,22 +33,17 @@ index 40c3319ba..5dc9fc83b 100644
  
    return null;
 diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
-index dad044441..020dd59eb 100644
+index 2a360df1a..5b2a4096a 100644
 --- a/website/server/models/user/hooks.js
 +++ b/website/server/models/user/hooks.js
-@@ -128,19 +128,6 @@ function _setUpNewUser (user) {
-   user.purchased.background.violet = true;
-   user.preferences.background = 'violet';
+@@ -147,14 +147,6 @@ function _setUpNewUser (user) {
+   user.migration = '20190314_pi_day';
+   /* eslint-enable camelcase */
  
 -  const testGroup = Math.random();
--  if (testGroup < 0.2) {
--    user._ABtests.welcomeEmailSplit = 'welcome-v2';
--  } else if (testGroup < 0.4) {
+-
+-  if (testGroup < 0.5) {
 -    user._ABtests.welcomeEmailSplit = 'welcome-v2b';
--  } else if (testGroup < 0.6) {
--    user._ABtests.welcomeEmailSplit = 'welcome-v2c';
--  } else if (testGroup < 0.8) {
--    user._ABtests.welcomeEmailSplit = 'welcome-v2d';
 -  } else {
 -    user._ABtests.welcomeEmailSplit = 'welcome';
 -  }

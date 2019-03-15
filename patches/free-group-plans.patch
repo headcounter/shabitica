@@ -298,7 +298,7 @@ index b65b216a1..1524a1a69 100644
    computed: {
      ...mapState({user: 'user.data'}),
 diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
-index ad645020b..ba98990c2 100644
+index 2561b2946..5f43a0343 100644
 --- a/website/client/components/groups/groupPlan.vue
 +++ b/website/client/components/groups/groupPlan.vue
 @@ -30,21 +30,8 @@ div
@@ -349,7 +349,7 @@ index ad645020b..ba98990c2 100644
      .col-12(v-if='activePage === PAGES.CREATE_GROUP')
        .form-group
          label.control-label(for='new-group-name') Name
-@@ -91,42 +63,6 @@ div
+@@ -91,36 +63,6 @@ div
  </template>
  
  <style lang="scss" scoped>
@@ -374,12 +374,6 @@ index ad645020b..ba98990c2 100644
 -      color: #fff;
 -    }
 -
--    .payment-button {
--      display: block;
--      margin: 0 auto;
--      margin-bottom: 1em;
--    }
--
 -    .plus .svg-icon{
 -      width: 24px;
 -    }
@@ -392,7 +386,7 @@ index ad645020b..ba98990c2 100644
    .header {
      background: #432874;
      background: linear-gradient(180deg, #4F2A93 0%, #432874 100%);
-@@ -201,101 +137,22 @@ div
+@@ -195,88 +137,21 @@ div
      height: 96px;
    }
  
@@ -477,29 +471,16 @@ index ad645020b..ba98990c2 100644
 -      vertical-align: bottom;
 -    }
 -  }
--
--  .payment-button {
--    width: 200px;
--    height: 80px;
--    margin-bottom: .5em;
--    padding: .5em;
--    display: block;
--  }
--
--  .payment-button:hover {
--    cursor: pointer;
--  }
  </style>
  
  <script>
  import { mapState } from 'client/libs/store';
- import group from 'assets/svg/group.svg';
  import positiveIcon from 'assets/svg/positive.svg';
 +import axios from 'axios';
  
  export default {
-   mixins: [],
-@@ -308,9 +165,7 @@ export default {
+   data () {
+@@ -287,9 +162,7 @@ export default {
        PAGES: {
          CREATE_GROUP: 'create-group',
          UPGRADE_GROUP: 'upgrade-group',
@@ -509,7 +490,7 @@ index ad645020b..ba98990c2 100644
        newGroup: {
          type: 'guild',
          privacy: 'private',
-@@ -345,21 +200,25 @@ export default {
+@@ -324,21 +197,25 @@ export default {
        this.activePage = page;
        window.scrollTo(0, 0);
      },

@@ -161,7 +161,7 @@ index 9f4b96acd..d9b8ec7a6 100644
          let result = _map(this.category.items, (e) => {
            return {
 diff --git a/website/client/components/shops/market/index.vue b/website/client/components/shops/market/index.vue
-index ccf3f432d..c1e78024d 100644
+index 6b8349bc2..e74610df6 100644
 --- a/website/client/components/shops/market/index.vue
 +++ b/website/client/components/shops/market/index.vue
 @@ -116,11 +116,6 @@
