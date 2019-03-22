@@ -113,6 +113,13 @@ let
         shift
         exec ${connect} "$@"
         exit 1
+      elif [ "$1" = '--switch' ]; then
+        newsys=${lib.escapeShellArg config.system.build.toplevel}
+        exec ${connect} "$newsys/bin/switch-to-configuration" test
+        exit 1
+      elif [ -n "$1" ]; then
+        echo "Usage: $0 [--connect|--switch]" >&2
+        exit 1
       fi
 
       if ${nc} -z 127.0.0.1 3022; then
