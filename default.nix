@@ -500,18 +500,29 @@ in autoCalledOr {
       services.nginx.virtualHosts.${cfg.hostName} = {
         forceSSL = cfg.useSSL;
         enableACME = cfg.useACME;
-        locations = {
-          "/".root = cfg.staticPath;
-          "/".index = "index.html";
-          "/".tryFiles = "$uri $uri/ @backend";
-
+        locations = let
           # This is ugly as hell and basically disables caching.
           # See https://github.com/NixOS/nixpkgs/issues/25485
-          "/".extraConfig = ''
+          storeDirWorkaround = ''
             if_modified_since off;
             add_header Last-Modified "";
             etag off;
           '';
+          commonHeaders = let
+            csp = lib.concatStringsSep "; " [
+              "default-src ${cfg.baseURL} 'unsafe-eval' 'unsafe-inline'"
+              "img-src ${cfg.baseURL} data:"
+            ];
+          in ''
+            add_header X-Content-Type-Options nosniff;
+            add_header Referrer-Policy no-referrer;
+            add_header Content-Security-Policy "${csp};";
+          '';
+        in {
+          "/".root = cfg.staticPath;
+          "/".index = "index.html";
+          "/".tryFiles = "$uri $uri/ @backend";
+          "/".extraConfig = storeDirWorkaround + commonHeaders;
 
           "@backend".proxyPass = "http://unix:/run/shabitica.sock:";
           "@backend".extraConfig = ''
@@ -522,10 +533,12 @@ in autoCalledOr {
             proxy_set_header   Host             $http_host;
             proxy_set_header   Upgrade          $http_upgrade;
             proxy_redirect     off;
+            ${commonHeaders}
           '';
 
           "/apidoc".alias = cfg.apiDocPath;
           "/apidoc".index = "index.html";
+          "/apidoc".extraConfig = commonHeaders;
         };
       };
     })
