@@ -212,6 +212,22 @@ in autoCalledOr {
         etc...).
       '';
     };
+
+    allowEmbedFrom = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [];
+      example = [ "https://example.com/" "https://*.example.net/" ];
+      description = ''
+        List of URLs which are allowed to embed Shabitica using one of the
+        <tag class="element">frame</tag>, <tag class="element">iframe</tag>,
+        <tag class="element">embed</tag> or <tag class="element">object</tag>
+        tags.
+
+        The syntax has to be in the form described in <link xlink:href="${
+          "https://w3c.github.io/webappsec-csp/2/#match-source-expression"
+        }"/>.
+      '';
+    };
   };
 
   config = lib.mkMerge [
@@ -509,9 +525,15 @@ in autoCalledOr {
             etag off;
           '';
           commonHeaders = let
+            frameAncestors = let
+              allowed = lib.concatStringsSep " " cfg.allowEmbedFrom;
+            in if cfg.allowEmbedFrom == [] then "'none'" else allowed;
+
             csp = lib.concatStringsSep "; " [
               "default-src ${cfg.baseURL} 'unsafe-eval' 'unsafe-inline'"
               "img-src ${cfg.baseURL} data:"
+              "object-src 'none'"
+              "frame-ancestors ${frameAncestors}"
             ];
           in ''
             add_header X-Content-Type-Options nosniff;
