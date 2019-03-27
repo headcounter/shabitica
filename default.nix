@@ -539,6 +539,7 @@ in autoCalledOr {
             add_header X-Content-Type-Options nosniff;
             add_header Referrer-Policy no-referrer;
             add_header Content-Security-Policy "${csp};";
+            add_header X-XSS-Protection "1; mode=block";
           '';
         in {
           "/".root = cfg.staticPath;
