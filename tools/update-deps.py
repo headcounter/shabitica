@@ -8,7 +8,7 @@ import subprocess
 
 from nixops import nix_expr
 
-BASEDIR = os.path.dirname(os.path.realpath(__file__))
+BASEDIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
 OUTPUT_DIR = os.path.join(BASEDIR, 'generated')
 COMPOSITION_FILENAME = 'all-deps.nix'
 COMPOSITION_FILE = os.path.join(OUTPUT_DIR, COMPOSITION_FILENAME)
