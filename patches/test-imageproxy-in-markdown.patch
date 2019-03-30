@@ -15,7 +15,7 @@ Date:   Sat Aug 4 23:09:37 2018 +0200
     Filename: test-imageproxy-in-markdown.patch
 
 diff --git a/test/client/e2e/specs/test.js b/test/client/e2e/specs/test.js
-index f43964476..8898b7c0d 100644
+index f439644760..8898b7c0d4 100644
 --- a/test/client/e2e/specs/test.js
 +++ b/test/client/e2e/specs/test.js
 @@ -15,4 +15,32 @@ module.exports = {

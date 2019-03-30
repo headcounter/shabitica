@@ -20,7 +20,7 @@ Date:   Sat Mar 31 00:52:13 2018 +0200
     Filename: remove-external-links.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 83501d037..a9a59f9be 100644
+index 83501d0374..a9a59f9bec 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -101,23 +101,13 @@
@@ -49,7 +49,7 @@ index 83501d037..a9a59f9be 100644
        sidebar-section(:title="$t('playerTiers')")
          .row
 diff --git a/website/client/components/hall/heroes.vue b/website/client/components/hall/heroes.vue
-index 6f6278313..f20bf241b 100644
+index 6f62783132..f20bf241b7 100644
 --- a/website/client/components/hall/heroes.vue
 +++ b/website/client/components/hall/heroes.vue
 @@ -23,10 +23,6 @@
@@ -64,7 +64,7 @@ index 6f6278313..f20bf241b 100644
              textarea.form-control(cols=5, :placeholder="$t('contributions')", v-model='hero.contributor.contributions')
              //include ../../shared/formattiv-help
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 79af1ef9a..3eb2ed0c9 100644
+index 79af1ef9a3..3eb2ed0c99 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -52,9 +52,6 @@ div
@@ -78,7 +78,7 @@ index 79af1ef9a..3eb2ed0c9 100644
              a.topbar-dropdown-item.dropdown-item(href="http://habitica.fandom.com/wiki/Habitica_Wiki", target='_blank') {{ $t('wiki') }}
        .currency-tray.form-inline
 diff --git a/website/client/components/settings/api.vue b/website/client/components/settings/api.vue
-index 291c3640f..ccacd0f28 100644
+index 291c3640f8..ccacd0f280 100644
 --- a/website/client/components/settings/api.vue
 +++ b/website/client/components/settings/api.vue
 @@ -15,27 +15,6 @@
@@ -110,7 +110,7 @@ index 291c3640f..ccacd0f28 100644
      h2 {{ $t('webhooks') }}
      p(v-html="$t('webhooksInfo')")
 diff --git a/website/client/components/static/faq.vue b/website/client/components/static/faq.vue
-index 7a8ca6792..5000dac10 100644
+index 7a8ca6792d..5000dac10c 100644
 --- a/website/client/components/static/faq.vue
 +++ b/website/client/components/static/faq.vue
 @@ -3,7 +3,7 @@
@@ -146,7 +146,7 @@ index 7a8ca6792..5000dac10 100644
      },
      methods: {
 diff --git a/website/client/components/static/overview.vue b/website/client/components/static/overview.vue
-index 586663018..7fd00b1ec 100644
+index 5866630186..7fd00b1ec7 100644
 --- a/website/client/components/static/overview.vue
 +++ b/website/client/components/static/overview.vue
 @@ -8,7 +8,6 @@
@@ -158,7 +158,7 @@ index 586663018..7fd00b1ec 100644
  
  <style lang='scss'>
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 069224fa9..f5c543b1e 100644
+index 069224fa9c..f5c543b1ea 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -712,7 +712,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
@@ -170,7 +170,7 @@ index 069224fa9..f5c543b1e 100644
    }
  }
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 356ba59c7..dbd3a2508 100644
+index 356ba59c71..dbd3a25083 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -109,7 +109,6 @@ let schema = new Schema({

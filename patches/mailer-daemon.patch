@@ -18,7 +18,7 @@ Date:   Tue Mar 27 05:37:16 2018 +0200
     Filename: mailer-daemon.patch
 
 diff --git a/config.json.example b/config.json.example
-index 3a31e9c95..cb82930b4 100644
+index 3a31e9c951..cb82930b49 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -7,13 +7,11 @@
@@ -53,7 +53,7 @@ index 3a31e9c95..cb82930b4 100644
    "WEB_CONCURRENCY": 1,
    "SKIP_SSL_CHECK_KEY": "key",
 diff --git a/package.json b/package.json
-index 4fcaccaef..2b5f8e368 100644
+index b5403a1777..d90127e9b0 100644
 --- a/package.json
 +++ b/package.json
 @@ -59,7 +59,6 @@
@@ -65,7 +65,7 @@ index 4fcaccaef..2b5f8e368 100644
      "pageres": "^4.1.1",
      "passport": "^0.4.0",
 diff --git a/test/api/unit/libs/email.test.js b/test/api/unit/libs/email.test.js
-index 23989fbf3..b043db942 100644
+index 23989fbf31..b043db942f 100644
 --- a/test/api/unit/libs/email.test.js
 +++ b/test/api/unit/libs/email.test.js
 @@ -1,7 +1,6 @@
@@ -137,7 +137,7 @@ index 23989fbf3..b043db942 100644
          body: {
            data: {
 diff --git a/website/server/libs/email.js b/website/server/libs/email.js
-index 9d3d029cf..a6d71bc7f 100644
+index 9d3d029cf7..a6d71bc7f5 100644
 --- a/website/server/libs/email.js
 +++ b/website/server/libs/email.js
 @@ -1,4 +1,3 @@

@@ -16,7 +16,7 @@ Date:   Fri Mar 30 02:41:52 2018 +0200
     Filename: no-limit-for-gold-to-gems.patch
 
 diff --git a/test/common/ops/buy/buyGem.js b/test/common/ops/buy/buyGem.js
-index 4ae96a55b..22b15739b 100644
+index 4ae96a55b7..22b15739bc 100644
 --- a/test/common/ops/buy/buyGem.js
 +++ b/test/common/ops/buy/buyGem.js
 @@ -102,19 +102,6 @@ describe('shared.ops.buyGem', () => {
@@ -40,7 +40,7 @@ index 4ae96a55b..22b15739b 100644
          user.stats.gp = goldPoints;
          user.purchased.plan.gemsBought = gemsBought;
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 1326dea81..c04eb6738 100644
+index 1326dea810..c04eb67386 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -56,13 +56,6 @@
@@ -98,7 +98,7 @@ index 1326dea81..c04eb6738 100644
          return !this.enoughCurrency(this.getPriceClass(), this.item.value * this.selectedAmountToBuy);
        },
 diff --git a/website/client/components/shops/market/categoryItem.vue b/website/client/components/shops/market/categoryItem.vue
-index bdd4546ca..50a453312 100644
+index bdd4546ca9..50a453312a 100644
 --- a/website/client/components/shops/market/categoryItem.vue
 +++ b/website/client/components/shops/market/categoryItem.vue
 @@ -5,8 +5,6 @@ div
@@ -130,7 +130,7 @@ index bdd4546ca..50a453312 100644
  };
  </script>
 diff --git a/website/client/components/shops/market/categoryRow.vue b/website/client/components/shops/market/categoryRow.vue
-index 9f4b96acd..d9b8ec7a6 100644
+index 9f4b96acd6..d9b8ec7a63 100644
 --- a/website/client/components/shops/market/categoryRow.vue
 +++ b/website/client/components/shops/market/categoryRow.vue
 @@ -7,7 +7,6 @@ div.items
@@ -161,7 +161,7 @@ index 9f4b96acd..d9b8ec7a6 100644
          let result = _map(this.category.items, (e) => {
            return {
 diff --git a/website/client/components/shops/market/index.vue b/website/client/components/shops/market/index.vue
-index 6b8349bc2..e74610df6 100644
+index 6b8349bc27..e74610df6d 100644
 --- a/website/client/components/shops/market/index.vue
 +++ b/website/client/components/shops/market/index.vue
 @@ -116,11 +116,6 @@
@@ -177,7 +177,7 @@ index 6b8349bc2..e74610df6 100644
  
  
 diff --git a/website/common/script/ops/buy/buyGem.js b/website/common/script/ops/buy/buyGem.js
-index 81fa5be9d..08dc3ee2f 100644
+index 81fa5be9da..08dc3ee2f7 100644
 --- a/website/common/script/ops/buy/buyGem.js
 +++ b/website/common/script/ops/buy/buyGem.js
 @@ -33,12 +33,6 @@ export class BuyGemOperation extends AbstractGoldItemOperation {

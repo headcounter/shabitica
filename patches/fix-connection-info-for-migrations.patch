@@ -13,7 +13,7 @@ Date:   Thu Jun 28 15:26:53 2018 +0200
     Filename: fix-connection-info-for-migrations.patch
 
 diff --git a/migrations/archive/2018/20180811_inboxOutsideUser.js b/migrations/archive/2018/20180811_inboxOutsideUser.js
-index a58df2a4c..35da63622 100644
+index a58df2a4cf..35da63622b 100644
 --- a/migrations/archive/2018/20180811_inboxOutsideUser.js
 +++ b/migrations/archive/2018/20180811_inboxOutsideUser.js
 @@ -6,12 +6,12 @@ const authorUuid = 'ed4c688c-6652-4a92-9d03-a5a79844174a'; // ... own data is do
@@ -32,7 +32,7 @@ index a58df2a4c..35da63622 100644
  const dbUsers = monk(connectionString).get('users', { castIds: false });
  
 diff --git a/migrations/tasks/habits-one-history-entry-per-day-challenges.js b/migrations/tasks/habits-one-history-entry-per-day-challenges.js
-index dcb05f48b..12e55ecb7 100644
+index dcb05f48bf..12e55ecb79 100644
 --- a/migrations/tasks/habits-one-history-entry-per-day-challenges.js
 +++ b/migrations/tasks/habits-one-history-entry-per-day-challenges.js
 @@ -6,10 +6,11 @@
@@ -49,7 +49,7 @@ index dcb05f48b..12e55ecb7 100644
  
  function processChallengeHabits (lastId) {
 diff --git a/migrations/tasks/habits-one-history-entry-per-day-users.js b/migrations/tasks/habits-one-history-entry-per-day-users.js
-index 509aa71eb..f71cad61e 100644
+index 509aa71eb7..f71cad61ed 100644
 --- a/migrations/tasks/habits-one-history-entry-per-day-users.js
 +++ b/migrations/tasks/habits-one-history-entry-per-day-users.js
 @@ -6,10 +6,11 @@ const authorUuid = 'ed4c688c-6652-4a92-9d03-a5a79844174a'; // ... own data is do

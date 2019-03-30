@@ -13,7 +13,7 @@ Date:   Fri Mar 30 19:32:26 2018 +0200
     Filename: remove-contact-form.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 4cf6a7e6d..3d040479d 100644
+index 4cf6a7e6df..3d040479d1 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -101,8 +101,6 @@
@@ -44,7 +44,7 @@ index 4cf6a7e6d..3d040479d 100644
        this.$store.dispatch('user:sleep');
      },
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 9419f2218..79af1ef9a 100644
+index 9419f22186..79af1ef9a3 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -57,7 +57,6 @@ div
@@ -74,7 +74,7 @@ index 9419f2218..79af1ef9a 100644
        this.isUserDropdownOpen = !this.isUserDropdownOpen;
      },
 diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
-index 4f148b29c..fefaa2089 100644
+index 4f148b29c5..fefaa20896 100644
 --- a/website/client/components/static/header.vue
 +++ b/website/client/components/static/header.vue
 @@ -16,8 +16,6 @@
@@ -87,7 +87,7 @@ index 4f148b29c..fefaa2089 100644
          router-link.nav-item(tag='li', to='/register')
            a.nav-link(v-once) {{ $t('getStarted') }}
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index 0a760836f..cd97a355f 100644
+index 0a760836f0..cd97a355fd 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -11,7 +11,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'client/components/

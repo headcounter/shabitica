@@ -13,7 +13,7 @@ Date:   Sat Jun 23 14:25:29 2018 +0200
     Filename: buy-gems-via-menu.patch
 
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 3eb2ed0c9..514788bde 100644
+index 3eb2ed0c99..514788bde2 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -59,7 +59,7 @@ div

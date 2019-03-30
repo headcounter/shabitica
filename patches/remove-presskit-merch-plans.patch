@@ -10,7 +10,7 @@ Date:   Sat Mar 31 02:10:24 2018 +0200
     Filename: remove-presskit-merch-plans.patch
 
 diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
-index fefaa2089..7a865e176 100644
+index fefaa20896..7a865e176a 100644
 --- a/website/client/components/static/header.vue
 +++ b/website/client/components/static/header.vue
 @@ -5,25 +5,13 @@
@@ -112,7 +112,7 @@ index fefaa2089..7a865e176 100644
  </style>
  
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index 246d9214f..6f072043d 100644
+index 246d9214f0..6f072043d8 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -12,11 +12,8 @@ const AppPage = () => import(/* webpackChunkName: "static" */'client/components/

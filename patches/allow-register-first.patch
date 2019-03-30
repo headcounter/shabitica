@@ -15,7 +15,7 @@ Date:   Tue Mar 27 05:37:23 2018 +0200
     Filename: allow-register-first.patch
 
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 18cfb5bdb..e371e01f9 100644
+index 18cfb5bdb7..e371e01f99 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -138,15 +138,17 @@ async function registerLocal (req, res, { isV3 = false }) {
