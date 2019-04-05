@@ -63,7 +63,7 @@ index 0000000000..347c750ab3
 +  "mochaSimpleHtmlReporterReporterOptions": {"output": "test-report.html"}
 +}
 diff --git a/package.json b/package.json
-index 8e1fef9113..8b5d8085f1 100644
+index e8db88a899..f28ef43f98 100644
 --- a/package.json
 +++ b/package.json
 @@ -110,9 +110,9 @@
@@ -86,5 +86,5 @@ index 8e1fef9113..8b5d8085f1 100644
 +    "mocha-multi-reporters": "^1.1.7",
 +    "mocha-simple-html-reporter": "^1.1.0",
      "monk": "^6.0.6",
-     "nightwatch": "^0.9.21",
-     "puppeteer": "^1.5.0",
+     "nightwatch": "^1.0.16",
+     "puppeteer": "^1.14.0",

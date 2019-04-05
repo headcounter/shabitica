@@ -555,7 +555,7 @@ index 05663006bc..0a760836f0 100644
      },
      {
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 2c70e0ccd0..48eb5798e3 100644
+index 7c96a96499..19b84850c6 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -23,6 +23,7 @@ import {

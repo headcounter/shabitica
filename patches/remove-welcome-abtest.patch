@@ -33,10 +33,10 @@ index 40c3319ba3..5dc9fc83b6 100644
  
    return null;
 diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
-index 75bee4d71d..020dd59ebe 100644
+index ed3a7514b5..676231ef59 100644
 --- a/website/server/models/user/hooks.js
 +++ b/website/server/models/user/hooks.js
-@@ -128,14 +128,6 @@ function _setUpNewUser (user) {
+@@ -130,14 +130,6 @@ function _setUpNewUser (user) {
    user.purchased.background.violet = true;
    user.preferences.background = 'violet';
  

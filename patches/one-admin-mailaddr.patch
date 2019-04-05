@@ -133,7 +133,7 @@ index 1609e92969..5bfbbd7ef5 100644
  };
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 54c40a05d4..61bd8a090b 100644
+index 26200eaf88..86e4d8fb05 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -20,7 +20,7 @@ import {
@@ -159,7 +159,7 @@ index bee0f5ee82..79798efe7a 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 162047d9ec..2c70e0ccd0 100644
+index 7c67e39af1..7c96a96499 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -25,7 +25,7 @@ import common from '../../../common';
@@ -172,7 +172,7 @@ index 162047d9ec..2c70e0ccd0 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index dd27a72373..36df04d1ed 100644
+index 2b833592db..790ea214c5 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -23,7 +23,7 @@ import * as userLib from '../../libs/user';

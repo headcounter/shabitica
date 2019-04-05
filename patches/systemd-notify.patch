@@ -10,7 +10,7 @@ Date:   Thu May 3 06:29:02 2018 +0200
     Filename: systemd-notify.patch
 
 diff --git a/package.json b/package.json
-index bde80da0a5..e84efa053b 100644
+index 377adff35f..502649736e 100644
 --- a/package.json
 +++ b/package.json
 @@ -68,6 +68,7 @@
@@ -19,7 +19,7 @@ index bde80da0a5..e84efa053b 100644
      "sass-loader": "^7.0.3",
 +    "sd-notify": "^2.3.1",
      "shelljs": "^0.8.2",
-     "superagent": "^4.0.0",
+     "superagent": "^5.0.2",
      "svg-inline-loader": "^0.8.0",
 diff --git a/website/server/server.js b/website/server/server.js
 index d704cdb1a1..03dc694f54 100644

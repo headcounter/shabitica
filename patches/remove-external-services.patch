@@ -1887,10 +1887,10 @@ index 62df06f307..b75c9b4c55 100644
      let username, email, api;
  
 diff --git a/test/common/ops/buy/buy.js b/test/common/ops/buy/buy.js
-index 478a2cae86..f743f02c61 100644
+index 5ec36dfd3a..02acabf9b7 100644
 --- a/test/common/ops/buy/buy.js
 +++ b/test/common/ops/buy/buy.js
-@@ -12,7 +12,6 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
+@@ -13,7 +13,6 @@ import { defaultsDeep } from 'lodash';
  
  describe('shared.ops.buy', () => {
    let user;
@@ -1898,9 +1898,9 @@ index 478a2cae86..f743f02c61 100644
  
    beforeEach(() => {
      user = generateUser({
-@@ -28,12 +27,6 @@ describe('shared.ops.buy', () => {
+@@ -32,12 +31,6 @@ describe('shared.ops.buy', () => {
+         },
        },
-       stats: { gp: 200 },
      });
 -
 -    sinon.stub(analytics, 'track');
@@ -1911,7 +1911,7 @@ index 478a2cae86..f743f02c61 100644
    });
  
    it('returns error when key is not provided', (done) => {
-@@ -48,10 +41,8 @@ describe('shared.ops.buy', () => {
+@@ -52,10 +45,8 @@ describe('shared.ops.buy', () => {
  
    it('recovers 15 hp', () => {
      user.stats.hp = 30;
@@ -2063,12 +2063,12 @@ index 9f04c4d6bb..01fcc829d2 100644
  
      it('does not increase hp above 50', () => {
 diff --git a/test/common/ops/buy/buyMarketGear.js b/test/common/ops/buy/buyMarketGear.js
-index f546331215..67305e116a 100644
+index 602975f6a6..9018d6abf9 100644
 --- a/test/common/ops/buy/buyMarketGear.js
 +++ b/test/common/ops/buy/buyMarketGear.js
-@@ -12,15 +12,14 @@ import {
- import i18n from '../../../../website/common/script/i18n';
+@@ -13,15 +13,14 @@ import i18n from '../../../../website/common/script/i18n';
  import errorMessage from '../../../../website/common/script/libs/errorMessage';
+ import { defaultsDeep } from 'lodash';
  
 -function buyGear (user, req, analytics) {
 -  let buyOp = new BuyMarketGearOperation(user, req, analytics);
@@ -2084,7 +2084,7 @@ index f546331215..67305e116a 100644
  
    beforeEach(() => {
      user = generateUser({
-@@ -39,20 +38,18 @@ describe('shared.ops.buyMarketGear', () => {
+@@ -43,20 +42,18 @@ describe('shared.ops.buyMarketGear', () => {
  
      sinon.stub(shared, 'randomVal');
      sinon.stub(shared.fns, 'predictableRandom');
@@ -2106,7 +2106,7 @@ index f546331215..67305e116a 100644
  
        expect(user.items.gear.owned).to.eql({
          weapon_warrior_0: true,
-@@ -72,7 +69,6 @@ describe('shared.ops.buyMarketGear', () => {
+@@ -76,7 +73,6 @@ describe('shared.ops.buyMarketGear', () => {
          headAccessory_special_whiteHeadband: true,
          headAccessory_special_yellowHeadband: true,
        });
@@ -4348,7 +4348,7 @@ index f3131cb5a5..719a693820 100644
    group_plan_auto: {
      target: 'user',
 diff --git a/website/common/script/fns/randomDrop.js b/website/common/script/fns/randomDrop.js
-index deaf0127b3..26283710a4 100644
+index 6061b3f83f..7c643d0ef0 100644
 --- a/website/common/script/fns/randomDrop.js
 +++ b/website/common/script/fns/randomDrop.js
 @@ -25,7 +25,7 @@ function trueRandom () {
@@ -4360,7 +4360,7 @@ index deaf0127b3..26283710a4 100644
    let acceptableDrops;
    let drop;
    let dropMultiplier;
-@@ -111,16 +111,6 @@ module.exports = function randomDrop (user, options, req = {}, analytics) {
+@@ -119,16 +119,6 @@ module.exports = function randomDrop (user, options, req = {}, analytics) {
        }, req.language);
      }
  
@@ -4378,7 +4378,7 @@ index deaf0127b3..26283710a4 100644
      user.items.lastDrop.date = Number(new Date());
      user.items.lastDrop.count++;
 diff --git a/website/common/script/fns/updateStats.js b/website/common/script/fns/updateStats.js
-index 65d466f1b0..c0aa9d37ef 100644
+index 669fb46fd2..11278bd04d 100644
 --- a/website/common/script/fns/updateStats.js
 +++ b/website/common/script/fns/updateStats.js
 @@ -6,7 +6,7 @@ import {
@@ -4390,10 +4390,10 @@ index 65d466f1b0..c0aa9d37ef 100644
    let allocatedStatPoints;
    let totalStatPoints;
    let experienceToNextLevel;
-@@ -88,15 +88,6 @@ module.exports = function updateStats (user, stats, req = {}, analytics) {
-         user.items.quests[k] = 0;
+@@ -92,15 +92,6 @@ module.exports = function updateStats (user, stats, req = {}, analytics) {
        user.items.quests[k]++;
-       if (user.markModified) user.markModified('flags.levelDrops');
+       if (user.markModified) user.markModified('items.quests');
+ 
 -      if (analytics) {
 -        analytics.track('acquire item', {
 -          uuid: user._id,
@@ -4619,7 +4619,7 @@ index 13a995060f..7d86911f17 100644
        buyRes = buyOp.purchase();
        break;
 diff --git a/website/common/script/ops/buy/buyArmoire.js b/website/common/script/ops/buy/buyArmoire.js
-index 6416815841..c3a6051f00 100644
+index cd4eb796af..2c38cbfc9c 100644
 --- a/website/common/script/ops/buy/buyArmoire.js
 +++ b/website/common/script/ops/buy/buyArmoire.js
 @@ -18,8 +18,8 @@ const YIELD_EQUIPMENT_THRESHOLD = 0.6;
@@ -4653,7 +4653,7 @@ index 6416815841..c3a6051f00 100644
    _gearResult (user, eligibleEquipment) {
      eligibleEquipment.sort();
      let drop = randomVal(eligibleEquipment);
-@@ -102,10 +89,6 @@ export class BuyArmoireOperation extends AbstractGoldItemOperation {
+@@ -104,10 +91,6 @@ export class BuyArmoireOperation extends AbstractGoldItemOperation {
  
      removeItemByPath(user, `gear.flat.${drop.key}`);
  
@@ -4664,9 +4664,9 @@ index 6416815841..c3a6051f00 100644
      let armoireResp = {
        type: 'gear',
        dropKey: drop.key,
-@@ -126,10 +109,6 @@ export class BuyArmoireOperation extends AbstractGoldItemOperation {
-     user.items.food[drop.key] = user.items.food[drop.key] || 0;
+@@ -129,10 +112,6 @@ export class BuyArmoireOperation extends AbstractGoldItemOperation {
      user.items.food[drop.key] += 1;
+     if (user.markModified) user.markModified('items.food');
  
 -    if (this.analytics) {
 -      this._trackDropAnalytics(user._id, drop.key);
@@ -4730,7 +4730,7 @@ index 5f8728bf53..7660de1c46 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buyMysterySet.js b/website/common/script/ops/buy/buyMysterySet.js
-index 7e0bf0c83a..0d4387ddb6 100644
+index db9ca557f2..e8098e7b23 100644
 --- a/website/common/script/ops/buy/buyMysterySet.js
 +++ b/website/common/script/ops/buy/buyMysterySet.js
 @@ -9,7 +9,7 @@ import {
@@ -4758,9 +4758,9 @@ index 7e0bf0c83a..0d4387ddb6 100644
 -    }
    });
  
-   user.purchased.plan.consecutive.trinkets--;
+   if (user.markModified) user.markModified('items.gear.owned');
 diff --git a/website/common/script/ops/buy/buyQuest.js b/website/common/script/ops/buy/buyQuest.js
-index c9fb3985fb..ff9f540b06 100644
+index 09f04dcb59..68c47fcbfa 100644
 --- a/website/common/script/ops/buy/buyQuest.js
 +++ b/website/common/script/ops/buy/buyQuest.js
 @@ -10,8 +10,8 @@ import {AbstractGoldItemOperation} from './abstractBuyOperation';
@@ -4775,7 +4775,7 @@ index c9fb3985fb..ff9f540b06 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buyQuestGem.js b/website/common/script/ops/buy/buyQuestGem.js
-index 90cf0190e8..b3ae661abb 100644
+index 1a1a24d90a..449de84fbf 100644
 --- a/website/common/script/ops/buy/buyQuestGem.js
 +++ b/website/common/script/ops/buy/buyQuestGem.js
 @@ -10,8 +10,8 @@ import errorMessage from '../../libs/errorMessage';
@@ -4805,7 +4805,7 @@ index 46e73a5d81..5397b50125 100644
  
    getItemKey () {
 diff --git a/website/common/script/ops/buy/hourglassPurchase.js b/website/common/script/ops/buy/hourglassPurchase.js
-index 5354ee20bd..b08c0d2d50 100644
+index 44f6e1a6f4..88ff944527 100644
 --- a/website/common/script/ops/buy/hourglassPurchase.js
 +++ b/website/common/script/ops/buy/hourglassPurchase.js
 @@ -9,7 +9,7 @@ import {
@@ -4817,8 +4817,8 @@ index 5354ee20bd..b08c0d2d50 100644
    let key = get(req, 'params.key');
    if (!key) throw new BadRequest(errorMessage('missingKeyParam'));
  
-@@ -42,17 +42,6 @@ module.exports = function purchaseHourglass (user, req = {}, analytics) {
-     user.items.mounts[key] = true;
+@@ -44,17 +44,6 @@ module.exports = function purchaseHourglass (user, req = {}, analytics) {
+     if (user.markModified) user.markModified('items.mounts');
    }
  
 -  if (analytics) {
@@ -4836,10 +4836,10 @@ index 5354ee20bd..b08c0d2d50 100644
      { items: user.items, purchasedPlanConsecutive: user.purchased.plan.consecutive },
      i18n.t('hourglassPurchase', req.language),
 diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index bd07248590..b4f84ade40 100644
+index 752ffed231..2afa0001d6 100644
 --- a/website/common/script/ops/buy/purchase.js
 +++ b/website/common/script/ops/buy/purchase.js
-@@ -65,7 +65,7 @@ function purchaseItem (user, item, price, type, key) {
+@@ -68,7 +68,7 @@ function purchaseItem (user, item, price, type, key) {
  
  const acceptedTypes = ['eggs', 'hatchingPotions', 'food', 'gear', 'bundles'];
  const singlePurchaseTypes = ['gear'];
@@ -4848,7 +4848,7 @@ index bd07248590..b4f84ade40 100644
    let type = get(req.params, 'type');
    let key = get(req.params, 'key');
  
-@@ -103,19 +103,6 @@ module.exports = function purchase (user, req = {}, analytics) {
+@@ -106,19 +106,6 @@ module.exports = function purchase (user, req = {}, analytics) {
      purchaseItem(user, item, price, type, key);
    }
  
@@ -4869,7 +4869,7 @@ index bd07248590..b4f84ade40 100644
      pick(user, splitWhitespace('items balance')),
    ];
 diff --git a/website/common/script/ops/changeClass.js b/website/common/script/ops/changeClass.js
-index 618a617619..7c66147a81 100644
+index 49af6f481a..5704f92f81 100644
 --- a/website/common/script/ops/changeClass.js
 +++ b/website/common/script/ops/changeClass.js
 @@ -33,18 +33,17 @@ function resetClass (user, req = {}) {
@@ -4894,8 +4894,8 @@ index 618a617619..7c66147a81 100644
      }
  
      user.stats.class = klass;
-@@ -56,17 +55,6 @@ module.exports = function changeClass (user, req = {}, analytics) {
-     if (klass === 'rogue')  user.items.gear.owned[`shield_${klass}_0`] = true;
+@@ -57,17 +56,6 @@ module.exports = function changeClass (user, req = {}, analytics) {
+     if (user.markModified) user.markModified('items.gear.owned');
  
      removePinnedItemsByOwnedGear(user);
 -
@@ -4913,7 +4913,7 @@ index 618a617619..7c66147a81 100644
      // if invalid class is specified, throw an error.
      throw new BadRequest(i18n.t('invalidClass', req.language));
 diff --git a/website/common/script/ops/openMysteryItem.js b/website/common/script/ops/openMysteryItem.js
-index 4773565b89..33411f549f 100644
+index c45d63e925..149460c7b2 100644
 --- a/website/common/script/ops/openMysteryItem.js
 +++ b/website/common/script/ops/openMysteryItem.js
 @@ -13,7 +13,7 @@ function markNotificationAsRead (user) {
@@ -4925,9 +4925,9 @@ index 4773565b89..33411f549f 100644
    const mysteryItems = user.purchased.plan.mysteryItems;
    let item = mysteryItems.shift();
  
-@@ -28,17 +28,6 @@ module.exports = function openMysteryItem (user, req = {}, analytics) {
- 
-   if (user.markModified) user.markModified('purchased.plan.mysteryItems');
+@@ -31,17 +31,6 @@ module.exports = function openMysteryItem (user, req = {}, analytics) {
+     user.markModified('items.gear.owned');
+   }
  
 -  if (analytics) {
 -    analytics.track('open mystery item', {
@@ -4978,7 +4978,7 @@ index 7531de25a6..79ddbdbabe 100644
  
    let lvl = capByLevel(user.stats.lvl);
 diff --git a/website/common/script/ops/releaseBoth.js b/website/common/script/ops/releaseBoth.js
-index c306d92793..3231a3914f 100644
+index 75aa65abd7..9722d4e952 100644
 --- a/website/common/script/ops/releaseBoth.js
 +++ b/website/common/script/ops/releaseBoth.js
 @@ -22,21 +22,6 @@ module.exports = function releaseBoth (user, req = {}) {
@@ -5004,7 +5004,7 @@ index c306d92793..3231a3914f 100644
  
    if (mountInfo && mountInfo.type === 'drop') {
 diff --git a/website/common/script/ops/releaseMounts.js b/website/common/script/ops/releaseMounts.js
-index 4462d11f44..a5c92dcff2 100644
+index adb9d96dfd..8cd3e11625 100644
 --- a/website/common/script/ops/releaseMounts.js
 +++ b/website/common/script/ops/releaseMounts.js
 @@ -5,7 +5,7 @@ import {
@@ -5016,7 +5016,7 @@ index 4462d11f44..a5c92dcff2 100644
    if (user.balance < 1) {
      throw new NotAuthorized(i18n.t('notEnoughGems', req.language));
    }
-@@ -38,16 +38,6 @@ module.exports = function releaseMounts (user, req = {}, analytics) {
+@@ -39,16 +39,6 @@ module.exports = function releaseMounts (user, req = {}, analytics) {
      user.achievements.mountMasterCount++;
    }
  
@@ -5034,7 +5034,7 @@ index 4462d11f44..a5c92dcff2 100644
      user.items.mounts,
      i18n.t('mountsReleased'),
 diff --git a/website/common/script/ops/releasePets.js b/website/common/script/ops/releasePets.js
-index 0124474a37..d9363e3df4 100644
+index 0764fddb62..955a91f4a0 100644
 --- a/website/common/script/ops/releasePets.js
 +++ b/website/common/script/ops/releasePets.js
 @@ -5,7 +5,7 @@ import {
@@ -5046,7 +5046,7 @@ index 0124474a37..d9363e3df4 100644
    if (user.balance < 1) {
      throw new NotAuthorized(i18n.t('notEnoughGems', req.language));
    }
-@@ -38,16 +38,6 @@ module.exports = function releasePets (user, req = {}, analytics) {
+@@ -39,16 +39,6 @@ module.exports = function releasePets (user, req = {}, analytics) {
      user.achievements.beastMasterCount++;
    }
  
@@ -5094,7 +5094,7 @@ index 9f8da0c839..ffe9e2c5c0 100644
      {user, tasks},
      i18n.t('fortifyComplete'),
 diff --git a/website/common/script/ops/revive.js b/website/common/script/ops/revive.js
-index b8ddb0b637..67eb51776b 100644
+index 14ad3d1ddd..8714b0d356 100644
 --- a/website/common/script/ops/revive.js
 +++ b/website/common/script/ops/revive.js
 @@ -12,7 +12,7 @@ import predictableRandom from '../fns/predictableRandom';
@@ -5106,7 +5106,7 @@ index b8ddb0b637..67eb51776b 100644
    if (user.stats.hp > 0) {
      throw new NotAuthorized(i18n.t('cannotRevive', req.language));
    }
-@@ -104,16 +104,6 @@ module.exports = function revive (user, req = {}, analytics) {
+@@ -105,16 +105,6 @@ module.exports = function revive (user, req = {}, analytics) {
      message = i18n.t('messageLostItem', { itemText: item.text(req.language)}, req.language);
    }
  
@@ -5156,7 +5156,7 @@ index e80f766b0a..48a283ce29 100644
    return [user.preferences.sleep];
  };
 diff --git a/website/common/script/ops/unlock.js b/website/common/script/ops/unlock.js
-index bbf59c7b2a..1363281cc3 100644
+index 7adbac48de..bbdb7ea6fc 100644
 --- a/website/common/script/ops/unlock.js
 +++ b/website/common/script/ops/unlock.js
 @@ -15,7 +15,7 @@ import content from '../content/index';
@@ -5168,7 +5168,7 @@ index bbf59c7b2a..1363281cc3 100644
    let path = get(req.query, 'path');
  
    if (!path) {
-@@ -115,18 +115,6 @@ module.exports = function unlock (user, req = {}, analytics) {
+@@ -117,18 +117,6 @@ module.exports = function unlock (user, req = {}, analytics) {
      }
  
      user.balance -= cost;
@@ -5188,7 +5188,7 @@ index bbf59c7b2a..1363281cc3 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 84c5485fe6..54c40a05d4 100644
+index bdf8c17a72..26200eaf88 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -5,7 +5,6 @@ import {
@@ -5265,7 +5265,7 @@ index 84c5485fe6..54c40a05d4 100644
  /**
   * @api {put} /api/v3/user/auth/update-username Update username
   * @apiDescription Update the username of a local user
-@@ -411,33 +387,4 @@ api.resetPasswordSetNewOne = {
+@@ -413,33 +389,4 @@ api.resetPasswordSetNewOne = {
    },
  };
  
@@ -5467,7 +5467,7 @@ index 7acc406a44..8a441b55e4 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 9eef5108e9..162047d9ec 100644
+index eed4aff4cb..7c67e39af1 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,10 +22,6 @@ import {
@@ -5559,7 +5559,7 @@ index 9eef5108e9..162047d9ec 100644
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
      // await Q.ninvoke(savedGroup, 'populate', ['leader', nameFields]); // doc.populate doesn't return a promise
      let response = savedGroup.toJSON();
-@@ -616,10 +548,7 @@ api.joinGroup = {
+@@ -617,10 +549,7 @@ api.joinGroup = {
  
      promises = await Promise.all(promises);
  
@@ -5571,7 +5571,7 @@ index 9eef5108e9..162047d9ec 100644
  
      let response = await Group.toJSONCleanChat(promises[0], user);
      let leader = await User.findById(response.leader).select(nameFields).exec();
-@@ -627,22 +556,6 @@ api.joinGroup = {
+@@ -628,22 +557,6 @@ api.joinGroup = {
        response.leader = leader.toJSON({minimize: true});
      }
  
@@ -5594,7 +5594,7 @@ index 9eef5108e9..162047d9ec 100644
      res.respond(200, response);
    },
  };
-@@ -777,12 +690,7 @@ api.leaveGroup = {
+@@ -778,12 +691,7 @@ api.leaveGroup = {
        user.guilds.splice(guildIndex, 1);
      }
  
@@ -5608,7 +5608,7 @@ index 9eef5108e9..162047d9ec 100644
      res.respond(200, {});
    },
  };
-@@ -913,8 +821,7 @@ api.removeGroupMember = {
+@@ -915,8 +823,7 @@ api.removeGroupMember = {
      ]);
  
      if (isInGroup && group.hasNotCancelled())  {
@@ -5618,7 +5618,7 @@ index 9eef5108e9..162047d9ec 100644
      }
  
      res.respond(200, {});
-@@ -1057,16 +964,6 @@ api.inviteToGroup = {
+@@ -1059,16 +966,6 @@ api.inviteToGroup = {
        results.push(...usernameResults);
      }
  
@@ -5907,7 +5907,7 @@ index 69f050ad3d..79aae8c5e9 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 641adf93c8..dd27a72373 100644
+index 839c7cd06f..2b833592db 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -24,7 +24,6 @@ import nconf from 'nconf';
@@ -6149,7 +6149,7 @@ index 2474c31dc0..75f6890796 100644
   * Tags
   * TasksOrder (list of all ids for dailys, habits, rewards and todos)
 diff --git a/website/server/controllers/top-level/dataexport.js b/website/server/controllers/top-level/dataexport.js
-index 710f620fa2..f4ce1fdc4d 100644
+index e9f4448a3f..5a94470e98 100644
 --- a/website/server/controllers/top-level/dataexport.js
 +++ b/website/server/controllers/top-level/dataexport.js
 @@ -9,17 +9,7 @@ import _ from 'lodash';
@@ -6600,7 +6600,7 @@ index d5225338ef..7616855f2a 100644
      .select({_id: true, 'preferences.emailNotifications': true})
      .exec();
 diff --git a/website/server/libs/logger.js b/website/server/libs/logger.js
-index 7f39b3792f..d5d95a634e 100644
+index 7da144a7cf..8a260a1a6b 100644
 --- a/website/server/libs/logger.js
 +++ b/website/server/libs/logger.js
 @@ -1,6 +1,5 @@
@@ -6683,7 +6683,7 @@ index 35d18cc706..400bf08e65 100644
    await data.user.save();
  }
 diff --git a/website/server/libs/payments/groupPayments.js b/website/server/libs/payments/groupPayments.js
-index b632667284..2e37e98d40 100644
+index 5da9309f1f..aef8cac2be 100644
 --- a/website/server/libs/payments/groupPayments.js
 +++ b/website/server/libs/payments/groupPayments.js
 @@ -1,4 +1,3 @@
@@ -6766,7 +6766,7 @@ index da3e189d70..57b9a64b05 100644
  
  api.addSubscriptionToGroupUsers = addSubscriptionToGroupUsers;
 diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
-index 549b41d1dc..10d2a69927 100644
+index fe0119e09a..72f522aca3 100644
 --- a/website/server/libs/payments/subscriptions.js
 +++ b/website/server/libs/payments/subscriptions.js
 @@ -1,8 +1,6 @@
@@ -6818,7 +6818,7 @@ index 549b41d1dc..10d2a69927 100644
        nextPaymentProcessing: data.nextPaymentProcessing,
        nextBillingDate: data.nextBillingDate,
        additionalData: data.additionalData,
-@@ -148,19 +137,6 @@ async function createSubscription (data) {
+@@ -149,19 +138,6 @@ async function createSubscription (data) {
      txnEmail(data.user, emailType);
    }
  
@@ -6838,7 +6838,7 @@ index 549b41d1dc..10d2a69927 100644
    if (!group) data.user.purchased.txnCount++;
  
    if (data.gift) {
-@@ -195,48 +171,17 @@ async function createSubscription (data) {
+@@ -196,48 +172,17 @@ async function createSubscription (data) {
          {name: 'X_MONTHS_SUBSCRIPTION', content: months},
        ]);
      }
@@ -6887,7 +6887,7 @@ index 549b41d1dc..10d2a69927 100644
    let emailType;
    let emailMergeData = [];
    let sendEmail = true;
-@@ -298,20 +243,6 @@ async function cancelSubscription (data) {
+@@ -299,20 +244,6 @@ async function cancelSubscription (data) {
    }
  
    if (sendEmail) txnEmail(data.user, emailType, emailMergeData);
@@ -7123,7 +7123,7 @@ index 492b0592dd..f0cc9f4180 100644
  
    // Run some operations in the background withouth blocking the thread
 diff --git a/website/server/models/coupon.js b/website/server/models/coupon.js
-index 2d99143b68..7326ae0b17 100644
+index f08a8135eb..fe391c9684 100644
 --- a/website/server/models/coupon.js
 +++ b/website/server/models/coupon.js
 @@ -12,7 +12,7 @@ import {
@@ -7240,7 +7240,7 @@ index c26f03bd6a..5cf5014731 100644
      count: {$type: Number, default: 0},
      offset: {$type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 9bf3a5e975..5f80832e55 100644
+index 2be8135fa1..b3bddab948 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -17,9 +17,6 @@ import { model as UserNotification } from '../userNotification';
@@ -7282,18 +7282,18 @@ index 9bf3a5e975..5f80832e55 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 42871628c8..cbe23ab4ba 100644
+index e411bfb437..5cbd3fd679 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
-@@ -3,7 +3,6 @@ import shared from '../../../common';
- import _ from 'lodash';
+@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
+ import shared from '../../../common';
  import validator from 'validator';
  import { schema as TagSchema } from '../tag';
 -import { schema as PushDeviceSchema } from '../pushDevice';
  import { schema as WebhookSchema } from '../webhook';
  import {
    schema as UserNotificationSchema,
-@@ -25,12 +24,6 @@ let schema = new Schema({
+@@ -27,12 +26,6 @@ let schema = new Schema({
  
    auth: {
      blocked: Boolean,
@@ -7306,7 +7306,7 @@ index 42871628c8..cbe23ab4ba 100644
      local: {
        email: {
          $type: String,
-@@ -483,18 +476,6 @@ let schema = new Schema({
+@@ -482,18 +475,6 @@ let schema = new Schema({
        onboarding: {$type: Boolean, default: true},
        majorUpdates: {$type: Boolean, default: true},
      },
@@ -7325,7 +7325,7 @@ index 42871628c8..cbe23ab4ba 100644
      suppressModals: {
        levelUp: {$type: Boolean, default: false},
        hatchPet: {$type: Boolean, default: false},
-@@ -575,7 +556,6 @@ let schema = new Schema({
+@@ -574,7 +555,6 @@ let schema = new Schema({
    extra: {$type: Schema.Types.Mixed, default: () => {
      return {};
    }},
