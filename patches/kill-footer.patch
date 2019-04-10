@@ -13,10 +13,10 @@ Date:   Tue Mar 27 05:37:21 2018 +0200
     Filename: kill-footer.patch
 
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index bb0bec4e76..dbb12a1729 100644
+index 65a652cfcd..dbb12a1729 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
-@@ -2,95 +2,6 @@
+@@ -2,93 +2,6 @@
  .row.footer-row
    buy-gems-modal(v-if='user')
    //modify-inventory(v-if="isUserLoaded")
@@ -54,8 +54,6 @@ index bb0bec4e76..dbb12a1729 100644
 -            a(href='https://trello.com/c/odmhIqyW/440-read-first-table-of-contents', target='_blank') {{ $t('requestFeature') }}
 -          li(v-html='$t("communityExtensions")')
 -          li(v-html='$t("communityForum")')
--          li
--            a(href='https://www.reddit.com/r/habitrpg/', target='_blank') {{ $t('communityReddit') }}
 -      .col-12.col-md-6
 -        .row
 -          .col-6
@@ -112,7 +110,7 @@ index bb0bec4e76..dbb12a1729 100644
  </template>
  
  <style lang="scss" scoped>
-@@ -178,25 +89,6 @@
+@@ -176,25 +89,6 @@
    .heart svg {
      margin-top: .1em;
    }

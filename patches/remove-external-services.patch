@@ -2734,7 +2734,7 @@ index de65914ea7..ab38d55467 100644
      close () {
        this.$root.$emit('bv::hide::modal', 'won-challenge');
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index 89d12e0ecf..bb0bec4e76 100644
+index 93f8e1766e..65a652cfcd 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -4,11 +4,6 @@
@@ -2757,10 +2757,10 @@ index 89d12e0ecf..bb0bec4e76 100644
 -            a(href='https://www.facebook.com/Habitica', target='_blank') {{ $t('communityFacebook') }}
 -          li
 -            a(href='https://www.instagram.com/habitica', target='_blank') {{ $t('communityInstagram') }}
-           li
-             a(href='https://www.reddit.com/r/habitrpg/', target='_blank') {{ $t('communityReddit') }}
        .col-12.col-md-6
-@@ -58,15 +49,6 @@
+         .row
+           .col-6
+@@ -56,15 +47,6 @@
                  a(:href="getDataDisplayToolUrl", target='_blank') {{ $t('dataDisplayTool') }}
                li
                  a(href='http://habitica.fandom.com/wiki/Guidance_for_Blacksmiths', target='_blank') {{ $t('guidanceForBlacksmiths') }}
@@ -2776,7 +2776,7 @@ index 89d12e0ecf..bb0bec4e76 100644
          .row
            .col-12.col-md-8 {{ $t('donateText3') }}
            .col-12.col-md-4
-@@ -140,51 +122,12 @@
+@@ -138,51 +120,12 @@
      margin-bottom: .5em;
    }
  
@@ -2828,7 +2828,7 @@ index 89d12e0ecf..bb0bec4e76 100644
    .logo {
      width: 24px;
      height: 24px;
-@@ -236,11 +179,6 @@
+@@ -234,11 +177,6 @@
      margin-top: .1em;
    }
  
@@ -2840,7 +2840,7 @@ index 89d12e0ecf..bb0bec4e76 100644
    footer {
      &.expanded {
        padding-left: 6em;
-@@ -265,31 +203,22 @@
+@@ -263,31 +201,22 @@
  import axios from 'axios';
  import moment from 'moment';
  import { mapState } from 'client/libs/store';
@@ -2872,7 +2872,7 @@ index 89d12e0ecf..bb0bec4e76 100644
          heart,
        }),
        debugMenuShown: false,
-@@ -390,12 +319,6 @@ export default {
+@@ -388,12 +317,6 @@ export default {
        this.$root.$emit('bv::show::modal', 'modify-inventory');
      },
      donate () {
