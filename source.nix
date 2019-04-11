@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.92.1";
+  version = "4.92.3";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1g1x7xpzqc3z4hxklwwriyx42jqhdqwrlblbcfnjkkvqhbkm8i03";
+    sha256 = "03c6k1dzmklzhnm6fs23i8idhi3fl9lkhg8xnk41mmh8afmp9002";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];

@@ -81,7 +81,7 @@ in {
     bcrypt = nodePackages."bcrypt-^3.0.5";
     "body-parser" = nodePackages."body-parser-^1.18.3";
     bootstrap = nodePackages."bootstrap-^4.1.1";
-    "bootstrap-vue" = nodePackages."bootstrap-vue-^2.0.0-rc.16";
+    "bootstrap-vue" = nodePackages."bootstrap-vue-^2.0.0-rc.18";
     compression = nodePackages."compression-^1.7.4";
     "cookie-session" = nodePackages."cookie-session-^1.3.3";
     "coupon-code" = nodePackages."coupon-code-^0.4.5";
