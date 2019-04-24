@@ -22,7 +22,7 @@ index 324e871af2..00287d0621 100644
    "MAINTENANCE_MODE": "false",
    "NODE_DB_URI": "mongodb://localhost/habitrpg",
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index e371e01f99..40c3319ba3 100644
+index a11e9042db..bf459d5e63 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -13,7 +13,9 @@ import { model as Group } from '../../models/group';

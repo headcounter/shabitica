@@ -244,7 +244,7 @@ index 848ced7f1f..0b1fea1bcc 100644
  
    describe('guild invites', () => {
 diff --git a/website/client/components/group-plans/index.vue b/website/client/components/group-plans/index.vue
-index 7674d4b6f9..82c2825f45 100644
+index 82a20d244d..9a5e64926f 100644
 --- a/website/client/components/group-plans/index.vue
 +++ b/website/client/components/group-plans/index.vue
 @@ -6,11 +6,6 @@
@@ -260,7 +260,7 @@ index 7674d4b6f9..82c2825f45 100644
    .col-12
      router-view
 diff --git a/website/client/components/group-plans/taskInformation.vue b/website/client/components/group-plans/taskInformation.vue
-index b65b216a11..1524a1a698 100644
+index b6312e0764..61a59bc2c4 100644
 --- a/website/client/components/group-plans/taskInformation.vue
 +++ b/website/client/components/group-plans/taskInformation.vue
 @@ -1,6 +1,5 @@
@@ -270,7 +270,7 @@ index b65b216a11..1524a1a698 100644
    task-modal(
      :task="workingTask",
      :purpose="taskFormPurpose",
-@@ -236,7 +235,6 @@
+@@ -247,7 +246,6 @@
  import taskDefaults from 'common/script/libs/taskDefaults';
  import TaskColumn from '../tasks/column';
  import TaskModal from '../tasks/taskModal';
@@ -278,7 +278,7 @@ index b65b216a11..1524a1a698 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import filterIcon from 'assets/svg/filter.svg';
-@@ -257,7 +255,6 @@ export default {
+@@ -268,7 +266,6 @@ export default {
    components: {
      TaskColumn,
      TaskModal,
@@ -286,7 +286,7 @@ index b65b216a11..1524a1a698 100644
    },
    data () {
      return {
-@@ -303,10 +300,6 @@ export default {
+@@ -314,10 +311,6 @@ export default {
    mounted () {
      if (!this.searchId) this.searchId = this.groupId;
      this.load();
@@ -595,7 +595,7 @@ index 7c96a96499..19b84850c6 100644
  
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 94086f5b2a..8c1a66d244 100644
+index 80f6dff1eb..7e9e1dae6d 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -1,4 +1,3 @@
@@ -603,7 +603,7 @@ index 94086f5b2a..8c1a66d244 100644
  import mongoose from 'mongoose';
  import {
    model as User,
-@@ -1432,19 +1431,16 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
+@@ -1436,19 +1435,16 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
  };
  
  schema.methods.isSubscribed = function isSubscribed () {

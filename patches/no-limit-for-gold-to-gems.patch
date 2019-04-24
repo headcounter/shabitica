@@ -40,7 +40,7 @@ index 4ae96a55b7..22b15739bc 100644
          user.stats.gp = goldPoints;
          user.purchased.plan.gemsBought = gemsBought;
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 1326dea810..c04eb67386 100644
+index d79177cf7a..6511885ca8 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -56,13 +56,6 @@
@@ -57,15 +57,16 @@ index 1326dea810..c04eb67386 100644
          button.btn.btn-primary(
            @click="purchaseGems()",
            v-if="getPriceClass() === 'gems' && !this.enoughCurrency(getPriceClass(), item.value * selectedAmountToBuy)"
-@@ -71,7 +64,6 @@
+@@ -71,7 +64,7 @@
          button.btn.btn-primary(
            @click="buyItem()",
            v-else,
--          :disabled='item.key === "gem" && gemsLeft === 0 || attemptingToPurchaseMoreGemsThanAreLeft',
+-          :disabled='item.key === "gem" && gemsLeft === 0 || attemptingToPurchaseMoreGemsThanAreLeft || numberInvalid',
++          :disabled='numberInvalid',
            :class="{'notEnough': !preventHealthPotion || !this.enoughCurrency(getPriceClass(), item.value * selectedAmountToBuy)}"
          ) {{ $t('buyNow') }}
  
-@@ -249,16 +241,11 @@
+@@ -249,16 +242,11 @@
  
        margin: 10px 0 24px;
      }
@@ -79,10 +80,10 @@ index 1326dea810..c04eb67386 100644
  <script>
    import spellsMixin from 'client/mixins/spells';
 -  import planGemLimits from 'common/script/libs/planGemLimits';
+   import numberInvalid from 'client/mixins/numberInvalid';
  
    import svgClose from 'assets/svg/close.svg';
-   import svgGold from 'assets/svg/gold.svg';
-@@ -347,14 +334,6 @@
+@@ -348,14 +336,6 @@
        limitedString () {
          return this.$t('limitedOffer', {date: moment(seasonalShopConfig.dateRange.end).format('LL')});
        },

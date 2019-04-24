@@ -15,7 +15,7 @@ Date:   Wed Feb 27 21:55:38 2019 +0100
     Filename: remove-welcome-abtest.patch
 
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 40c3319ba3..5dc9fc83b6 100644
+index bf459d5e63..5dc9fc83b6 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -175,12 +175,7 @@ async function registerLocal (req, res, { isV3 = false }) {
@@ -23,8 +23,8 @@ index 40c3319ba3..5dc9fc83b6 100644
      .remove({email: savedUser.auth.local.email})
      .then(() => {
 -      if (existingUser) return;
--      if (savedUser._ABtests && savedUser._ABtests.welcomeEmailSplit) {
--        sendTxnEmail(savedUser, savedUser._ABtests.welcomeEmailSplit);
+-      if (newUser.registeredThrough === 'habitica-web') {
+-        sendTxnEmail(savedUser, 'welcome-v2b');
 -      } else {
 -        sendTxnEmail(savedUser, 'welcome');
 -      }
@@ -32,22 +32,3 @@ index 40c3319ba3..5dc9fc83b6 100644
      });
  
    return null;
-diff --git a/website/server/models/user/hooks.js b/website/server/models/user/hooks.js
-index ed3a7514b5..676231ef59 100644
---- a/website/server/models/user/hooks.js
-+++ b/website/server/models/user/hooks.js
-@@ -130,14 +130,6 @@ function _setUpNewUser (user) {
-   user.purchased.background.violet = true;
-   user.preferences.background = 'violet';
- 
--  const testGroup = Math.random();
--
--  if (testGroup < 0.5) {
--    user._ABtests.welcomeEmailSplit = 'welcome-v2b';
--  } else {
--    user._ABtests.welcomeEmailSplit = 'welcome';
--  }
--
-   if (user.registeredThrough === 'habitica-web') {
-     taskTypes = ['habit', 'daily', 'todo', 'reward', 'tag'];
- 

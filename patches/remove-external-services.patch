@@ -1887,7 +1887,7 @@ index 62df06f307..b75c9b4c55 100644
      let username, email, api;
  
 diff --git a/test/common/ops/buy/buy.js b/test/common/ops/buy/buy.js
-index 5ec36dfd3a..02acabf9b7 100644
+index f203ae0cd9..8bf64d4d89 100644
 --- a/test/common/ops/buy/buy.js
 +++ b/test/common/ops/buy/buy.js
 @@ -13,7 +13,6 @@ import { defaultsDeep } from 'lodash';
@@ -2330,7 +2330,7 @@ index d1631fb277..ceb0cb7d29 100644
  
      it('buys a mount', () => {
 diff --git a/test/common/ops/buy/purchase.js b/test/common/ops/buy/purchase.js
-index fd1ab65b48..055a925984 100644
+index 9c3bb5233c..84e0e522d5 100644
 --- a/test/common/ops/buy/purchase.js
 +++ b/test/common/ops/buy/purchase.js
 @@ -16,19 +16,16 @@ describe('shared.ops.purchase', () => {
@@ -2353,7 +2353,34 @@ index fd1ab65b48..055a925984 100644
      pinnedGearUtils.removeItemByPath.restore();
    });
  
-@@ -129,11 +126,10 @@ describe('shared.ops.purchase', () => {
+@@ -114,7 +111,7 @@ describe('shared.ops.purchase', () => {
+       let key = 'Wolf';
+ 
+       try {
+-        purchase(user, {params: {type, key}, quantity: 'jamboree'}, analytics);
++        purchase(user, {params: {type, key}, quantity: 'jamboree'});
+       } catch (err) {
+         expect(err).to.be.an.instanceof(BadRequest);
+         expect(err.message).to.equal(i18n.t('invalidQuantity'));
+@@ -128,7 +125,7 @@ describe('shared.ops.purchase', () => {
+       user.balance = 10;
+ 
+       try {
+-        purchase(user, {params: {type, key}, quantity: -2}, analytics);
++        purchase(user, {params: {type, key}, quantity: -2});
+       } catch (err) {
+         expect(err).to.be.an.instanceof(BadRequest);
+         expect(err.message).to.equal(i18n.t('invalidQuantity'));
+@@ -142,7 +139,7 @@ describe('shared.ops.purchase', () => {
+       user.balance = 10;
+ 
+       try {
+-        purchase(user, {params: {type, key}, quantity: 2.9}, analytics);
++        purchase(user, {params: {type, key}, quantity: 2.9});
+       } catch (err) {
+         expect(err).to.be.an.instanceof(BadRequest);
+         expect(err.message).to.equal(i18n.t('invalidQuantity'));
+@@ -170,11 +167,10 @@ describe('shared.ops.purchase', () => {
        let type = 'eggs';
        let key = 'Wolf';
  
@@ -3261,7 +3288,7 @@ index 9d13f2d0b3..97d18ff8f6 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 04ae3439e6..9419f22186 100644
+index 169a599a36..0d5799cc4d 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -4,7 +4,6 @@ div
@@ -3280,23 +3307,23 @@ index 04ae3439e6..9419f22186 100644
  import { goToModForm } from 'client/libs/modform';
  
  import gemIcon from 'assets/svg/gem.svg';
-@@ -349,7 +347,6 @@ import creatorIntro from '../creatorIntro';
- import InboxModal from '../userMenu/inbox.vue';
+@@ -350,7 +348,6 @@ import InboxModal from '../userMenu/inbox.vue';
  import notificationMenu from './notificationsDropdown';
  import profileModal from '../userMenu/profileModal';
+ import reportFlagModal from '../chat/reportFlagModal';
 -import sendGemsModal from 'client/components/payments/sendGemsModal';
+ import sync from 'client/mixins/sync';
  import userDropdown from './userDropdown';
  
- import reportFlagModal from '../chat/reportFlagModal';
-@@ -361,7 +358,6 @@ export default {
+@@ -362,7 +359,6 @@ export default {
      notificationMenu,
      profileModal,
      reportFlagModal,
 -    sendGemsModal,
      userDropdown,
    },
-   data () {
-@@ -419,14 +415,6 @@ export default {
+   mixins: [sync],
+@@ -413,14 +409,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -3600,7 +3627,7 @@ index 6e2a634258..b352bdd35c 100644
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index fee9615707..1326dea810 100644
+index 83e2c0649d..d79177cf7a 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -257,7 +257,6 @@
@@ -3610,8 +3637,8 @@ index fee9615707..1326dea810 100644
 -  import * as Analytics from 'client/libs/analytics';
    import spellsMixin from 'client/mixins/spells';
    import planGemLimits from 'common/script/libs/planGemLimits';
- 
-@@ -398,14 +397,6 @@
+   import numberInvalid from 'client/mixins/numberInvalid';
+@@ -399,14 +398,6 @@
          this.hideDialog();
        },
        purchaseGems () {
@@ -3914,7 +3941,7 @@ index 34ff15ca57..e5dd03e023 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index 18c35ceab5..72804a5140 100644
+index fbdc7a2d2e..c30032f8d8 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
 @@ -517,7 +517,6 @@ import moment from 'moment';
@@ -4427,7 +4454,7 @@ index 9298468707..9188eb6e35 100644
    PARTY_LIMIT_MEMBERS,
  };
 diff --git a/website/common/script/ops/buy/abstractBuyOperation.js b/website/common/script/ops/buy/abstractBuyOperation.js
-index 85b9588f0a..b8393026a3 100644
+index 0a6f7735dd..b6b81d6d23 100644
 --- a/website/common/script/ops/buy/abstractBuyOperation.js
 +++ b/website/common/script/ops/buy/abstractBuyOperation.js
 @@ -4,19 +4,16 @@ import {
@@ -4836,7 +4863,7 @@ index 44f6e1a6f4..88ff944527 100644
      { items: user.items, purchasedPlanConsecutive: user.purchased.plan.consecutive },
      i18n.t('hourglassPurchase', req.language),
 diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index 752ffed231..2afa0001d6 100644
+index 20975506f0..e0ae2111e8 100644
 --- a/website/common/script/ops/buy/purchase.js
 +++ b/website/common/script/ops/buy/purchase.js
 @@ -68,7 +68,7 @@ function purchaseItem (user, item, price, type, key) {
@@ -5300,7 +5327,7 @@ index bdf8c17a72..26200eaf88 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 82bb301169..b907397a96 100644
+index 4a70540d85..38ac7e4c8b 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -202,16 +202,6 @@ api.createChallenge = {
@@ -5684,7 +5711,7 @@ index 1723c925b2..fbd2dacba0 100644
      res.respond(200, {});
    },
 diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
-index cac17c6111..50d2be67c8 100644
+index c8b2b25ebe..3ffac6482b 100644
 --- a/website/server/controllers/api-v3/quests.js
 +++ b/website/server/controllers/api-v3/quests.js
 @@ -1,6 +1,5 @@
@@ -6261,7 +6288,7 @@ index c1d6757dee..8259255218 100644
  const logger = require('./libs/logger');
  
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 1a806ead3c..c46cee7953 100644
+index 609f546ad8..0ec22f525c 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -7,12 +7,10 @@ import * as passwordUtils from '../../libs/password';
@@ -7136,7 +7163,7 @@ index f08a8135eb..fe391c9684 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index e8bf77e39a..94086f5b2a 100644
+index 53f66e9a3a..80f6dff1eb 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {
@@ -7189,7 +7216,7 @@ index e8bf77e39a..94086f5b2a 100644
      }
  
      // Send webhooks
-@@ -1461,7 +1447,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+@@ -1465,7 +1451,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
    return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
@@ -7198,7 +7225,7 @@ index e8bf77e39a..94086f5b2a 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1470,12 +1456,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1474,12 +1460,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;

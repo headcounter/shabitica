@@ -56,7 +56,7 @@ index 0180180773..265ff3d708 100644
      watch: {
        username () {
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 60034732c7..18cfb5bdb7 100644
+index 97867e40b5..3adf355408 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -50,7 +50,9 @@ async function _handleGroupInvitation (user, invite) {

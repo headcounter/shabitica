@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:02 2018 +0200
     Filename: strip-dependencies.patch
 
 diff --git a/package.json b/package.json
-index 996db1da45..0d94969f45 100644
+index c62fc9be3c..0667229391 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,16 +4,9 @@
-   "version": "4.92.1",
+   "version": "4.92.6",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@google-cloud/trace-agent": "^3.6.0",

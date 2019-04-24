@@ -64,7 +64,7 @@ index 6f62783132..f20bf241b7 100644
              textarea.form-control(cols=5, :placeholder="$t('contributions')", v-model='hero.contributor.contributions')
              //include ../../shared/formattiv-help
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 79af1ef9a3..3eb2ed0c99 100644
+index d98c21fc54..05bb1c8677 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -52,9 +52,6 @@ div

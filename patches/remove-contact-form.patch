@@ -44,7 +44,7 @@ index 4cf6a7e6df..3d040479d1 100644
        this.$store.dispatch('user:sleep');
      },
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 9419f22186..79af1ef9a3 100644
+index 0d5799cc4d..d98c21fc54 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -57,7 +57,6 @@ div
@@ -63,7 +63,7 @@ index 9419f22186..79af1ef9a3 100644
  
  import gemIcon from 'assets/svg/gem.svg';
  import goldIcon from 'assets/svg/gold.svg';
-@@ -393,9 +391,6 @@ export default {
+@@ -395,9 +393,6 @@ export default {
      this.getUserGroupPlans();
    },
    methods: {

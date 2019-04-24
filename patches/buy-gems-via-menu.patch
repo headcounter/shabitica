@@ -13,7 +13,7 @@ Date:   Sat Jun 23 14:25:29 2018 +0200
     Filename: buy-gems-via-menu.patch
 
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 3eb2ed0c99..514788bde2 100644
+index 05bb1c8677..8d9b16a251 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -59,7 +59,7 @@ div
@@ -25,15 +25,16 @@ index 3eb2ed0c99..514788bde2 100644
            span {{userGems}}
          .item-with-icon.gold
            .top-menu-icon.svg-icon(v-html="icons.gold", v-b-tooltip.hover.bottom="$t('gold')")
-@@ -345,6 +345,7 @@ import profileModal from '../userMenu/profileModal';
- import userDropdown from './userDropdown';
- 
+@@ -345,7 +345,7 @@ import profileModal from '../userMenu/profileModal';
  import reportFlagModal from '../chat/reportFlagModal';
+ import sync from 'client/mixins/sync';
+ import userDropdown from './userDropdown';
+-
 +import getItemInfo from 'common/script/libs/getItemInfo';
  
  export default {
    components: {
-@@ -405,11 +406,10 @@ export default {
+@@ -399,11 +399,10 @@ export default {
      openPartyModal () {
        this.$root.$emit('bv::show::modal', 'create-party-modal');
      },

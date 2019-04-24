@@ -225,7 +225,7 @@ index b1d3749256..9160226c5d 100644
  
    describe('bulk purchasing', () => {
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index c46cee7953..60034732c7 100644
+index 0ec22f525c..97867e40b5 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -121,6 +121,13 @@ async function registerLocal (req, res, { isV3 = false }) {
