@@ -1,4 +1,4 @@
-{ stdenv, lib, runCommand, fetchFromGitHub, fetchpatch, nodePackages
+{ stdenv, lib, runCommand, fetchFromGitHub, fetchpatch, pkgs, nodePackages
 , shabiticaConfig
 }:
 
@@ -453,33 +453,22 @@ stdenv.mkDerivation rec {
       exit 1
     fi
 
-    cp --no-preserve=mode -rt website/static "$googleFonts/fonts"
+    cp --no-preserve=mode -r "$googleFonts" website/static/fonts
     cp --no-preserve=mode -rt website/static "$emojis/public/graphics/emojis"
   '';
 
-  # FIXME: This is not deterministic, find a better way...
   googleFonts = runCommand "google-fonts" {
-    outputHashAlgo = "sha256";
-    outputHash = "06izjlyrpn7zi9idyw8mi773qpc3s79rpr14b8drn32dzv4c58yf";
-    outputHashMode = "recursive";
-    nativeBuildInputs = [
-      nodePackages.extra.google-fonts-offline
-      nodePackages.extra.csso-cli
-    ];
-    inherit src;
+    inherit (import ./google-fonts.nix {
+      inherit pkgs lib nodePackages;
+    }) home index;
   } ''
     mkdir "$out"
-    for fontsrc in index.html components/static/home.vue; do
-      fontURL="$(sed -n \
-        -e 's!^.*\(https://fonts\.googleapis\.com/[^'\'''"]\+\).*$!\1!p' \
-        "$src/website/client/$fontsrc")"
-      fontbase="$(basename "$fontsrc")"
-      ( cd "$out"
-        goofoffline outCss="''${fontbase%.*}-fonts.css" "$fontURL"
-        csso "fonts/''${fontbase%.*}-fonts.css" --comments none \
-          --output "fonts/''${fontbase%.*}-fonts.css"
-      )
+    for i in "$home/"* "$index/"*; do
+      if [ "''${i##*.}" = css ]; then continue; fi
+      install -m 0644 -vD "$i" "$out/$(basename "$i")"
     done
+    cp "$home/fonts.css" "$out/home-fonts.css"
+    cp "$index/fonts.css" "$out/index-fonts.css"
   '';
 
   emojis = fetchFromGitHub {

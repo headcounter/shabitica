@@ -57,8 +57,9 @@ in {
     "webpack-hot-middleware" = nodePackages."webpack-hot-middleware-^2.22.2";
   };
   extra = {
-    "csso-cli" = nodePackages."csso-cli";
-    "google-fonts-offline" = nodePackages."google-fonts-offline";
+    ttf2eot = nodePackages."ttf2eot";
+    ttf2svg = nodePackages."ttf2svg";
+    ttf2woff = nodePackages."ttf2woff";
   };
   main = {
     accepts = nodePackages."accepts-^1.3.5";

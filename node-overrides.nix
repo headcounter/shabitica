@@ -1,4 +1,4 @@
-{ super, lib, fetchFromGitHub, substituteAll, runCommand
+{ super, lib, pkgs, fetchFromGitHub, substituteAll, runCommand
 , libsass, libjpeg, optipng, gifsicle, pkgconfig, phantomjs2, systemd
 , chromedriver, chromium
 
@@ -82,30 +82,16 @@
 
   # We don't want to load fonts from Google, but instead ship it ourselves.
   main.apidoc = drv: {
-    # FIXME: This is not deterministic, find a better way...
-    googleFonts = runCommand "google-fonts-apidoc" {
-      outputHashAlgo = "sha256";
-      outputHash = "1x0z8r8nb5pj073dyx66b25w9hxs33k07bhbj5cbgf5pyx3589x1";
-      outputHashMode = "recursive";
-      nativeBuildInputs = [
-        super.extra.google-fonts-offline
-        super.extra.csso-cli
-      ];
-
-      fontURL = "https://fonts.googleapis.com/css?family="
-              + "Source+Code+Pro%7CSource+Sans+Pro:n4,n6,n7";
-    } ''
-      mkdir "$out"
-      cd "$out"
-      goofoffline outCss=fonts.css "$fontURL"
-      csso fonts/fonts.css --comments none --output fonts/fonts.css
-    '';
+    googleFonts = (import ./google-fonts.nix {
+      inherit pkgs lib;
+      nodePackages = super;
+    }).apidoc;
 
     preRebuild = (drv.preRebuild or "") + ''
       rm template/vendor/webfontloader.js
       rm template/vendor/prettify/run_prettify.js
 
-      cp -t template/fonts "$googleFonts/fonts/"*
+      cp -t template/fonts "$googleFonts/"*
       sed -i -e '/<\/head>/i \
         <link rel="stylesheet" href="fonts/fonts.css" media="all">
       ' template/index.html
