@@ -559,8 +559,9 @@ in autoCalledOr {
             ${commonHeaders}
           '';
 
-          "= /apidoc".return = "301 ${cfg.baseURL}/apidoc/";
-          "= /apidoc".extraConfig = commonHeaders;
+          "= /apidoc".extraConfig = commonHeaders + ''
+            return 301 ${cfg.baseURL}/apidoc/;
+          '';
 
           "/apidoc/".alias = "${cfg.apiDocPath}/";
           "/apidoc/".index = "index.html";
