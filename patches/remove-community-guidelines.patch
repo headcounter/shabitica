@@ -11,7 +11,7 @@ Date:   Fri Mar 30 20:29:49 2018 +0200
     Filename: remove-community-guidelines.patch
 
 diff --git a/website/client/components/chat/chatCard.vue b/website/client/components/chat/chatCard.vue
-index fac207d5c0..a3937089d7 100644
+index fac207d5c..a3937089d 100644
 --- a/website/client/components/chat/chatCard.vue
 +++ b/website/client/components/chat/chatCard.vue
 @@ -20,7 +20,7 @@ div
@@ -24,7 +24,7 @@ index fac207d5c0..a3937089d7 100644
          div(v-once) {{$t('report')}}
        .action.d-flex.align-items-center(v-if='msg.uuid === user._id || inbox || user.contributor.admin', @click='remove()')
 diff --git a/website/client/components/groups/chat.vue b/website/client/components/groups/chat.vue
-index af7b065894..62ac77fd06 100644
+index af7b06589..62ac77fd0 100644
 --- a/website/client/components/groups/chat.vue
 +++ b/website/client/components/groups/chat.vue
 @@ -1,10 +1,10 @@
@@ -94,7 +94,7 @@ index af7b065894..62ac77fd06 100644
        margin-left: 0;
        margin-right: 0;
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index a175ea31b1..a84651521a 100644
+index a175ea31b..a84651521 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
 @@ -394,9 +394,6 @@ export default {
@@ -108,7 +108,7 @@ index a175ea31b1..a84651521a 100644
        if (this.isParty) {
          this.searchId = 'party';
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 3d040479d1..83501d0374 100644
+index 3d040479d..83501d037 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -10,7 +10,6 @@
@@ -129,7 +129,7 @@ index 3d040479d1..83501d0374 100644
              router-link(to="/groups/guild/f2db2a7f-13c5-454d-b3ee-ea1f5089e601") {{ $t('lookingForGroup') }}
            li
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index f1b03290b8..94b7004527 100644
+index f1b03290b..94b700452 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -76,8 +76,6 @@
@@ -142,7 +142,7 @@ index f1b03290b8..94b7004527 100644
            label {{ $t('displayName') }}
            input.form-control(type='text', :placeholder="$t('fullName')", v-model='editingProfile.name')
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index cd97a355fd..246d9214f0 100644
+index cd97a355f..246d9214f 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -10,7 +10,6 @@ const HomePage = () => import(/* webpackChunkName: "entry" */'client/components/
@@ -162,7 +162,7 @@ index cd97a355fd..246d9214f0 100644
          { name: 'features', path: 'features', component: FeaturesPage, meta: {requiresLogin: false}},
          { name: 'groupPlans', path: 'group-plans', component: GroupPlansPage, meta: {requiresLogin: false}},
 diff --git a/website/server/libs/user/index.js b/website/server/libs/user/index.js
-index 5737a9ed6c..c4321265cc 100644
+index 5737a9ed6..c4321265c 100644
 --- a/website/server/libs/user/index.js
 +++ b/website/server/libs/user/index.js
 @@ -39,7 +39,6 @@ const updatablePaths = [
@@ -174,7 +174,7 @@ index 5737a9ed6c..c4321265cc 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 81060359a0..fd0f016555 100644
+index 81060359a..fd0f01655 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -217,7 +217,6 @@ let schema = new Schema({

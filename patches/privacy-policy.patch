@@ -13,7 +13,7 @@ Date:   Thu Mar 29 06:27:23 2018 +0200
     Filename: privacy-policy.patch
 
 diff --git a/website/client/components/static/privacy.vue b/website/client/components/static/privacy.vue
-index 2ecda4b8ad..0a3e8e90be 100644
+index 2ecda4b8a..0a3e8e90b 100644
 --- a/website/client/components/static/privacy.vue
 +++ b/website/client/components/static/privacy.vue
 @@ -2,298 +2,18 @@

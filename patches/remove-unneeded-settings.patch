@@ -9,7 +9,7 @@ Date:   Sat Apr 7 01:42:11 2018 +0200
     Filename: remove-unneeded-settings.patch
 
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
-index e4fcd3ef49..dece73205a 100644
+index e4fcd3ef4..dece73205 100644
 --- a/website/client/components/header/userDropdown.vue
 +++ b/website/client/components/header/userDropdown.vue
 @@ -16,14 +16,7 @@ menu-dropdown.item-user(:right="true")
@@ -28,7 +28,7 @@ index e4fcd3ef49..dece73205a 100644
  
  <style lang='scss' scoped>
 diff --git a/website/client/components/settings/index.vue b/website/client/components/settings/index.vue
-index 68366e1107..9f8b08f3f5 100644
+index 68366e110..9f8b08f3f 100644
 --- a/website/client/components/settings/index.vue
 +++ b/website/client/components/settings/index.vue
 @@ -4,8 +4,6 @@
@@ -41,7 +41,7 @@ index 68366e1107..9f8b08f3f5 100644
  
    .col-12
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index 6f072043d8..983ff4e296 100644
+index 6f072043d..983ff4e29 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -30,9 +30,7 @@ const Settings = () => import(/* webpackChunkName: "settings" */'client/componen

@@ -9,7 +9,7 @@ Date:   Wed May 2 03:15:04 2018 +0200
     Filename: migration-substvar.patch
 
 diff --git a/migrations/migration-runner.js b/migrations/migration-runner.js
-index c65f18def7..38901eda7a 100644
+index c65f18def..38901eda7 100644
 --- a/migrations/migration-runner.js
 +++ b/migrations/migration-runner.js
 @@ -17,7 +17,7 @@ function setUpServer () {

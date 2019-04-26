@@ -14,7 +14,7 @@ Date:   Tue Mar 27 05:37:27 2018 +0200
     Filename: always-permit-group-leader-change.patch
 
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 19b84850c6..b58eb1e030 100644
+index 19b84850c..b58eb1e03 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -393,8 +393,6 @@ api.updateGroup = {
@@ -27,7 +27,7 @@ index 19b84850c6..b58eb1e030 100644
  
      let savedGroup = await group.save();
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 7e9e1dae6d..d3e37e380a 100644
+index 7e9e1dae6..d3e37e380 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -22,7 +22,6 @@ import {

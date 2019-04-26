@@ -10,7 +10,7 @@ Date:   Sat Mar 31 01:16:24 2018 +0200
     Filename: tavern-remove-staff-and-tiers.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index a9a59f9bec..748737bc41 100644
+index a9a59f9be..748737bc4 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -87,16 +87,6 @@

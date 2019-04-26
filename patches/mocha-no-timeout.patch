@@ -10,7 +10,7 @@ Date:   Wed Apr 11 17:46:08 2018 +0200
     Filename: mocha-no-timeout.patch
 
 diff --git a/test/mocha.opts b/test/mocha.opts
-index 28345d5049..093c26c6aa 100644
+index 28345d504..093c26c6a 100644
 --- a/test/mocha.opts
 +++ b/test/mocha.opts
 @@ -1,6 +1,6 @@

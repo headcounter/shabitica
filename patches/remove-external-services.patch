@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 09b6778415..3a31e9c951 100644
+index 09b677841..3a31e9c95 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -1,12 +1,5 @@
@@ -122,7 +122,7 @@ index 09b6778415..3a31e9c951 100644
    "SKIP_SSL_CHECK_KEY": "key",
    "ENABLE_STACKDRIVER_TRACING": "false"
 diff --git a/gulp/taskHelper.js b/gulp/taskHelper.js
-index 270573ba70..75d2ae7596 100644
+index 270573ba7..75d2ae759 100644
 --- a/gulp/taskHelper.js
 +++ b/gulp/taskHelper.js
 @@ -2,7 +2,6 @@ import { exec }                   from 'child_process';
@@ -166,7 +166,7 @@ index 270573ba70..75d2ae7596 100644
    require('../test/helpers/globals.helper'); // eslint-disable-line global-require
  
 diff --git a/test/api/unit/libs/cron.test.js b/test/api/unit/libs/cron.test.js
-index 101069f4ea..45db2b9bf7 100644
+index 101069f4e..45db2b9bf 100644
 --- a/test/api/unit/libs/cron.test.js
 +++ b/test/api/unit/libs/cron.test.js
 @@ -6,7 +6,6 @@ import { recoverCron, cron } from '../../../../website/server/libs/cron';
@@ -1378,7 +1378,7 @@ index 101069f4ea..45db2b9bf7 100644
        expect(user.items.food.Saddle).to.eql(1);
        expect(user.notifications[0].type).to.eql('LOGIN_INCENTIVE');
 diff --git a/test/api/unit/libs/email.test.js b/test/api/unit/libs/email.test.js
-index fe2fafd08e..23989fbf31 100644
+index fe2fafd08..23989fbf3 100644
 --- a/test/api/unit/libs/email.test.js
 +++ b/test/api/unit/libs/email.test.js
 @@ -90,21 +90,6 @@ describe('emails', () => {
@@ -1404,7 +1404,7 @@ index fe2fafd08e..23989fbf31 100644
        let attachEmail = requireAgain(pathToEmailLib);
        let getUserInfo = attachEmail.getUserInfo;
 diff --git a/test/api/unit/libs/payments/payments.test.js b/test/api/unit/libs/payments/payments.test.js
-index 82fb3dabad..3e14cc1722 100644
+index 82fb3daba..3e14cc172 100644
 --- a/test/api/unit/libs/payments/payments.test.js
 +++ b/test/api/unit/libs/payments/payments.test.js
 @@ -2,8 +2,6 @@ import moment from 'moment';
@@ -1511,7 +1511,7 @@ index 82fb3dabad..3e14cc1722 100644
          // TODO using english for both users because other languages are not loaded
          // for api.buyGems
 diff --git a/test/api/unit/middlewares/cronMiddleware.js b/test/api/unit/middlewares/cronMiddleware.js
-index 28d4135e25..2deb852285 100644
+index 28d4135e2..2deb85228 100644
 --- a/test/api/unit/middlewares/cronMiddleware.js
 +++ b/test/api/unit/middlewares/cronMiddleware.js
 @@ -9,7 +9,6 @@ import moment from 'moment';
@@ -1531,7 +1531,7 @@ index 28d4135e25..2deb852285 100644
        })
        .catch(done);
 diff --git a/test/api/v3/integration/chat/POST-chat.flag.test.js b/test/api/v3/integration/chat/POST-chat.flag.test.js
-index 723715c80b..322e5853a0 100644
+index 723715c80..322e5853a 100644
 --- a/test/api/v3/integration/chat/POST-chat.flag.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.flag.test.js
 @@ -4,10 +4,6 @@ import {
@@ -1614,7 +1614,7 @@ index 723715c80b..322e5853a0 100644
  
    it('Flags a chat when the author\'s account was deleted', async () => {
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index aa6b8c8806..cce17bc434 100644
+index aa6b8c880..cce17bc43 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
 @@ -1,5 +1,3 @@
@@ -1693,7 +1693,7 @@ index aa6b8c8806..cce17bc434 100644
        await expect(members[0].post(`/groups/${groupWithChat._id}/chat`, { message: testMessage})).to.eventually.be.rejected.and.eql({
          code: 401,
 diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
-index 2fbe493d43..1e70c3486e 100644
+index 2fbe493d4..1e70c3486 100644
 --- a/test/api/v3/integration/user/DELETE-user.test.js
 +++ b/test/api/v3/integration/user/DELETE-user.test.js
 @@ -17,8 +17,6 @@ import {
@@ -1769,7 +1769,7 @@ index 2fbe493d43..1e70c3486e 100644
 -  });
  });
 diff --git a/test/api/v3/integration/user/POST-user_sleep.test.js b/test/api/v3/integration/user/POST-user_sleep.test.js
-index 292b77e9db..0e9773150e 100644
+index 292b77e9d..0e9773150 100644
 --- a/test/api/v3/integration/user/POST-user_sleep.test.js
 +++ b/test/api/v3/integration/user/POST-user_sleep.test.js
 @@ -1,7 +1,6 @@
@@ -1797,7 +1797,7 @@ index 292b77e9db..0e9773150e 100644
 -  });
  });
 diff --git a/test/api/v3/integration/user/auth/POST-register_local.test.js b/test/api/v3/integration/user/auth/POST-register_local.test.js
-index c6b3248258..5b559aae5b 100644
+index c6b324825..5b559aae5 100644
 --- a/test/api/v3/integration/user/auth/POST-register_local.test.js
 +++ b/test/api/v3/integration/user/auth/POST-register_local.test.js
 @@ -440,40 +440,6 @@ describe('POST /user/auth/local/register', () => {
@@ -1842,7 +1842,7 @@ index c6b3248258..5b559aae5b 100644
      let username, email, api;
  
 diff --git a/test/api/v4/user/auth/POST-register_local.test.js b/test/api/v4/user/auth/POST-register_local.test.js
-index 62df06f307..b75c9b4c55 100644
+index 62df06f30..b75c9b4c5 100644
 --- a/test/api/v4/user/auth/POST-register_local.test.js
 +++ b/test/api/v4/user/auth/POST-register_local.test.js
 @@ -423,40 +423,6 @@ describe('POST /user/auth/local/register', () => {
@@ -1887,7 +1887,7 @@ index 62df06f307..b75c9b4c55 100644
      let username, email, api;
  
 diff --git a/test/common/ops/buy/buy.js b/test/common/ops/buy/buy.js
-index f203ae0cd9..8bf64d4d89 100644
+index f203ae0cd..8bf64d4d8 100644
 --- a/test/common/ops/buy/buy.js
 +++ b/test/common/ops/buy/buy.js
 @@ -13,7 +13,6 @@ import { defaultsDeep } from 'lodash';
@@ -1924,7 +1924,7 @@ index f203ae0cd9..8bf64d4d89 100644
  
    it('adds equipment to inventory', () => {
 diff --git a/test/common/ops/buy/buyArmoire.js b/test/common/ops/buy/buyArmoire.js
-index 3c58585022..aa4ddd17d5 100644
+index 3c5858502..aa4ddd17d 100644
 --- a/test/common/ops/buy/buyArmoire.js
 +++ b/test/common/ops/buy/buyArmoire.js
 @@ -31,10 +31,9 @@ describe('shared.ops.buyArmoire', () => {
@@ -1971,7 +1971,7 @@ index 3c58585022..aa4ddd17d5 100644
    });
  });
 diff --git a/test/common/ops/buy/buyGem.js b/test/common/ops/buy/buyGem.js
-index fc3d00f708..4ae96a55b7 100644
+index fc3d00f70..4ae96a55b 100644
 --- a/test/common/ops/buy/buyGem.js
 +++ b/test/common/ops/buy/buyGem.js
 @@ -1,6 +1,5 @@
@@ -2025,7 +2025,7 @@ index fc3d00f708..4ae96a55b7 100644
  
      it('purchases gems with a different language than the default', () => {
 diff --git a/test/common/ops/buy/buyHealthPotion.js b/test/common/ops/buy/buyHealthPotion.js
-index 9f04c4d6bb..01fcc829d2 100644
+index 9f04c4d6b..01fcc829d 100644
 --- a/test/common/ops/buy/buyHealthPotion.js
 +++ b/test/common/ops/buy/buyHealthPotion.js
 @@ -10,10 +10,9 @@ import i18n from '../../../../website/common/script/i18n';
@@ -2063,7 +2063,7 @@ index 9f04c4d6bb..01fcc829d2 100644
  
      it('does not increase hp above 50', () => {
 diff --git a/test/common/ops/buy/buyMarketGear.js b/test/common/ops/buy/buyMarketGear.js
-index 602975f6a6..9018d6abf9 100644
+index 602975f6a..9018d6abf 100644
 --- a/test/common/ops/buy/buyMarketGear.js
 +++ b/test/common/ops/buy/buyMarketGear.js
 @@ -13,15 +13,14 @@ import i18n from '../../../../website/common/script/i18n';
@@ -2115,7 +2115,7 @@ index 602975f6a6..9018d6abf9 100644
  
      it('deducts gold from user', () => {
 diff --git a/test/common/ops/buy/buyMysterySet.js b/test/common/ops/buy/buyMysterySet.js
-index dca60d7489..9ef720f70c 100644
+index dca60d748..9ef720f70 100644
 --- a/test/common/ops/buy/buyMysterySet.js
 +++ b/test/common/ops/buy/buyMysterySet.js
 @@ -14,7 +14,6 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
@@ -2156,7 +2156,7 @@ index dca60d7489..9ef720f70c 100644
      });
    });
 diff --git a/test/common/ops/buy/buyQuest.js b/test/common/ops/buy/buyQuest.js
-index 4554b9832a..06d5bf80d7 100644
+index 4554b9832..06d5bf80d 100644
 --- a/test/common/ops/buy/buyQuest.js
 +++ b/test/common/ops/buy/buyQuest.js
 @@ -12,21 +12,15 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
@@ -2223,7 +2223,7 @@ index 4554b9832a..06d5bf80d7 100644
        expect(err).to.be.an.instanceof(BadRequest);
        expect(err.message).to.equal(i18n.t('invalidQuantity'));
 diff --git a/test/common/ops/buy/buyQuestGems.js b/test/common/ops/buy/buyQuestGems.js
-index 3bb19841e4..067cb39f53 100644
+index 3bb19841e..067cb39f5 100644
 --- a/test/common/ops/buy/buyQuestGems.js
 +++ b/test/common/ops/buy/buyQuestGems.js
 @@ -11,10 +11,9 @@ import {BuyQuestWithGemOperation} from '../../../../website/common/script/ops/bu
@@ -2253,7 +2253,7 @@ index 3bb19841e4..067cb39f53 100644
    });
  
 diff --git a/test/common/ops/buy/buySpell.js b/test/common/ops/buy/buySpell.js
-index 02d0bda6a4..6db2b7b509 100644
+index 02d0bda6a..6db2b7b50 100644
 --- a/test/common/ops/buy/buySpell.js
 +++ b/test/common/ops/buy/buySpell.js
 @@ -13,20 +13,14 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
@@ -2296,7 +2296,7 @@ index 02d0bda6a4..6db2b7b509 100644
    });
  });
 diff --git a/test/common/ops/buy/hourglassPurchase.js b/test/common/ops/buy/hourglassPurchase.js
-index d1631fb277..ceb0cb7d29 100644
+index d1631fb27..ceb0cb7d2 100644
 --- a/test/common/ops/buy/hourglassPurchase.js
 +++ b/test/common/ops/buy/hourglassPurchase.js
 @@ -12,15 +12,9 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
@@ -2330,7 +2330,7 @@ index d1631fb277..ceb0cb7d29 100644
  
      it('buys a mount', () => {
 diff --git a/test/common/ops/buy/purchase.js b/test/common/ops/buy/purchase.js
-index 9c3bb5233c..84e0e522d5 100644
+index 9c3bb5233..84e0e522d 100644
 --- a/test/common/ops/buy/purchase.js
 +++ b/test/common/ops/buy/purchase.js
 @@ -16,19 +16,16 @@ describe('shared.ops.purchase', () => {
@@ -2394,7 +2394,7 @@ index 9c3bb5233c..84e0e522d5 100644
  
      it('purchases hatchingPotions', () => {
 diff --git a/webpack/config/index.js b/webpack/config/index.js
-index ca098d0a95..4f9bee934f 100644
+index ca098d0a9..4f9bee934 100644
 --- a/webpack/config/index.js
 +++ b/webpack/config/index.js
 @@ -50,18 +50,6 @@ module.exports = {
@@ -2417,7 +2417,7 @@ index ca098d0a95..4f9bee934f 100644
          target: DEV_BASE_URL,
          changeOrigin: true,
 diff --git a/webpack/config/prod.env.js b/webpack/config/prod.env.js
-index 7b89084678..1609e92969 100644
+index 7b8908467..1609e9296 100644
 --- a/webpack/config/prod.env.js
 +++ b/webpack/config/prod.env.js
 @@ -12,23 +12,10 @@ setupNconf(configFile);
@@ -2454,7 +2454,7 @@ index 7b89084678..1609e92969 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 0ed4b662e1..7c78fef8f2 100644
+index 0ed4b662e..7c78fef8f 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,8 +10,6 @@ div
@@ -2558,7 +2558,7 @@ index 0ed4b662e1..7c78fef8f2 100644
  <style src="assets/css/sprites.css"></style>
 -<style src="smartbanner.js/dist/smartbanner.min.css"></style>
 diff --git a/website/client/assets/scss/index.scss b/website/client/assets/scss/index.scss
-index 3919ff6efd..185eb917c3 100644
+index 3919ff6ef..185eb917c 100644
 --- a/website/client/assets/scss/index.scss
 +++ b/website/client/assets/scss/index.scss
 @@ -36,5 +36,4 @@
@@ -2570,7 +2570,7 @@ index 3919ff6efd..185eb917c3 100644
 \ No newline at end of file
 +@import './datepicker.scss';
 diff --git a/website/client/components/achievements/achievementFooter.vue b/website/client/components/achievements/achievementFooter.vue
-index dd899a34b6..9b5328c7cb 100644
+index dd899a34b..9b5328c7c 100644
 --- a/website/client/components/achievements/achievementFooter.vue
 +++ b/website/client/components/achievements/achievementFooter.vue
 @@ -1,16 +1,5 @@
@@ -2645,7 +2645,7 @@ index dd899a34b6..9b5328c7cb 100644
 -};
 -</script>
 diff --git a/website/client/components/achievements/levelUp.vue b/website/client/components/achievements/levelUp.vue
-index 0f815deecf..cd47be7a04 100644
+index 0f815deec..cd47be7a0 100644
 --- a/website/client/components/achievements/levelUp.vue
 +++ b/website/client/components/achievements/levelUp.vue
 @@ -12,18 +12,6 @@
@@ -2730,7 +2730,7 @@ index 0f815deecf..cd47be7a04 100644
    },
    mounted () {
 diff --git a/website/client/components/achievements/wonChallenge.vue b/website/client/components/achievements/wonChallenge.vue
-index de65914ea7..ab38d55467 100644
+index de65914ea..ab38d5546 100644
 --- a/website/client/components/achievements/wonChallenge.vue
 +++ b/website/client/components/achievements/wonChallenge.vue
 @@ -13,13 +13,6 @@
@@ -2761,7 +2761,7 @@ index de65914ea7..ab38d55467 100644
      close () {
        this.$root.$emit('bv::hide::modal', 'won-challenge');
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index 93f8e1766e..65a652cfcd 100644
+index 93f8e1766..65a652cfc 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -4,11 +4,6 @@
@@ -2913,7 +2913,7 @@ index 93f8e1766e..65a652cfcd 100644
      },
    },
 diff --git a/website/client/components/auth/registerLoginReset.vue b/website/client/components/auth/registerLoginReset.vue
-index 7aa7f795c8..390ff25c3a 100644
+index 7aa7f795c..390ff25c3 100644
 --- a/website/client/components/auth/registerLoginReset.vue
 +++ b/website/client/components/auth/registerLoginReset.vue
 @@ -13,15 +13,6 @@
@@ -3036,7 +3036,7 @@ index 7aa7f795c8..390ff25c3a 100644
        if (this.registering) {
          this.register();
 diff --git a/website/client/components/challenges/challengeModal.vue b/website/client/components/challenges/challengeModal.vue
-index b142f89073..a8bb57142b 100644
+index b142f8907..a8bb57142 100644
 --- a/website/client/components/challenges/challengeModal.vue
 +++ b/website/client/components/challenges/challengeModal.vue
 @@ -54,8 +54,6 @@
@@ -3049,7 +3049,7 @@ index b142f89073..a8bb57142b 100644
            button.btn.btn-primary(v-once, v-if='cloning', @click='createChallenge()', :disabled='loading') {{$t('createChallengeCloneTasks')}}
            button.btn.btn-primary(v-once, v-if='!creating && !cloning', @click='updateChallenge()') {{$t('updateChallenge')}}
 diff --git a/website/client/components/group-plans/billing.vue b/website/client/components/group-plans/billing.vue
-index f9b886d54b..5f2f449af3 100644
+index f9b886d54..5f2f449af 100644
 --- a/website/client/components/group-plans/billing.vue
 +++ b/website/client/components/group-plans/billing.vue
 @@ -11,10 +11,6 @@
@@ -3085,7 +3085,7 @@ index f9b886d54b..5f2f449af3 100644
    data () {
      return {
 diff --git a/website/client/components/groups/createPartyModal.vue b/website/client/components/groups/createPartyModal.vue
-index 6e0ea2956a..21a5a75ef4 100644
+index 6e0ea2956..21a5a75ef 100644
 --- a/website/client/components/groups/createPartyModal.vue
 +++ b/website/client/components/groups/createPartyModal.vue
 @@ -141,7 +141,6 @@ b-modal#create-party-modal(size='lg', hide-footer=true)
@@ -3109,7 +3109,7 @@ index 6e0ea2956a..21a5a75ef4 100644
          this.$router.push('/party');
        },
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index 8ff4d05b69..a175ea31b1 100644
+index 8ff4d05b6..a175ea31b 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
 @@ -262,7 +262,6 @@ import extend from 'lodash/extend';
@@ -3143,7 +3143,7 @@ index 8ff4d05b69..a175ea31b1 100644
        }
  
 diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
-index 8d30345589..2561b2946b 100644
+index 8d3034558..2561b2946 100644
 --- a/website/client/components/groups/groupPlan.vue
 +++ b/website/client/components/groups/groupPlan.vue
 @@ -46,13 +46,6 @@ div
@@ -3225,7 +3225,7 @@ index 8d30345589..2561b2946b 100644
    },
  };
 diff --git a/website/client/components/groups/questDetailsModal.vue b/website/client/components/groups/questDetailsModal.vue
-index e025221025..4173eeda74 100644
+index e02522102..4173eeda7 100644
 --- a/website/client/components/groups/questDetailsModal.vue
 +++ b/website/client/components/groups/questDetailsModal.vue
 @@ -140,8 +140,6 @@ import quests from 'common/script/content/quests';
@@ -3247,7 +3247,7 @@ index e025221025..4173eeda74 100644
          goldIcon,
          difficultyStarIcon,
 diff --git a/website/client/components/groups/startQuestModal.vue b/website/client/components/groups/startQuestModal.vue
-index 9d13f2d0b3..97d18ff8f6 100644
+index 9d13f2d0b..97d18ff8f 100644
 --- a/website/client/components/groups/startQuestModal.vue
 +++ b/website/client/components/groups/startQuestModal.vue
 @@ -106,15 +106,12 @@
@@ -3288,7 +3288,7 @@ index 9d13f2d0b3..97d18ff8f6 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 169a599a36..0d5799cc4d 100644
+index 169a599a3..0d5799cc4 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -4,7 +4,6 @@ div
@@ -3339,7 +3339,7 @@ index 169a599a36..0d5799cc4d 100644
      },
  
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
-index 1c134fcbf2..e4fcd3ef49 100644
+index 1c134fcbf..e4fcd3ef4 100644
 --- a/website/client/components/header/userDropdown.vue
 +++ b/website/client/components/header/userDropdown.vue
 @@ -67,7 +67,6 @@ menu-dropdown.item-user(:right="true")
@@ -3366,7 +3366,7 @@ index 1c134fcbf2..e4fcd3ef49 100644
      },
      logout () {
 diff --git a/website/client/components/settings/deleteModal.vue b/website/client/components/settings/deleteModal.vue
-index 34838b0504..a74c52e6ee 100644
+index 34838b050..a74c52e6e 100644
 --- a/website/client/components/settings/deleteModal.vue
 +++ b/website/client/components/settings/deleteModal.vue
 @@ -3,7 +3,6 @@
@@ -3378,7 +3378,7 @@ index 34838b0504..a74c52e6ee 100644
          .col-6
            input.form-control(type='password', v-model='password')
 diff --git a/website/client/components/settings/notifications.vue b/website/client/components/settings/notifications.vue
-index 2b4966a8cc..c12e72f9cd 100644
+index 2b4966a8c..c12e72f9c 100644
 --- a/website/client/components/settings/notifications.vue
 +++ b/website/client/components/settings/notifications.vue
 @@ -3,14 +3,6 @@
@@ -3415,7 +3415,7 @@ index 2b4966a8cc..c12e72f9cd 100644
  </template>
  
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index 533de1ba13..caa61badcc 100644
+index 533de1ba1..caa61badc 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -109,12 +109,6 @@
@@ -3517,7 +3517,7 @@ index 533de1ba13..caa61badcc 100644
        if (confirmationNeeded && !confirm(this.$t('changeClassConfirmCost'))) return;
        try {
 diff --git a/website/client/components/settings/subscription.vue b/website/client/components/settings/subscription.vue
-index 6e2a634258..b352bdd35c 100644
+index 6e2a63425..b352bdd35 100644
 --- a/website/client/components/settings/subscription.vue
 +++ b/website/client/components/settings/subscription.vue
 @@ -36,9 +36,6 @@
@@ -3627,7 +3627,7 @@ index 6e2a634258..b352bdd35c 100644
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 83e2c0649d..d79177cf7a 100644
+index 83e2c0649..d79177cf7 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -257,7 +257,6 @@
@@ -3654,7 +3654,7 @@ index 83e2c0649d..d79177cf7a 100644
        },
        togglePinned () {
 diff --git a/website/client/components/static/app.vue b/website/client/components/static/app.vue
-index cfcf1fa02a..4dd4105b54 100644
+index cfcf1fa02..4dd4105b5 100644
 --- a/website/client/components/static/app.vue
 +++ b/website/client/components/static/app.vue
 @@ -1,11 +1,3 @@
@@ -3670,7 +3670,7 @@ index cfcf1fa02a..4dd4105b54 100644
 -        a(href='https://geo.itunes.apple.com/us/app/habitica/id994882113?mt=8', style='display:inline-block;overflow:hidden;background:url(http://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg#svgView) no-repeat;background-size:100%;width:152px;height:45px;margin-left:20px;image-rendering:auto')
  </template>
 diff --git a/website/client/components/static/header.vue b/website/client/components/static/header.vue
-index 9d17a17fb0..4f148b29c5 100644
+index 9d17a17fb..4f148b29c 100644
 --- a/website/client/components/static/header.vue
 +++ b/website/client/components/static/header.vue
 @@ -21,8 +21,6 @@
@@ -3713,7 +3713,7 @@ index 9d17a17fb0..4f148b29c5 100644
  };
  </script>
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index a6acf92a55..0180180773 100644
+index a6acf92a5..018018077 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -13,15 +13,6 @@
@@ -3928,7 +3928,7 @@ index a6acf92a55..0180180773 100644
    };
  </script>
 diff --git a/website/client/components/static/staticWrapper.vue b/website/client/components/static/staticWrapper.vue
-index 34ff15ca57..e5dd03e023 100644
+index 34ff15ca5..e5dd03e02 100644
 --- a/website/client/components/static/staticWrapper.vue
 +++ b/website/client/components/static/staticWrapper.vue
 @@ -90,7 +90,7 @@ div
@@ -3941,7 +3941,7 @@ index 34ff15ca57..e5dd03e023 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index fbdc7a2d2e..c30032f8d8 100644
+index fbdc7a2d2..c30032f8d 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
 @@ -517,7 +517,6 @@ import moment from 'moment';
@@ -3961,7 +3961,7 @@ index fbdc7a2d2e..c30032f8d8 100644
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
        const crit = tmp.crit;
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index e66208d0d8..f1b03290b8 100644
+index e66208d0d..f1b03290b 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -72,14 +72,12 @@
@@ -3996,7 +3996,7 @@ index e66208d0d8..f1b03290b8 100644
        .col-12.text-center
          button.btn.btn-primary(@click='save()') {{ $t("save") }}
 diff --git a/website/client/index.html b/website/client/index.html
-index 32ecee0b0e..096b62dc2c 100644
+index 32ecee0b0..096b62dc2 100644
 --- a/website/client/index.html
 +++ b/website/client/index.html
 @@ -6,18 +6,7 @@
@@ -4028,7 +4028,7 @@ index 32ecee0b0e..096b62dc2c 100644
      <script type='text/javascript' src='/api/v4/i18n/browser-script'></script>
    </body>
 diff --git a/website/client/main.js b/website/client/main.js
-index f6b0701dd8..da68df567e 100644
+index f6b0701dd..da68df567 100644
 --- a/website/client/main.js
 +++ b/website/client/main.js
 @@ -1,15 +1,10 @@
@@ -4057,7 +4057,7 @@ index f6b0701dd8..da68df567e 100644
  
  export default new Vue({
 diff --git a/website/client/mixins/guide.js b/website/client/mixins/guide.js
-index 4dd3d9be88..d213fb5454 100644
+index 4dd3d9be8..d213fb545 100644
 --- a/website/client/mixins/guide.js
 +++ b/website/client/mixins/guide.js
 @@ -1,6 +1,5 @@
@@ -4113,7 +4113,7 @@ index 4dd3d9be88..d213fb5454 100644
      },
    },
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index 167232732b..05663006bc 100644
+index 167232732..05663006b 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -1,8 +1,6 @@
@@ -4167,7 +4167,7 @@ index 167232732b..05663006bc 100644
  });
  
 diff --git a/website/client/store/actions/auth.js b/website/client/store/actions/auth.js
-index 58af5e3be9..c84241a39e 100644
+index 58af5e3be..c84241a39 100644
 --- a/website/client/store/actions/auth.js
 +++ b/website/client/store/actions/auth.js
 @@ -63,25 +63,6 @@ export async function verifyDisplayName (store, params) {
@@ -4197,7 +4197,7 @@ index 58af5e3be9..c84241a39e 100644
    localStorage.clear();
    window.location.href = '/logout-server';
 diff --git a/website/client/store/actions/chat.js b/website/client/store/actions/chat.js
-index 584db3bf75..98806066f3 100644
+index 584db3bf7..98806066f 100644
 --- a/website/client/store/actions/chat.js
 +++ b/website/client/store/actions/chat.js
 @@ -1,5 +1,4 @@
@@ -4221,7 +4221,7 @@ index 584db3bf75..98806066f3 100644
      message: payload.message,
    });
 diff --git a/website/client/store/actions/guilds.js b/website/client/store/actions/guilds.js
-index ea4e680440..b4eda8714b 100644
+index ea4e68044..b4eda8714 100644
 --- a/website/client/store/actions/guilds.js
 +++ b/website/client/store/actions/guilds.js
 @@ -1,7 +1,6 @@
@@ -4242,7 +4242,7 @@ index ea4e680440..b4eda8714b 100644
  
    return response.data.data;
 diff --git a/website/client/store/actions/quests.js b/website/client/store/actions/quests.js
-index cff15fa53a..ef7fd0dd5b 100644
+index cff15fa53..ef7fd0dd5 100644
 --- a/website/client/store/actions/quests.js
 +++ b/website/client/store/actions/quests.js
 @@ -1,26 +1,9 @@
@@ -4273,7 +4273,7 @@ index cff15fa53a..ef7fd0dd5b 100644
  
    // @TODO: Update user?
 diff --git a/website/client/store/index.js b/website/client/store/index.js
-index b47fce6de7..4f33daf2a2 100644
+index b47fce6de..4f33daf2a 100644
 --- a/website/client/store/index.js
 +++ b/website/client/store/index.js
 @@ -51,7 +51,6 @@ export default function () {
@@ -4285,7 +4285,7 @@ index b47fce6de7..4f33daf2a2 100644
        credentials: isUserLoggedIn ? {
          API_ID: AUTH_SETTINGS.auth.apiId,
 diff --git a/website/common/errors/apiErrorMessages.js b/website/common/errors/apiErrorMessages.js
-index f10747b12c..90804492fc 100644
+index f10747b12..90804492f 100644
 --- a/website/common/errors/apiErrorMessages.js
 +++ b/website/common/errors/apiErrorMessages.js
 @@ -23,6 +23,5 @@ module.exports = {
@@ -4296,7 +4296,7 @@ index f10747b12c..90804492fc 100644
    missingSubKey: 'Missing "req.query.sub"',
  };
 diff --git a/website/common/script/constants.js b/website/common/script/constants.js
-index 1bc3308460..ff0e5f1d63 100644
+index 1bc330846..ff0e5f1d6 100644
 --- a/website/common/script/constants.js
 +++ b/website/common/script/constants.js
 @@ -10,11 +10,6 @@ export const MAX_SUMMARY_SIZE_FOR_GUILDS = 250;
@@ -4312,7 +4312,7 @@ index 1bc3308460..ff0e5f1d63 100644
  
  export const PARTY_LIMIT_MEMBERS = 30;
 diff --git a/website/common/script/content/spells.js b/website/common/script/content/spells.js
-index 58d69d3755..e641f15466 100644
+index 58d69d375..e641f1546 100644
 --- a/website/common/script/content/spells.js
 +++ b/website/common/script/content/spells.js
 @@ -44,13 +44,13 @@ spells.wizard = {
@@ -4347,7 +4347,7 @@ index 58d69d3755..e641f15466 100644
    },
    toolsOfTrade: { // Tools of the Trade
 diff --git a/website/common/script/content/subscriptionBlocks.js b/website/common/script/content/subscriptionBlocks.js
-index f3131cb5a5..719a693820 100644
+index f3131cb5a..719a69382 100644
 --- a/website/common/script/content/subscriptionBlocks.js
 +++ b/website/common/script/content/subscriptionBlocks.js
 @@ -20,14 +20,6 @@ let subscriptionBlocks = {
@@ -4375,7 +4375,7 @@ index f3131cb5a5..719a693820 100644
    group_plan_auto: {
      target: 'user',
 diff --git a/website/common/script/fns/randomDrop.js b/website/common/script/fns/randomDrop.js
-index 6061b3f83f..7c643d0ef0 100644
+index 6061b3f83..7c643d0ef 100644
 --- a/website/common/script/fns/randomDrop.js
 +++ b/website/common/script/fns/randomDrop.js
 @@ -25,7 +25,7 @@ function trueRandom () {
@@ -4405,7 +4405,7 @@ index 6061b3f83f..7c643d0ef0 100644
      user.items.lastDrop.date = Number(new Date());
      user.items.lastDrop.count++;
 diff --git a/website/common/script/fns/updateStats.js b/website/common/script/fns/updateStats.js
-index 669fb46fd2..11278bd04d 100644
+index 669fb46fd..11278bd04 100644
 --- a/website/common/script/fns/updateStats.js
 +++ b/website/common/script/fns/updateStats.js
 @@ -6,7 +6,7 @@ import {
@@ -4434,7 +4434,7 @@ index 669fb46fd2..11278bd04d 100644
          type: 'Quest',
          key: k,
 diff --git a/website/common/script/index.js b/website/common/script/index.js
-index 9298468707..9188eb6e35 100644
+index 929846870..9188eb6e3 100644
 --- a/website/common/script/index.js
 +++ b/website/common/script/index.js
 @@ -26,7 +26,6 @@ import {
@@ -4454,7 +4454,7 @@ index 9298468707..9188eb6e35 100644
    PARTY_LIMIT_MEMBERS,
  };
 diff --git a/website/common/script/ops/buy/abstractBuyOperation.js b/website/common/script/ops/buy/abstractBuyOperation.js
-index 0a6f7735dd..b6b81d6d23 100644
+index 0a6f7735d..b6b81d6d2 100644
 --- a/website/common/script/ops/buy/abstractBuyOperation.js
 +++ b/website/common/script/ops/buy/abstractBuyOperation.js
 @@ -4,19 +4,16 @@ import {
@@ -4567,7 +4567,7 @@ index 0a6f7735dd..b6b81d6d23 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index 13a995060f..7d86911f17 100644
+index 13a995060..7d86911f1 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
 @@ -19,7 +19,7 @@ import {BuyQuestWithGemOperation} from './buyQuestGem';
@@ -4646,7 +4646,7 @@ index 13a995060f..7d86911f17 100644
        buyRes = buyOp.purchase();
        break;
 diff --git a/website/common/script/ops/buy/buyArmoire.js b/website/common/script/ops/buy/buyArmoire.js
-index cd4eb796af..2c38cbfc9c 100644
+index cd4eb796a..2c38cbfc9 100644
 --- a/website/common/script/ops/buy/buyArmoire.js
 +++ b/website/common/script/ops/buy/buyArmoire.js
 @@ -18,8 +18,8 @@ const YIELD_EQUIPMENT_THRESHOLD = 0.6;
@@ -4703,7 +4703,7 @@ index cd4eb796af..2c38cbfc9c 100644
        message: this.i18n('armoireFood', {
          image: `<span class="Pet_Food_${drop.key} pull-left"></span>`,
 diff --git a/website/common/script/ops/buy/buyGem.js b/website/common/script/ops/buy/buyGem.js
-index b2ea03046e..81fa5be9da 100644
+index b2ea03046..81fa5be9d 100644
 --- a/website/common/script/ops/buy/buyGem.js
 +++ b/website/common/script/ops/buy/buyGem.js
 @@ -9,8 +9,8 @@ import get from 'lodash/get';
@@ -4727,7 +4727,7 @@ index b2ea03046e..81fa5be9da 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buyHealthPotion.js b/website/common/script/ops/buy/buyHealthPotion.js
-index e3d6c1062a..5bd6cf4b5c 100644
+index e3d6c1062..5bd6cf4b5 100644
 --- a/website/common/script/ops/buy/buyHealthPotion.js
 +++ b/website/common/script/ops/buy/buyHealthPotion.js
 @@ -6,8 +6,8 @@ import {
@@ -4742,7 +4742,7 @@ index e3d6c1062a..5bd6cf4b5c 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buyMarketGear.js b/website/common/script/ops/buy/buyMarketGear.js
-index 5f8728bf53..7660de1c46 100644
+index 5f8728bf5..7660de1c4 100644
 --- a/website/common/script/ops/buy/buyMarketGear.js
 +++ b/website/common/script/ops/buy/buyMarketGear.js
 @@ -16,8 +16,8 @@ import { AbstractGoldItemOperation } from './abstractBuyOperation';
@@ -4757,7 +4757,7 @@ index 5f8728bf53..7660de1c46 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buyMysterySet.js b/website/common/script/ops/buy/buyMysterySet.js
-index db9ca557f2..e8098e7b23 100644
+index db9ca557f..e8098e7b2 100644
 --- a/website/common/script/ops/buy/buyMysterySet.js
 +++ b/website/common/script/ops/buy/buyMysterySet.js
 @@ -9,7 +9,7 @@ import {
@@ -4787,7 +4787,7 @@ index db9ca557f2..e8098e7b23 100644
  
    if (user.markModified) user.markModified('items.gear.owned');
 diff --git a/website/common/script/ops/buy/buyQuest.js b/website/common/script/ops/buy/buyQuest.js
-index 09f04dcb59..68c47fcbfa 100644
+index 09f04dcb5..68c47fcbf 100644
 --- a/website/common/script/ops/buy/buyQuest.js
 +++ b/website/common/script/ops/buy/buyQuest.js
 @@ -10,8 +10,8 @@ import {AbstractGoldItemOperation} from './abstractBuyOperation';
@@ -4802,7 +4802,7 @@ index 09f04dcb59..68c47fcbfa 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buyQuestGem.js b/website/common/script/ops/buy/buyQuestGem.js
-index 1a1a24d90a..449de84fbf 100644
+index 1a1a24d90..449de84fb 100644
 --- a/website/common/script/ops/buy/buyQuestGem.js
 +++ b/website/common/script/ops/buy/buyQuestGem.js
 @@ -10,8 +10,8 @@ import errorMessage from '../../libs/errorMessage';
@@ -4817,7 +4817,7 @@ index 1a1a24d90a..449de84fbf 100644
  
    multiplePurchaseAllowed () {
 diff --git a/website/common/script/ops/buy/buySpell.js b/website/common/script/ops/buy/buySpell.js
-index 46e73a5d81..5397b50125 100644
+index 46e73a5d8..5397b5012 100644
 --- a/website/common/script/ops/buy/buySpell.js
 +++ b/website/common/script/ops/buy/buySpell.js
 @@ -10,8 +10,8 @@ import {AbstractGoldItemOperation} from './abstractBuyOperation';
@@ -4832,7 +4832,7 @@ index 46e73a5d81..5397b50125 100644
  
    getItemKey () {
 diff --git a/website/common/script/ops/buy/hourglassPurchase.js b/website/common/script/ops/buy/hourglassPurchase.js
-index 44f6e1a6f4..88ff944527 100644
+index 44f6e1a6f..88ff94452 100644
 --- a/website/common/script/ops/buy/hourglassPurchase.js
 +++ b/website/common/script/ops/buy/hourglassPurchase.js
 @@ -9,7 +9,7 @@ import {
@@ -4863,7 +4863,7 @@ index 44f6e1a6f4..88ff944527 100644
      { items: user.items, purchasedPlanConsecutive: user.purchased.plan.consecutive },
      i18n.t('hourglassPurchase', req.language),
 diff --git a/website/common/script/ops/buy/purchase.js b/website/common/script/ops/buy/purchase.js
-index 20975506f0..e0ae2111e8 100644
+index 20975506f..e0ae2111e 100644
 --- a/website/common/script/ops/buy/purchase.js
 +++ b/website/common/script/ops/buy/purchase.js
 @@ -68,7 +68,7 @@ function purchaseItem (user, item, price, type, key) {
@@ -4896,7 +4896,7 @@ index 20975506f0..e0ae2111e8 100644
      pick(user, splitWhitespace('items balance')),
    ];
 diff --git a/website/common/script/ops/changeClass.js b/website/common/script/ops/changeClass.js
-index 49af6f481a..5704f92f81 100644
+index 49af6f481..5704f92f8 100644
 --- a/website/common/script/ops/changeClass.js
 +++ b/website/common/script/ops/changeClass.js
 @@ -33,18 +33,17 @@ function resetClass (user, req = {}) {
@@ -4940,7 +4940,7 @@ index 49af6f481a..5704f92f81 100644
      // if invalid class is specified, throw an error.
      throw new BadRequest(i18n.t('invalidClass', req.language));
 diff --git a/website/common/script/ops/openMysteryItem.js b/website/common/script/ops/openMysteryItem.js
-index c45d63e925..149460c7b2 100644
+index c45d63e92..149460c7b 100644
 --- a/website/common/script/ops/openMysteryItem.js
 +++ b/website/common/script/ops/openMysteryItem.js
 @@ -13,7 +13,7 @@ function markNotificationAsRead (user) {
@@ -4971,7 +4971,7 @@ index c45d63e925..149460c7b2 100644
      item,
      i18n.t('mysteryItemOpened', req.language),
 diff --git a/website/common/script/ops/rebirth.js b/website/common/script/ops/rebirth.js
-index 7531de25a6..79ddbdbabe 100644
+index 7531de25a..79ddbdbab 100644
 --- a/website/common/script/ops/rebirth.js
 +++ b/website/common/script/ops/rebirth.js
 @@ -11,28 +11,13 @@ import { removePinnedGearByClass } from './pinnedGearUtils';
@@ -5005,7 +5005,7 @@ index 7531de25a6..79ddbdbabe 100644
  
    let lvl = capByLevel(user.stats.lvl);
 diff --git a/website/common/script/ops/releaseBoth.js b/website/common/script/ops/releaseBoth.js
-index 75aa65abd7..9722d4e952 100644
+index 75aa65abd..9722d4e95 100644
 --- a/website/common/script/ops/releaseBoth.js
 +++ b/website/common/script/ops/releaseBoth.js
 @@ -22,21 +22,6 @@ module.exports = function releaseBoth (user, req = {}) {
@@ -5031,7 +5031,7 @@ index 75aa65abd7..9722d4e952 100644
  
    if (mountInfo && mountInfo.type === 'drop') {
 diff --git a/website/common/script/ops/releaseMounts.js b/website/common/script/ops/releaseMounts.js
-index adb9d96dfd..8cd3e11625 100644
+index adb9d96df..8cd3e1162 100644
 --- a/website/common/script/ops/releaseMounts.js
 +++ b/website/common/script/ops/releaseMounts.js
 @@ -5,7 +5,7 @@ import {
@@ -5061,7 +5061,7 @@ index adb9d96dfd..8cd3e11625 100644
      user.items.mounts,
      i18n.t('mountsReleased'),
 diff --git a/website/common/script/ops/releasePets.js b/website/common/script/ops/releasePets.js
-index 0764fddb62..955a91f4a0 100644
+index 0764fddb6..955a91f4a 100644
 --- a/website/common/script/ops/releasePets.js
 +++ b/website/common/script/ops/releasePets.js
 @@ -5,7 +5,7 @@ import {
@@ -5091,7 +5091,7 @@ index 0764fddb62..955a91f4a0 100644
      user.items.pets,
      i18n.t('petsReleased'),
 diff --git a/website/common/script/ops/reroll.js b/website/common/script/ops/reroll.js
-index 9f8da0c839..ffe9e2c5c0 100644
+index 9f8da0c83..ffe9e2c5c 100644
 --- a/website/common/script/ops/reroll.js
 +++ b/website/common/script/ops/reroll.js
 @@ -4,7 +4,7 @@ import {
@@ -5121,7 +5121,7 @@ index 9f8da0c839..ffe9e2c5c0 100644
      {user, tasks},
      i18n.t('fortifyComplete'),
 diff --git a/website/common/script/ops/revive.js b/website/common/script/ops/revive.js
-index 14ad3d1ddd..8714b0d356 100644
+index 14ad3d1dd..8714b0d35 100644
 --- a/website/common/script/ops/revive.js
 +++ b/website/common/script/ops/revive.js
 @@ -12,7 +12,7 @@ import predictableRandom from '../fns/predictableRandom';
@@ -5151,7 +5151,7 @@ index 14ad3d1ddd..8714b0d356 100644
      user.items,
      message,
 diff --git a/website/common/script/ops/scoreTask.js b/website/common/script/ops/scoreTask.js
-index 58e594754d..5ab557a574 100644
+index 58e594754..5ab557a57 100644
 --- a/website/common/script/ops/scoreTask.js
 +++ b/website/common/script/ops/scoreTask.js
 @@ -327,6 +327,6 @@ module.exports = function scoreTask (options = {}, req = {}) {
@@ -5163,7 +5163,7 @@ index 58e594754d..5ab557a574 100644
    return [delta];
  };
 diff --git a/website/common/script/ops/sleep.js b/website/common/script/ops/sleep.js
-index e80f766b0a..48a283ce29 100644
+index e80f766b0..48a283ce2 100644
 --- a/website/common/script/ops/sleep.js
 +++ b/website/common/script/ops/sleep.js
 @@ -1,14 +1,4 @@
@@ -5183,7 +5183,7 @@ index e80f766b0a..48a283ce29 100644
    return [user.preferences.sleep];
  };
 diff --git a/website/common/script/ops/unlock.js b/website/common/script/ops/unlock.js
-index 7adbac48de..bbdb7ea6fc 100644
+index 7adbac48d..bbdb7ea6f 100644
 --- a/website/common/script/ops/unlock.js
 +++ b/website/common/script/ops/unlock.js
 @@ -15,7 +15,7 @@ import content from '../content/index';
@@ -5215,7 +5215,7 @@ index 7adbac48de..bbdb7ea6fc 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index bdf8c17a72..26200eaf88 100644
+index b5933991d..26200eaf8 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -5,7 +5,6 @@ import {
@@ -5253,14 +5253,16 @@ index bdf8c17a72..26200eaf88 100644
   */
  api.registerLocal = {
    method: 'POST',
-@@ -98,7 +95,6 @@ api.loginLocal = {
+@@ -98,8 +95,7 @@ api.loginLocal = {
      // load the entire user because we may have to save it to convert the password to bcrypt
      let user = await User.findOne(login).exec();
  
 -    // if user is using social login, then user will not have a hashed_password stored
-     if (!user.auth.local.hashed_password) throw new NotAuthorized(res.t('invalidLoginCredentialsLong'));
+-    if (!user || !user.auth.local.hashed_password) throw new NotAuthorized(res.t('invalidLoginCredentialsLong'));
++    if (!user.auth.local.hashed_password) throw new NotAuthorized(res.t('invalidLoginCredentialsLong'));
  
      let isValidPassword;
+ 
 @@ -117,30 +113,10 @@ api.loginLocal = {
        await user.save();
      }
@@ -5327,7 +5329,7 @@ index bdf8c17a72..26200eaf88 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 4a70540d85..38ac7e4c8b 100644
+index 4a70540d8..38ac7e4c8 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -202,16 +202,6 @@ api.createChallenge = {
@@ -5417,7 +5419,7 @@ index 4a70540d85..38ac7e4c8b 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 84703ac0da..bee0f5ee82 100644
+index 84703ac0d..bee0f5ee8 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -9,7 +9,6 @@ import {
@@ -5481,7 +5483,7 @@ index 84703ac0da..bee0f5ee82 100644
        res.respond(200, {chat: chatRes.chat});
      } else {
 diff --git a/website/server/controllers/api-v3/coupon.js b/website/server/controllers/api-v3/coupon.js
-index 7acc406a44..8a441b55e4 100644
+index 7acc406a4..8a441b55e 100644
 --- a/website/server/controllers/api-v3/coupon.js
 +++ b/website/server/controllers/api-v3/coupon.js
 @@ -58,7 +58,7 @@ api.getCoupons = {
@@ -5494,7 +5496,7 @@ index 7acc406a44..8a441b55e4 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index eed4aff4cb..7c67e39af1 100644
+index eed4aff4c..7c67e39af 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,10 +22,6 @@ import {
@@ -5663,7 +5665,7 @@ index eed4aff4cb..7c67e39af1 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index 1723c925b2..fbd2dacba0 100644
+index 1723c925b..fbd2dacba 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,6 @@ import {
@@ -5711,7 +5713,7 @@ index 1723c925b2..fbd2dacba0 100644
      res.respond(200, {});
    },
 diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
-index c8b2b25ebe..3ffac6482b 100644
+index c8b2b25eb..3ffac6482 100644
 --- a/website/server/controllers/api-v3/quests.js
 +++ b/website/server/controllers/api-v3/quests.js
 @@ -1,6 +1,5 @@
@@ -5830,7 +5832,7 @@ index c8b2b25ebe..3ffac6482b 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index 524669d3a1..e5bb0b7a1c 100644
+index 524669d3a..e5bb0b7a1 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -23,7 +23,6 @@ import {
@@ -5913,7 +5915,7 @@ index 524669d3a1..e5bb0b7a1c 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks/groups.js b/website/server/controllers/api-v3/tasks/groups.js
-index 69f050ad3d..79aae8c5e9 100644
+index 69f050ad3..79aae8c5e 100644
 --- a/website/server/controllers/api-v3/tasks/groups.js
 +++ b/website/server/controllers/api-v3/tasks/groups.js
 @@ -60,16 +60,6 @@ api.createGroupTasks = {
@@ -5934,7 +5936,7 @@ index 69f050ad3d..79aae8c5e9 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 839c7cd06f..2b833592db 100644
+index 839c7cd06..2b833592d 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -24,7 +24,6 @@ import nconf from 'nconf';
@@ -6129,7 +6131,7 @@ index 839c7cd06f..2b833592db 100644
      res.respond(200, ...reviveRes);
    },
 diff --git a/website/server/controllers/api-v4/auth.js b/website/server/controllers/api-v4/auth.js
-index 05f8b6dd9b..55514c0275 100644
+index 05f8b6dd9..55514c027 100644
 --- a/website/server/controllers/api-v4/auth.js
 +++ b/website/server/controllers/api-v4/auth.js
 @@ -56,7 +56,7 @@ api.verifyUsername = {
@@ -6151,7 +6153,7 @@ index 05f8b6dd9b..55514c0275 100644
  api.registerLocal = {
    method: 'POST',
 diff --git a/website/server/controllers/api-v4/members.js b/website/server/controllers/api-v4/members.js
-index 57a1b39ddd..24cffe91dd 100644
+index 57a1b39dd..24cffe91d 100644
 --- a/website/server/controllers/api-v4/members.js
 +++ b/website/server/controllers/api-v4/members.js
 @@ -5,7 +5,7 @@ let api = {};
@@ -6164,7 +6166,7 @@ index 57a1b39ddd..24cffe91dd 100644
   * @apiGroup Member
   *
 diff --git a/website/server/controllers/api-v4/user.js b/website/server/controllers/api-v4/user.js
-index 2474c31dc0..75f6890796 100644
+index 2474c31dc..75f689079 100644
 --- a/website/server/controllers/api-v4/user.js
 +++ b/website/server/controllers/api-v4/user.js
 @@ -33,7 +33,6 @@ const api = {};
@@ -6176,7 +6178,7 @@ index 2474c31dc0..75f6890796 100644
   * Tags
   * TasksOrder (list of all ids for dailys, habits, rewards and todos)
 diff --git a/website/server/controllers/top-level/dataexport.js b/website/server/controllers/top-level/dataexport.js
-index e9f4448a3f..5a94470e98 100644
+index e9f4448a3..5a94470e9 100644
 --- a/website/server/controllers/top-level/dataexport.js
 +++ b/website/server/controllers/top-level/dataexport.js
 @@ -9,17 +9,7 @@ import _ from 'lodash';
@@ -6274,7 +6276,7 @@ index e9f4448a3f..5a94470e98 100644
   * @api {get} /export/inbox.html Export user private messages as HTML document
   * @apiName ExportUserPrivateMessages
 diff --git a/website/server/index.js b/website/server/index.js
-index c1d6757dee..8259255218 100644
+index c1d6757de..825925521 100644
 --- a/website/server/index.js
 +++ b/website/server/index.js
 @@ -12,9 +12,6 @@ const setupNconf = require('./libs/setupNconf');
@@ -6288,7 +6290,7 @@ index c1d6757dee..8259255218 100644
  const logger = require('./libs/logger');
  
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 609f546ad8..0ec22f525c 100644
+index 609f546ad..0ec22f525 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -7,12 +7,10 @@ import * as passwordUtils from '../../libs/password';
@@ -6374,7 +6376,7 @@ index 609f546ad8..0ec22f525c 100644
    registerLocal,
  };
 diff --git a/website/server/libs/auth/utils.js b/website/server/libs/auth/utils.js
-index 588c596037..8e9265be22 100644
+index 588c59603..8e9265be2 100644
 --- a/website/server/libs/auth/utils.js
 +++ b/website/server/libs/auth/utils.js
 @@ -1,15 +1,8 @@
@@ -6401,7 +6403,7 @@ index 588c596037..8e9265be22 100644
    loginRes,
  };
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index b41f142579..806358dbd7 100644
+index b41f14257..806358dbd 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
 @@ -7,7 +7,6 @@ import {
@@ -6453,7 +6455,7 @@ index b41f142579..806358dbd7 100644
      return message;
    }
 diff --git a/website/server/libs/chatReporting/inboxChatReporter.js b/website/server/libs/chatReporting/inboxChatReporter.js
-index 207b570fd3..e8078d83cf 100644
+index 207b570fd..e8078d83c 100644
 --- a/website/server/libs/chatReporting/inboxChatReporter.js
 +++ b/website/server/libs/chatReporting/inboxChatReporter.js
 @@ -6,7 +6,6 @@ import {
@@ -6479,7 +6481,7 @@ index 207b570fd3..e8078d83cf 100644
  
    async getAuthorVariables (message) {
 diff --git a/website/server/libs/cron.js b/website/server/libs/cron.js
-index 5106b013e2..f56fbb659b 100644
+index 5106b013e..f56fbb659 100644
 --- a/website/server/libs/cron.js
 +++ b/website/server/libs/cron.js
 @@ -85,12 +85,12 @@ function grantEndOfTheMonthPerks (user, now) {
@@ -6550,7 +6552,7 @@ index 5106b013e2..f56fbb659b 100644
    return _progress;
  }
 diff --git a/website/server/libs/email.js b/website/server/libs/email.js
-index 42ec7387a4..9d3d029cf7 100644
+index 42ec7387a..9d3d029cf 100644
 --- a/website/server/libs/email.js
 +++ b/website/server/libs/email.js
 @@ -4,7 +4,6 @@ import { TAVERN_ID } from '../models/group';
@@ -6575,7 +6577,7 @@ index 42ec7387a4..9d3d029cf7 100644
    }
  
 diff --git a/website/server/libs/invites/index.js b/website/server/libs/invites/index.js
-index d5225338ef..7616855f2a 100644
+index d5225338e..7616855f2 100644
 --- a/website/server/libs/invites/index.js
 +++ b/website/server/libs/invites/index.js
 @@ -1,7 +1,6 @@
@@ -6627,7 +6629,7 @@ index d5225338ef..7616855f2a 100644
      .select({_id: true, 'preferences.emailNotifications': true})
      .exec();
 diff --git a/website/server/libs/logger.js b/website/server/libs/logger.js
-index 7da144a7cf..8a260a1a6b 100644
+index 7da144a7c..8a260a1a6 100644
 --- a/website/server/libs/logger.js
 +++ b/website/server/libs/logger.js
 @@ -1,6 +1,5 @@
@@ -6651,7 +6653,7 @@ index 7da144a7cf..8a260a1a6b 100644
  } else if (!IS_TEST || IS_TEST && ENABLE_LOGS_IN_TEST) { // Do not log anything when testing unless specified
    logger
 diff --git a/website/server/libs/payments/gems.js b/website/server/libs/payments/gems.js
-index 35d18cc706..400bf08e65 100644
+index 35d18cc70..400bf08e6 100644
 --- a/website/server/libs/payments/gems.js
 +++ b/website/server/libs/payments/gems.js
 @@ -1,9 +1,7 @@
@@ -6710,7 +6712,7 @@ index 35d18cc706..400bf08e65 100644
    await data.user.save();
  }
 diff --git a/website/server/libs/payments/groupPayments.js b/website/server/libs/payments/groupPayments.js
-index 5da9309f1f..aef8cac2be 100644
+index 5da9309f1..aef8cac2b 100644
 --- a/website/server/libs/payments/groupPayments.js
 +++ b/website/server/libs/payments/groupPayments.js
 @@ -1,4 +1,3 @@
@@ -6780,7 +6782,7 @@ index 5da9309f1f..aef8cac2be 100644
        } else if (memberPlan.customerId === this.constants.GROUP_PLAN_CUSTOMER_ID) {
          previousSubscriptionType = EMAIL_TEMPLATE_SUBSCRIPTION_TYPE_GROUP_PLAN;
 diff --git a/website/server/libs/payments/payments.js b/website/server/libs/payments/payments.js
-index da3e189d70..57b9a64b05 100644
+index da3e189d7..57b9a64b0 100644
 --- a/website/server/libs/payments/payments.js
 +++ b/website/server/libs/payments/payments.js
 @@ -18,8 +18,6 @@ api.constants = {
@@ -6793,7 +6795,7 @@ index da3e189d70..57b9a64b05 100644
  
  api.addSubscriptionToGroupUsers = addSubscriptionToGroupUsers;
 diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
-index fe0119e09a..72f522aca3 100644
+index fe0119e09..72f522aca 100644
 --- a/website/server/libs/payments/subscriptions.js
 +++ b/website/server/libs/payments/subscriptions.js
 @@ -1,8 +1,6 @@
@@ -6936,7 +6938,7 @@ index fe0119e09a..72f522aca3 100644
  
  module.exports = {
 diff --git a/website/server/libs/setupPassport.js b/website/server/libs/setupPassport.js
-index 215c91daa5..1d2c933392 100644
+index 215c91daa..1d2c93339 100644
 --- a/website/server/libs/setupPassport.js
 +++ b/website/server/libs/setupPassport.js
 @@ -1,32 +1,9 @@
@@ -6974,7 +6976,7 @@ index 215c91daa5..1d2c933392 100644
 -  clientSecret: nconf.get('GOOGLE_CLIENT_SECRET'),
 -}, (accessToken, refreshToken, profile, done) => done(null, profile)));
 diff --git a/website/server/libs/user/index.js b/website/server/libs/user/index.js
-index 1274e16d21..5737a9ed6c 100644
+index 1274e16d2..5737a9ed6 100644
 --- a/website/server/libs/user/index.js
 +++ b/website/server/libs/user/index.js
 @@ -198,12 +198,6 @@ export async function reset (req, res, { isV3 = false }) {
@@ -7009,7 +7011,7 @@ index 1274e16d21..5737a9ed6c 100644
      rebirthRes[0].user = await rebirthRes[0].user.toJSONWithInbox();
    }
 diff --git a/website/server/middlewares/appRoutes.js b/website/server/middlewares/appRoutes.js
-index 5819c7231d..ce018e7718 100644
+index 5819c7231..ce018e771 100644
 --- a/website/server/middlewares/appRoutes.js
 +++ b/website/server/middlewares/appRoutes.js
 @@ -1,6 +1,5 @@
@@ -7028,7 +7030,7 @@ index 5819c7231d..ce018e7718 100644
  
  const topLevelRouter = express.Router(); // eslint-disable-line new-cap
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
-index f4c301acf9..1589fcd8bc 100644
+index f4c301acf..1589fcd8b 100644
 --- a/website/server/middlewares/auth.js
 +++ b/website/server/middlewares/auth.js
 @@ -6,7 +6,6 @@ import {
@@ -7070,7 +7072,7 @@ index f4c301acf9..1589fcd8bc 100644
      })
      .catch(next);
 diff --git a/website/server/middlewares/cron.js b/website/server/middlewares/cron.js
-index 15a66b02bf..315f1fa440 100644
+index 15a66b02b..315f1fa44 100644
 --- a/website/server/middlewares/cron.js
 +++ b/website/server/middlewares/cron.js
 @@ -54,7 +54,6 @@ async function cronAsync (req, res) {
@@ -7091,7 +7093,7 @@ index 15a66b02bf..315f1fa440 100644
      // Clear old completed todos - 30 days for free users, 90 for subscribers
      // Do not delete challenges completed todos TODO unless the task is broken?
 diff --git a/website/server/middlewares/errorHandler.js b/website/server/middlewares/errorHandler.js
-index 5b3cdb7390..e10fb3f749 100644
+index 5b3cdb739..e10fb3f74 100644
 --- a/website/server/middlewares/errorHandler.js
 +++ b/website/server/middlewares/errorHandler.js
 @@ -50,12 +50,6 @@ module.exports = function errorHandler (err, req, res, next) { // eslint-disable
@@ -7108,7 +7110,7 @@ index 5b3cdb7390..e10fb3f749 100644
      // Try to identify the error...
      // ...
 diff --git a/website/server/middlewares/notFound.js b/website/server/middlewares/notFound.js
-index adf74bcbd1..67f63b364d 100644
+index adf74bcbd..67f63b364 100644
 --- a/website/server/middlewares/notFound.js
 +++ b/website/server/middlewares/notFound.js
 @@ -7,10 +7,6 @@ import { serveClient } from '../libs/client';
@@ -7123,7 +7125,7 @@ index adf74bcbd1..67f63b364d 100644
    '/email',
    '/qr-code',
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
-index 492b0592dd..f0cc9f4180 100644
+index 492b0592d..f0cc9f418 100644
 --- a/website/server/models/challenge.js
 +++ b/website/server/models/challenge.js
 @@ -10,7 +10,6 @@ import {
@@ -7150,7 +7152,7 @@ index 492b0592dd..f0cc9f4180 100644
  
    // Run some operations in the background withouth blocking the thread
 diff --git a/website/server/models/coupon.js b/website/server/models/coupon.js
-index f08a8135eb..fe391c9684 100644
+index f08a8135e..fe391c968 100644
 --- a/website/server/models/coupon.js
 +++ b/website/server/models/coupon.js
 @@ -12,7 +12,7 @@ import {
@@ -7163,7 +7165,7 @@ index f08a8135eb..fe391c9684 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 53f66e9a3a..80f6dff1eb 100644
+index 53f66e9a3..80f6dff1e 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {
@@ -7239,7 +7241,7 @@ index 53f66e9a3a..80f6dff1eb 100644
  
  export let model = mongoose.model('Group', schema);
 diff --git a/website/server/models/subscriptionPlan.js b/website/server/models/subscriptionPlan.js
-index c26f03bd6a..5cf5014731 100644
+index c26f03bd6..5cf501473 100644
 --- a/website/server/models/subscriptionPlan.js
 +++ b/website/server/models/subscriptionPlan.js
 @@ -7,18 +7,18 @@ export let schema = new mongoose.Schema({
@@ -7267,7 +7269,7 @@ index c26f03bd6a..5cf5014731 100644
      count: {$type: Number, default: 0},
      offset: {$type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 2be8135fa1..b3bddab948 100644
+index 2be8135fa..b3bddab94 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -17,9 +17,6 @@ import { model as UserNotification } from '../userNotification';
@@ -7309,7 +7311,7 @@ index 2be8135fa1..b3bddab948 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index e411bfb437..5cbd3fd679 100644
+index e411bfb43..5cbd3fd67 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -2,7 +2,6 @@ import mongoose from 'mongoose';

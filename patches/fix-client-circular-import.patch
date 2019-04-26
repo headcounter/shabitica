@@ -14,7 +14,7 @@ Date:   Thu Mar 29 05:54:18 2018 +0200
     Filename: fix-client-circular-import.patch
 
 diff --git a/website/common/script/libs/statsComputed.js b/website/common/script/libs/statsComputed.js
-index 1239b6d9d5..b13054cbbb 100644
+index 1239b6d9d..b13054cbb 100644
 --- a/website/common/script/libs/statsComputed.js
 +++ b/website/common/script/libs/statsComputed.js
 @@ -1,11 +1,11 @@

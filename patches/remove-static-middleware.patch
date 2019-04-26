@@ -11,7 +11,7 @@ Date:   Wed Mar 28 08:26:40 2018 +0200
     Filename: remove-static-middleware.patch
 
 diff --git a/website/server/middlewares/index.js b/website/server/middlewares/index.js
-index 0ca550f7c4..4de5ce8940 100644
+index 0ca550f7c..4de5ce894 100644
 --- a/website/server/middlewares/index.js
 +++ b/website/server/middlewares/index.js
 @@ -6,7 +6,6 @@ import nconf from 'nconf';

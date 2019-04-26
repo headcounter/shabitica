@@ -10,7 +10,7 @@ Date:   Wed Mar 28 07:23:59 2018 +0200
     Filename: hardcoded-server-version.patch
 
 diff --git a/website/server/middlewares/response.js b/website/server/middlewares/response.js
-index 420ba9e529..1769d57ded 100644
+index 420ba9e52..1769d57de 100644
 --- a/website/server/middlewares/response.js
 +++ b/website/server/middlewares/response.js
 @@ -1,4 +1,3 @@

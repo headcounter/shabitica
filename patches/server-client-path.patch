@@ -12,7 +12,7 @@ Date:   Wed Mar 28 08:39:05 2018 +0200
     Filename: server-client-path.patch
 
 diff --git a/website/server/libs/client.js b/website/server/libs/client.js
-index 12aa476c95..5acd5d2db9 100644
+index 12aa476c9..5acd5d2db 100644
 --- a/website/server/libs/client.js
 +++ b/website/server/libs/client.js
 @@ -1,5 +1,3 @@

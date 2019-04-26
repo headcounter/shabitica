@@ -12,7 +12,7 @@ Date:   Thu Apr 5 12:32:08 2018 +0200
     Filename: fix-client-e2e-test.patch
 
 diff --git a/test/client/e2e/specs/test.js b/test/client/e2e/specs/test.js
-index da58561b29..f439644760 100644
+index da58561b2..f43964476 100644
 --- a/test/client/e2e/specs/test.js
 +++ b/test/client/e2e/specs/test.js
 @@ -12,8 +12,7 @@ module.exports = {

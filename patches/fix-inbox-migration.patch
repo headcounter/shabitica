@@ -14,7 +14,7 @@ Date:   Wed Oct 10 03:17:50 2018 +0200
     Filename: fix-inbox-migration.patch
 
 diff --git a/migrations/archive/2018/20180811_inboxOutsideUser.js b/migrations/archive/2018/20180811_inboxOutsideUser.js
-index 35da63622b..a0e25e9c58 100644
+index 35da63622..a0e25e9c5 100644
 --- a/migrations/archive/2018/20180811_inboxOutsideUser.js
 +++ b/migrations/archive/2018/20180811_inboxOutsideUser.js
 @@ -1,7 +1,3 @@

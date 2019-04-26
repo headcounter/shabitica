@@ -13,7 +13,7 @@ Date:   Sun Aug 19 06:56:32 2018 +0200
     Filename: profile-photo-imageproxy.patch
 
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 94b7004527..6ecf68dd53 100644
+index 94b700452..6ecf68dd5 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -52,7 +52,7 @@

@@ -18,7 +18,7 @@ Date:   Tue Mar 27 05:37:18 2018 +0200
     Filename: one-admin-mailaddr.patch
 
 diff --git a/config.json.example b/config.json.example
-index cb82930b49..9fdd842b62 100644
+index cb82930b4..9fdd842b6 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -4,12 +4,8 @@
@@ -35,7 +35,7 @@ index cb82930b49..9fdd842b62 100644
    "MAILER_SOCKET": "/run/habitica/mailer.sock",
    "MAINTENANCE_MODE": "false",
 diff --git a/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js b/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
-index 98ce34d35a..a0b90dbc84 100644
+index 98ce34d35..a0b90dbc8 100644
 --- a/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
 +++ b/test/api/v3/integration/chat/POST-groups_id_chat_id_clear_flags.test.js
 @@ -3,7 +3,6 @@ import {
@@ -60,7 +60,7 @@ index 98ce34d35a..a0b90dbc84 100644
        // expect(messages[0].id).to.eql(skillMsg.id);
        // expect(messages[0].flagCount).to.eql(0);
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index f5069b3875..848ced7f1f 100644
+index f5069b387..848ced7f1 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
 @@ -333,7 +333,7 @@ describe('Post /groups/:groupId/invite', () => {
@@ -73,7 +73,7 @@ index f5069b3875..848ced7f1f 100644
      });
  
 diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
-index 1694349e53..a7785fd49c 100644
+index 1694349e5..a7785fd49 100644
 --- a/test/api/v3/integration/user/DELETE-user.test.js
 +++ b/test/api/v3/integration/user/DELETE-user.test.js
 @@ -63,11 +63,7 @@ describe('DELETE /user', () => {
@@ -90,7 +90,7 @@ index 1694349e53..a7785fd49c 100644
  
      it('returns no error if user has active subscription', async () => {
 diff --git a/test/api/v3/integration/user/auth/POST-login-local.test.js b/test/api/v3/integration/user/auth/POST-login-local.test.js
-index 484ff16af5..c3f88ecda2 100644
+index 484ff16af..c3f88ecda 100644
 --- a/test/api/v3/integration/user/auth/POST-login-local.test.js
 +++ b/test/api/v3/integration/user/auth/POST-login-local.test.js
 @@ -45,7 +45,7 @@ describe('POST /user/auth/local/login', () => {
@@ -103,7 +103,7 @@ index 484ff16af5..c3f88ecda2 100644
    });
  
 diff --git a/test/api/v3/integration/user/auth/PUT-user_update_email.test.js b/test/api/v3/integration/user/auth/PUT-user_update_email.test.js
-index d540dbd27b..d8470644ac 100644
+index d540dbd27..d8470644a 100644
 --- a/test/api/v3/integration/user/auth/PUT-user_update_email.test.js
 +++ b/test/api/v3/integration/user/auth/PUT-user_update_email.test.js
 @@ -71,7 +71,7 @@ describe('PUT /user/auth/update-email', () => {
@@ -116,7 +116,7 @@ index d540dbd27b..d8470644ac 100644
      });
  
 diff --git a/webpack/config/prod.env.js b/webpack/config/prod.env.js
-index 1609e92969..5bfbbd7ef5 100644
+index 1609e9296..5bfbbd7ef 100644
 --- a/webpack/config/prod.env.js
 +++ b/webpack/config/prod.env.js
 @@ -17,9 +17,9 @@ let env = {
@@ -133,7 +133,7 @@ index 1609e92969..5bfbbd7ef5 100644
  };
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 26200eaf88..86e4d8fb05 100644
+index 26200eaf8..86e4d8fb0 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -20,7 +20,7 @@ import {
@@ -146,7 +146,7 @@ index 26200eaf88..86e4d8fb05 100644
  let api = {};
  
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index bee0f5ee82..79798efe7a 100644
+index bee0f5ee8..79798efe7 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -18,7 +18,7 @@ import { getMatchesByWordArray } from '../../libs/stringUtils';
@@ -159,7 +159,7 @@ index bee0f5ee82..79798efe7a 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 7c67e39af1..7c96a96499 100644
+index 7c67e39af..7c96a9649 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -25,7 +25,7 @@ import common from '../../../common';
@@ -172,7 +172,7 @@ index 7c67e39af1..7c96a96499 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 2b833592db..790ea214c5 100644
+index 2b833592d..790ea214c 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -23,7 +23,7 @@ import * as userLib from '../../libs/user';
@@ -185,7 +185,7 @@ index 2b833592db..790ea214c5 100644
  /**
   * @apiDefine UserNotFound
 diff --git a/website/server/libs/auth/utils.js b/website/server/libs/auth/utils.js
-index 8e9265be22..f5785583c6 100644
+index 8e9265be2..f5785583c 100644
 --- a/website/server/libs/auth/utils.js
 +++ b/website/server/libs/auth/utils.js
 @@ -2,7 +2,7 @@ import nconf from 'nconf';
@@ -198,7 +198,7 @@ index 8e9265be22..f5785583c6 100644
  function loginRes (user, req, res) {
    if (user.auth.blocked) throw new NotAuthorized(res.t('accountSuspended', {communityManagerEmail: COMMUNITY_MANAGER_EMAIL, userId: user._id}));
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
-index 806358dbd7..6e06e122d6 100644
+index 806358dbd..6e06e122d 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
 +++ b/website/server/libs/chatReporting/groupChatReporter.js
 @@ -11,8 +11,8 @@ import { model as Group } from '../../models/group';
@@ -213,7 +213,7 @@ index 806358dbd7..6e06e122d6 100644
  });
  const USER_AGE_FOR_FLAGGING = 3; // accounts less than this many days old don't increment flagCount
 diff --git a/website/server/libs/chatReporting/inboxChatReporter.js b/website/server/libs/chatReporting/inboxChatReporter.js
-index e8078d83cf..9ce229cfca 100644
+index e8078d83c..9ce229cfc 100644
 --- a/website/server/libs/chatReporting/inboxChatReporter.js
 +++ b/website/server/libs/chatReporting/inboxChatReporter.js
 @@ -11,7 +11,7 @@ import apiError from '../apiError';
@@ -226,7 +226,7 @@ index e8078d83cf..9ce229cfca 100644
  });
  
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
-index 1589fcd8bc..cb239ab41d 100644
+index 1589fcd8b..cb239ab41 100644
 --- a/website/server/middlewares/auth.js
 +++ b/website/server/middlewares/auth.js
 @@ -7,7 +7,7 @@ import {
