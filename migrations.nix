@@ -57,7 +57,9 @@
     testScript = ''
       spec = getuser('bar', api_version=3)
 
-      messages = spec.api.inbox.messages.get(page=0)
+      messages = spec.api.inbox.messages.get(
+        page=0, conversation=getuser('foo').apiUser
+      )
       assertEqual(len(messages), 1)
       assertIn('text', messages[0])
       assertEqual(messages[0]['text'], "Hello Bar!")
