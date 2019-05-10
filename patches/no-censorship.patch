@@ -461,7 +461,7 @@ index c17b789a4..041a41820 100644
  
      it('errors if username has incorrect length', async () => {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 7c78fef8f..a22383649 100644
+index cb86d389c..2eaa4bd29 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -469,10 +469,10 @@ index 7c78fef8f..a22383649 100644
          p {{currentTip}}
    #app(:class='{"casting-spell": castingSpell}')
 -    banned-account-modal
+     sub-cancel-modal-confirm(v-if='isUserLoaded')
+     sub-canceled-modal(v-if='isUserLoaded')
      snackbars
-     router-view(v-if="!isUserLoggedIn || isStaticPage")
-     template(v-else)
-@@ -185,7 +184,6 @@ import spellsMixin from 'client/mixins/spells';
+@@ -188,7 +187,6 @@ import spellsMixin from 'client/mixins/spells';
  import { CONSTANTS, getLocalSetting, removeLocalSetting } from 'client/libs/userlocalManager';
  
  import svgClose from 'assets/svg/close.svg';
@@ -480,7 +480,7 @@ index 7c78fef8f..a22383649 100644
  
  const COMMUNITY_MANAGER_EMAIL = process.env.EMAILS.COMMUNITY_MANAGER_EMAIL; // eslint-disable-line
  
-@@ -200,7 +198,6 @@ export default {
+@@ -203,7 +201,6 @@ export default {
      snackbars,
      BuyModal,
      SelectMembersModal,
@@ -488,7 +488,7 @@ index 7c78fef8f..a22383649 100644
    },
    data () {
      return {
-@@ -293,8 +290,6 @@ export default {
+@@ -296,8 +293,6 @@ export default {
        return response;
      }, (error) => {
        if (error.response.status >= 400) {
@@ -497,7 +497,7 @@ index 7c78fef8f..a22383649 100644
          // Don't show errors from getting user details. These users have delete their account,
          // but their chat message still exists.
          let configExists = Boolean(error.response) && Boolean(error.response.config);
-@@ -444,25 +439,6 @@ export default {
+@@ -447,25 +442,6 @@ export default {
      if (loadingScreen) document.body.removeChild(loadingScreen);
    },
    methods: {

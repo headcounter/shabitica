@@ -2454,7 +2454,7 @@ index 7b8908467..1609e9296 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 0ed4b662e..7c78fef8f 100644
+index a7e3a424d..cb86d389c 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,8 +10,6 @@ div
@@ -2463,10 +2463,10 @@ index 0ed4b662e..7c78fef8f 100644
      banned-account-modal
 -    amazon-payments-modal(v-if='!isStaticPage')
 -    payments-success-modal
+     sub-cancel-modal-confirm(v-if='isUserLoaded')
+     sub-canceled-modal(v-if='isUserLoaded')
      snackbars
-     router-view(v-if="!isUserLoggedIn || isStaticPage")
-     template(v-else)
-@@ -180,14 +178,9 @@ import AppFooter from './components/appFooter';
+@@ -182,15 +180,9 @@ import AppFooter from './components/appFooter';
  import notificationsDisplay from './components/notifications';
  import snackbars from './components/snackbars/notifications';
  import { mapState } from 'client/libs/store';
@@ -2477,21 +2477,24 @@ index 0ed4b662e..7c78fef8f 100644
 -import { setup as setupPayments } from 'client/libs/payments';
 -import amazonPaymentsModal from 'client/components/payments/amazonModal';
 -import paymentsSuccessModal from 'client/components/payments/successModal';
--
+-import subCancelModalConfirm from 'client/components/payments/cancelModalConfirm';
+-import subCanceledModal from 'client/components/payments/canceledModal';
+ 
  import spellsMixin from 'client/mixins/spells';
  import { CONSTANTS, getLocalSetting, removeLocalSetting } from 'client/libs/userlocalManager';
- 
-@@ -207,9 +200,7 @@ export default {
+@@ -211,11 +203,7 @@ export default {
      snackbars,
      BuyModal,
      SelectMembersModal,
 -    amazonPaymentsModal,
      bannedAccountModal,
 -    paymentsSuccessModal,
+-    subCancelModalConfirm,
+-    subCanceledModal,
    },
    data () {
      return {
-@@ -404,10 +395,6 @@ export default {
+@@ -410,10 +398,6 @@ export default {
      this.$store.watch(state => state.title, (title) => {
        document.title = title;
      });
@@ -2502,7 +2505,7 @@ index 0ed4b662e..7c78fef8f 100644
  
      if (this.isUserLoggedIn && !this.isStaticPage) {
        // Load the user and the user tasks
-@@ -416,8 +403,6 @@ export default {
+@@ -422,8 +406,6 @@ export default {
          this.$store.dispatch('tasks:fetchUserTasks'),
        ]).then(() => {
          this.$store.state.isUserLoaded = true;
@@ -2511,7 +2514,7 @@ index 0ed4b662e..7c78fef8f 100644
  
          this.hideLoadingScreen();
  
-@@ -433,12 +418,9 @@ export default {
+@@ -439,12 +421,9 @@ export default {
            appState = JSON.parse(appState);
            if (appState.paymentCompleted) {
              removeLocalSetting(CONSTANTS.savedAppStateValues.SAVED_APP_STATE);
@@ -2524,7 +2527,7 @@ index 0ed4b662e..7c78fef8f 100644
          });
        }).catch((err) => {
          console.error('Impossible to fetch user. Clean up localStorage and refresh.', err); // eslint-disable-line no-console
-@@ -487,8 +469,6 @@ export default {
+@@ -493,8 +472,6 @@ export default {
          if (data.fromRoot) return;
          const modalStack = this.$store.state.modalStack;
  
@@ -2533,7 +2536,7 @@ index 0ed4b662e..7c78fef8f 100644
          // Add new modal to the stack
          const prev = modalStack[modalStack.length - 1];
          const prevId = prev ? prev.modalId : undefined;
-@@ -552,18 +532,6 @@ export default {
+@@ -558,18 +535,6 @@ export default {
  
        return true;
      },
@@ -2552,7 +2555,7 @@ index 0ed4b662e..7c78fef8f 100644
      itemSelected (item) {
        this.selectedItemToBuy = item;
      },
-@@ -651,4 +619,3 @@ export default {
+@@ -657,4 +622,3 @@ export default {
  <style src="assets/css/sprites/spritesmith-main-23.css"></style>
  <style src="assets/css/sprites/spritesmith-main-24.css"></style>
  <style src="assets/css/sprites.css"></style>
@@ -3048,42 +3051,6 @@ index b142f8907..a8bb57142 100644
            button.btn.btn-primary(v-if='creating && !cloning', @click='createChallenge()', :disabled='loading') {{$t('createChallengeAddTasks')}}
            button.btn.btn-primary(v-once, v-if='cloning', @click='createChallenge()', :disabled='loading') {{$t('createChallengeCloneTasks')}}
            button.btn.btn-primary(v-once, v-if='!creating && !cloning', @click='updateChallenge()') {{$t('updateChallenge')}}
-diff --git a/website/client/components/group-plans/billing.vue b/website/client/components/group-plans/billing.vue
-index f9b886d54..5f2f449af 100644
---- a/website/client/components/group-plans/billing.vue
-+++ b/website/client/components/group-plans/billing.vue
-@@ -11,10 +11,6 @@
-         td
-           h3 {{ $t('paymentDetails') }}
-           p(v-if='group.purchased.plan.planId') {{ $t('groupSubscriptionPrice') }}
--      tr(v-if='group.purchased.plan.extraMonths')
--        td
--          span.glyphicon.glyphicon-credit-card
--          | {{ $t('purchasedGroupPlanPlanExtraMonths', purchasedGroupPlanPlanExtraMonths) }}
-       tr(v-if='group.purchased.plan.consecutive.count || group.purchased.plan.consecutive.offset')
-         td
-           span.glyphicon.glyphicon-forward
-@@ -26,8 +22,6 @@
-   .col-12.col-md-6.offset-md-3
-     button.btn.btn-success(class='btn-success', v-if='group.purchased.plan.dateTerminated', @click='upgradeGroup()')
-       | {{ $t('upgrade') }}
--    .btn.btn-primary(v-if='!group.purchased.plan.dateTerminated && group.purchased.plan.paymentMethod === "Stripe"',
--      @click='showStripeEdit({groupId: group.id})') {{ $t('subUpdateCard') }}
-     .btn.btn-sm.btn-danger(v-if='!group.purchased.plan.dateTerminated',
-       @click='cancelSubscription({group: group})') {{ $t('cancelGroupSub') }}
- </template>
-@@ -35,10 +29,9 @@
- <script>
- import moment from 'moment';
- import { mapState } from 'client/libs/store';
--import paymentsMixin from 'client/mixins/payments';
- 
- export default {
--  mixins: [paymentsMixin],
-+  mixins: [],
-   props: ['groupId'],
-   data () {
-     return {
 diff --git a/website/client/components/groups/createPartyModal.vue b/website/client/components/groups/createPartyModal.vue
 index 6e0ea2956..21a5a75ef 100644
 --- a/website/client/components/groups/createPartyModal.vue
@@ -3517,7 +3484,7 @@ index 533de1ba1..caa61badc 100644
        if (confirmationNeeded && !confirm(this.$t('changeClassConfirmCost'))) return;
        try {
 diff --git a/website/client/components/settings/subscription.vue b/website/client/components/settings/subscription.vue
-index 6e2a63425..b352bdd35 100644
+index 80023627c..eea2bc36a 100644
 --- a/website/client/components/settings/subscription.vue
 +++ b/website/client/components/settings/subscription.vue
 @@ -36,9 +36,6 @@
@@ -3535,7 +3502,7 @@ index 6e2a63425..b352bdd35 100644
  
          div(v-if='hasSubscription')
 -          .btn.btn-primary(v-if='canEditCardDetails', @click='showStripeEdit()') {{ $t('subUpdateCard') }}
-           .btn.btn-sm.btn-danger(v-if='canCancelSubscription && !loading', @click='cancelSubscription()') {{ $t('cancelSub') }}
+           .btn.btn-sm.btn-danger(v-if='canCancelSubscription && !loading', @click='cancelSubscriptionConfirm()') {{ $t('cancelSub') }}
            small(v-if='!canCancelSubscription && !hasCanceledSubscription', v-html='getCancelSubInfo()')
  
 -        .subscribe-pay(v-if='!hasSubscription || hasCanceledSubscription')
@@ -3552,7 +3519,7 @@ index 6e2a63425..b352bdd35 100644
      .row
        .col-6
          h2(v-once) {{ $t('giftSubscription') }}
-@@ -112,17 +97,10 @@ import { mapState } from 'client/libs/store';
+@@ -111,17 +96,10 @@ import { mapState } from 'client/libs/store';
  
  import subscriptionBlocks from '../../../common/script/content/subscriptionBlocks';
  import planGemLimits from '../../../common/script/libs/planGemLimits';
@@ -3571,7 +3538,7 @@ index 6e2a63425..b352bdd35 100644
    data () {
      return {
        loading: false,
-@@ -133,19 +111,9 @@ export default {
+@@ -132,19 +110,9 @@ export default {
        subscription: {
          key: 'basic_earned',
        },
@@ -3591,7 +3558,7 @@ index 6e2a63425..b352bdd35 100644
      };
    },
    computed: {
-@@ -180,10 +148,7 @@ export default {
+@@ -179,10 +147,7 @@ export default {
        return subscriptionBlocks;
      },
      canEditCardDetails () {
@@ -3603,7 +3570,7 @@ index 6e2a63425..b352bdd35 100644
      },
      hasSubscription () {
        return Boolean(this.user.purchased.plan.customerId);
-@@ -241,8 +206,6 @@ export default {
+@@ -236,8 +201,6 @@ export default {
      },
      canCancelSubscription () {
        return (
@@ -3612,7 +3579,7 @@ index 6e2a63425..b352bdd35 100644
          !this.hasCanceledSubscription &&
          !this.hasGroupPlan
        );
-@@ -250,12 +213,7 @@ export default {
+@@ -245,12 +208,7 @@ export default {
    },
    methods: {
      async applyCoupon (coupon) {
@@ -3627,7 +3594,7 @@ index 6e2a63425..b352bdd35 100644
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 83e2c0649..d79177cf7 100644
+index 12016ef0d..da2aa2222 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -257,7 +257,6 @@
@@ -3638,8 +3605,8 @@ index 83e2c0649..d79177cf7 100644
    import spellsMixin from 'client/mixins/spells';
    import planGemLimits from 'common/script/libs/planGemLimits';
    import numberInvalid from 'client/mixins/numberInvalid';
-@@ -399,14 +398,6 @@
-         this.hideDialog();
+@@ -403,14 +402,6 @@
+         }
        },
        purchaseGems () {
 -        if (this.item.key === 'rebirth_orb') {
@@ -5329,7 +5296,7 @@ index b5933991d..26200eaf8 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 4a70540d8..38ac7e4c8 100644
+index a60f9502b..a8b00d1ea 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -202,16 +202,6 @@ api.createChallenge = {
@@ -5383,7 +5350,7 @@ index 4a70540d8..38ac7e4c8 100644
      res.respond(200, {});
    },
  };
-@@ -712,16 +682,6 @@ api.deleteChallenge = {
+@@ -713,16 +683,6 @@ api.deleteChallenge = {
      // Close channel in background, some ops are run in the background without `await`ing
      await challenge.closeChal({broken: 'CHALLENGE_DELETED'});
  
@@ -5400,7 +5367,7 @@ index 4a70540d8..38ac7e4c8 100644
      res.respond(200, {});
    },
  };
-@@ -761,17 +721,6 @@ api.selectChallengeWinner = {
+@@ -762,17 +722,6 @@ api.selectChallengeWinner = {
      // Close channel in background, some ops are run in the background without `await`ing
      await challenge.closeChal({broken: 'CHALLENGE_CLOSED', winner});
  
@@ -5915,7 +5882,7 @@ index 524669d3a..e5bb0b7a1 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks/groups.js b/website/server/controllers/api-v3/tasks/groups.js
-index 69f050ad3..79aae8c5e 100644
+index 93ce3cb1e..96e747768 100644
 --- a/website/server/controllers/api-v3/tasks/groups.js
 +++ b/website/server/controllers/api-v3/tasks/groups.js
 @@ -60,16 +60,6 @@ api.createGroupTasks = {
@@ -7125,7 +7092,7 @@ index adf74bcbd..67f63b364 100644
    '/email',
    '/qr-code',
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
-index 492b0592d..f0cc9f418 100644
+index 62ab8716a..3f3444501 100644
 --- a/website/server/models/challenge.js
 +++ b/website/server/models/challenge.js
 @@ -10,7 +10,6 @@ import {
@@ -7165,7 +7132,7 @@ index f08a8135e..fe391c968 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 53f66e9a3..80f6dff1e 100644
+index fee789a87..37acdf8f3 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {
@@ -7218,7 +7185,7 @@ index 53f66e9a3..80f6dff1e 100644
      }
  
      // Send webhooks
-@@ -1465,7 +1451,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+@@ -1485,7 +1471,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
    return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
@@ -7227,7 +7194,7 @@ index 53f66e9a3..80f6dff1e 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1474,12 +1460,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1494,12 +1480,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;

@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.93.4";
+  version = "4.94.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1zqv0i3zkqyh91317hlm4piv57xh7cfhwg8gpr4kl44kjzc3y8w2";
+    sha256 = "1iwh3cdw71j9w7dn3vqb2y42wkzav1ik9bwj3h1jv3c3ak3ss4r8";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -200,6 +200,14 @@ stdenv.mkDerivation rec {
     # Don't use A/B tests for "welcome" emails that new users would get when
     # they register.
     patches/remove-welcome-abtest.patch
+
+    # Fix tests by supplying the correct date range for the Feathered Friends
+    # bundle.
+    (fetchpatch {
+      url = "https://github.com/HabitRPG/habitica/commit/"
+          + "e9163a1bb22cf853938a70c0c62977d843e9de73.patch";
+      sha256 = "0frz6c5bz725ncjf396vy8723gj47jgq2rj7z8gmn9kk5qkp3glf";
+    })
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -237,6 +245,7 @@ stdenv.mkDerivation rec {
     "website/client/components/achievements/newStuff.vue"
     "website/client/components/auth/authForm.vue"
     "website/client/components/bannedAccountModal.vue"
+    "website/client/components/group-plans/billing.vue"
     "website/client/components/group-plans/createGroupModalPages.vue"
     "website/client/components/group-plans/groupPlanOverviewModal.vue"
     "website/client/components/groups/communityGuidelines.vue"
@@ -244,6 +253,8 @@ stdenv.mkDerivation rec {
     "website/client/components/payments/amazonButton.vue"
     "website/client/components/payments/amazonModal.vue"
     "website/client/components/payments/buyGemsModal.vue"
+    "website/client/components/payments/cancelModalConfirm.vue"
+    "website/client/components/payments/canceledModal.vue"
     "website/client/components/payments/sendGemsModal.vue"
     "website/client/components/payments/successModal.vue"
     "website/client/components/static/communityGuidelines.vue"
@@ -405,11 +416,11 @@ stdenv.mkDerivation rec {
     "api-v3/groups\\.js:.*await payments.createSubscription"
     "api-v3/groups\\.js:import payments from"
     "auth.js:.*function verifyDisplayName.*{"
+    "rebirth\\.vue:.*b-modal#rebirth"
     "static/privacy\\.vue:.*doesn't use any analytics"
     "static/terms\\.vue:.*such as Google Chrome"
     "top-level/pages\\.js:// All.*except.*api and payments"
     "user/methods\\.js:schema\\.statics\\.pushNotification ="
-    "rebirth\\.vue:.*b-modal#rebirth"
   ];
 
   # Change all habitica.com URLs to use BASE_URL and all hardcoded email

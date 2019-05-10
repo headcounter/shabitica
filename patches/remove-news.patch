@@ -38,7 +38,7 @@ index fc6bcbaa6..9155977e4 100644
    methods: {
      ...mapActions({
 diff --git a/website/client/components/header/notificationsDropdown.vue b/website/client/components/header/notificationsDropdown.vue
-index 3132f9e9b..ce7f12616 100644
+index 48f7bba6e..6a4af7381 100644
 --- a/website/client/components/header/notificationsDropdown.vue
 +++ b/website/client/components/header/notificationsDropdown.vue
 @@ -79,7 +79,6 @@ import MessageCount from './messageCount';
@@ -49,26 +49,26 @@ index 3132f9e9b..ce7f12616 100644
  import GROUP_TASK_NEEDS_WORK from './notifications/groupTaskNeedsWork';
  import GUILD_INVITATION from './notifications/guildInvitation';
  import PARTY_INVITATION from './notifications/partyInvitation';
-@@ -100,7 +99,7 @@ export default {
+@@ -101,7 +100,7 @@ export default {
      MenuDropdown,
      MessageCount,
      // One component for each type
 -    NEW_STUFF, GROUP_TASK_NEEDS_WORK,
 +    GROUP_TASK_NEEDS_WORK,
      GUILD_INVITATION, PARTY_INVITATION, CHALLENGE_INVITATION,
-     QUEST_INVITATION, GROUP_TASK_APPROVAL, GROUP_TASK_APPROVED,
+     QUEST_INVITATION, GROUP_TASK_APPROVAL, GROUP_TASK_APPROVED, GROUP_TASK_ASSIGNED,
      UNALLOCATED_STATS_POINTS, NEW_MYSTERY_ITEMS, CARD_RECEIVED,
-@@ -124,7 +123,7 @@ export default {
+@@ -125,7 +124,7 @@ export default {
        // listed in the order they should appear in the notifications panel.
        // NOTE: Those not listed here won't be shown in the notification panel!
        handledNotifications: [
 -        'NEW_STUFF', 'GROUP_TASK_NEEDS_WORK',
 +        'GROUP_TASK_NEEDS_WORK',
          'GUILD_INVITATION', 'PARTY_INVITATION', 'CHALLENGE_INVITATION',
-         'QUEST_INVITATION', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
+         'QUEST_INVITATION', 'GROUP_TASK_ASSIGNED', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
          'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
 diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
-index 8cf7e722e..ab4042907 100644
+index 75f2cf0ad..a896e5cdd 100644
 --- a/website/client/components/notifications.vue
 +++ b/website/client/components/notifications.vue
 @@ -5,7 +5,6 @@ div
@@ -87,7 +87,7 @@ index 8cf7e722e..ab4042907 100644
  import death from './achievements/death';
  import lowHealth from './achievements/lowHealth';
  import levelUp from './achievements/levelUp';
-@@ -166,7 +164,6 @@ export default {
+@@ -161,7 +159,6 @@ export default {
      joinedChallenge,
      invitedFriend,
      welcomeModal,
@@ -95,7 +95,7 @@ index 8cf7e722e..ab4042907 100644
      death,
      lowHealth,
      levelUp,
-@@ -420,10 +417,6 @@ export default {
+@@ -404,10 +401,6 @@ export default {
          return this.$root.$emit('bv::show::modal', 'avatar-modal');
        }
  
@@ -181,10 +181,10 @@ index 983ff4e29..db9fbc0fa 100644
          { name: 'privacy', path: 'privacy', component: PrivacyPage, meta: {requiresLogin: false}},
          { name: 'terms', path: 'terms', component: TermsPage, meta: {requiresLogin: false}},
 diff --git a/website/client/store/actions/user.js b/website/client/store/actions/user.js
-index fe6094fcc..a18fe4b7e 100644
+index c8edffe28..575752d9e 100644
 --- a/website/client/store/actions/user.js
 +++ b/website/client/store/actions/user.js
-@@ -134,11 +134,6 @@ export async function openMysteryItem (store) {
+@@ -132,11 +132,6 @@ export async function openMysteryItem (store) {
    return axios.post('/api/v4/user/open-mystery-item');
  }
  
@@ -221,10 +221,10 @@ index 9536aadee..a773fa4b2 100644
      classSelected: {$type: Boolean, default: false},
      mathUpdates: Boolean,
 diff --git a/website/server/models/userNotification.js b/website/server/models/userNotification.js
-index acb280b16..7cdab6e53 100644
+index 79075f7d7..96b80df34 100644
 --- a/website/server/models/userNotification.js
 +++ b/website/server/models/userNotification.js
-@@ -28,7 +28,6 @@ const NOTIFICATION_TYPES = [
+@@ -29,7 +29,6 @@ const NOTIFICATION_TYPES = [
    'NEW_MYSTERY_ITEMS',
    'UNALLOCATED_STATS_POINTS',
    'NEW_INBOX_MESSAGE',
