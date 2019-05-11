@@ -140,8 +140,11 @@ let
         done 2> /dev/null || :
       }
 
-      waitport() {
+      waitport_ssh() {
         while ! ${nc} -z 127.0.0.1 "$1"; do ${sleep} 0.1; done
+        while ! ${nc} -w1 127.0.0.1 "$1" < /dev/null | grep -q -m1 '^SSH-'; do
+          ${sleep} 0.1
+        done
       }
 
       trap kill_everything EXIT
@@ -157,7 +160,7 @@ let
         "$@" &
       vmpid=$!
 
-      waitport 3022
+      waitport_ssh 3022
 
       set +e
       ${connect}
