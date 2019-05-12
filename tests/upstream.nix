@@ -103,7 +103,10 @@ in lib.mapAttrs runTests {
         requiredBy = [ "multi-user.target" ];
         serviceConfig.ExecStart = let
           bin = "${pkgs.selenium-server-standalone}/bin/selenium-server";
-          cmd = [ "${pkgs.xvfb_run}/bin/xvfb-run" bin "-port" "4444" ];
+          cmd = [
+            "${pkgs.xvfb_run}/bin/xvfb-run" "-s" "-screen 0 1024x768x24"
+            bin "-port" "4444"
+          ];
         in lib.concatMapStringsSep " " lib.escapeShellArg cmd;
         serviceConfig.User = "selenium";
       };
