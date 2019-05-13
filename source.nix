@@ -208,6 +208,9 @@ stdenv.mkDerivation rec {
           + "e9163a1bb22cf853938a70c0c62977d843e9de73.patch";
       sha256 = "0frz6c5bz725ncjf396vy8723gj47jgq2rj7z8gmn9kk5qkp3glf";
     })
+
+    # Provide users with a button to generate an invitation URL.
+    patches/allow-invite-by-url.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

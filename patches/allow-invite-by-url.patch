@@ -1,0 +1,419 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Mon May 13 11:42:29 2019 +0200
+
+    Add ability to generate invite URLs
+    
+    On the server side, we don't necessarily have an MTA running, so
+    inviting others via email is not an option. This is getting even more
+    crucial because by default we are in invite-only mode.
+    
+    In addition, people not always have the email address of another person
+    but rather just a contact via some other means (eg. instant messaging),
+    so just being able to paste an URL is way more convenient.
+    
+    The implementation adds a new API endpoint (/groups/ID/generate-invite),
+    which just returns a new invitation URL and also isn't subject to the
+    invitation limit, because generating these URLs is a way cheaper
+    operation than sending out one or more emails.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: allow-invite-by-url.patch
+
+diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
+index 0b1fea1bc..79f575ffd 100644
+--- a/test/api/v3/integration/groups/POST-groups_invite.test.js
++++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
+@@ -337,6 +337,32 @@ describe('Post /groups/:groupId/invite', () => {
+     });
+   });
+ 
++  describe('URL invites', () => {
++    it('returns an error when inviter has no chat privileges', async () => {
++      let inviterMuted = await inviter.update({'flags.chatRevoked': true});
++      await expect(inviterMuted.post(`/groups/${group._id}/generate-invite`))
++        .to.eventually.be.rejected.and.eql({
++          code: 401,
++          error: 'NotAuthorized',
++          message: t('cannotInviteWhenMuted'),
++        });
++    });
++
++    it('is not subject to INVITES_LIMIT', async () => {
++      for (let i = 0; i < INVITES_LIMIT + 10; ++i) {
++        await inviter.post(`/groups/${group._id}/generate-invite`); // eslint-disable-line no-await-in-loop
++      }
++
++      await expect(inviter.post(`/groups/${group._id}/generate-invite`)).to.exist;
++    });
++
++    it('returns an absolute URL', async () => {
++      let res = await inviter.post(`/groups/${group._id}/generate-invite`);
++      expect(res).to.exist;
++      expect(res).to.match(/^http/);
++    });
++  });
++
+   describe('user and email invites', () => {
+     it('returns an error when emails and uuids are not provided', async () => {
+       await expect(inviter.post(`/groups/${group._id}/invite`))
+diff --git a/test/client/e2e/nightwatch.conf.js b/test/client/e2e/nightwatch.conf.js
+index 6b0360e9c..731fc5520 100644
+--- a/test/client/e2e/nightwatch.conf.js
++++ b/test/client/e2e/nightwatch.conf.js
+@@ -27,6 +27,7 @@ module.exports = {
+       silent: true,
+       globals: {
+         devServerURL: 'http://localhost',
++        waitForConditionTimeout: 60000,
+       },
+     },
+ 
+diff --git a/test/client/e2e/specs/smoke.js b/test/client/e2e/specs/smoke.js
+new file mode 100644
+index 000000000..fa4ce1f07
+--- /dev/null
++++ b/test/client/e2e/specs/smoke.js
+@@ -0,0 +1,12 @@
++module.exports = {
++  'whether the main page works' (browser) {
++    const devServer = browser.globals.devServerURL;
++
++    browser
++      .url(devServer)
++      .waitForElementVisible('#app')
++      .assert.elementPresent('.logo')
++      .assert.containsText('h1', 'Motivate yourself to achieve your goals.')
++      .end();
++  },
++};
+diff --git a/test/client/e2e/specs/test.js b/test/client/e2e/specs/test.js
+deleted file mode 100644
+index 8898b7c0d..000000000
+--- a/test/client/e2e/specs/test.js
++++ /dev/null
+@@ -1,46 +0,0 @@
+-// For authoring Nightwatch tests, see
+-// http://nightwatchjs.org/guide#usage
+-
+-module.exports = {
+-  'default e2e tests' (browser) {
+-    // automatically uses dev Server port from /config.index.js
+-    // default: http://localhost:8080
+-    // see nightwatch.conf.js
+-    const devServer = browser.globals.devServerURL;
+-
+-    browser
+-      .url(devServer)
+-      .waitForElementVisible('#app', 5000)
+-      .assert.elementPresent('.logo')
+-      .assert.containsText('h1', 'Motivate yourself to achieve your goals.')
+-      .end();
+-  },
+-  'images in markdown use proxy url' (browser) {
+-    const baseUrl = browser.globals.devServerURL;
+-
+-    browser
+-      .url(`${baseUrl}/register`)
+-      .waitForElementVisible('#app', 50000)
+-      .setValue('#usernameInput', 'foo')
+-      .setValue('#emailInput', 'foo@example.org')
+-      .setValue('#passwordInput', 'bar')
+-      .setValue('#confirmPasswordInput', 'bar')
+-      .useXpath()
+-      .click('//*[text()="Join Habitica"]')
+-      .useCss()
+-      .waitForElementVisible('.welcome-section', 50000)
+-      .click('#avatar-modal .btn-primary')
+-      .waitForElementVisible('.avatar-section.page-2', 50000)
+-      .click('.next')
+-      .click('.next')
+-      .waitForElementVisible('.introjs-donebutton', 50000)
+-      .click('.introjs-donebutton')
+-      .setValue('textarea.quick-add', [
+-        'Test ![image](http://example.org/image.png)',
+-        [browser.Keys.ENTER],
+-      ])
+-      .waitForElementVisible('.markdown-img', 50000)
+-      .assert.attributeEquals('.markdown-img', 'src',
+-        `${baseUrl}/imageproxy/aHR0cDovL2V4YW1wbGUub3JnL2ltYWdlLnBuZw`);
+-  },
+-};
+diff --git a/test/client/e2e/specs/user.js b/test/client/e2e/specs/user.js
+new file mode 100644
+index 000000000..714d54243
+--- /dev/null
++++ b/test/client/e2e/specs/user.js
+@@ -0,0 +1,86 @@
++module.exports = {
++  before (browser) {
++    browser
++      .url(`${browser.globals.devServerURL}/register`)
++      .useCss()
++      .waitForElementVisible('#app')
++      .setValue('#usernameInput', 'foo')
++      .setValue('#emailInput', 'foo@example.org')
++      .setValue('#passwordInput', 'bar')
++      .setValue('#confirmPasswordInput', 'bar')
++      .useXpath()
++      .click('//*[text()="Join Habitica"]')
++      .useCss()
++      .waitForElementVisible('.welcome-section')
++      .click('#avatar-modal .btn-primary')
++      .waitForElementVisible('.avatar-section.page-2')
++      .click('.next')
++      .click('.next')
++      .waitForElementVisible('.introjs-donebutton')
++      .click('.introjs-donebutton');
++  },
++
++  beforeEach (browser) {
++    browser
++      .url(browser.globals.devServerURL)
++      .useCss()
++      .waitForElementVisible('textarea.quick-add');
++  },
++
++  'images in markdown use proxy url' (browser) {
++    const baseUrl = browser.globals.devServerURL;
++
++    browser
++      .setValue('textarea.quick-add', [
++        'Test ![image](http://example.org/image.png)',
++        [browser.Keys.ENTER],
++      ])
++      .waitForElementVisible('.markdown-img')
++      .assert.attributeEquals('.markdown-img', 'src',
++        `${baseUrl}/imageproxy/aHR0cDovL2V4YW1wbGUub3JnL2ltYWdlLnBuZw`);
++  },
++
++  'invite URLs work correctly' (browser) {
++    const partyNav = '//*[contains(@class, "nav-item")]/a[text()="Party"]';
++    const createPartyButton = '//button[text()="Create a Party"]';
++    const generateButton = '//button[text()="Generate URL"]';
++
++    browser
++      .useXpath()
++      .waitForElementVisible(partyNav)
++      .click(partyNav)
++      .waitForElementVisible(createPartyButton)
++      .click(createPartyButton)
++      .waitForElementVisible('//button[text()="Invite"]')
++      .click('//button[text()="Invite"]')
++      .useCss()
++      .waitForElementVisible('#invite-modal')
++      .useXpath()
++      .waitForElementVisible(generateButton)
++      .click(generateButton)
++      .useCss()
++      .waitForElementVisible('#invite-url')
++      .getText('#invite-url', function (result) {
++        browser
++          .url(`${browser.globals.devServerURL}/logout`)
++          .waitForElementVisible('#app')
++          .url(result.value);
++      })
++      .waitForElementVisible('#app')
++      .setValue('#usernameInput', 'another')
++      .setValue('input[placeholder="Email"]', 'another@example.org')
++      .setValue('input[placeholder="Password"]', 'bar')
++      .setValue('input[placeholder="Confirm Password"]', 'bar')
++      .useXpath()
++      .click('//*[text()="Sign Up"]')
++      .useCss()
++      .waitForElementVisible('.welcome-section')
++      .click('#avatar-modal .btn-primary')
++      .waitForElementVisible('.avatar-section.page-2')
++      .click('.next')
++      .click('.next')
++      .waitForElementVisible('.introjs-donebutton')
++      .click('.introjs-donebutton')
++      .waitForElementVisible('textarea.quick-add');
++  },
++};
+diff --git a/website/client/components/groups/inviteModal.vue b/website/client/components/groups/inviteModal.vue
+index a1e8a312e..e761094de 100644
+--- a/website/client/components/groups/inviteModal.vue
++++ b/website/client/components/groups/inviteModal.vue
+@@ -1,6 +1,15 @@
+ <template lang="pug">
+   b-modal#invite-modal(:title='$t(`inviteTo${groupType}`)', :hide-footer='true')
+     div
++      strong Invite via URL
++      .mt-2.mb-4.d-flex
++        button.btn.btn-secondary(@click='generateInviteUrl') Generate URL
++        .input-group-text(v-if='inviteUrl', @click='copyInviteUrl')
++          #invite-url.text {{ inviteUrl }}
++          .ml-3
++            .svg-icon.copy-icon(v-html='icons.copy')
++            .small(v-once) {{ $t('copy') }}
++
+       strong {{ $t('inviteEmailUsername') }}
+       .small {{ $t('inviteEmailUsernameInfo') }}
+       div(v-for='(invite, index) in invites')
+@@ -41,6 +50,29 @@
+ <style lang="scss" scoped>
+   @import '~client/assets/scss/colors.scss';
+ 
++  .input-group-text {
++    background-color: $gray-600;
++    border-radius: 2px;
++    border: solid 1px $gray-500;
++    margin: auto;
++    cursor: pointer;
++    overflow: hidden;
++
++    .text {
++      overflow: hidden;
++      min-height: 1rem;
++    }
++
++    .copy-icon {
++      width: 1rem;
++      margin: 0 auto;
++    }
++
++    .small {
++      margin: 0 auto;
++    }
++  }
++
+   a:not([href]) {
+     color: $blue-10;
+     font-size: 16px;
+@@ -99,6 +131,7 @@
+   import isUUID from 'validator/lib/isUUID';
+   import notifications from 'client/mixins/notifications';
+   import positiveIcon from 'assets/svg/positive.svg';
++  import copyIcon from 'assets/svg/copy.svg';
+ 
+   const INVITE_DEFAULTS = {text: '', error: null, valid: null};
+ 
+@@ -117,9 +150,11 @@
+     },
+     data () {
+       return {
++        inviteUrl: null,
+         invites: [clone(INVITE_DEFAULTS), clone(INVITE_DEFAULTS)],
+         icons: Object.freeze({
+           positiveIcon,
++          copy: copyIcon,
+         }),
+       };
+     },
+@@ -192,6 +227,24 @@
+         this.text(this.$t(invitationString));
+         this.close();
+       },
++      async generateInviteUrl () {
++        this.inviteUrl = await this.$store.dispatch('guilds:inviteUrl', {
++          groupId: this.group._id,
++        });
++      },
++      copyInviteUrl () {
++        if (navigator.clipboard) {
++          navigator.clipboard.writeText(this.inviteUrl);
++        } else {
++          let copyText = document.createElement('textarea');
++          copyText.value = this.inviteUrl;
++          document.body.appendChild(copyText);
++          copyText.select();
++          document.execCommand('copy');
++          document.body.removeChild(copyText);
++        }
++        this.text('Invite URL copied to clipboard.');
++      },
+     },
+     mixins: [notifications],
+     props: ['group', 'groupType'],
+diff --git a/website/client/store/actions/guilds.js b/website/client/store/actions/guilds.js
+index b4eda8714..d186fbbd3 100644
+--- a/website/client/store/actions/guilds.js
++++ b/website/client/store/actions/guilds.js
+@@ -169,6 +169,11 @@ export async function invite (store, payload) {
+   return response;
+ }
+ 
++export async function inviteUrl (store, payload) {
++  let response = await axios.post(`/api/v4/groups/${payload.groupId}/generate-invite`);
++  return response.data.data;
++}
++
+ export async function inviteToQuest (store, payload) {
+   let response = await axios.post(`/api/v4/groups/${payload.groupId}/quests/invite/${payload.key}`);
+ 
+diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
+index 14de9af52..b7a6f19cc 100644
+--- a/website/server/controllers/api-v3/groups.js
++++ b/website/server/controllers/api-v3/groups.js
+@@ -24,9 +24,11 @@ import {
+ import common from '../../../common';
+ import apiError from '../../libs/apiError';
+ import payments from '../../libs/payments/payments';
++import { encrypt } from '../../libs/encryption';
+ 
+ const MAX_EMAIL_INVITES_BY_USER = 200;
+ const TECH_ASSISTANCE_EMAIL = nconf.get('ADMIN_EMAIL');
++const BASE_URL = nconf.get('BASE_URL');
+ 
+ /**
+  * @apiDefine GroupBodyInvalid
+@@ -978,6 +980,59 @@ api.inviteToGroup = {
+   },
+ };
+ 
++/**
++ * @api {post} /api/v3/groups/:groupId/generate-invite Generate invite URL
++ * @apiName GenerateInviteUrlToGroup
++ * @apiGroup Group
++ *
++ * @apiParam (Path) {String} groupId The group _id ('party' for the user party and 'habitrpg' for tavern are accepted)
++ *
++ * @apiSuccess {String} url The generated URL
++ *
++ * @apiError (401) {NotAuthorized} CannotInviteWhenMuted You cannot invite anyone to a guild or party because your chat privileges have been revoked.
++ *
++ * @apiUse GroupNotFound
++ * @apiUse PartyNotFound
++ */
++api.generateInviteUrlToGroup = {
++  method: 'POST',
++  url: '/groups/:groupId/generate-invite',
++  middlewares: [authWithHeaders()],
++  async handler (req, res) {
++    const user = res.locals.user;
++
++    if (user.flags.chatRevoked)
++      throw new NotAuthorized(res.t('cannotInviteWhenMuted'));
++
++    req.checkParams('groupId', apiError('groupIdRequired')).notEmpty();
++
++    const validationErrors = req.validationErrors();
++    if (validationErrors) throw validationErrors;
++
++    const group = await Group.getGroup({
++      user, groupId: req.params.groupId, fields: '-chat',
++    });
++    if (!group) throw new NotFound(res.t('groupNotFound'));
++
++    if (group.purchased && group.purchased.plan.customerId &&
++        user._id !== group.leader)
++      throw new NotAuthorized(res.t('onlyGroupLeaderCanInviteToGroupPlan'));
++
++    let cancelledPlan = false;
++    if (group.isSubscribed() && !group.hasNotCancelled()) cancelledPlan = true;
++
++    const groupQueryString = JSON.stringify({
++      id: group._id,
++      inviter: res.locals.user._id,
++      publicGuild: group.type === 'guild' && group.privacy === 'public',
++      sentAt: Date.now(), // so we can let it expire
++      cancelledPlan,
++    });
++    const payload = encrypt(groupQueryString);
++    res.respond(200, `${BASE_URL}/static/front?groupInvite=${payload}`);
++  },
++};
++
+ /**
+  * @api {post} /api/v3/groups/:groupId/add-manager Add a manager to a group
+  * @apiName AddGroupManager
