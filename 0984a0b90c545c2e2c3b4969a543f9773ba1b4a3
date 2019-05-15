@@ -1,0 +1,21 @@
+The configuration example for applying the patch is actually wrong, here is the
+correct way to add the patch:
+
+  { pkgs, lib, ... }:
+
+  {
+    # ... other configuration definitions
+
+    services.nginx.package = pkgs.nginx.overrideAttrs (drv: {
+      patches = (drv.patches or []) ++ lib.singleton (pkgs.fetchurl {
+        url = "https://raw.githubusercontent.com/NixOS/nixpkgs/master/"
+            + "pkgs/servers/http/nginx/nix-etag-1.15.4.patch";
+        sha256 = "0i2lfz66204kcm1qdqws07cbq5nh1grxcz1ycp6qhmypl3da8hq4";
+        postFetch = ''
+          substituteInPlace "$out" \
+            --subst-var-by nixStoreDir "$NIX_STORE" \
+            --subst-var-by nixStoreDirLen "''${#NIX_STORE}"
+        '';
+      });
+    });
+  }
