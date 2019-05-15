@@ -1,5 +1,5 @@
-The configuration example for applying the patch is actually wrong, here is the
-correct way to add the patch:
+The configuration example for applying the patch is actually wrong, here
+is the correct way to add the patch:
 
   { pkgs, lib, ... }:
 
