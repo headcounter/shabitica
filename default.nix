@@ -517,13 +517,21 @@ in autoCalledOr {
         forceSSL = cfg.useSSL;
         enableACME = cfg.useACME;
         locations = let
-          # This is ugly as hell and basically disables caching.
-          # See https://github.com/NixOS/nixpkgs/issues/25485
-          storeDirWorkaround = ''
+          # Check whether nginx has the etag patch applied from
+          # https://github.com/NixOS/nixpkgs/pull/48337 and only disable
+          # caching if it's not the case.
+          hasEtagPatch = let
+            inherit (config.services.nginx.package) patches;
+            matchEtagPatch = builtins.match ".*nix-etag.*patch";
+          in lib.any (p: matchEtagPatch p.name != null) patches;
+
+          # Workaround for https://github.com/NixOS/nixpkgs/issues/25485
+          storeDirWorkaround = lib.optionalString (!hasEtagPatch) ''
             if_modified_since off;
             add_header Last-Modified "";
             etag off;
           '';
+
           commonHeaders = let
             frameAncestors = let
               allowed = lib.concatStringsSep " " cfg.allowEmbedFrom;
