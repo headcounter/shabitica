@@ -521,7 +521,7 @@ in autoCalledOr {
           # https://github.com/NixOS/nixpkgs/pull/48337 and only disable
           # caching if it's not the case.
           hasEtagPatch = let
-            inherit (config.services.nginx.package) patches;
+            patches = config.services.nginx.package.patches or [];
             matchEtagPatch = builtins.match ".*nix-etag.*patch";
           in lib.any (p: matchEtagPatch p.name != null) patches;
 
