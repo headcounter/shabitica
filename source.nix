@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.94.1";
+  version = "4.95.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1iwh3cdw71j9w7dn3vqb2y42wkzav1ik9bwj3h1jv3c3ak3ss4r8";
+    sha256 = "02l7cb0d73bvqqd8lw7bignmzr331nlrwbz5vf338i4i8ln0sppm";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -200,14 +200,6 @@ stdenv.mkDerivation rec {
     # Don't use A/B tests for "welcome" emails that new users would get when
     # they register.
     patches/remove-welcome-abtest.patch
-
-    # Fix tests by supplying the correct date range for the Feathered Friends
-    # bundle.
-    (fetchpatch {
-      url = "https://github.com/HabitRPG/habitica/commit/"
-          + "e9163a1bb22cf853938a70c0c62977d843e9de73.patch";
-      sha256 = "0frz6c5bz725ncjf396vy8723gj47jgq2rj7z8gmn9kk5qkp3glf";
-    })
 
     # Provide users with a button to generate an invitation URL.
     patches/allow-invite-by-url.patch
