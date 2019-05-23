@@ -94,7 +94,7 @@ in lib.mapAttrs runTests {
       imports = [ ../. ];
       networking.firewall.enable = false;
       virtualisation.diskSize = 16384;
-      virtualisation.memorySize = 1024;
+      virtualisation.memorySize = 2048;
 
       users.users.selenium.description = "Selenium User";
 
