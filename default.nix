@@ -526,10 +526,10 @@ in autoCalledOr {
           in lib.any (p: matchEtagPatch p.name != null) patches;
 
           # Workaround for https://github.com/NixOS/nixpkgs/issues/25485
-          storeDirWorkaround = lib.optionalString (!hasEtagPatch) ''
+          storeDirWorkaround = ''
             if_modified_since off;
             add_header Last-Modified "";
-            etag off;
+            ${lib.optionalString (!hasEtagPatch) "etag off;"}
           '';
 
           commonHeaders = let
