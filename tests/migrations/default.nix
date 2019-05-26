@@ -83,7 +83,14 @@
       });
     '';
 
+    inherit (pkgs) writeText;
     inherit (import ../../docinfo.nix) migrationMsg;
+
+    emptyArmoire = writeText "empty-armoire.js" ''
+      db.users.updateOne({'auth.local.username': 'foo'},
+                         {$set: {'flags.armoireEmpty': true}});
+      quit(db.users.count({'flags.armoireEmpty': true}) == 1 ? 0 : 1);
+    '';
 
   in ''
     $machine->waitForUnit('shabitica.service');
@@ -116,6 +123,30 @@
         'test "$(journalctl -b -u shabitica-db-update.service'.
         ' | grep -F "${migrationMsg}" | wc -l)" -eq 0'
       );
+    });
+
+    $machine->nest('check whether Armoire is correctly restocked', sub {
+      $machine->succeed('shabitica-db-shell < ${emptyArmoire}');
+      $machine->succeed('echo foo | sha256sum | cut -d" " -f1 '.
+                        '> /var/lib/shabitica/armoire.sha256');
+      $machine->nest('reboot to run migrations', sub {
+        $machine->shutdown;
+        $machine->waitForUnit('shabitica.service');
+      });
+      $machine->succeed('shabitica-db-shell < ${writeText "check-armoire.js" ''
+        quit(db.users.count({'flags.armoireEmpty': true}));
+      ''}');
+    });
+
+    $machine->nest('ensure that Armoire is not unnecessarily restocked', sub {
+      $machine->succeed('shabitica-db-shell < ${emptyArmoire}');
+      $machine->nest('reboot to run migrations', sub {
+        $machine->shutdown;
+        $machine->waitForUnit('shabitica.service');
+      });
+      $machine->succeed('shabitica-db-shell < ${writeText "check-armoire.js" ''
+        quit(db.users.count({'flags.armoireEmpty': true}) == 1 ? 0 : 1);
+      ''}');
     });
   '';
 }

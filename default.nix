@@ -406,10 +406,13 @@ in autoCalledOr {
               ${cfg.packages.migrator}/bin/migrate "$ver"
             done
           fi
+          ${cfg.packages.migrator}/bin/maybe-restock-armoire
         '';
 
         postStart = ''
           echo ${toString latestDbVersion} > /var/lib/shabitica/db-version
+          cat ${cfg.packages.migrator}/share/shabitica/armoire.sha256 \
+            > /var/lib/shabitica/armoire.sha256
         '';
       };
 

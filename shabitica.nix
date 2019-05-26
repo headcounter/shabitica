@@ -120,7 +120,34 @@ in rec {
     '';
   };
 
-  migrator = mkCommonBuild {
+  migrator = let
+    mkMigStep = ident: { file, ... }: ''
+      migPath=${lib.escapeShellArg "_migrations_transpiled/${file}"}
+      migFile="$(basename "$migPath")"
+      migDir="_migrations/${toString ident}"
+      migOutDir="$out/share/shabitica/migrations/${toString ident}"
+      migRunner="$migDir/runner.js"
+
+      mkdir "$migDir"
+
+      substitute _migrations_transpiled/migration-runner.js "$migRunner" \
+        --subst-var-by migrationScript "$migOutDir/$migFile"
+
+      # Move the actual migration script so that we get a build failure if we
+      # have duplicate migrations.
+      mv "$migPath" "$migDir/$migFile"
+
+      makeWrapper \
+        ${lib.escapeShellArg "${nodejs}/bin/node"} "$migDir/run.sh" \
+        --add-flags "$migOutDir/runner.js" \
+        --set NODE_ENV production \
+        --set NODE_PATH "$runtimeNodePath" \
+        --run "cd '${server}/libexec/shabitica'" \
+        --run ${let
+          desc = "${migrationMsg} ${toString ident} (${file})";
+        in lib.escapeShellArg "echo ${lib.escapeShellArg desc} >&2"}
+    '';
+  in mkCommonBuild {
     name = "migrator";
 
     runtimeNodePath = let
@@ -160,43 +187,48 @@ in rec {
       # Note that we don't use -p or anything like that, because we want this
       # to fail if the directory already exists.
       mkdir _migrations
-    '' + lib.concatStrings (lib.imap1 (num: { file, ... }: ''
-      migPath=${lib.escapeShellArg "_migrations_transpiled/${file}"}
-      migFile="$(basename "$migPath")"
-      migDir="_migrations/${toString num}"
-      migOutDir="$out/share/shabitica/migrations/${toString num}"
-      migRunner="$migDir/runner.js"
 
-      mkdir "$migDir"
+      # All of the regular migrations
+      ${lib.concatStrings (lib.imap1 mkMigStep (import ./migrations.nix))}
+      # Special one to restock Armoire
+      ${mkMigStep "armoire" { file = "restock_armoire.js"; }}
 
-      substitute _migrations_transpiled/migration-runner.js "$migRunner" \
-        --subst-var-by migrationScript "$migOutDir/$migFile"
-
-      # Move the actual migration script so that we get a build failure if we
-      # have duplicate migrations.
-      mv "$migPath" "$migDir/$migFile"
-
-      makeWrapper \
-        ${lib.escapeShellArg "${nodejs}/bin/node"} "$migDir/run.sh" \
-        --add-flags "$migOutDir/runner.js" \
-        --set NODE_ENV production \
-        --set NODE_PATH "$runtimeNodePath" \
-        --run "cd '${server}/libexec/shabitica'" \
-        --run ${let
-          desc = "${migrationMsg} ${toString num} (${file})";
-        in lib.escapeShellArg "echo ${lib.escapeShellArg desc} >&2"}
-    '') (import ./migrations.nix));
+      # Gets a deterministic SHA256 of all the Armoire items available in order
+      # to compare it with the state of the running system and reset the
+      # armoireEmpty user flag if needed.
+      HOME="$PWD" node <<EOF | sha256sum | cut -d' ' -f1 > armoire.sha256
+      require('babel-register');
+      const armoire =
+        require('./website/common/script/content/gear/sets/armoire.js');
+      console.log(Object.keys(armoire)
+        .sort()
+        .map(k => k + '=' + Object.keys(armoire[k]).sort().join(','))
+        .join(';'));
+      EOF
+    '';
 
     installPhase = ''
       mkdir -p "$out/bin" "$out/share/shabitica"
-
       mv _migrations "$out/share/shabitica/migrations"
+      install -m 0644 -vD armoire.sha256 "$out/share/shabitica/armoire.sha256"
+
+      cat > "$out/bin/maybe-restock-armoire" <<EOF
+      #!${stdenv.shell} -e
+      if [ -e /var/lib/shabitica/armoire.sha256 ]; then
+        if [ "\$(< /var/lib/shabitica/armoire.sha256)" \
+           = "$(< armoire.sha256)" ]; then
+          exit 0
+        fi
+      fi
+      exec "$out/share/shabitica/migrations/armoire/run.sh"
+      EOF
+      chmod +x "$out/bin/maybe-restock-armoire"
 
       cat > "$out/bin/migrate" <<EOF
       #!${stdenv.shell} -e
       usage() {
-        echo "Usage \$0 MIGRATION_NUMBER" >&2
-        echo "Run the specified database migration number on Shabitica" >&2
+        echo "Usage \$0 MIGRATION_ID" >&2
+        echo "Run the specified database migration ID on Shabitica" >&2
       }
 
       if [ -z "\$1" ]; then

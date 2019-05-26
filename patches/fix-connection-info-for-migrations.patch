@@ -31,6 +31,21 @@ index a58df2a4c..35da63622 100644
  const dbInboxes = monk(connectionString).get('inboxes', { castIds: false });
  const dbUsers = monk(connectionString).get('users', { castIds: false });
  
+diff --git a/migrations/restock_armoire.js b/migrations/restock_armoire.js
+index 5046998a3..34188d068 100644
+--- a/migrations/restock_armoire.js
++++ b/migrations/restock_armoire.js
+@@ -6,8 +6,9 @@ let authorUuid = '7f14ed62-5408-4e1b-be83-ada62d504931'; // ... own data is done
+  * Remove flag stating that the Enchanted Armoire is empty, for when new equipment is added
+  */
+ 
++let mongoose = require('mongoose');
+ let monk = require('monk');
+-let connectionString = 'mongodb://localhost:27017/habitrpg?auto_reconnect=true'; // FOR TEST DATABASE
++let connectionString = `mongodb://${mongoose.connection.host}`;
+ let dbUsers = monk(connectionString).get('users', { castIds: false });
+ 
+ function processUsers (lastId) {
 diff --git a/migrations/tasks/habits-one-history-entry-per-day-challenges.js b/migrations/tasks/habits-one-history-entry-per-day-challenges.js
 index dcb05f48b..12e55ecb7 100644
 --- a/migrations/tasks/habits-one-history-entry-per-day-challenges.js
