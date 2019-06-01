@@ -60,7 +60,7 @@ index 98ce34d35..a0b90dbc8 100644
        // expect(messages[0].id).to.eql(skillMsg.id);
        // expect(messages[0].flagCount).to.eql(0);
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index f5069b387..848ced7f1 100644
+index 2a648e2bb..1695d3966 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
 @@ -333,7 +333,7 @@ describe('Post /groups/:groupId/invite', () => {
@@ -146,7 +146,7 @@ index 26200eaf8..86e4d8fb0 100644
  let api = {};
  
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index bee0f5ee8..79798efe7 100644
+index 440719eaa..0799a4935 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -18,7 +18,7 @@ import { getMatchesByWordArray } from '../../libs/stringUtils';
@@ -159,7 +159,7 @@ index bee0f5ee8..79798efe7 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 7c67e39af..7c96a9649 100644
+index 7c1057e72..bfbb88e29 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -25,7 +25,7 @@ import common from '../../../common';
@@ -226,7 +226,7 @@ index e8078d83c..9ce229cfc 100644
  });
  
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
-index 1589fcd8b..cb239ab41 100644
+index 96188ece5..4ce5175d5 100644
 --- a/website/server/middlewares/auth.js
 +++ b/website/server/middlewares/auth.js
 @@ -7,7 +7,7 @@ import {
@@ -235,6 +235,6 @@ index 1589fcd8b..cb239ab41 100644
  
 -const COMMUNITY_MANAGER_EMAIL = nconf.get('EMAILS_COMMUNITY_MANAGER_EMAIL');
 +const COMMUNITY_MANAGER_EMAIL = nconf.get('ADMIN_EMAIL');
+ const USER_FIELDS_ALWAYS_LOADED = ['_id', 'notifications', 'preferences', 'auth', 'flags'];
  
  function getUserFields (options, req) {
-   // A list of user fields that aren't needed for the route and are not loaded from the db.

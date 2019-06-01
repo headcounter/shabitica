@@ -10,10 +10,10 @@ Date:   Mon Apr 2 04:50:12 2018 +0200
     Filename: dont-cancel-group-subscription-on-leave.patch
 
 diff --git a/test/api/unit/models/group.test.js b/test/api/unit/models/group.test.js
-index 11012a54b..b041db8b2 100644
+index 624e971f6..3cfee7073 100644
 --- a/test/api/unit/models/group.test.js
 +++ b/test/api/unit/models/group.test.js
-@@ -865,10 +865,14 @@ describe('Group Model', () => {
+@@ -1166,10 +1166,14 @@ describe('Group Model', () => {
        });
  
        it('deletes a private group when the last member leaves and a subscription is active', async () => {
@@ -29,7 +29,7 @@ index 11012a54b..b041db8b2 100644
  
          party = await Group.findOne({_id: party._id});
          expect(party).to.not.exist;
-@@ -877,6 +881,7 @@ describe('Group Model', () => {
+@@ -1178,6 +1182,7 @@ describe('Group Model', () => {
        it('allows a leader to leave a group with an active subscription', async () => {
          party.memberCount = 2;
          party.purchased.plan.customerId = '110002222333';
@@ -97,7 +97,7 @@ index eab444222..9eb8e166b 100644
 -  });
  });
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 19917a447..b250c99c5 100644
+index a49a51f09..e92d41123 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -14,7 +14,6 @@ import {
@@ -108,7 +108,7 @@ index 19917a447..b250c99c5 100644
  import {
    groupChatReceivedWebhook,
    questActivityWebhook,
-@@ -1167,10 +1166,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
+@@ -1255,10 +1254,6 @@ schema.methods.leave = async function leaveGroup (user, keep = 'keep-all', keepC
      update.$unset = {[`quest.members.${user._id}`]: 1};
    }
  

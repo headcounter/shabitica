@@ -198,6 +198,20 @@ in runInMachine {
       loggedin = newuser_piday2019['auth']['timestamps']['loggedin']
       assert loggedin.startswith('2019-02-20')
 
+      # The Half-Moon Glasses gear is only awarded for users logged in after
+      # 2019-05-01, so let's warp to 2019-05-10.
+      timewarp(6822000)
+
+      newuser_halfmoon = first.user.auth.local.register.post(
+        username='halfmoon',
+        email='halfmoon@example.org',
+        password='snakeoil',
+        confirmPassword='snakeoil',
+      )
+
+      loggedin = newuser_halfmoon['auth']['timestamps']['loggedin']
+      assert loggedin.startswith('2019-05-10')
+
       with open('spec.json', 'w') as fp:
         json.dump({
           'foo': {
@@ -220,6 +234,10 @@ in runInMachine {
           'piday2019': {
             'apiUser': newuser_piday2019['id'],
             'apiToken': newuser_piday2019['apiToken'],
+          },
+          'halfmoon': {
+            'apiUser': newuser_halfmoon['id'],
+            'apiToken': newuser_halfmoon['apiToken'],
           }
         }, fp)
     '';

@@ -64,7 +64,7 @@ index 6f6278313..f20bf241b 100644
              textarea.form-control(cols=5, :placeholder="$t('contributions')", v-model='hero.contributor.contributions')
              //include ../../shared/formattiv-help
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index d98c21fc5..05bb1c867 100644
+index 2a352504c..41789106b 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -52,9 +52,6 @@ div
@@ -158,10 +158,10 @@ index 586663018..7fd00b1ec 100644
  
  <style lang='scss'>
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index b58eb1e03..14de9af52 100644
+index 570a60c8d..75e63d258 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
-@@ -713,7 +713,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
+@@ -714,7 +714,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
        {name: 'GROUP_NAME', content: group.name},
        {name: 'MESSAGE', content: message},
        {name: 'GUILDS_LINK', content: '/groups/discovery'},

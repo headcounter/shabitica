@@ -114,4 +114,24 @@
       assertFalse(user['items']['gear']['owned']['shield_special_piDay'])
     '';
   }
+  { file = "archive/2019/20190530_halfmoon_glasses.js";
+    testScript = ''
+      ineligible_user = getuser('piday2019').api.user.get()
+      halfmoon_user = getuser('halfmoon').api.user.get()
+
+      for user in [ineligible_user, halfmoon_user]:
+        assertIn('items', user)
+        assertIn('gear', user['items'])
+        assertIn('owned', user['items']['gear'])
+
+      for color in ['black', 'blue', 'green', 'pink', 'red', 'white',
+                    'yellow']:
+        item_name = 'eyewear_special_' + color + 'HalfMoon'
+
+        assertIn(item_name, halfmoon_user['items']['gear']['owned'])
+        assertTrue(halfmoon_user['items']['gear']['owned'][item_name])
+
+        assertNotIn(item_name, ineligible_user['items']['gear']['owned'])
+    '';
+  }
 ]

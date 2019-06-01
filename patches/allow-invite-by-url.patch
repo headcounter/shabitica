@@ -20,7 +20,7 @@ Date:   Mon May 13 11:42:29 2019 +0200
     Filename: allow-invite-by-url.patch
 
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index 0b1fea1bc..79f575ffd 100644
+index 27f1a5c62..60b57e059 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
 @@ -337,6 +337,32 @@ describe('Post /groups/:groupId/invite', () => {
@@ -342,7 +342,7 @@ index b4eda8714..d186fbbd3 100644
    let response = await axios.post(`/api/v4/groups/${payload.groupId}/quests/invite/${payload.key}`);
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 14de9af52..b7a6f19cc 100644
+index 75e63d258..69b826d9b 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -24,9 +24,11 @@ import {
@@ -357,7 +357,7 @@ index 14de9af52..b7a6f19cc 100644
  
  /**
   * @apiDefine GroupBodyInvalid
-@@ -978,6 +980,59 @@ api.inviteToGroup = {
+@@ -979,6 +981,59 @@ api.inviteToGroup = {
    },
  };
  

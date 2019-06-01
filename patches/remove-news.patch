@@ -38,7 +38,7 @@ index fc6bcbaa6..9155977e4 100644
    methods: {
      ...mapActions({
 diff --git a/website/client/components/header/notificationsDropdown.vue b/website/client/components/header/notificationsDropdown.vue
-index 48f7bba6e..6a4af7381 100644
+index 6fce4cc0c..7c73e830b 100644
 --- a/website/client/components/header/notificationsDropdown.vue
 +++ b/website/client/components/header/notificationsDropdown.vue
 @@ -79,7 +79,6 @@ import MessageCount from './messageCount';
