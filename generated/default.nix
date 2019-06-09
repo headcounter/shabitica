@@ -13,7 +13,7 @@ in {
     chai = nodePackages."chai-^4.1.2";
     "chai-as-promised" = nodePackages."chai-as-promised-^7.1.1";
     chalk = nodePackages."chalk-^2.4.1";
-    chromedriver = nodePackages."chromedriver-^2.40.0";
+    chromedriver = nodePackages."chromedriver-^73.0.0";
     "connect-history-api-fallback" = nodePackages."connect-history-api-fallback-^1.1.0";
     coveralls = nodePackages."coveralls-^3.0.3";
     "cross-spawn" = nodePackages."cross-spawn-^6.0.5";
@@ -65,7 +65,7 @@ in {
     accepts = nodePackages."accepts-^1.3.5";
     apidoc = nodePackages."apidoc-^0.17.5";
     autoprefixer = nodePackages."autoprefixer-^9.4.0";
-    axios = nodePackages."axios-^0.18.0";
+    axios = nodePackages."axios-^0.19.0";
     "axios-progress-bar" = nodePackages."axios-progress-bar-^1.2.0";
     "babel-core" = nodePackages."babel-core-^6.26.3";
     "babel-eslint" = nodePackages."babel-eslint-^8.2.3";
@@ -99,7 +99,7 @@ in {
     got = nodePackages."got-^9.0.0";
     gulp = nodePackages."gulp-^4.0.0";
     "gulp-babel" = nodePackages."gulp-babel-^7.0.1";
-    "gulp-imagemin" = nodePackages."gulp-imagemin-^5.0.3";
+    "gulp-imagemin" = nodePackages."gulp-imagemin-^6.0.0";
     "gulp-nodemon" = nodePackages."gulp-nodemon-^2.4.1";
     "gulp.spritesmith" = nodePackages."gulp.spritesmith-^6.9.0";
     "habitica-markdown" = nodePackages."habitica-markdown-^1.3.0";
@@ -107,9 +107,9 @@ in {
     "image-size" = nodePackages."image-size-^0.7.0";
     "intro.js" = nodePackages."intro.js-^2.9.3";
     jquery = nodePackages."jquery->=3.0.0";
-    js2xmlparser = nodePackages."js2xmlparser-^3.0.0";
+    js2xmlparser = nodePackages."js2xmlparser-^4.0.0";
     lodash = nodePackages."lodash-^4.17.10";
-    "merge-stream" = nodePackages."merge-stream-^1.0.0";
+    "merge-stream" = nodePackages."merge-stream-^2.0.0";
     "method-override" = nodePackages."method-override-^3.0.0";
     moment = nodePackages."moment-^2.22.1";
     "moment-recur" = nodePackages."moment-recur-^1.0.7";
@@ -118,7 +118,7 @@ in {
     nconf = nodePackages."nconf-^0.10.0";
     "node-sass" = nodePackages."node-sass-^4.9.0";
     ora = nodePackages."ora-^3.2.0";
-    pageres = nodePackages."pageres-^4.1.1";
+    pageres = nodePackages."pageres-^5.1.0";
     passport = nodePackages."passport-^0.4.0";
     "popper.js" = nodePackages."popper.js-^1.14.3";
     "postcss-easy-import" = nodePackages."postcss-easy-import-^3.0.0";
@@ -139,7 +139,7 @@ in {
     "url-loader" = nodePackages."url-loader-^1.0.0";
     useragent = nodePackages."useragent-^2.1.9";
     uuid = nodePackages."uuid-^3.0.1";
-    validator = nodePackages."validator-^10.5.0";
+    validator = nodePackages."validator-^11.0.0";
     "vinyl-buffer" = nodePackages."vinyl-buffer-^1.0.1";
     vue = nodePackages."vue-^2.6.10";
     "vue-loader" = nodePackages."vue-loader-^14.2.2";

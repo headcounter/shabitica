@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:02 2018 +0200
     Filename: strip-dependencies.patch
 
 diff --git a/package.json b/package.json
-index 587f63354..4e308fc8c 100644
+index 312a1ae53..0e1ddd28a 100644
 --- a/package.json
 +++ b/package.json
 @@ -4,16 +4,9 @@
-   "version": "4.98.0",
+   "version": "4.99.1",
    "main": "./website/server/index.js",
    "dependencies": {
 -    "@google-cloud/trace-agent": "^3.6.0",
@@ -27,7 +27,7 @@ index 587f63354..4e308fc8c 100644
 -    "apn": "^2.2.0",
      "autoprefixer": "^9.4.0",
 -    "aws-sdk": "^2.432.0",
-     "axios": "^0.18.0",
+     "axios": "^0.19.0",
      "axios-progress-bar": "^1.2.0",
      "babel-core": "^6.26.3",
 @@ -52,10 +45,8 @@
@@ -40,7 +40,7 @@ index 587f63354..4e308fc8c 100644
 -    "in-app-purchase": "^1.11.3",
      "intro.js": "^2.9.3",
      "jquery": ">=3.0.0",
-     "js2xmlparser": "^3.0.0",
+     "js2xmlparser": "^4.0.0",
 @@ -67,16 +58,11 @@
      "mongoose": "^5.4.19",
      "morgan": "^1.7.0",
@@ -49,7 +49,7 @@ index 587f63354..4e308fc8c 100644
      "node-sass": "^4.9.0",
      "nodemailer": "^6.0.0",
      "ora": "^3.2.0",
-     "pageres": "^4.1.1",
+     "pageres": "^5.1.0",
      "passport": "^0.4.0",
 -    "passport-facebook": "^2.0.0",
 -    "passport-google-oauth20": "1.0.0",

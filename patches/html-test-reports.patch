@@ -63,7 +63,7 @@ index 000000000..347c750ab
 +  "mochaSimpleHtmlReporterReporterOptions": {"output": "test-report.html"}
 +}
 diff --git a/package.json b/package.json
-index 8161a447d..e1a5d5dab 100644
+index fe12e131b..daf758f98 100644
 --- a/package.json
 +++ b/package.json
 @@ -110,9 +110,9 @@
