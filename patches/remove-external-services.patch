@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 2c5e30fdf..feded8540 100644
+index 09b677841..3a31e9c95 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -1,12 +1,5 @@
@@ -102,8 +102,8 @@ index 2c5e30fdf..feded8540 100644
    "SESSION_SECRET_IV": "12345678912345678912345678912345",
    "SESSION_SECRET_KEY": "1234567891234567891234567891234567891234567891234567891234567891",
    "SITE_HTTP_AUTH_ENABLED": "false",
-   "SITE_HTTP_AUTH_PASSWORDS": "password,wordpass,passkey",
-   "SITE_HTTP_AUTH_USERNAMES": "admin,tester,contributor",
+   "SITE_HTTP_AUTH_PASSWORD": "password",
+   "SITE_HTTP_AUTH_USERNAME": "admin",
 -  "SLACK_FLAGGING_FOOTER_LINK": "https://habitrpg.github.io/flag-o-rama/",
 -  "SLACK_FLAGGING_URL": "https://hooks.slack.com/services/id/id/id",
 -  "SLACK_SUBSCRIPTIONS_URL": "https://hooks.slack.com/services/id/id/id",
@@ -3255,7 +3255,7 @@ index 9d13f2d0b..97d18ff8f 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 8b2c37354..da4d72caf 100644
+index 336cbd6f7..f474d0b9a 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -4,7 +4,6 @@ div
@@ -3266,7 +3266,7 @@ index 8b2c37354..da4d72caf 100644
    b-navbar.topbar.navbar-inverse.static-top(toggleable="lg", type="dark", :class="navbarZIndexClass")
      b-navbar-brand.brand(aria-label="Habitica")
        .logo.svg-icon.d-none.d-xl-block(v-html="icons.logo")
-@@ -394,7 +393,6 @@ div
+@@ -337,7 +336,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -3274,7 +3274,7 @@ index 8b2c37354..da4d72caf 100644
  import { goToModForm } from 'client/libs/modform';
  
  import gemIcon from 'assets/svg/gem.svg';
-@@ -409,7 +407,6 @@ import InboxModal from '../userMenu/inbox.vue';
+@@ -351,7 +349,6 @@ import InboxModal from '../userMenu/inbox.vue';
  import notificationMenu from './notificationsDropdown';
  import profileModal from '../userMenu/profileModal';
  import reportFlagModal from '../chat/reportFlagModal';
@@ -3282,7 +3282,7 @@ index 8b2c37354..da4d72caf 100644
  import sync from 'client/mixins/sync';
  import userDropdown from './userDropdown';
  
-@@ -421,7 +418,6 @@ export default {
+@@ -363,7 +360,6 @@ export default {
      notificationMenu,
      profileModal,
      reportFlagModal,
@@ -3290,7 +3290,7 @@ index 8b2c37354..da4d72caf 100644
      userDropdown,
    },
    mixins: [sync],
-@@ -481,14 +477,6 @@ export default {
+@@ -414,14 +410,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -3304,7 +3304,7 @@ index 8b2c37354..da4d72caf 100644
 -
        this.$root.$emit('bv::show::modal', 'buy-gems', {alreadyTracked: true});
      },
-     dropdownDesktop (hover) {
+ 
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
 index e2a25d995..f68ebd850 100644
 --- a/website/client/components/header/userDropdown.vue
@@ -6145,13 +6145,13 @@ index 2474c31dc..75f689079 100644
   * Tags
   * TasksOrder (list of all ids for dailys, habits, rewards and todos)
 diff --git a/website/server/controllers/top-level/dataexport.js b/website/server/controllers/top-level/dataexport.js
-index 39333edea..2b3388ae7 100644
+index e9f4448a3..5a94470e9 100644
 --- a/website/server/controllers/top-level/dataexport.js
 +++ b/website/server/controllers/top-level/dataexport.js
 @@ -9,17 +9,7 @@ import _ from 'lodash';
  import csvStringify from '../../libs/csvStringify';
  import moment from 'moment';
- import * as js2xml from 'js2xmlparser';
+ import js2xml from 'js2xmlparser';
 -import Pageres from 'pageres';
 -import nconf from 'nconf';
 -import got from 'got';
@@ -6208,7 +6208,7 @@ index 39333edea..2b3388ae7 100644
 -      return res.redirect(s3url);
 -    }
 -
--    const pageBuffer = await new Pageres()
+-    let [stream] = await new Pageres()
 -      .src(`${BASE_URL}/export/avatar-${memberId}.html`, ['140x147'], {
 -        crop: true,
 -        filename: filename.replace('.png', ''),
@@ -6222,7 +6222,7 @@ index 39333edea..2b3388ae7 100644
 -      StorageClass: 'REDUCED_REDUNDANCY',
 -      ContentType: 'image/png',
 -      Expires: moment().add({minutes: 5}).toDate(),
--      Body: pageBuffer,
+-      Body: stream,
 -    });
 -
 -    let s3res = await new Promise((resolve, reject) => {
