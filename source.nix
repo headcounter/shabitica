@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.99.0";
+  version = "4.100.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1vfnvmlsl11mh48fqii2s3pqnm4fzfaz6r7a2d2yi7x6l3fa2li6";
+    sha256 = "0avrvxswdhjclcij3hrfpcfrkcl883468j9djbwbljb9xz79m5p3";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -203,6 +203,9 @@ stdenv.mkDerivation rec {
 
     # Provide users with a button to generate an invitation URL.
     patches/allow-invite-by-url.patch
+
+    # Pin bootstrap-vue to version 2.0.0-rc.18.
+    patches/pin-bootstrap-vue.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

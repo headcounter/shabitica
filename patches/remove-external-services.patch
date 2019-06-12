@@ -40,7 +40,7 @@ Date:   Tue Mar 27 05:37:11 2018 +0200
     Filename: remove-external-services.patch
 
 diff --git a/config.json.example b/config.json.example
-index 09b677841..3a31e9c95 100644
+index 2c5e30fdf..feded8540 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -1,12 +1,5 @@
@@ -102,8 +102,8 @@ index 09b677841..3a31e9c95 100644
    "SESSION_SECRET_IV": "12345678912345678912345678912345",
    "SESSION_SECRET_KEY": "1234567891234567891234567891234567891234567891234567891234567891",
    "SITE_HTTP_AUTH_ENABLED": "false",
-   "SITE_HTTP_AUTH_PASSWORD": "password",
-   "SITE_HTTP_AUTH_USERNAME": "admin",
+   "SITE_HTTP_AUTH_PASSWORDS": "password,wordpass,passkey",
+   "SITE_HTTP_AUTH_USERNAMES": "admin,tester,contributor",
 -  "SLACK_FLAGGING_FOOTER_LINK": "https://habitrpg.github.io/flag-o-rama/",
 -  "SLACK_FLAGGING_URL": "https://hooks.slack.com/services/id/id/id",
 -  "SLACK_SUBSCRIPTIONS_URL": "https://hooks.slack.com/services/id/id/id",
@@ -2454,7 +2454,7 @@ index 7b8908467..1609e9296 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index a7e3a424d..cb86d389c 100644
+index bc0cf71de..2a9f204dd 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,8 +10,6 @@ div
@@ -2555,9 +2555,9 @@ index a7e3a424d..cb86d389c 100644
      itemSelected (item) {
        this.selectedItemToBuy = item;
      },
-@@ -657,4 +622,3 @@ export default {
- <style src="assets/css/sprites/spritesmith-main-23.css"></style>
+@@ -658,4 +623,3 @@ export default {
  <style src="assets/css/sprites/spritesmith-main-24.css"></style>
+ <style src="assets/css/sprites/spritesmith-main-25.css"></style>
  <style src="assets/css/sprites.css"></style>
 -<style src="smartbanner.js/dist/smartbanner.min.css"></style>
 diff --git a/website/client/assets/scss/index.scss b/website/client/assets/scss/index.scss
@@ -3255,7 +3255,7 @@ index 9d13f2d0b..97d18ff8f 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 336cbd6f7..f474d0b9a 100644
+index 8b2c37354..da4d72caf 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -4,7 +4,6 @@ div
@@ -3266,7 +3266,7 @@ index 336cbd6f7..f474d0b9a 100644
    b-navbar.topbar.navbar-inverse.static-top(toggleable="lg", type="dark", :class="navbarZIndexClass")
      b-navbar-brand.brand(aria-label="Habitica")
        .logo.svg-icon.d-none.d-xl-block(v-html="icons.logo")
-@@ -337,7 +336,6 @@ div
+@@ -394,7 +393,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -3274,7 +3274,7 @@ index 336cbd6f7..f474d0b9a 100644
  import { goToModForm } from 'client/libs/modform';
  
  import gemIcon from 'assets/svg/gem.svg';
-@@ -351,7 +349,6 @@ import InboxModal from '../userMenu/inbox.vue';
+@@ -409,7 +407,6 @@ import InboxModal from '../userMenu/inbox.vue';
  import notificationMenu from './notificationsDropdown';
  import profileModal from '../userMenu/profileModal';
  import reportFlagModal from '../chat/reportFlagModal';
@@ -3282,7 +3282,7 @@ index 336cbd6f7..f474d0b9a 100644
  import sync from 'client/mixins/sync';
  import userDropdown from './userDropdown';
  
-@@ -363,7 +360,6 @@ export default {
+@@ -421,7 +418,6 @@ export default {
      notificationMenu,
      profileModal,
      reportFlagModal,
@@ -3290,7 +3290,7 @@ index 336cbd6f7..f474d0b9a 100644
      userDropdown,
    },
    mixins: [sync],
-@@ -414,14 +410,6 @@ export default {
+@@ -481,14 +477,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -3304,7 +3304,7 @@ index 336cbd6f7..f474d0b9a 100644
 -
        this.$root.$emit('bv::show::modal', 'buy-gems', {alreadyTracked: true});
      },
- 
+     dropdownDesktop (hover) {
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
 index e2a25d995..f68ebd850 100644
 --- a/website/client/components/header/userDropdown.vue
@@ -3345,7 +3345,7 @@ index 34838b050..a74c52e6e 100644
          .col-6
            input.form-control(type='password', v-model='password')
 diff --git a/website/client/components/settings/notifications.vue b/website/client/components/settings/notifications.vue
-index 2b4966a8c..c12e72f9c 100644
+index dfc6dfb96..bfb599608 100644
 --- a/website/client/components/settings/notifications.vue
 +++ b/website/client/components/settings/notifications.vue
 @@ -3,14 +3,6 @@
@@ -6145,13 +6145,13 @@ index 2474c31dc..75f689079 100644
   * Tags
   * TasksOrder (list of all ids for dailys, habits, rewards and todos)
 diff --git a/website/server/controllers/top-level/dataexport.js b/website/server/controllers/top-level/dataexport.js
-index e9f4448a3..5a94470e9 100644
+index 39333edea..2b3388ae7 100644
 --- a/website/server/controllers/top-level/dataexport.js
 +++ b/website/server/controllers/top-level/dataexport.js
 @@ -9,17 +9,7 @@ import _ from 'lodash';
  import csvStringify from '../../libs/csvStringify';
  import moment from 'moment';
- import js2xml from 'js2xmlparser';
+ import * as js2xml from 'js2xmlparser';
 -import Pageres from 'pageres';
 -import nconf from 'nconf';
 -import got from 'got';
@@ -6208,7 +6208,7 @@ index e9f4448a3..5a94470e9 100644
 -      return res.redirect(s3url);
 -    }
 -
--    let [stream] = await new Pageres()
+-    const pageBuffer = await new Pageres()
 -      .src(`${BASE_URL}/export/avatar-${memberId}.html`, ['140x147'], {
 -        crop: true,
 -        filename: filename.replace('.png', ''),
@@ -6222,7 +6222,7 @@ index e9f4448a3..5a94470e9 100644
 -      StorageClass: 'REDUCED_REDUNDANCY',
 -      ContentType: 'image/png',
 -      Expires: moment().add({minutes: 5}).toDate(),
--      Body: stream,
+-      Body: pageBuffer,
 -    });
 -
 -    let s3res = await new Promise((resolve, reject) => {
@@ -7132,7 +7132,7 @@ index f08a8135e..fe391c968 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 636eb3ca0..92cbfb2b3 100644
+index 5bb6da71f..19da8dc48 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {
@@ -7151,7 +7151,7 @@ index 636eb3ca0..92cbfb2b3 100644
  import { getGroupChat, translateMessage } from '../libs/chat/group-chat';
  import { model as UserNotification } from './userNotification';
  
-@@ -611,7 +608,7 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -612,7 +609,7 @@ schema.methods.startQuest = async function startQuest (user) {
    await User.find({
      _id: {$in: Object.keys(this.quest.members)},
    })
@@ -7160,7 +7160,7 @@ index 636eb3ca0..92cbfb2b3 100644
      .lean()
      .exec()
      .then(partyMembers => {
-@@ -679,8 +676,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -680,8 +677,6 @@ schema.methods.startQuest = async function startQuest (user) {
    await newMessage.save();
  
    const membersToEmail = [];
@@ -7169,7 +7169,7 @@ index 636eb3ca0..92cbfb2b3 100644
  
    // send notifications and webhooks in the background without blocking
    members.forEach(member => {
-@@ -689,15 +684,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -690,15 +685,6 @@ schema.methods.startQuest = async function startQuest (user) {
        if (member.preferences.emailNotifications.questStarted !== false) {
          membersToEmail.push(member);
        }
@@ -7185,7 +7185,7 @@ index 636eb3ca0..92cbfb2b3 100644
      }
  
      // Send webhooks
-@@ -1573,7 +1559,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+@@ -1570,7 +1556,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
    return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
@@ -7194,7 +7194,7 @@ index 636eb3ca0..92cbfb2b3 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1582,12 +1568,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1579,12 +1565,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;
@@ -7208,10 +7208,10 @@ index 636eb3ca0..92cbfb2b3 100644
  
  export let model = mongoose.model('Group', schema);
 diff --git a/website/server/models/subscriptionPlan.js b/website/server/models/subscriptionPlan.js
-index c26f03bd6..5cf501473 100644
+index aaf2cbf14..383ea0c10 100644
 --- a/website/server/models/subscriptionPlan.js
 +++ b/website/server/models/subscriptionPlan.js
-@@ -7,18 +7,18 @@ export let schema = new mongoose.Schema({
+@@ -7,8 +7,8 @@ export let schema = new mongoose.Schema({
    subscriptionId: String,
    owner: {$type: String, ref: 'User', validate: [v => validator.isUUID(v), 'Invalid uuid.']},
    quantity: {$type: Number, default: 1},
@@ -7222,9 +7222,10 @@ index c26f03bd6..5cf501473 100644
    dateCreated: Date,
    dateTerminated: Date,
    dateUpdated: Date,
-   extraMonths: {$type: Number, default: 0},
+@@ -16,10 +16,10 @@ export let schema = new mongoose.Schema({
    gemsBought: {$type: Number, default: 0},
    mysteryItems: {$type: Array, default: () => []},
+   lastReminderDate: Date, // indicates the last time a subscription reminder was sent
 -  lastBillingDate: Date, // Used only for Amazon Payments to keep track of billing date
 -  additionalData: mongoose.Schema.Types.Mixed, // Example for Google: {'receipt': 'serialized receipt json', 'signature': 'signature string'}
 +  lastBillingDate: Date,
@@ -7278,7 +7279,7 @@ index 2be8135fa..b3bddab94 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index e411bfb43..5cbd3fd67 100644
+index 70d2dd58c..ddd5790f7 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -2,7 +2,6 @@ import mongoose from 'mongoose';
@@ -7302,9 +7303,9 @@ index e411bfb43..5cbd3fd67 100644
      local: {
        email: {
          $type: String,
-@@ -482,18 +475,6 @@ let schema = new Schema({
-       onboarding: {$type: Boolean, default: true},
+@@ -487,18 +480,6 @@ let schema = new Schema({
        majorUpdates: {$type: Boolean, default: true},
+       subscriptionReminders: {$type: Boolean, default: true},
      },
 -    pushNotifications: {
 -      unsubscribeFromAll: {$type: Boolean, default: false},
@@ -7321,7 +7322,7 @@ index e411bfb43..5cbd3fd67 100644
      suppressModals: {
        levelUp: {$type: Boolean, default: false},
        hatchPet: {$type: Boolean, default: false},
-@@ -574,7 +555,6 @@ let schema = new Schema({
+@@ -579,7 +560,6 @@ let schema = new Schema({
    extra: {$type: Schema.Types.Mixed, default: () => {
      return {};
    }},

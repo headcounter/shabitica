@@ -64,10 +64,10 @@ index 6f6278313..f20bf241b 100644
              textarea.form-control(cols=5, :placeholder="$t('contributions')", v-model='hero.contributor.contributions')
              //include ../../shared/formattiv-help
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 2a352504c..41789106b 100644
+index 705f54eee..bca8c78e4 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -52,9 +52,6 @@ div
+@@ -64,9 +64,6 @@ div
            .topbar-dropdown
              router-link.topbar-dropdown-item.dropdown-item(:to="{name: 'faq'}") {{ $t('faq') }}
              router-link.topbar-dropdown-item.dropdown-item(:to="{name: 'overview'}") {{ $t('overview') }}
@@ -170,10 +170,10 @@ index 570a60c8d..75e63d258 100644
    }
  }
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index fd0f01655..9536aadee 100644
+index 4f944e399..07d0398a6 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
-@@ -111,7 +111,6 @@ let schema = new Schema({
+@@ -115,7 +115,6 @@ let schema = new Schema({
    },
  
    contributor: {

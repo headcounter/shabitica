@@ -11,7 +11,7 @@ Date:   Wed Mar 28 08:26:40 2018 +0200
     Filename: remove-static-middleware.patch
 
 diff --git a/website/server/middlewares/index.js b/website/server/middlewares/index.js
-index 0ca550f7c..4de5ce894 100644
+index 20f7e28a4..b08088529 100644
 --- a/website/server/middlewares/index.js
 +++ b/website/server/middlewares/index.js
 @@ -6,7 +6,6 @@ import nconf from 'nconf';
@@ -22,7 +22,7 @@ index 0ca550f7c..4de5ce894 100644
  import domainMiddleware from './domain';
  import mongoose from 'mongoose';
  import compression from 'compression';
-@@ -90,7 +89,6 @@ module.exports = function attachMiddlewares (app, server) {
+@@ -95,7 +94,6 @@ module.exports = function attachMiddlewares (app, server) {
    app.use('/api/v2', v2);
    app.use('/api/v1', v1);
    app.use(appRoutes); // the main app, also setup top-level routes

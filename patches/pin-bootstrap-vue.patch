@@ -1,0 +1,24 @@
+Author: aszlig <aszlig@nix.build>
+Date:   Wed Jun 12 22:08:07 2019 +0200
+
+    Pin bootstrap-vue to version 2.0.0-rc.18
+    
+    Newer versions of bootstrap-vue cause issues with Habitica's UI, for
+    example version 2.0.0-rc.22 breaks editing tasks.
+    
+    Signed-off-by: aszlig <aszlig@nix.build>
+    Filename: pin-bootstrap-vue.patch
+
+diff --git a/package.json b/package.json
+index d155c6ab5..eb9235c37 100644
+--- a/package.json
++++ b/package.json
+@@ -24,7 +24,7 @@
+     "bcrypt": "^3.0.5",
+     "body-parser": "^1.18.3",
+     "bootstrap": "^4.1.1",
+-    "bootstrap-vue": "^2.0.0-rc.18",
++    "bootstrap-vue": "2.0.0-rc.18",
+     "compression": "^1.7.4",
+     "cookie-session": "^1.3.3",
+     "coupon-code": "^0.4.5",

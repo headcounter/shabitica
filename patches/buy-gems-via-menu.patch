@@ -13,10 +13,10 @@ Date:   Sat Jun 23 14:25:29 2018 +0200
     Filename: buy-gems-via-menu.patch
 
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 41789106b..b9319fcb2 100644
+index bca8c78e4..f42f475d8 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
-@@ -59,7 +59,7 @@ div
+@@ -71,7 +71,7 @@ div
            .top-menu-icon.svg-icon(v-html="icons.hourglasses", v-b-tooltip.hover.bottom="$t('mysticHourglassesTooltip')")
            span {{ userHourglasses }}
          .item-with-icon
@@ -25,7 +25,7 @@ index 41789106b..b9319fcb2 100644
            span {{userGems}}
          .item-with-icon.gold
            .top-menu-icon.svg-icon(:aria-label="$t('gold')", v-html="icons.gold", v-b-tooltip.hover.bottom="$t('gold')")
-@@ -346,7 +346,7 @@ import profileModal from '../userMenu/profileModal';
+@@ -404,7 +404,7 @@ import profileModal from '../userMenu/profileModal';
  import reportFlagModal from '../chat/reportFlagModal';
  import sync from 'client/mixins/sync';
  import userDropdown from './userDropdown';
@@ -34,7 +34,7 @@ index 41789106b..b9319fcb2 100644
  
  export default {
    components: {
-@@ -400,11 +400,10 @@ export default {
+@@ -467,9 +467,9 @@ export default {
      openPartyModal () {
        this.$root.$emit('bv::show::modal', 'create-party-modal');
      },
@@ -45,7 +45,5 @@ index 41789106b..b9319fcb2 100644
 +      let gemItem = getItemInfo(this.user, 'gem');
 +      this.$root.$emit('buyModal::showItem', gemItem);
      },
--
-   },
- };
- </script>
+     dropdownDesktop (hover) {
+       if (this.isDesktop() && hover.target.classList.contains('droppable')) {
