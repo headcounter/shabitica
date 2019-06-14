@@ -53,7 +53,7 @@ index feded8540..cb82930b4 100644
    "WEB_CONCURRENCY": 1,
    "SKIP_SSL_CHECK_KEY": "key",
 diff --git a/package.json b/package.json
-index 6726462bb..7249f0a16 100644
+index fded743d8..61644b072 100644
 --- a/package.json
 +++ b/package.json
 @@ -59,7 +59,6 @@

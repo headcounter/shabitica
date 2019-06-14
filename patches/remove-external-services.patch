@@ -5296,7 +5296,7 @@ index b5933991d..26200eaf8 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 214f3baf7..ad02ce968 100644
+index 87a530fcf..c45cded62 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -202,16 +202,6 @@ api.createChallenge = {
@@ -5632,7 +5632,7 @@ index e214bda27..7c1057e72 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index 1723c925b..fbd2dacba 100644
+index 362347720..9c59c17a4 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,6 @@ import {
@@ -5641,29 +5641,18 @@ index 1723c925b..fbd2dacba 100644
  } from '../../libs/email';
 -import { sendNotification as sendPushNotification } from '../../libs/pushNotifications';
  import { achievements } from '../../../../website/common/';
+ import {sentMessage} from '../../libs/inbox';
  
- let api = {};
-@@ -648,19 +647,6 @@ api.sendPrivateMessage = {
-       ]);
-     }
+@@ -642,7 +641,7 @@ api.sendPrivateMessage = {
+     const objections = sender.getObjectionsToInteraction('send-private-message', receiver);
+     if (objections.length > 0 && !sender.isAdmin()) throw new NotAuthorized(res.t(objections[0]));
  
--    if (receiver.preferences.pushNotifications.newPM !== false) {
--      sendPushNotification(
--        receiver,
--        {
--          title: res.t('newPM'),
--          message: res.t('newPMInfo', {name: getUserInfo(sender, ['name']).name, message}),
--          identifier: 'newPM',
--          category: 'newPM',
--          payload: {replyTo: sender._id},
--        }
--      );
--    }
--
+-    const messageSent = await sentMessage(sender, receiver, message, res.t);
++    const messageSent = await sentMessage(sender, receiver, message);
+ 
      res.respond(200, {message: messageSent});
    },
- };
-@@ -739,15 +725,6 @@ api.transferGems = {
+@@ -722,15 +721,6 @@ api.transferGems = {
          {name: 'X_GEMS_GIFTED', content: gemAmount},
        ]);
      }
@@ -6543,6 +6532,43 @@ index 42ec7387a..9d3d029cf 100644
      }
    }
  
+diff --git a/website/server/libs/inbox/index.js b/website/server/libs/inbox/index.js
+index dcf05f2cc..bcbc01c48 100644
+--- a/website/server/libs/inbox/index.js
++++ b/website/server/libs/inbox/index.js
+@@ -1,11 +1,10 @@
+ import {inboxModel as Inbox} from '../../models/message';
+ import orderBy from 'lodash/orderBy';
+ import {getUserInfo, sendTxn as sendTxnEmail} from '../email';
+-import {sendNotification as sendPushNotification} from '../pushNotifications';
+ 
+ const PM_PER_PAGE = 10;
+ 
+-export async function sentMessage (sender, receiver, message, translate) {
++export async function sentMessage (sender, receiver, message) {
+   const messageSent = await sender.sendMessage(receiver, { receiverMsg: message });
+ 
+   if (receiver.preferences.emailNotifications.newPM !== false) {
+@@ -14,19 +13,6 @@ export async function sentMessage (sender, receiver, message, translate) {
+     ]);
+   }
+ 
+-  if (receiver.preferences.pushNotifications.newPM !== false) {
+-    sendPushNotification(
+-      receiver,
+-      {
+-        title: translate('newPM'),
+-        message: translate('newPMInfo', {name: getUserInfo(sender, ['name']).name, message}),
+-        identifier: 'newPM',
+-        category: 'newPM',
+-        payload: {replyTo: sender._id},
+-      }
+-    );
+-  }
+-
+   return messageSent;
+ }
+ 
 diff --git a/website/server/libs/invites/index.js b/website/server/libs/invites/index.js
 index d5225338e..7616855f2 100644
 --- a/website/server/libs/invites/index.js
@@ -6762,7 +6788,7 @@ index da3e189d7..57b9a64b0 100644
  
  api.addSubscriptionToGroupUsers = addSubscriptionToGroupUsers;
 diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
-index fe0119e09..72f522aca 100644
+index ba7305da8..f01602701 100644
 --- a/website/server/libs/payments/subscriptions.js
 +++ b/website/server/libs/payments/subscriptions.js
 @@ -1,8 +1,6 @@
@@ -6814,7 +6840,7 @@ index fe0119e09..72f522aca 100644
        nextPaymentProcessing: data.nextPaymentProcessing,
        nextBillingDate: data.nextBillingDate,
        additionalData: data.additionalData,
-@@ -149,19 +138,6 @@ async function createSubscription (data) {
+@@ -150,19 +139,6 @@ async function createSubscription (data) {
      txnEmail(data.user, emailType);
    }
  
@@ -6834,7 +6860,7 @@ index fe0119e09..72f522aca 100644
    if (!group) data.user.purchased.txnCount++;
  
    if (data.gift) {
-@@ -196,48 +172,17 @@ async function createSubscription (data) {
+@@ -197,48 +173,17 @@ async function createSubscription (data) {
          {name: 'X_MONTHS_SUBSCRIPTION', content: months},
        ]);
      }
@@ -6883,7 +6909,7 @@ index fe0119e09..72f522aca 100644
    let emailType;
    let emailMergeData = [];
    let sendEmail = true;
-@@ -299,20 +244,6 @@ async function cancelSubscription (data) {
+@@ -300,20 +245,6 @@ async function cancelSubscription (data) {
    }
  
    if (sendEmail) txnEmail(data.user, emailType, emailMergeData);
@@ -6978,7 +7004,7 @@ index 1274e16d2..5737a9ed6 100644
      rebirthRes[0].user = await rebirthRes[0].user.toJSONWithInbox();
    }
 diff --git a/website/server/middlewares/appRoutes.js b/website/server/middlewares/appRoutes.js
-index 5819c7231..ce018e771 100644
+index 625685515..25f756387 100644
 --- a/website/server/middlewares/appRoutes.js
 +++ b/website/server/middlewares/appRoutes.js
 @@ -1,6 +1,5 @@
