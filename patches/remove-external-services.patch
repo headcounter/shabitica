@@ -3594,10 +3594,10 @@ index 80023627c..eea2bc36a 100644
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 12016ef0d..da2aa2222 100644
+index 66a1478ce..0ce58d7d1 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
-@@ -257,7 +257,6 @@
+@@ -274,7 +274,6 @@
  </style>
  
  <script>
@@ -3605,7 +3605,7 @@ index 12016ef0d..da2aa2222 100644
    import spellsMixin from 'client/mixins/spells';
    import planGemLimits from 'common/script/libs/planGemLimits';
    import numberInvalid from 'client/mixins/numberInvalid';
-@@ -403,14 +402,6 @@
+@@ -425,14 +424,6 @@
          }
        },
        purchaseGems () {
@@ -4938,16 +4938,18 @@ index c45d63e92..149460c7b 100644
      item,
      i18n.t('mysteryItemOpened', req.language),
 diff --git a/website/common/script/ops/rebirth.js b/website/common/script/ops/rebirth.js
-index 7531de25a..79ddbdbab 100644
+index 86c12d7c5..6892ec3d1 100644
 --- a/website/common/script/ops/rebirth.js
 +++ b/website/common/script/ops/rebirth.js
-@@ -11,28 +11,13 @@ import { removePinnedGearByClass } from './pinnedGearUtils';
+@@ -11,30 +11,15 @@ import isFreeRebirth from '../libs/isFreeRebirth';
  
  const USERSTATSLIST = ['per', 'int', 'con', 'str', 'points', 'gp', 'exp', 'mp'];
  
 -module.exports = function rebirth (user, tasks = [], req = {}, analytics) {
 +module.exports = function rebirth (user, tasks = [], req = {}) {
-   if (user.balance < 1.5 && user.stats.lvl < MAX_LEVEL) {
+   const notFree = !isFreeRebirth(user);
+ 
+   if (user.balance < 1.5 && notFree) {
      throw new NotAuthorized(i18n.t('notEnoughGems', req.language));
    }
  
@@ -4956,7 +4958,7 @@ index 7531de25a..79ddbdbab 100644
 -    category: 'behavior',
 -  };
 -
-   if (user.stats.lvl < MAX_LEVEL) {
+   if (notFree) {
      user.balance -= 1.5;
 -    analyticsData.acquireMethod = 'Gems';
 -    analyticsData.gemCost = 6;
@@ -5632,7 +5634,7 @@ index e214bda27..7c1057e72 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index 362347720..9c59c17a4 100644
+index 1723c925b..fbd2dacba 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,6 @@ import {
@@ -5641,18 +5643,29 @@ index 362347720..9c59c17a4 100644
  } from '../../libs/email';
 -import { sendNotification as sendPushNotification } from '../../libs/pushNotifications';
  import { achievements } from '../../../../website/common/';
- import {sentMessage} from '../../libs/inbox';
  
-@@ -642,7 +641,7 @@ api.sendPrivateMessage = {
-     const objections = sender.getObjectionsToInteraction('send-private-message', receiver);
-     if (objections.length > 0 && !sender.isAdmin()) throw new NotAuthorized(res.t(objections[0]));
+ let api = {};
+@@ -648,19 +647,6 @@ api.sendPrivateMessage = {
+       ]);
+     }
  
--    const messageSent = await sentMessage(sender, receiver, message, res.t);
-+    const messageSent = await sentMessage(sender, receiver, message);
- 
+-    if (receiver.preferences.pushNotifications.newPM !== false) {
+-      sendPushNotification(
+-        receiver,
+-        {
+-          title: res.t('newPM'),
+-          message: res.t('newPMInfo', {name: getUserInfo(sender, ['name']).name, message}),
+-          identifier: 'newPM',
+-          category: 'newPM',
+-          payload: {replyTo: sender._id},
+-        }
+-      );
+-    }
+-
      res.respond(200, {message: messageSent});
    },
-@@ -722,15 +721,6 @@ api.transferGems = {
+ };
+@@ -739,15 +725,6 @@ api.transferGems = {
          {name: 'X_GEMS_GIFTED', content: gemAmount},
        ]);
      }
@@ -6532,43 +6545,6 @@ index 42ec7387a..9d3d029cf 100644
      }
    }
  
-diff --git a/website/server/libs/inbox/index.js b/website/server/libs/inbox/index.js
-index dcf05f2cc..bcbc01c48 100644
---- a/website/server/libs/inbox/index.js
-+++ b/website/server/libs/inbox/index.js
-@@ -1,11 +1,10 @@
- import {inboxModel as Inbox} from '../../models/message';
- import orderBy from 'lodash/orderBy';
- import {getUserInfo, sendTxn as sendTxnEmail} from '../email';
--import {sendNotification as sendPushNotification} from '../pushNotifications';
- 
- const PM_PER_PAGE = 10;
- 
--export async function sentMessage (sender, receiver, message, translate) {
-+export async function sentMessage (sender, receiver, message) {
-   const messageSent = await sender.sendMessage(receiver, { receiverMsg: message });
- 
-   if (receiver.preferences.emailNotifications.newPM !== false) {
-@@ -14,19 +13,6 @@ export async function sentMessage (sender, receiver, message, translate) {
-     ]);
-   }
- 
--  if (receiver.preferences.pushNotifications.newPM !== false) {
--    sendPushNotification(
--      receiver,
--      {
--        title: translate('newPM'),
--        message: translate('newPMInfo', {name: getUserInfo(sender, ['name']).name, message}),
--        identifier: 'newPM',
--        category: 'newPM',
--        payload: {replyTo: sender._id},
--      }
--    );
--  }
--
-   return messageSent;
- }
- 
 diff --git a/website/server/libs/invites/index.js b/website/server/libs/invites/index.js
 index d5225338e..7616855f2 100644
 --- a/website/server/libs/invites/index.js
@@ -7004,7 +6980,7 @@ index 1274e16d2..5737a9ed6 100644
      rebirthRes[0].user = await rebirthRes[0].user.toJSONWithInbox();
    }
 diff --git a/website/server/middlewares/appRoutes.js b/website/server/middlewares/appRoutes.js
-index 625685515..25f756387 100644
+index 5819c7231..ce018e771 100644
 --- a/website/server/middlewares/appRoutes.js
 +++ b/website/server/middlewares/appRoutes.js
 @@ -1,6 +1,5 @@
@@ -7305,7 +7281,7 @@ index 2be8135fa..b3bddab94 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 70d2dd58c..ddd5790f7 100644
+index 0119969c1..1ad6ae8d6 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -2,7 +2,6 @@ import mongoose from 'mongoose';
@@ -7329,7 +7305,7 @@ index 70d2dd58c..ddd5790f7 100644
      local: {
        email: {
          $type: String,
-@@ -487,18 +480,6 @@ let schema = new Schema({
+@@ -488,18 +481,6 @@ let schema = new Schema({
        majorUpdates: {$type: Boolean, default: true},
        subscriptionReminders: {$type: Boolean, default: true},
      },
@@ -7348,7 +7324,7 @@ index 70d2dd58c..ddd5790f7 100644
      suppressModals: {
        levelUp: {$type: Boolean, default: false},
        hatchPet: {$type: Boolean, default: false},
-@@ -579,7 +560,6 @@ let schema = new Schema({
+@@ -580,7 +561,6 @@ let schema = new Schema({
    extra: {$type: Schema.Types.Mixed, default: () => {
      return {};
    }},

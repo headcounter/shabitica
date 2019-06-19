@@ -40,7 +40,7 @@ index 4ae96a55b..22b15739b 100644
          user.stats.gp = goldPoints;
          user.purchased.plan.gemsBought = gemsBought;
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index da2aa2222..c96ba52c9 100644
+index 0ce58d7d1..0d6a23fb4 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -56,13 +56,6 @@
@@ -66,16 +66,18 @@ index da2aa2222..c96ba52c9 100644
            :class="{'notEnough': !preventHealthPotion || !this.enoughCurrency(getPriceClass(), item.value * selectedAmountToBuy)}"
          ) {{ $t('buyNow') }}
  
-@@ -249,16 +242,11 @@
- 
+@@ -255,10 +248,6 @@
        margin: 10px 0 24px;
      }
--
+ 
 -    .gems-left {
 -      margin-top: .5em;
 -    }
-   }
- </style>
+-
+     .free-rebirth {
+       background-color: $yellow-5;
+       color: $white;
+@@ -275,7 +264,6 @@
  
  <script>
    import spellsMixin from 'client/mixins/spells';
@@ -83,7 +85,7 @@ index da2aa2222..c96ba52c9 100644
    import numberInvalid from 'client/mixins/numberInvalid';
  
    import svgClose from 'assets/svg/close.svg';
-@@ -348,14 +336,6 @@
+@@ -367,14 +355,6 @@
        limitedString () {
          return this.$t('limitedOffer', {date: moment(seasonalShopConfig.dateRange.end).format('LL')});
        },
