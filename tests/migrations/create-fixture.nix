@@ -212,6 +212,20 @@ in runInMachine {
       loggedin = newuser_halfmoon['auth']['timestamps']['loggedin']
       assert loggedin.startswith('2019-05-10')
 
+      # The Orca pets are only awarded for users logged in after
+      # 2019-05-18, so let's warp to 2019-05-25.
+      timewarp(1296000)
+
+      newuser_orca = first.user.auth.local.register.post(
+        username='orca',
+        email='orca@example.org',
+        password='snakeoil',
+        confirmPassword='snakeoil',
+      )
+
+      loggedin = newuser_orca['auth']['timestamps']['loggedin']
+      assert loggedin.startswith('2019-05-25')
+
       with open('spec.json', 'w') as fp:
         json.dump({
           'foo': {
@@ -238,6 +252,10 @@ in runInMachine {
           'halfmoon': {
             'apiUser': newuser_halfmoon['id'],
             'apiToken': newuser_halfmoon['apiToken'],
+          },
+          'orca': {
+            'apiUser': newuser_orca['id'],
+            'apiToken': newuser_orca['apiToken'],
           }
         }, fp)
     '';

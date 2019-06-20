@@ -134,4 +134,22 @@
         assertNotIn(item_name, ineligible_user['items']['gear']['owned'])
     '';
   }
+  { file = "archive/2019/20190618_summer_splash_orcas.js";
+    testScript = ''
+      ineligible_user = getuser('halfmoon').api.user.get()
+      orca_user = getuser('orca').api.user.get()
+
+      for user in [ineligible_user, orca_user]:
+        assertIn('items', user)
+        assertIn('pets', user['items'])
+        assertIn('mounts', user['items'])
+
+      assertNotIn('Orca-Base', ineligible_user['items']['pets'])
+      assertNotIn('Orca-Base', ineligible_user['items']['mounts'])
+
+      assertIn('Orca-Base', orca_user['items']['mounts'])
+      assertTrue(orca_user['items']['mounts']['Orca-Base'])
+      assertNotIn('Orca-Base', orca_user['items']['pets'])
+    '';
+  }
 ]
