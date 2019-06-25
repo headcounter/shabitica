@@ -108,6 +108,18 @@ in lib.mapAttrs runTests {
             bin "-port" "4444"
           ];
         in lib.concatMapStringsSep " " lib.escapeShellArg cmd;
+        postStart = let
+          getStatus = lib.escapeShellArgs [
+            "${pkgs.curl}/bin/curl" "http://localhost:4444/wd/hub/status"
+          ];
+          checkReady = lib.escapeShellArgs [
+            "${pkgs.jq}/bin/jq" "-e" ".value.ready"
+          ];
+        in ''
+          while ! ${getStatus} | ${checkReady}; do
+            ${lib.escapeShellArg "${pkgs.coreutils}/bin/sleep"} 0.1
+          done
+        '';
         serviceConfig.User = "selenium";
       };
       # XXX: Figure out how to set the browser path for chromedriver, so we
