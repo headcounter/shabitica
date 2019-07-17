@@ -10,7 +10,7 @@ Date:   Wed Jun 12 22:08:07 2019 +0200
     Filename: pin-bootstrap-vue.patch
 
 diff --git a/package.json b/package.json
-index cd0dbe7a2..0e4185662 100644
+index 6330b7341..444b5eb2f 100644
 --- a/package.json
 +++ b/package.json
 @@ -24,7 +24,7 @@
