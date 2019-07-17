@@ -101,12 +101,14 @@ in lib.mapAttrs runTests {
       systemd.services.selenium = {
         description = "Selenium Server";
         requiredBy = [ "multi-user.target" ];
+        path = lib.singleton (pkgs.writeScriptBin "chromium" ''
+          #!${pkgs.stdenv.shell}
+          exec ${lib.escapeShellArg "${pkgs.chromium}/bin/chromium"} \
+            --headless --window-size=1920x1080 "$@"
+        '');
         serviceConfig.ExecStart = let
           bin = "${pkgs.selenium-server-standalone}/bin/selenium-server";
-          cmd = [
-            "${pkgs.xvfb_run}/bin/xvfb-run" "-s" "-screen 0 1024x768x24"
-            bin "-port" "4444"
-          ];
+          cmd = [ bin "-port" "4444" ];
         in lib.concatMapStringsSep " " lib.escapeShellArg cmd;
         postStart = let
           getStatus = lib.escapeShellArgs [
@@ -122,12 +124,6 @@ in lib.mapAttrs runTests {
         '';
         serviceConfig.User = "selenium";
       };
-      # XXX: Figure out how to set the browser path for chromedriver, so we
-      #      don't need this ugly workaround.
-      system.activationScripts.chromium = ''
-        mkdir -m 0755 -p /bin
-        ln -sfn ${pkgs.chromium}/bin/chromium /bin/chromium
-      '';
     };
   };
 }
