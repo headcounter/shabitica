@@ -90,7 +90,13 @@ in lib.mapAttrs runTests {
           > "$out/nix-support/hydra-build-products"
       '';
     };
-    machine = {
+    machine = { config, pkgs, lib, ... }: let
+      chromium = pkgs.writeScriptBin "chromium" ''
+        #!${pkgs.stdenv.shell}
+        exec ${lib.escapeShellArg "${pkgs.chromium}/bin/chromium"} \
+          --headless --window-size=1920x1080 "$@"
+      '';
+    in {
       imports = [ ../. ];
       networking.firewall.enable = false;
       virtualisation.diskSize = 16384;
@@ -101,11 +107,7 @@ in lib.mapAttrs runTests {
       systemd.services.selenium = {
         description = "Selenium Server";
         requiredBy = [ "multi-user.target" ];
-        path = lib.singleton (pkgs.writeScriptBin "chromium" ''
-          #!${pkgs.stdenv.shell}
-          exec ${lib.escapeShellArg "${pkgs.chromium}/bin/chromium"} \
-            --headless --window-size=1920x1080 "$@"
-        '');
+        path = lib.singleton chromium;
         serviceConfig.ExecStart = let
           bin = "${pkgs.selenium-server-standalone}/bin/selenium-server";
           cmd = [ bin "-port" "4444" ];
@@ -123,6 +125,16 @@ in lib.mapAttrs runTests {
           done
         '';
         serviceConfig.User = "selenium";
+      };
+
+      # XXX: This is needed for NixOS 18.03 and 18.09 :-(
+      system.activationScripts = let
+        inherit (config.system.nixos) release;
+      in lib.mkIf (lib.versionOlder release "19.03") {
+        chromium = ''
+          mkdir -m 0755 -p /bin
+          ln -sfn ${chromium}/bin/chromium /bin/chromium
+        '';
       };
     };
   };
