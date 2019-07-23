@@ -52,7 +52,6 @@ let
 
     print(fetch_new_mail())
 
-    # This is the only occurence where the simple send() function is used.
     anonymous.user.reset_password.post(email='foo@example.org')
 
     print(fetch_new_mail())

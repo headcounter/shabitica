@@ -20,31 +20,6 @@ import Data.Semigroup (Semigroup((<>)))
 space :: T.Text
 space = " "
 
-resetPassword :: SimpleMail
-resetPassword = SimpleMail
-    { smTo = "foo@example.org"
-    , smSubject = "Password Reset for Shabitica"
-    , smText = "If you requested a password reset for foo on Shabitica, head"
-            <> " to http://example.org/.../reset-password-set-new-one?code="
-            <> "123456 to set a new one. The link will expire after 24 hours."
-            <> " If you haven't requested a password reset, please ignore"
-            <> " this email."
-    , smHtml = Just $ "If you requested a password reset for <strong>foo</str"
-                   <> "ong> on Shabitica, <a href=\"http://example.org/.../"
-                   <> "reset-password-set-new-one?code=123456\">click"
-                   <> " here</a> to set a new one. The link will expire"
-                   <> " after 24 hours.<br/><br>If you haven't requested a"
-                   <> " password reset, please ignore this email."
-    }
-
-resetPasswordBody :: TL.Text
-resetPasswordBody = TL.fromStrict [text|
-    If you requested a password reset for foo on Shabitica, head to
-    http://example.org/.../reset-password-set-new-one?code=123456 to set a
-    new one. The link will expire after 24 hours. If you haven't requested a
-    password reset, please ignore this email.
-|]
-
 commonTxnAddr :: T.Text
 commonTxnAddr = "foo@example.org"
 
@@ -58,6 +33,34 @@ commonTxnMail = TxnMail
     , txnVariables = object []
     , txnPersonalVariables = M.empty
     }
+
+resetPassword :: TxnMail
+resetPassword = commonTxnMail
+    { txnEmailType = "reset-password"
+    , txnVariables = object
+        [ "BASE_URL" .= T.pack "https://shabitica.example.org"
+        , "PASSWORD_RESET_LINK" .= T.pack
+              "https://example.org/.../reset-password-set-new-one?code=123456"
+        ]
+    , txnPersonalVariables = M.singleton commonTxnAddr $ object
+        [ "RECIPIENT_NAME" .= T.pack "lostone"
+        , "RECIPIENT_UNSUB_URL" .= T.pack "/email/unsubscribe?code=1234"
+        ]
+    }
+
+resetPasswordBody :: TL.Text
+resetPasswordBody = TL.fromStrict [text|
+    Hello lostone,
+
+    If you requested a password reset for Shabitica, head to
+    https://example.org/.../reset-password-set-new-one?code=123456 to set a
+    new one. The link will expire after 24 hours.
+
+    If you haven't requested a password reset, please ignore this email.
+    --$space
+    Self-hosted Habitica instance at https://shabitica.example.org/
+    Unsubscribe: https://shabitica.example.org/email/unsubscribe?code=1234
+|]
 
 welcome :: TxnMail
 welcome = commonTxnMail
@@ -223,7 +226,7 @@ newPmBody = TL.fromStrict [text|
 main :: IO ()
 main = hspec $ do
     describe "reset-password" $ do
-        let rendered = renderSimpleMail resetPassword
+        let rendered = snd $ renderTxnMail commonTxnRecip resetPassword
 
         it "has correct subject" $
             subject rendered `shouldBe` "Password Reset for Shabitica"

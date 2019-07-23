@@ -14,10 +14,10 @@ Date:   Tue Mar 27 05:37:09 2018 +0200
     Filename: subscriptions4all.patch
 
 diff --git a/test/api/unit/libs/payments/payments.test.js b/test/api/unit/libs/payments/payments.test.js
-index 3e14cc172..86cd51df6 100644
+index d33a0095c..0b0fb3f42 100644
 --- a/test/api/unit/libs/payments/payments.test.js
 +++ b/test/api/unit/libs/payments/payments.test.js
-@@ -438,83 +438,6 @@ describe('payments/index', () => {
+@@ -439,83 +439,6 @@ describe('payments/index', () => {
      });
    });
  

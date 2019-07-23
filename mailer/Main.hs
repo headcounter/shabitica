@@ -19,9 +19,8 @@ import qualified Network.HTTP.Types as HT
 import qualified Network.Wai as W
 import qualified Network.Wai.Handler.Warp as Warp
 
-import Types (SimpleMail(smTo), TxnMail(txnTo),
-              RenderedMail(..), JsonResponse(..), Address(..))
-import Render (renderSimpleMail, renderTxnMail)
+import Types (TxnMail(txnTo), RenderedMail(..), JsonResponse(..), Address(..))
+import Render (renderTxnMail)
 
 data Settings = Settings
     { fromEmail :: Address
@@ -48,13 +47,6 @@ handleTxnMail s txn = do
   where
     (warnings, mails) = renderMimeTxnMails s txn
 
-handleSimpleMail :: Settings -> SimpleMail -> IO JsonResponse
-handleSimpleMail s sm = do
-    sendRendered s [simpleMail' (smTo sm) (fromEmail s) subj bdy]
-    return JsonOk
-  where
-    RenderedMail { subject = subj, body = bdy } = renderSimpleMail sm
-
 responseJson :: J.ToJSON a => HT.Status -> a -> W.Response
 responseJson status =
     W.responseLBS status jsonHeaders . J.encode
@@ -78,7 +70,6 @@ handler :: Settings -> Application
 handler s req respond =
     case W.pathInfo req of
          ["job"] -> wrapJson (handleTxnMail s) req respond
-         ["simple-mail"] -> wrapJson (handleSimpleMail s) req respond
          _ -> respond $ responseJson HT.status404 $ JsonErr "path not found"
 
 warpSettings :: Warp.Settings

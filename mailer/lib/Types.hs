@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Types
     ( TxnMail(..)
-    , SimpleMail(..)
     , Address(..)
     , JsonResponse(..)
     , RenderedMail(..)
@@ -60,20 +59,6 @@ instance J.FromJSON TxnMail where
         parseAddress :: J.Value -> Parser Address
         parseAddress = J.withObject "Address" $ \a ->
             Address <$> a .:? "name" <*> a .: "email"
-
-data SimpleMail = SimpleMail
-    { smTo      :: Address
-    , smSubject :: Text
-    , smText    :: Text
-    , smHtml    :: Maybe Text
-    } deriving Show
-
-instance J.FromJSON SimpleMail where
-    parseJSON = J.withObject "SimpleMail" $ \obj ->
-        SimpleMail <$> fmap (Address Nothing) (obj .: "to")
-                   <*> obj .: "subject"
-                   <*> obj .: "text"
-                   <*> obj .:? "html"
 
 data JsonResponse = JsonErr Text | JsonOk deriving Show
 

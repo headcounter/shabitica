@@ -18,7 +18,7 @@ Date:   Tue Mar 27 05:37:16 2018 +0200
     Filename: mailer-daemon.patch
 
 diff --git a/config.json.example b/config.json.example
-index feded8540..cb82930b4 100644
+index e13607e0e..cb82930b4 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -7,13 +7,11 @@
@@ -36,80 +36,21 @@ index feded8540..cb82930b4 100644
    "MAINTENANCE_MODE": "false",
    "NODE_DB_URI": "mongodb://localhost/habitrpg",
    "NODE_ENV": "development",
-@@ -22,15 +20,6 @@
+@@ -22,9 +20,6 @@
    "SESSION_SECRET": "YOUR SECRET HERE",
    "SESSION_SECRET_IV": "12345678912345678912345678912345",
    "SESSION_SECRET_KEY": "1234567891234567891234567891234567891234567891234567891234567891",
 -  "SITE_HTTP_AUTH_ENABLED": "false",
 -  "SITE_HTTP_AUTH_PASSWORDS": "password,wordpass,passkey",
 -  "SITE_HTTP_AUTH_USERNAMES": "admin,tester,contributor",
--  "SMTP_HOST": "example.com",
--  "SMTP_PASS": "password",
--  "SMTP_PORT": 587,
--  "SMTP_SERVICE": "Gmail",
--  "SMTP_TLS": "true",
--  "SMTP_USER": "user@example.com",
    "TEST_DB_URI": "mongodb://localhost/habitrpg_test",
    "WEB_CONCURRENCY": 1,
    "SKIP_SSL_CHECK_KEY": "key",
-diff --git a/package.json b/package.json
-index 920c226c2..c75e373ea 100644
---- a/package.json
-+++ b/package.json
-@@ -59,7 +59,6 @@
-     "morgan": "^1.7.0",
-     "nconf": "^0.10.0",
-     "node-sass": "^4.9.0",
--    "nodemailer": "^6.0.0",
-     "ora": "^3.2.0",
-     "pageres": "^5.1.0",
-     "passport": "^0.4.0",
 diff --git a/test/api/unit/libs/email.test.js b/test/api/unit/libs/email.test.js
-index 23989fbf3..b043db942 100644
+index 93cffd869..6d17a0c0d 100644
 --- a/test/api/unit/libs/email.test.js
 +++ b/test/api/unit/libs/email.test.js
-@@ -1,7 +1,6 @@
- /* eslint-disable global-require */
- import got from 'got';
- import nconf from 'nconf';
--import nodemailer from 'nodemailer';
- import requireAgain from 'require-again';
- import logger from '../../../../website/server/libs/logger';
- import { TAVERN_ID } from '../../../../website/server/models/group';
-@@ -36,13 +35,8 @@ describe('emails', () => {
-   let pathToEmailLib = '../../../../website/server/libs/email';
- 
-   describe('sendEmail', () => {
--    let sendMailSpy;
--
-     beforeEach(() => {
--      sendMailSpy = sandbox.stub().returns(defer().promise);
--      sandbox.stub(nodemailer, 'createTransport').returns({
--        sendMail: sendMailSpy,
--      });
-+      sandbox.stub(got, 'post').returns(defer().promise);
-     });
- 
-     afterEach(() => {
-@@ -52,7 +46,7 @@ describe('emails', () => {
-     it('can send an email using the default transport', () => {
-       let attachEmail = requireAgain(pathToEmailLib);
-       attachEmail.send();
--      expect(sendMailSpy).to.be.calledOnce;
-+      expect(got.post).to.be.calledOnce;
-     });
- 
-     it('logs errors', (done) => {
-@@ -60,7 +54,7 @@ describe('emails', () => {
- 
-       let attachEmail = requireAgain(pathToEmailLib);
-       attachEmail.send();
--      expect(sendMailSpy).to.be.calledOnce;
-+      expect(got.post).to.be.calledOnce;
-       defer().reject();
- 
-       // wait for unhandledRejection event to fire
-@@ -143,7 +137,7 @@ describe('emails', () => {
+@@ -104,7 +104,7 @@ describe('emails', () => {
        };
  
        sendTxnEmail(mailingInfo, emailType);
@@ -118,7 +59,7 @@ index 23989fbf3..b043db942 100644
          json: true,
          body: {
            data: {
-@@ -178,7 +172,7 @@ describe('emails', () => {
+@@ -139,7 +139,7 @@ describe('emails', () => {
        let mailingInfo = getUser();
  
        sendTxnEmail(mailingInfo, emailType);
@@ -127,7 +68,7 @@ index 23989fbf3..b043db942 100644
          json: true,
          body: {
            data: {
-@@ -201,7 +195,7 @@ describe('emails', () => {
+@@ -162,7 +162,7 @@ describe('emails', () => {
        let variables = [1, 2, 3];
  
        sendTxnEmail(mailingInfo, emailType, variables);
@@ -137,15 +78,10 @@ index 23989fbf3..b043db942 100644
          body: {
            data: {
 diff --git a/website/server/libs/email.js b/website/server/libs/email.js
-index 9d3d029cf..a6d71bc7f 100644
+index b37c3e8a0..a2f4adf0c 100644
 --- a/website/server/libs/email.js
 +++ b/website/server/libs/email.js
-@@ -1,4 +1,3 @@
--import nodemailer from 'nodemailer';
- import nconf from 'nconf';
- import { TAVERN_ID } from '../models/group';
- import { encrypt } from './encryption';
-@@ -6,27 +5,16 @@ import got from 'got';
+@@ -5,13 +5,7 @@ import got from 'got';
  import logger from './logger';
  
  const IS_PROD = nconf.get('IS_PROD');
@@ -159,26 +95,8 @@ index 9d3d029cf..a6d71bc7f 100644
 +const MAILER_SOCKET = nconf.get('MAILER_SOCKET');
  const BASE_URL = nconf.get('BASE_URL');
  
--let smtpTransporter = nodemailer.createTransport({
--  service: nconf.get('SMTP_SERVICE'),
--  auth: {
--    user: nconf.get('SMTP_USER'),
--    pass: nconf.get('SMTP_PASS'),
--  },
--});
--
- // Send email directly from the server using the smtpTransporter,
- // used only to send password reset emails because users unsubscribed on Mandrill wouldn't get them
- export function send (mailData) {
--  return smtpTransporter.sendMail(mailData); // promise
-+  return got.post(`unix:${MAILER_SOCKET}:/simple-mail`, {
-+    json: true,
-+    body: mailData,
-+  });
- }
- 
  export function getUserInfo (user, fields = []) {
-@@ -135,8 +123,7 @@ export function sendTxn (mailingInfoArray, emailType, variables, personalVariabl
+@@ -120,8 +114,7 @@ export function sendTxn (mailingInfoArray, emailType, variables, personalVariabl
    }
  
    if (IS_PROD && mailingInfoArray.length > 0) {

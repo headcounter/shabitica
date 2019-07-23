@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
-module Render (renderTxnMail, renderSimpleMail) where
+module Render (renderTxnMail) where
 
 import Data.Aeson (object, (.=))
 import Control.Arrow (first, second, (>>>), (***))
@@ -15,7 +15,7 @@ import qualified Data.Map.Lazy as M
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 
-import Types (SimpleMail(..), TxnMail(..), RenderedMail(..), Address(..))
+import Types (TxnMail(..), RenderedMail(..), Address(..))
 
 -- XXX: Still needed for NixOS 18.03 which has base-4.10.1.0.
 -- TODO: Bump cabal requirements to base-4.11 after NixOS 18.09 was released.
@@ -115,9 +115,3 @@ renderTxnMail to txn = render $ object
               <> postProcess (renderMustacheW tpl obj)
               <> processPart (renderMustacheW footer obj)
     tpl = getTemplate (txnEmailType txn)
-
-renderSimpleMail :: SimpleMail -> RenderedMail
-renderSimpleMail sm = RenderedMail
-    { subject = smSubject sm
-    , body = flip TL.snoc '\n' . processBody . TL.fromStrict $ smText sm
-    }
