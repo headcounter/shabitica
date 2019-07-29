@@ -40,7 +40,7 @@ index 4ae96a55b..22b15739b 100644
          user.stats.gp = goldPoints;
          user.purchased.plan.gemsBought = gemsBought;
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 0ce58d7d1..0d6a23fb4 100644
+index 7cfb092e9..41eab2714 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -56,13 +56,6 @@
@@ -164,10 +164,10 @@ index 9f4b96acd..d9b8ec7a6 100644
          let result = _map(this.category.items, (e) => {
            return {
 diff --git a/website/client/components/shops/market/index.vue b/website/client/components/shops/market/index.vue
-index 6b8349bc2..e74610df6 100644
+index fb2f332da..fc2e8163b 100644
 --- a/website/client/components/shops/market/index.vue
 +++ b/website/client/components/shops/market/index.vue
-@@ -116,11 +116,6 @@
+@@ -115,11 +115,6 @@
        }
      }
    }

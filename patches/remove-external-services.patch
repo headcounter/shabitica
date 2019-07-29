@@ -2449,7 +2449,7 @@ index 7b8908467..1609e9296 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index bc0cf71de..2a9f204dd 100644
+index 09e370619..1363bc2ba 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,8 +10,6 @@ div
@@ -2759,7 +2759,7 @@ index de65914ea..ab38d5546 100644
      close () {
        this.$root.$emit('bv::hide::modal', 'won-challenge');
 diff --git a/website/client/components/appFooter.vue b/website/client/components/appFooter.vue
-index 93f8e1766..65a652cfc 100644
+index 97bcf9b3d..847808983 100644
 --- a/website/client/components/appFooter.vue
 +++ b/website/client/components/appFooter.vue
 @@ -4,11 +4,6 @@
@@ -3589,7 +3589,7 @@ index 80023627c..eea2bc36a 100644
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 66a1478ce..0ce58d7d1 100644
+index de3038cc1..7cfb092e9 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -274,7 +274,6 @@
@@ -3600,7 +3600,7 @@ index 66a1478ce..0ce58d7d1 100644
    import spellsMixin from 'client/mixins/spells';
    import planGemLimits from 'common/script/libs/planGemLimits';
    import numberInvalid from 'client/mixins/numberInvalid';
-@@ -425,14 +424,6 @@
+@@ -420,14 +419,6 @@
          }
        },
        purchaseGems () {
@@ -3923,7 +3923,7 @@ index fbdc7a2d2..c30032f8d 100644
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
        const crit = tmp.crit;
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index ddb84b8d2..72b21513e 100644
+index 68018a912..053cf402c 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -72,14 +72,12 @@
@@ -4258,7 +4258,7 @@ index f10747b12..90804492f 100644
    missingSubKey: 'Missing "req.query.sub"',
  };
 diff --git a/website/common/script/constants.js b/website/common/script/constants.js
-index 1bc330846..ff0e5f1d6 100644
+index bab826ea0..f4439dbb6 100644
 --- a/website/common/script/constants.js
 +++ b/website/common/script/constants.js
 @@ -10,11 +10,6 @@ export const MAX_SUMMARY_SIZE_FOR_GUILDS = 250;
@@ -5179,7 +5179,7 @@ index 7adbac48d..bbdb7ea6f 100644
  
    let response = [
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 081fd1824..838ba1833 100644
+index 9d5d2a497..3e3544aa3 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -5,7 +5,6 @@ import {
@@ -5293,7 +5293,7 @@ index 081fd1824..838ba1833 100644
 -
  module.exports = api;
 diff --git a/website/server/controllers/api-v3/challenges.js b/website/server/controllers/api-v3/challenges.js
-index 87a530fcf..c45cded62 100644
+index f0a60396a..00b4ebd31 100644
 --- a/website/server/controllers/api-v3/challenges.js
 +++ b/website/server/controllers/api-v3/challenges.js
 @@ -202,16 +202,6 @@ api.createChallenge = {
@@ -5629,7 +5629,7 @@ index e214bda27..7c1057e72 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/members.js b/website/server/controllers/api-v3/members.js
-index 1723c925b..fbd2dacba 100644
+index 362347720..9c59c17a4 100644
 --- a/website/server/controllers/api-v3/members.js
 +++ b/website/server/controllers/api-v3/members.js
 @@ -18,7 +18,6 @@ import {
@@ -5638,29 +5638,18 @@ index 1723c925b..fbd2dacba 100644
  } from '../../libs/email';
 -import { sendNotification as sendPushNotification } from '../../libs/pushNotifications';
  import { achievements } from '../../../../website/common/';
+ import {sentMessage} from '../../libs/inbox';
  
- let api = {};
-@@ -648,19 +647,6 @@ api.sendPrivateMessage = {
-       ]);
-     }
+@@ -642,7 +641,7 @@ api.sendPrivateMessage = {
+     const objections = sender.getObjectionsToInteraction('send-private-message', receiver);
+     if (objections.length > 0 && !sender.isAdmin()) throw new NotAuthorized(res.t(objections[0]));
  
--    if (receiver.preferences.pushNotifications.newPM !== false) {
--      sendPushNotification(
--        receiver,
--        {
--          title: res.t('newPM'),
--          message: res.t('newPMInfo', {name: getUserInfo(sender, ['name']).name, message}),
--          identifier: 'newPM',
--          category: 'newPM',
--          payload: {replyTo: sender._id},
--        }
--      );
--    }
--
+-    const messageSent = await sentMessage(sender, receiver, message, res.t);
++    const messageSent = await sentMessage(sender, receiver, message);
+ 
      res.respond(200, {message: messageSent});
    },
- };
-@@ -739,15 +725,6 @@ api.transferGems = {
+@@ -722,15 +721,6 @@ api.transferGems = {
          {name: 'X_GEMS_GIFTED', content: gemAmount},
        ]);
      }
@@ -5796,7 +5785,7 @@ index d0f96b8a8..79fc1f036 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index c7035f0f9..2019bc8be 100644
+index 1d2b7ab74..2458461fc 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -23,7 +23,6 @@ import {
@@ -5900,7 +5889,7 @@ index aee836daf..8ef090df9 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 839c7cd06..2b833592d 100644
+index e3e17571f..70754b0c9 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -24,7 +24,6 @@ import nconf from 'nconf';
@@ -6539,6 +6528,43 @@ index 02e236fe6..b37c3e8a0 100644
 -      });
      }
    }
+ 
+diff --git a/website/server/libs/inbox/index.js b/website/server/libs/inbox/index.js
+index dd9a4cb4b..bb2720f56 100644
+--- a/website/server/libs/inbox/index.js
++++ b/website/server/libs/inbox/index.js
+@@ -1,11 +1,10 @@
+ import {mapInboxMessage, inboxModel as Inbox} from '../../models/message';
+ import orderBy from 'lodash/orderBy';
+ import {getUserInfo, sendTxn as sendTxnEmail} from '../email';
+-import {sendNotification as sendPushNotification} from '../pushNotifications';
+ 
+ const PM_PER_PAGE = 10;
+ 
+-export async function sentMessage (sender, receiver, message, translate) {
++export async function sentMessage (sender, receiver, message) {
+   const messageSent = await sender.sendMessage(receiver, { receiverMsg: message });
+ 
+   if (receiver.preferences.emailNotifications.newPM !== false) {
+@@ -14,19 +13,6 @@ export async function sentMessage (sender, receiver, message, translate) {
+     ]);
+   }
+ 
+-  if (receiver.preferences.pushNotifications.newPM !== false) {
+-    sendPushNotification(
+-      receiver,
+-      {
+-        title: translate('newPM'),
+-        message: translate('newPMInfo', {name: getUserInfo(sender, ['name']).name, message}),
+-        identifier: 'newPM',
+-        category: 'newPM',
+-        payload: {replyTo: sender._id},
+-      }
+-    );
+-  }
+-
+   return messageSent;
+ }
  
 diff --git a/website/server/libs/invites/index.js b/website/server/libs/invites/index.js
 index d5225338e..7616855f2 100644

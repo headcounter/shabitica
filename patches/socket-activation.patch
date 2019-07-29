@@ -10,11 +10,11 @@ Date:   Tue Mar 27 05:37:06 2018 +0200
     Filename: socket-activation.patch
 
 diff --git a/package.json b/package.json
-index fb27484ed..a7679d2f1 100644
+index 08d2b1a44..a1c33f407 100644
 --- a/package.json
 +++ b/package.json
 @@ -74,6 +74,7 @@
-     "svg-url-loader": "^2.3.2",
+     "svg-url-loader": "^3.0.0",
      "svgo": "^1.2.0",
      "svgo-loader": "^2.1.0",
 +    "systemd-socket": "^0.0.0",

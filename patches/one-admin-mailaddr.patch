@@ -133,7 +133,7 @@ index 1609e9296..5bfbbd7ef 100644
  };
  
 diff --git a/website/server/controllers/api-v3/auth.js b/website/server/controllers/api-v3/auth.js
-index 838ba1833..7130f916d 100644
+index 3e3544aa3..4aa06e033 100644
 --- a/website/server/controllers/api-v3/auth.js
 +++ b/website/server/controllers/api-v3/auth.js
 @@ -20,7 +20,7 @@ import {
@@ -172,7 +172,7 @@ index 7c1057e72..bfbb88e29 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 2b833592d..790ea214c 100644
+index 70754b0c9..ccf90e2dc 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -23,7 +23,7 @@ import * as userLib from '../../libs/user';

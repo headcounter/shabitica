@@ -11,7 +11,7 @@ Date:   Fri Mar 30 20:29:49 2018 +0200
     Filename: remove-community-guidelines.patch
 
 diff --git a/website/client/components/chat/chatCard.vue b/website/client/components/chat/chatCard.vue
-index fac207d5c..a3937089d 100644
+index 7b3c476e7..724a5cf4a 100644
 --- a/website/client/components/chat/chatCard.vue
 +++ b/website/client/components/chat/chatCard.vue
 @@ -20,7 +20,7 @@ div
@@ -24,7 +24,7 @@ index fac207d5c..a3937089d 100644
          div(v-once) {{$t('report')}}
        .action.d-flex.align-items-center(v-if='msg.uuid === user._id || inbox || user.contributor.admin', @click='remove()')
 diff --git a/website/client/components/groups/chat.vue b/website/client/components/groups/chat.vue
-index af7b06589..62ac77fd0 100644
+index 424fc71e3..f6e76095a 100644
 --- a/website/client/components/groups/chat.vue
 +++ b/website/client/components/groups/chat.vue
 @@ -1,10 +1,10 @@
@@ -40,7 +40,7 @@ index af7b06589..62ac77fd0 100644
          textarea(:placeholder='placeholder',
                    v-model='newMessage',
                    ref='user-entry',
-@@ -23,14 +23,12 @@
+@@ -29,14 +29,12 @@
                  :caretPosition = 'caretPosition',
                  :chat='group.chat')
  
@@ -56,7 +56,7 @@ index af7b06589..62ac77fd0 100644
  
        slot(
          name="additionRow",
-@@ -45,7 +43,6 @@
+@@ -51,7 +49,6 @@
    import debounce from 'lodash/debounce';
  
    import autocomplete from '../chat/autoComplete';
@@ -64,7 +64,7 @@ index af7b06589..62ac77fd0 100644
    import chatMessage from '../chat/chatMessages';
    import { mapState } from 'client/libs/store';
    import markdownDirective from 'client/directives/markdown';
-@@ -57,7 +54,6 @@
+@@ -63,7 +60,6 @@
      },
      components: {
        autocomplete,
@@ -72,7 +72,7 @@ index af7b06589..62ac77fd0 100644
        chatMessage,
      },
      data () {
-@@ -81,9 +77,6 @@
+@@ -87,9 +83,6 @@
        currentLength () {
          return this.newMessage.length;
        },
@@ -82,7 +82,7 @@ index af7b06589..62ac77fd0 100644
      },
      methods: {
        // https://medium.com/@_jh3y/how-to-where-s-the-caret-getting-the-xy-position-of-the-caret-a24ba372990a
-@@ -216,10 +209,6 @@
+@@ -261,10 +254,6 @@
    .chat-row {
      position: relative;
  
@@ -129,7 +129,7 @@ index 3d040479d..83501d037 100644
              router-link(to="/groups/guild/f2db2a7f-13c5-454d-b3ee-ea1f5089e601") {{ $t('lookingForGroup') }}
            li
 diff --git a/website/client/components/userMenu/profile.vue b/website/client/components/userMenu/profile.vue
-index 72b21513e..87b73d9c0 100644
+index 053cf402c..45d1778a5 100644
 --- a/website/client/components/userMenu/profile.vue
 +++ b/website/client/components/userMenu/profile.vue
 @@ -76,8 +76,6 @@
