@@ -152,4 +152,34 @@
       assertNotIn('Orca-Base', orca_user['items']['pets'])
     '';
   }
+  { file = "archive/2019/20190731_naming_day.js";
+    testScript = ''
+      ineligible_user = getuser('foo').api.user.get()
+      namingday_user = getuser('namingday').api.user.get()
+
+      for user in [ineligible_user, namingday_user]:
+        assertIn('items', user)
+        assertIn('pets', user['items'])
+        assertIn('mounts', user['items'])
+
+      assertNotIn('Gryphon-RoyalPurple', ineligible_user['items']['pets'])
+      assertNotIn('Gryphon-RoyalPurple', ineligible_user['items']['mounts'])
+
+      assertNotIn('Gryphon-RoyalPurple', namingday_user['items']['pets'])
+      assertIn('Gryphon-RoyalPurple', namingday_user['items']['mounts'])
+
+      assertNotIn('habiticaDays', ineligible_user['achievements'])
+      assertIn('habiticaDays', namingday_user['achievements'])
+      assertEqual(namingday_user['achievements']['habiticaDays'], 1)
+
+      for food in ['Base', 'CottonCandyBlue', 'CottonCandyPink', 'Desert',
+                   'Golden', 'Red', 'Shade', 'Skeleton', 'White', 'Zombie']:
+        item_name = 'Cake_' + food
+        assertNotIn(item_name, ineligible_user['items']['food'])
+        assertIn(item_name, namingday_user['items']['food'])
+        # Note that food items will be awarded twice, once for Habitica
+        # Birthday 2019 and once again for the Naming Day.
+        assertEqual(namingday_user['items']['food'][item_name], 2)
+    '';
+  }
 ]

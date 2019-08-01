@@ -10,7 +10,7 @@ Date:   Tue Mar 27 07:32:57 2018 +0200
     Filename: dont-restrict-email-domains.patch
 
 diff --git a/test/api/v3/integration/user/auth/POST-register_local.test.js b/test/api/v3/integration/user/auth/POST-register_local.test.js
-index 5b559aae5..22f440ee6 100644
+index 5b559aae5b..22f440ee6a 100644
 --- a/test/api/v3/integration/user/auth/POST-register_local.test.js
 +++ b/test/api/v3/integration/user/auth/POST-register_local.test.js
 @@ -389,38 +389,32 @@ describe('POST /user/auth/local/register', () => {
@@ -59,7 +59,7 @@ index 5b559aae5..22f440ee6 100644
  
      it('requires a password', async () => {
 diff --git a/test/api/v4/user/auth/POST-register_local.test.js b/test/api/v4/user/auth/POST-register_local.test.js
-index b75c9b4c5..8bdf4dd4c 100644
+index b75c9b4c55..8bdf4dd4c0 100644
 --- a/test/api/v4/user/auth/POST-register_local.test.js
 +++ b/test/api/v4/user/auth/POST-register_local.test.js
 @@ -372,38 +372,32 @@ describe('POST /user/auth/local/register', () => {
@@ -108,7 +108,7 @@ index b75c9b4c5..8bdf4dd4c 100644
  
      it('requires a password', async () => {
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 1ad6ae8d6..08c220fa5 100644
+index 832cb7e04a..b4291c0afc 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -15,8 +15,6 @@ import {

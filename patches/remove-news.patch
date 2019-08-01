@@ -15,7 +15,7 @@ Date:   Wed Apr 11 14:32:43 2018 +0200
     Filename: remove-news.patch
 
 diff --git a/website/client/components/header/notifications/base.vue b/website/client/components/header/notifications/base.vue
-index fc6bcbaa6..9155977e4 100644
+index fc6bcbaa68..9155977e45 100644
 --- a/website/client/components/header/notifications/base.vue
 +++ b/website/client/components/header/notifications/base.vue
 @@ -4,7 +4,7 @@
@@ -38,7 +38,7 @@ index fc6bcbaa6..9155977e4 100644
    methods: {
      ...mapActions({
 diff --git a/website/client/components/header/notificationsDropdown.vue b/website/client/components/header/notificationsDropdown.vue
-index 526bbece0..48d7041b4 100644
+index 526bbece0b..48d7041b4b 100644
 --- a/website/client/components/header/notificationsDropdown.vue
 +++ b/website/client/components/header/notificationsDropdown.vue
 @@ -79,7 +79,6 @@ import MessageCount from './messageCount';
@@ -68,7 +68,7 @@ index 526bbece0..48d7041b4 100644
          'QUEST_INVITATION', 'GROUP_TASK_ASSIGNED', 'GROUP_TASK_APPROVAL', 'GROUP_TASK_APPROVED',
          'NEW_MYSTERY_ITEMS', 'CARD_RECEIVED',
 diff --git a/website/client/components/notifications.vue b/website/client/components/notifications.vue
-index 00a8a6baa..bd557d613 100644
+index 00a8a6baa4..bd557d613a 100644
 --- a/website/client/components/notifications.vue
 +++ b/website/client/components/notifications.vue
 @@ -5,7 +5,6 @@ div
@@ -107,7 +107,7 @@ index 00a8a6baa..bd557d613 100644
          return this.showDeathModal();
        }
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index caa61badc..e36daa819 100644
+index caa61badcc..e36daa819a 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
 @@ -76,7 +76,6 @@
@@ -129,7 +129,7 @@ index caa61badc..e36daa819 100644
        let nextCron = moment().hours(this.newDayStart).minutes(0).seconds(0).milliseconds(0);
  
 diff --git a/website/client/components/static/staticWrapper.vue b/website/client/components/static/staticWrapper.vue
-index e5dd03e02..a878ec5b7 100644
+index e5dd03e023..a878ec5b70 100644
 --- a/website/client/components/static/staticWrapper.vue
 +++ b/website/client/components/static/staticWrapper.vue
 @@ -1,14 +1,14 @@
@@ -161,7 +161,7 @@ index e5dd03e02..a878ec5b7 100644
        if (this.$route.name === 'plans') return;
        return 'purple-footer';
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index 983ff4e29..db9fbc0fa 100644
+index 983ff4e296..db9fbc0fae 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -12,7 +12,6 @@ const AppPage = () => import(/* webpackChunkName: "static" */'client/components/
@@ -181,7 +181,7 @@ index 983ff4e29..db9fbc0fa 100644
          { name: 'privacy', path: 'privacy', component: PrivacyPage, meta: {requiresLogin: false}},
          { name: 'terms', path: 'terms', component: TermsPage, meta: {requiresLogin: false}},
 diff --git a/website/client/store/actions/user.js b/website/client/store/actions/user.js
-index c8edffe28..575752d9e 100644
+index c8edffe287..575752d9e9 100644
 --- a/website/client/store/actions/user.js
 +++ b/website/client/store/actions/user.js
 @@ -132,11 +132,6 @@ export async function openMysteryItem (store) {
@@ -197,7 +197,7 @@ index c8edffe28..575752d9e 100644
    let result = await axios.post('/api/v4/user/rebirth');
  
 diff --git a/website/server/libs/user/index.js b/website/server/libs/user/index.js
-index c65a19904..526fa4ac9 100644
+index c65a199049..526fa4ac9c 100644
 --- a/website/server/libs/user/index.js
 +++ b/website/server/libs/user/index.js
 @@ -41,7 +41,6 @@ const updatablePaths = [
@@ -209,7 +209,7 @@ index c65a19904..526fa4ac9 100644
    'achievements',
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index cc6c19028..662f2772e 100644
+index 4239f94cf7..ceb05e5289 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -201,7 +201,6 @@ let schema = new Schema({
@@ -221,7 +221,7 @@ index cc6c19028..662f2772e 100644
      classSelected: {$type: Boolean, default: false},
      mathUpdates: Boolean,
 diff --git a/website/server/models/userNotification.js b/website/server/models/userNotification.js
-index 27d29eeb9..57c85bc4f 100644
+index 27d29eeb9c..57c85bc4f8 100644
 --- a/website/server/models/userNotification.js
 +++ b/website/server/models/userNotification.js
 @@ -29,7 +29,6 @@ const NOTIFICATION_TYPES = [

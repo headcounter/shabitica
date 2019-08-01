@@ -20,7 +20,7 @@ Date:   Mon May 13 11:42:29 2019 +0200
     Filename: allow-invite-by-url.patch
 
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index 27f1a5c62..49b174b59 100644
+index 27f1a5c628..49b174b594 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
 @@ -337,6 +337,32 @@ describe('Post /groups/:groupId/invite', () => {
@@ -57,7 +57,7 @@ index 27f1a5c62..49b174b59 100644
      it('returns an error when emails and uuids are not provided', async () => {
        await expect(inviter.post(`/groups/${group._id}/invite`))
 diff --git a/test/client/e2e/nightwatch.conf.js b/test/client/e2e/nightwatch.conf.js
-index 6b0360e9c..731fc5520 100644
+index 6b0360e9c5..731fc5520e 100644
 --- a/test/client/e2e/nightwatch.conf.js
 +++ b/test/client/e2e/nightwatch.conf.js
 @@ -27,6 +27,7 @@ module.exports = {
@@ -70,7 +70,7 @@ index 6b0360e9c..731fc5520 100644
  
 diff --git a/test/client/e2e/specs/smoke.js b/test/client/e2e/specs/smoke.js
 new file mode 100644
-index 000000000..fa4ce1f07
+index 0000000000..fa4ce1f07f
 --- /dev/null
 +++ b/test/client/e2e/specs/smoke.js
 @@ -0,0 +1,12 @@
@@ -88,7 +88,7 @@ index 000000000..fa4ce1f07
 +};
 diff --git a/test/client/e2e/specs/test.js b/test/client/e2e/specs/test.js
 deleted file mode 100644
-index 8898b7c0d..000000000
+index 8898b7c0d4..0000000000
 --- a/test/client/e2e/specs/test.js
 +++ /dev/null
 @@ -1,46 +0,0 @@
@@ -140,7 +140,7 @@ index 8898b7c0d..000000000
 -};
 diff --git a/test/client/e2e/specs/user.js b/test/client/e2e/specs/user.js
 new file mode 100644
-index 000000000..714d54243
+index 0000000000..714d542439
 --- /dev/null
 +++ b/test/client/e2e/specs/user.js
 @@ -0,0 +1,86 @@
@@ -231,7 +231,7 @@ index 000000000..714d54243
 +  },
 +};
 diff --git a/website/client/components/groups/inviteModal.vue b/website/client/components/groups/inviteModal.vue
-index a1e8a312e..e761094de 100644
+index a1e8a312eb..e761094de0 100644
 --- a/website/client/components/groups/inviteModal.vue
 +++ b/website/client/components/groups/inviteModal.vue
 @@ -1,6 +1,15 @@
@@ -326,7 +326,7 @@ index a1e8a312e..e761094de 100644
      mixins: [notifications],
      props: ['group', 'groupType'],
 diff --git a/website/client/store/actions/guilds.js b/website/client/store/actions/guilds.js
-index b4eda8714..d186fbbd3 100644
+index b4eda8714b..d186fbbd3b 100644
 --- a/website/client/store/actions/guilds.js
 +++ b/website/client/store/actions/guilds.js
 @@ -169,6 +169,11 @@ export async function invite (store, payload) {
@@ -342,7 +342,7 @@ index b4eda8714..d186fbbd3 100644
    let response = await axios.post(`/api/v4/groups/${payload.groupId}/quests/invite/${payload.key}`);
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 75e63d258..492446db2 100644
+index 75e63d258b..492446db27 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -24,9 +24,11 @@ import {

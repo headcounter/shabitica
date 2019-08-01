@@ -226,6 +226,20 @@ in runInMachine {
       loggedin = newuser_orca['auth']['timestamps']['loggedin']
       assert loggedin.startswith('2019-05-25')
 
+      # Naming day items are only awarded for users logged in after
+      # 2019-07-01, so let's warp to 2019-07-10.
+      timewarp(3974400)
+
+      newuser_namingday = first.user.auth.local.register.post(
+        username='namingday',
+        email='namingday@example.org',
+        password='snakeoil',
+        confirmPassword='snakeoil',
+      )
+
+      loggedin = newuser_namingday['auth']['timestamps']['loggedin']
+      assert loggedin.startswith('2019-07-10')
+
       with open('spec.json', 'w') as fp:
         json.dump({
           'foo': {
@@ -256,6 +270,10 @@ in runInMachine {
           'orca': {
             'apiUser': newuser_orca['id'],
             'apiToken': newuser_orca['apiToken'],
+          },
+          'namingday': {
+            'apiUser': newuser_namingday['id'],
+            'apiToken': newuser_namingday['apiToken'],
           }
         }, fp)
     '';

@@ -11,7 +11,7 @@ Date:   Wed Oct 10 00:01:51 2018 +0200
     Filename: fix-import-of-chat-model.patch
 
 diff --git a/migrations/groups/migrate-chat.js b/migrations/groups/migrate-chat.js
-index 8b341952c..3b6c71763 100644
+index 8b341952cd..3b6c717636 100644
 --- a/migrations/groups/migrate-chat.js
 +++ b/migrations/groups/migrate-chat.js
 @@ -8,7 +8,7 @@

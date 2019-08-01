@@ -15,7 +15,7 @@ Date:   Thu Mar 29 09:49:42 2018 +0200
     Filename: fix-moment-recur-import.patch
 
 diff --git a/test/common/shouldDo.test.js b/test/common/shouldDo.test.js
-index dedcaa495..f0ea2f8a6 100644
+index dedcaa4951..f0ea2f8a60 100644
 --- a/test/common/shouldDo.test.js
 +++ b/test/common/shouldDo.test.js
 @@ -1,6 +1,5 @@
@@ -27,7 +27,7 @@ index dedcaa495..f0ea2f8a6 100644
  describe('shouldDo', () => {
    let day, dailyTask;
 diff --git a/website/common/script/cron.js b/website/common/script/cron.js
-index b93df4b80..ca6ca3667 100644
+index b93df4b80e..ca6ca36676 100644
 --- a/website/common/script/cron.js
 +++ b/website/common/script/cron.js
 @@ -6,8 +6,7 @@

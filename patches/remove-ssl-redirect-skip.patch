@@ -11,7 +11,7 @@ Date:   Wed Jan 30 04:54:38 2019 +0100
     Filename: remove-ssl-redirect-skip.patch
 
 diff --git a/config.json.example b/config.json.example
-index 00287d062..a57e372c9 100644
+index 00287d0621..a57e372c97 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -15,7 +15,5 @@
@@ -24,7 +24,7 @@ index 00287d062..a57e372c9 100644
 +  "WEB_CONCURRENCY": 1
  }
 diff --git a/test/api/unit/middlewares/redirects.js b/test/api/unit/middlewares/redirects.js
-index fdbff0d87..d93ed5345 100644
+index fdbff0d879..d93ed5345c 100644
 --- a/test/api/unit/middlewares/redirects.js
 +++ b/test/api/unit/middlewares/redirects.js
 @@ -73,56 +73,6 @@ describe('redirects middleware', () => {
@@ -85,7 +85,7 @@ index fdbff0d87..d93ed5345 100644
  
    context('forceHabitica', () => {
 diff --git a/website/server/middlewares/redirects.js b/website/server/middlewares/redirects.js
-index 587474378..a7c2a2a56 100644
+index 587474378e..a7c2a2a56c 100644
 --- a/website/server/middlewares/redirects.js
 +++ b/website/server/middlewares/redirects.js
 @@ -4,9 +4,6 @@ import url from 'url';

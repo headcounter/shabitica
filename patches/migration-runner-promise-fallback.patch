@@ -17,7 +17,7 @@ Date:   Sat Oct 13 02:40:20 2018 +0200
     Filename: migration-runner-promise-fallback.patch
 
 diff --git a/migrations/migration-runner.js b/migrations/migration-runner.js
-index 38901eda7..245097a10 100644
+index 38901eda7a..245097a105 100644
 --- a/migrations/migration-runner.js
 +++ b/migrations/migration-runner.js
 @@ -18,11 +18,13 @@ setUpServer();

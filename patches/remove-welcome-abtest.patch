@@ -15,7 +15,7 @@ Date:   Wed Feb 27 21:55:38 2019 +0100
     Filename: remove-welcome-abtest.patch
 
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index bf459d5e6..5dc9fc83b 100644
+index bf459d5e63..5dc9fc83b6 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -175,12 +175,7 @@ async function registerLocal (req, res, { isV3 = false }) {

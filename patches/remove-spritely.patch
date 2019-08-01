@@ -13,7 +13,7 @@ Date:   Fri Jun 29 23:09:04 2018 +0200
     Filename: remove-spritely.patch
 
 diff --git a/website/client/components/settings/api.vue b/website/client/components/settings/api.vue
-index ccacd0f28..c4ef9acf9 100644
+index ccacd0f280..c4ef9acf95 100644
 --- a/website/client/components/settings/api.vue
 +++ b/website/client/components/settings/api.vue
 @@ -65,12 +65,6 @@ export default {

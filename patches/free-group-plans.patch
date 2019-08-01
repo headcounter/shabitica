@@ -14,7 +14,7 @@ Date:   Tue Mar 27 05:37:23 2018 +0200
     Filename: free-group-plans.patch
 
 diff --git a/test/api/unit/models/group.test.js b/test/api/unit/models/group.test.js
-index 0a2b45b57..1470f0ad5 100644
+index 0a2b45b571..1470f0ad5d 100644
 --- a/test/api/unit/models/group.test.js
 +++ b/test/api/unit/models/group.test.js
 @@ -1,4 +1,3 @@
@@ -146,7 +146,7 @@ index 0a2b45b57..1470f0ad5 100644
    });
  });
 diff --git a/test/api/unit/models/user.test.js b/test/api/unit/models/user.test.js
-index 1e82b58f9..d1c5b0804 100644
+index 1e82b58f97..d1c5b0804a 100644
 --- a/test/api/unit/models/user.test.js
 +++ b/test/api/unit/models/user.test.js
 @@ -356,20 +356,6 @@ describe('User Model', () => {
@@ -171,7 +171,7 @@ index 1e82b58f9..d1c5b0804 100644
  
    context('pre-save hook', () => {
 diff --git a/test/api/v3/integration/groups/POST-groups_invite.test.js b/test/api/v3/integration/groups/POST-groups_invite.test.js
-index 1695d3966..27f1a5c62 100644
+index 1695d3966d..27f1a5c628 100644
 --- a/test/api/v3/integration/groups/POST-groups_invite.test.js
 +++ b/test/api/v3/integration/groups/POST-groups_invite.test.js
 @@ -1,14 +1,11 @@
@@ -244,7 +244,7 @@ index 1695d3966..27f1a5c62 100644
  
    describe('guild invites', () => {
 diff --git a/website/client/components/group-plans/index.vue b/website/client/components/group-plans/index.vue
-index 82a20d244..9a5e64926 100644
+index 82a20d244d..9a5e64926f 100644
 --- a/website/client/components/group-plans/index.vue
 +++ b/website/client/components/group-plans/index.vue
 @@ -6,11 +6,6 @@
@@ -260,7 +260,7 @@ index 82a20d244..9a5e64926 100644
    .col-12
      router-view
 diff --git a/website/client/components/group-plans/taskInformation.vue b/website/client/components/group-plans/taskInformation.vue
-index c1835d3bb..b57f6b77e 100644
+index fbe4516d4f..4e90b2385d 100644
 --- a/website/client/components/group-plans/taskInformation.vue
 +++ b/website/client/components/group-plans/taskInformation.vue
 @@ -1,6 +1,5 @@
@@ -298,7 +298,7 @@ index c1835d3bb..b57f6b77e 100644
    computed: {
      ...mapState({user: 'user.data'}),
 diff --git a/website/client/components/groups/groupPlan.vue b/website/client/components/groups/groupPlan.vue
-index 2561b2946..5f43a0343 100644
+index 2561b2946b..5f43a03430 100644
 --- a/website/client/components/groups/groupPlan.vue
 +++ b/website/client/components/groups/groupPlan.vue
 @@ -30,21 +30,8 @@ div
@@ -530,7 +530,7 @@ index 2561b2946..5f43a0343 100644
      },
    },
 diff --git a/website/client/router/index.js b/website/client/router/index.js
-index 05663006b..0a760836f 100644
+index 05663006bc..0a760836f0 100644
 --- a/website/client/router/index.js
 +++ b/website/client/router/index.js
 @@ -70,7 +70,6 @@ const GroupPlansAppPage = () => import(/* webpackChunkName: "guilds" */ 'client/
@@ -555,7 +555,7 @@ index 05663006b..0a760836f 100644
      },
      {
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index bfbb88e29..616bd90d2 100644
+index bfbb88e29c..616bd90d22 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -23,6 +23,7 @@ import {
@@ -595,7 +595,7 @@ index bfbb88e29..616bd90d2 100644
  
      // Instead of populate we make a find call manually because of https://github.com/Automattic/mongoose/issues/3833
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 19da8dc48..e64eb54b8 100644
+index d394d13a29..8da0c7100e 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -1,4 +1,3 @@
@@ -603,7 +603,7 @@ index 19da8dc48..e64eb54b8 100644
  import mongoose from 'mongoose';
  import {
    model as User,
-@@ -1541,19 +1540,16 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
+@@ -1546,19 +1545,16 @@ schema.methods.checkChatSpam = function groupCheckChatSpam (user) {
  };
  
  schema.methods.isSubscribed = function isSubscribed () {

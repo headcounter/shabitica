@@ -18,7 +18,7 @@ Date:   Tue Mar 27 05:37:16 2018 +0200
     Filename: mailer-daemon.patch
 
 diff --git a/config.json.example b/config.json.example
-index e13607e0e..cb82930b4 100644
+index e13607e0ee..cb82930b49 100644
 --- a/config.json.example
 +++ b/config.json.example
 @@ -7,13 +7,11 @@
@@ -47,7 +47,7 @@ index e13607e0e..cb82930b4 100644
    "WEB_CONCURRENCY": 1,
    "SKIP_SSL_CHECK_KEY": "key",
 diff --git a/test/api/unit/libs/email.test.js b/test/api/unit/libs/email.test.js
-index 93cffd869..6d17a0c0d 100644
+index 93cffd8693..6d17a0c0dd 100644
 --- a/test/api/unit/libs/email.test.js
 +++ b/test/api/unit/libs/email.test.js
 @@ -104,7 +104,7 @@ describe('emails', () => {
@@ -78,7 +78,7 @@ index 93cffd869..6d17a0c0d 100644
          body: {
            data: {
 diff --git a/website/server/libs/email.js b/website/server/libs/email.js
-index b37c3e8a0..a2f4adf0c 100644
+index b37c3e8a0a..a2f4adf0c9 100644
 --- a/website/server/libs/email.js
 +++ b/website/server/libs/email.js
 @@ -5,13 +5,7 @@ import got from 'got';

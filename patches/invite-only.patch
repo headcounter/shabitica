@@ -12,7 +12,7 @@ Date:   Tue Mar 27 05:37:13 2018 +0200
     Filename: invite-only.patch
 
 diff --git a/website/client/components/static/home.vue b/website/client/components/static/home.vue
-index 018018077..265ff3d70 100644
+index 0180180773..265ff3d708 100644
 --- a/website/client/components/static/home.vue
 +++ b/website/client/components/static/home.vue
 @@ -5,7 +5,7 @@
@@ -56,7 +56,7 @@ index 018018077..265ff3d70 100644
      watch: {
        username () {
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 97867e40b..3adf35540 100644
+index 97867e40b5..3adf355408 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -50,7 +50,9 @@ async function _handleGroupInvitation (user, invite) {

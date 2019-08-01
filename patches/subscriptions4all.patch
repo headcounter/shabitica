@@ -14,7 +14,7 @@ Date:   Tue Mar 27 05:37:09 2018 +0200
     Filename: subscriptions4all.patch
 
 diff --git a/test/api/unit/libs/payments/payments.test.js b/test/api/unit/libs/payments/payments.test.js
-index d33a0095c..0b0fb3f42 100644
+index d33a0095cf..0b0fb3f42b 100644
 --- a/test/api/unit/libs/payments/payments.test.js
 +++ b/test/api/unit/libs/payments/payments.test.js
 @@ -439,83 +439,6 @@ describe('payments/index', () => {
@@ -102,7 +102,7 @@ index d33a0095c..0b0fb3f42 100644
      beforeEach(() => {
        data = {
 diff --git a/test/api/unit/models/user.test.js b/test/api/unit/models/user.test.js
-index 24652fa7b..1e82b58f9 100644
+index 24652fa7b6..1e82b58f97 100644
 --- a/test/api/unit/models/user.test.js
 +++ b/test/api/unit/models/user.test.js
 @@ -299,13 +299,13 @@ describe('User Model', () => {
@@ -122,7 +122,7 @@ index 24652fa7b..1e82b58f9 100644
    });
  
 diff --git a/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js b/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
-index 41c655b88..76dd85651 100644
+index 41c655b88c..76dd856514 100644
 --- a/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
 +++ b/test/api/v3/integration/challenges/POST-challenges_challengeId_winner_winnerId.test.js
 @@ -115,7 +115,7 @@ describe('POST /challenges/:challengeId/winner/:winnerId', () => {
@@ -146,7 +146,7 @@ index 41c655b88..76dd85651 100644
  
      it('doesn\'t refund gems to group leader', async () => {
 diff --git a/test/api/v3/integration/user/DELETE-user.test.js b/test/api/v3/integration/user/DELETE-user.test.js
-index 1e70c3486..1694349e5 100644
+index 1e70c3486e..1694349e53 100644
 --- a/test/api/v3/integration/user/DELETE-user.test.js
 +++ b/test/api/v3/integration/user/DELETE-user.test.js
 @@ -70,16 +70,13 @@ describe('DELETE /user', () => {
@@ -170,7 +170,7 @@ index 1e70c3486..1694349e5 100644
  
      it('deletes the user\'s tasks', async () => {
 diff --git a/test/api/v3/integration/user/POST-user_purchase.test.js b/test/api/v3/integration/user/POST-user_purchase.test.js
-index b1d374925..9160226c5 100644
+index b1d3749256..9160226c5d 100644
 --- a/test/api/v3/integration/user/POST-user_purchase.test.js
 +++ b/test/api/v3/integration/user/POST-user_purchase.test.js
 @@ -1,7 +1,6 @@
@@ -225,7 +225,7 @@ index b1d374925..9160226c5 100644
  
    describe('bulk purchasing', () => {
 diff --git a/website/server/libs/auth/index.js b/website/server/libs/auth/index.js
-index 0ec22f525..97867e40b 100644
+index 0ec22f525c..97867e40b5 100644
 --- a/website/server/libs/auth/index.js
 +++ b/website/server/libs/auth/index.js
 @@ -121,6 +121,13 @@ async function registerLocal (req, res, { isV3 = false }) {
@@ -243,7 +243,7 @@ index 0ec22f525..97867e40b 100644
        language: req.language,
      },
 diff --git a/website/server/libs/payments/groupPayments.js b/website/server/libs/payments/groupPayments.js
-index aef8cac2b..118b81ca1 100644
+index aef8cac2be..118b81ca1a 100644
 --- a/website/server/libs/payments/groupPayments.js
 +++ b/website/server/libs/payments/groupPayments.js
 @@ -10,8 +10,6 @@ import {
@@ -276,7 +276,7 @@ index aef8cac2b..118b81ca1 100644
      plan = member.purchased.plan.toObject();
      let extraMonths = Number(plan.extraMonths);
 diff --git a/website/server/libs/payments/subscriptions.js b/website/server/libs/payments/subscriptions.js
-index f01602701..d0f7d9a39 100644
+index f01602701a..d0f7d9a397 100644
 --- a/website/server/libs/payments/subscriptions.js
 +++ b/website/server/libs/payments/subscriptions.js
 @@ -15,9 +15,6 @@ import {
@@ -304,7 +304,7 @@ index f01602701..d0f7d9a39 100644
  
    let now = moment();
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index b3bddab94..53b20073c 100644
+index b3bddab948..53b20073ca 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -15,7 +15,6 @@ import {

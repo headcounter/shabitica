@@ -12,17 +12,17 @@ Date:   Sat Apr 7 03:03:48 2018 +0200
     Filename: no-censorship.patch
 
 diff --git a/test/api/v3/integration/chat/POST-chat.test.js b/test/api/v3/integration/chat/POST-chat.test.js
-index cce17bc43..684e36973 100644
+index 50cb211863..d22ba309d5 100644
 --- a/test/api/v3/integration/chat/POST-chat.test.js
 +++ b/test/api/v3/integration/chat/POST-chat.test.js
-@@ -11,19 +11,10 @@ import {
-   TAVERN_ID,
+@@ -12,19 +12,11 @@ import {
  } from '../../../../../website/server/models/group';
+ import { CHAT_FLAG_FROM_SHADOW_MUTE } from '../../../../../website/common/script/constants';
  import { v4 as generateUUID } from 'uuid';
 -import { getMatchesByWordArray } from '../../../../../website/server/libs/stringUtils';
 -import bannedWords from '../../../../../website/server/libs/bannedWords';
 -import guildsAllowingBannedWords from '../../../../../website/server/libs/guildsAllowingBannedWords';
--import * as email from '../../../../../website/server/libs/email';
+ import * as email from '../../../../../website/server/libs/email';
  
  describe('POST /chat', () => {
    let user, groupWithChat, member, additionalMember;
@@ -35,7 +35,41 @@ index cce17bc43..684e36973 100644
  
    before(async () => {
      let { group, groupLeader, members } = await createAndPopulateGroup({
-@@ -87,221 +78,6 @@ describe('POST /chat', () => {
+@@ -131,7 +123,6 @@ describe('POST /chat', () => {
+   describe('shadow-mute user', () => {
+     beforeEach(() => {
+       sandbox.spy(email, 'sendTxn');
+-      sandbox.stub(IncomingWebhook.prototype, 'send');
+     });
+ 
+     afterEach(() => {
+@@ -149,25 +140,6 @@ describe('POST /chat', () => {
+       await sleep(0.5);
+       expect(email.sendTxn).to.be.calledOnce;
+       expect(email.sendTxn.args[0][1]).to.eql('shadow-muted-post-report-to-mods');
+-
+-      // Slack message to mods
+-      expect(IncomingWebhook.prototype.send).to.be.calledOnce;
+-      /* eslint-disable camelcase */
+-      expect(IncomingWebhook.prototype.send).to.be.calledWith({
+-        text: `@${member.auth.local.username} / ${member.profile.name} posted while shadow-muted`,
+-        attachments: [{
+-          fallback: 'Shadow-Muted Message',
+-          color: 'danger',
+-          author_name: `@${member.auth.local.username} ${member.profile.name} (${member.auth.local.email}; ${member._id})`,
+-          title: 'Shadow-Muted Post in Test Guild',
+-          title_link: `${BASE_URL}/groups/guild/${groupWithChat.id}`,
+-          text: testMessage,
+-          mrkdwn_in: [
+-            'text',
+-          ],
+-        }],
+-      });
+-      /* eslint-enable camelcase */
+     });
+ 
+     it('creates a chat with zero flagCount when sending a message to a private guild', async () => {
+@@ -215,213 +187,6 @@ describe('POST /chat', () => {
      });
    });
  
@@ -182,6 +216,7 @@ index cce17bc43..684e36973 100644
 -
 -    afterEach(() => {
 -      sandbox.restore();
+-      user.update({'flags.chatRevoked': false});
 -    });
 -
 -    it('errors and revokes privileges when chat message contains a banned slur', async () => {
@@ -202,11 +237,6 @@ index cce17bc43..684e36973 100644
 -        error: 'NotAuthorized',
 -        message: t('chatPrivilegesRevoked'),
 -      });
--
--      // @TODO: The next test should not depend on this. We should reset the user test in a beforeEach
--      // Restore chat privileges to continue testing
--      user.flags.chatRevoked = false;
--      await user.update({'flags.chatRevoked': false});
 -    });
 -
 -    it('does not allow slurs in private groups', async () => {
@@ -236,10 +266,6 @@ index cce17bc43..684e36973 100644
 -        error: 'NotAuthorized',
 -        message: t('chatPrivilegesRevoked'),
 -      });
--
--      // Restore chat privileges to continue testing
--      members[0].flags.chatRevoked = false;
--      await members[0].update({'flags.chatRevoked': false});
 -    });
 -
 -    it('errors when slur is typed in mixed case', async () => {
@@ -254,11 +280,11 @@ index cce17bc43..684e36973 100644
 -    });
 -  });
 -
-   it('does not error when sending a message to a private guild with a user with revoked chat', async () => {
-     let { group, members } = await createAndPopulateGroup({
-       groupDetails: {
+   it('creates a chat', async () => {
+     const newMessage = await user.post(`/groups/${groupWithChat._id}/chat`, { message: testMessage});
+     const groupMessages = await user.get(`/groups/${groupWithChat._id}/chat`);
 diff --git a/test/api/v3/integration/user/PUT-user.test.js b/test/api/v3/integration/user/PUT-user.test.js
-index bef5ec25d..6c7f49a28 100644
+index bef5ec25d0..6c7f49a283 100644
 --- a/test/api/v3/integration/user/PUT-user.test.js
 +++ b/test/api/v3/integration/user/PUT-user.test.js
 @@ -86,14 +86,6 @@ describe('PUT /user', () => {
@@ -277,7 +303,7 @@ index bef5ec25d..6c7f49a28 100644
    });
  
 diff --git a/test/api/v3/integration/user/auth/PUT-user_update_username.test.js b/test/api/v3/integration/user/auth/PUT-user_update_username.test.js
-index 987f7bd55..dc5efa212 100644
+index 987f7bd556..dc5efa212b 100644
 --- a/test/api/v3/integration/user/auth/PUT-user_update_username.test.js
 +++ b/test/api/v3/integration/user/auth/PUT-user_update_username.test.js
 @@ -133,58 +133,48 @@ describe('PUT /user/auth/update-username', async () => {
@@ -370,7 +396,7 @@ index 987f7bd55..dc5efa212 100644
  
      it('errors if username has incorrect length', async () => {
 diff --git a/test/api/v4/user/auth/POST-user_verify_display_name.test.js b/test/api/v4/user/auth/POST-user_verify_display_name.test.js
-index 8fa1b9d5b..b040578b6 100644
+index 8fa1b9d5b9..b040578b67 100644
 --- a/test/api/v4/user/auth/POST-user_verify_display_name.test.js
 +++ b/test/api/v4/user/auth/POST-user_verify_display_name.test.js
 @@ -30,22 +30,22 @@ describe('POST /user/auth/verify-display-name', async () => {
@@ -407,7 +433,7 @@ index 8fa1b9d5b..b040578b6 100644
  
      it('errors if display name has incorrect length', async () => {
 diff --git a/test/api/v4/user/auth/POST-user_verify_username.test.js b/test/api/v4/user/auth/POST-user_verify_username.test.js
-index c17b789a4..041a41820 100644
+index c17b789a41..041a418207 100644
 --- a/test/api/v4/user/auth/POST-user_verify_username.test.js
 +++ b/test/api/v4/user/auth/POST-user_verify_username.test.js
 @@ -38,34 +38,34 @@ describe('POST /user/auth/verify-username', async () => {
@@ -461,7 +487,7 @@ index c17b789a4..041a41820 100644
  
      it('errors if username has incorrect length', async () => {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 1363bc2ba..74c9411cf 100644
+index 1363bc2ba2..74c9411cf7 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -524,18 +550,18 @@ index 1363bc2ba..74c9411cf 100644
        // Manage modals
        this.$root.$on('bv::show::modal', (modalId, data = {}) => {
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 0799a4935..880ac169b 100644
+index 5fc8427ba3..7bdb5542e4 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
-@@ -3,7 +3,6 @@ import { model as Group } from '../../models/group';
- import { model as User } from '../../models/user';
+@@ -4,7 +4,6 @@ import { model as User } from '../../models/user';
  import { chatModel as Chat } from '../../models/message';
+ import common from '../../../common';
  import {
 -  BadRequest,
    NotFound,
    NotAuthorized,
  } from '../../libs/errors';
-@@ -12,10 +11,6 @@ import { getUserInfo, getGroupUrl, sendTxn } from '../../libs/email';
+@@ -13,10 +12,6 @@ import { getUserInfo, getGroupUrl, sendTxn } from '../../libs/email';
  import { getAuthorEmailFromMessage } from '../../libs/chat';
  import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
  import nconf from 'nconf';
@@ -546,7 +572,7 @@ index 0799a4935..880ac169b 100644
  import apiError from '../../libs/apiError';
  
  const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
-@@ -44,11 +39,6 @@ const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
+@@ -45,11 +40,6 @@ const FLAG_REPORT_EMAILS = nconf.get('ADMIN_EMAIL').split(',').map((email) => {
  
  let api = {};
  
@@ -558,7 +584,7 @@ index 0799a4935..880ac169b 100644
  /**
   * @api {get} /api/v3/groups/:groupId/chat Get chat messages from a group
   * @apiName GetChat
-@@ -83,10 +73,6 @@ api.getChat = {
+@@ -84,10 +74,6 @@ api.getChat = {
    },
  };
  
@@ -569,7 +595,7 @@ index 0799a4935..880ac169b 100644
  /**
   * @api {post} /api/v3/groups/:groupId/chat Post chat message to a group
   * @apiName PostChat
-@@ -119,50 +105,12 @@ api.postChat = {
+@@ -120,50 +106,12 @@ api.postChat = {
  
      let group = await Group.getGroup({user, groupId});
  
@@ -590,7 +616,7 @@ index 0799a4935..880ac169b 100644
 -        {name: 'AUTHOR_USERNAME', content: user.profile.name},
 -        {name: 'AUTHOR_UUID', content: user._id},
 -        {name: 'AUTHOR_EMAIL', content: authorEmail},
--        {name: 'AUTHOR_MODAL_URL', content: `/static/front/#?memberId=${user._id}`},
+-        {name: 'AUTHOR_MODAL_URL', content: `/profile/${user._id}`},
 -
 -        {name: 'GROUP_NAME', content: group.name},
 -        {name: 'GROUP_TYPE', content: group.type},
@@ -605,12 +631,12 @@ index 0799a4935..880ac169b 100644
 -
      if (!group) throw new NotFound(res.t('groupNotFound'));
  
-     if (group.privacy !== 'private' && user.flags.chatRevoked) {
+     if (group.privacy === 'public' && user.flags.chatRevoked) {
        throw new NotAuthorized(res.t('chatPrivilegesRevoked'));
      }
  
 -    // prevent banned words being posted, except in private guilds/parties and in certain public guilds with specific topics
--    if (group.privacy !== 'private' && !guildsAllowingBannedWords[group._id]) {
+-    if (group.privacy === 'public' && !guildsAllowingBannedWords[group._id]) {
 -      let matchedBadWords = getBannedWordsFromText(req.body.message);
 -      if (matchedBadWords.length > 0) {
 -        throw new BadRequest(res.t('bannedWordUsed', {swearWordsUsed: matchedBadWords.join(', ')}));
@@ -621,7 +647,7 @@ index 0799a4935..880ac169b 100644
      const lastClientMsg = req.query.previousMsg;
      chatUpdated = lastClientMsg && group.chat && group.chat[0] && group.chat[0].id !== lastClientMsg ? true : false;
 diff --git a/website/server/libs/user/index.js b/website/server/libs/user/index.js
-index c4321265c..c65a19904 100644
+index c4321265cc..c65a199049 100644
 --- a/website/server/libs/user/index.js
 +++ b/website/server/libs/user/index.js
 @@ -6,7 +6,6 @@ import {
@@ -641,7 +667,7 @@ index c4321265c..c65a19904 100644
  
    _.each(req.body, (val, key) => {
 diff --git a/website/server/libs/user/validation.js b/website/server/libs/user/validation.js
-index 097ef70cd..ba850aa01 100644
+index 097ef70cdf..ba850aa013 100644
 --- a/website/server/libs/user/validation.js
 +++ b/website/server/libs/user/validation.js
 @@ -1,25 +1,3 @@
