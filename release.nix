@@ -20,6 +20,10 @@ let
       optsFile = builtins.toFile "options.xml" optsXML;
       nixosVersion = builtins.readFile "${nixpkgs}/.version";
 
+      xsltPath = if pkgs ? nixosOptionsDoc
+        then "${nixpkgs}/nixos/lib/make-options-doc"
+        else "${nixpkgs}/nixos/doc/manual";
+
     in pkgs.stdenv.mkDerivation {
       name = "shabitica-options-manual";
 
@@ -49,10 +53,10 @@ let
             ${lib.escapeShellArg optsFile}
         '' else ''
           xsltproc -o intermediate.xml \
-            "${nixpkgs}/nixos/doc/manual/options-to-docbook.xsl" \
+            "${xsltPath}/options-to-docbook.xsl" \
             ${lib.escapeShellArg optsFile}
           xsltproc -o options-db.xml \
-            "${nixpkgs}/nixos/doc/manual/postprocess-option-descriptions.xsl" \
+            "${xsltPath}/postprocess-option-descriptions.xsl" \
             intermediate.xml
         ''}
 
