@@ -42,7 +42,7 @@ let
     ]);
 
   in {
-    imports = [ ./. zshModule ];
+    imports = [ ./.. zshModule ];
 
     shabitica.hostName = "localhost";
     shabitica.baseURL = "http://localhost:3000";

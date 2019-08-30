@@ -2,6 +2,21 @@
 Helper utilities
 ********************************
 
+build-vm.nix
+````````````
+
+Nix expression to build a VM for testing. The resulting file is the script to
+run the VM, which forwards the web server port to the host and makes it
+available via ``http://localhost:3000/``.
+
+The VM also has a Postfix mail service running, which redirects **all** mails
+to the mail box of the ``root`` user. A patched version of the `mutt`_ e-mail
+client is also available, so just invoking ``mutt`` will give you access to all
+mails that were sent out by Shabitica.
+
+.. warning:: This is **NOT** suitable for running in production and uses
+             insecure defaults.
+
 find-canaries.py
 ````````````````
 
@@ -39,3 +54,4 @@ locks are ignored, so it might not *always* be a good idea to update this
 regularily.
 
 .. _Habitica: https://habitica.com/
+.. _mutt: http://www.mutt.org/

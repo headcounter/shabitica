@@ -129,8 +129,8 @@ Please take a look at latest `manual`_ for all of the available options.
 Development/Testing
 -------------------
 
-There is a Nix expression in a file called ``build-vm.nix``, which builts a
-script to boot up a local VM with a fully running Shabitica instance, useful
+There is a Nix expression in a file called ``tools/build-vm.nix``, which builts
+a script to boot up a local VM with a fully running Shabitica instance, useful
 for testing and development.
 
 The NGINX web server listening on port 3000 is forwarded to the host, so you
