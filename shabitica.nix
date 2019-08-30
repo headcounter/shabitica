@@ -31,7 +31,7 @@ let
     sha256 = "1r0aqcxafha13ks8586x77n77zi88db259cpaix0y1ivdh6qkkfr";
   });
 
-  nodePackages = callPackage ./node-packages.nix {
+  nodePackages = callPackage deps/node-packages.nix {
     inherit nodejs;
   };
 

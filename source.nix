@@ -466,7 +466,7 @@ stdenv.mkDerivation rec {
   '';
 
   googleFonts = runCommand "google-fonts" {
-    inherit (import ./google-fonts.nix {
+    inherit (import deps/google-fonts.nix {
       inherit pkgs lib nodePackages;
     }) home index;
   } ''

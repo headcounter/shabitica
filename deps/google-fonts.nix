@@ -1,5 +1,5 @@
 { pkgs ? import <nixpkgs> {}, lib ? pkgs.lib
-, nodePackages ? import ../generated { inherit pkgs; }
+, nodePackages ? import ./generated { inherit pkgs; }
 }:
 
 let
