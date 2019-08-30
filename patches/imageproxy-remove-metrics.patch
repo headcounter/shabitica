@@ -1,0 +1,55 @@
+diff --git a/cmd/go-camo/main.go b/cmd/go-camo/main.go
+index 9fa8b0b..f20d96a 100644
+--- a/cmd/go-camo/main.go
++++ b/cmd/go-camo/main.go
+@@ -19,9 +19,6 @@ import (
+ 
+ 	"github.com/cactus/mlog"
+ 	flags "github.com/jessevdk/go-flags"
+-	"github.com/prometheus/client_golang/prometheus"
+-	"github.com/prometheus/client_golang/prometheus/promauto"
+-	"github.com/prometheus/client_golang/prometheus/promhttp"
+ 
+ 	"github.com/coreos/go-systemd/activation"
+ )
+@@ -31,24 +28,6 @@ const metricNamespace = "camo"
+ var (
+ 	// ServerVersion holds the server version string
+ 	ServerVersion = "no-version"
+-	responseSize  = promauto.NewHistogramVec(
+-		prometheus.HistogramOpts{
+-			Namespace: metricNamespace,
+-			Name:      "response_size_bytes",
+-			Help:      "A histogram of response sizes for requests.",
+-			Buckets:   prometheus.ExponentialBuckets(1024, 2, 10),
+-		},
+-		[]string{},
+-	)
+-	responseDuration = promauto.NewHistogramVec(
+-		prometheus.HistogramOpts{
+-			Namespace: metricNamespace,
+-			Name:      "response_duration_seconds",
+-			Help:      "A histogram of latencies for requests.",
+-			Buckets:   prometheus.DefBuckets,
+-		},
+-		[]string{},
+-	)
+ )
+ 
+ func main() {
+@@ -203,15 +182,6 @@ func main() {
+ 		CamoHandler: proxy,
+ 	}
+ 
+-	if opts.Metrics {
+-		mlog.Printf("Enabling metrics at /metrics")
+-		http.Handle("/metrics", promhttp.Handler())
+-		// Wrap the dumb router in instrumentation.
+-		router = promhttp.InstrumentHandlerDuration(responseDuration,
+-			promhttp.InstrumentHandlerResponseSize(responseSize, router),
+-		)
+-	}
+-
+ 	http.Handle("/", router)
+ 
+ 	if opts.BindAddress != "" {

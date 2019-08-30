@@ -1,8 +1,8 @@
 diff --git a/cmd/go-camo/main.go b/cmd/go-camo/main.go
-index 34e9203..9df91d2 100644
+index cd03faf..a18b310 100644
 --- a/cmd/go-camo/main.go
 +++ b/cmd/go-camo/main.go
-@@ -97,7 +97,7 @@ func main() {
+@@ -111,7 +111,7 @@ func main() {
  	mlog.SetFlags(0)
  
  	config := camo.Config{}
@@ -39,10 +39,10 @@ index 45713f3..7d6164e 100644
  		return "", fmt.Errorf("bad mac decode")
  	}
 diff --git a/pkg/camo/proxy.go b/pkg/camo/proxy.go
-index eb08eff..bd6ea31 100644
+index e9f715b..521a0c0 100644
 --- a/pkg/camo/proxy.go
 +++ b/pkg/camo/proxy.go
-@@ -16,6 +16,10 @@ import (
+@@ -17,6 +17,10 @@ import (
  	"strings"
  	"time"
  
@@ -53,7 +53,7 @@ index eb08eff..bd6ea31 100644
  	"github.com/cactus/go-camo/pkg/camo/encoding"
  
  	"github.com/cactus/mlog"
-@@ -85,22 +89,50 @@ func (p *Proxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+@@ -77,22 +81,50 @@ func (p *Proxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
  		return
  	}
  
@@ -114,7 +114,7 @@ index eb08eff..bd6ea31 100644
  
  	u, err := url.Parse(sURL)
 diff --git a/pkg/router/router.go b/pkg/router/router.go
-index ff307fe..552e162 100644
+index 8abed97..8ca954c 100644
 --- a/pkg/router/router.go
 +++ b/pkg/router/router.go
 @@ -6,7 +6,6 @@ package router
@@ -125,23 +125,18 @@ index ff307fe..552e162 100644
  )
  
  // DumbRouter is a basic, special purpose, http router
-@@ -42,21 +41,5 @@ func (dr *DumbRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
- 		http.Error(w, "Method Not Allowed", 405)
+@@ -42,16 +41,5 @@ func (dr *DumbRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+ 		return
  	}
  
--	components := strings.Split(r.URL.Path, "/")
--	if len(components) == 3 {
--		dr.CamoHandler.ServeHTTP(w, r)
--		return
--	}
--
 -	if r.URL.Path == "/healthcheck" {
 -		dr.HealthCheckHandler(w, r)
 -		return
 -	}
 -
--	if dr.StatsHandler != nil && r.URL.Path == "/status" {
--		dr.StatsHandler(w, r)
+-	components := strings.Split(r.URL.Path, "/")
+-	if len(components) == 3 {
+-		dr.CamoHandler.ServeHTTP(w, r)
 -		return
 -	}
 -
