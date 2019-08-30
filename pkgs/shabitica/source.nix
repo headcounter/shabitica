@@ -25,184 +25,184 @@ stdenv.mkDerivation rec {
     };
   in [
     # Remove payment, analytics and other external services.
-    ../../patches/remove-external-services.patch
+    patches/remove-external-services.patch
 
     # Remove all unneeded dependencies (eg. to external services and payment)
-    ../../patches/strip-dependencies.patch
+    patches/strip-dependencies.patch
 
     # Support systemd socket activation.
-    ../../patches/socket-activation.patch
+    patches/socket-activation.patch
 
     # Everybody gets a lifetime subscription.
-    ../../patches/subscriptions4all.patch
+    patches/subscriptions4all.patch
 
     # Don't allow anonymous users to register, we only want to invite people.
-    ../../patches/invite-only.patch
+    patches/invite-only.patch
 
     # Integrates the mailer daemon found in the mailer subdirectory.
-    ../../patches/mailer-daemon.patch
+    patches/mailer-daemon.patch
 
     # Official Habitica has different mail addresses for different positions,
     # but for a private instance this is not really necessary. So let's use
     # ADMIN_EMAIL everywhere.
-    ../../patches/one-admin-mailaddr.patch
+    patches/one-admin-mailaddr.patch
 
     # This thing takes way too much space, so let's remove it.
-    ../../patches/kill-footer.patch
+    patches/kill-footer.patch
 
     # Registration is allowed for the first user of the instance.
-    ../../patches/allow-register-first.patch
+    patches/allow-register-first.patch
 
     # Don't try to charge for group plans.
-    ../../patches/free-group-plans.patch
+    patches/free-group-plans.patch
 
     # We have subscriptions for all, so let's allow to change group leader in a
     # group that has a subscription.
-    ../../patches/always-permit-group-leader-change.patch
+    patches/always-permit-group-leader-change.patch
 
     # Don't restrict to use email domains such as habitica.com or habitrpg.com.
-    ../../patches/dont-restrict-email-domains.patch
+    patches/dont-restrict-email-domains.patch
 
-    # Fix an import of "../../../../website/common" to not use "../website".
-    ../../patches/fix-server-common-import.patch
+    # Fix an import of "../../website/common" to not use "../website".
+    patches/fix-server-common-import.patch
 
     # Force webpack to use NODE_PATH.
-    ../../patches/webpack-node-path.patch
+    patches/webpack-node-path.patch
 
     # Hardcode the server version using substituteInPlace below.
-    ../../patches/hardcoded-server-version.patch
+    patches/hardcoded-server-version.patch
 
     # Don't serve static files as we do have a web server for that.
-    ../../patches/remove-static-middleware.patch
+    patches/remove-static-middleware.patch
 
     # Correctly serve the client's index.html (patched using substituteInPlace
     # in habitica.nix).
-    ../../patches/server-client-path.patch
+    patches/server-client-path.patch
 
     # Fixes a circular import happening with spells.js and it's the reason why
     # spells weren't working from within the UI.
-    ../../patches/fix-client-circular-import.patch
+    patches/fix-client-circular-import.patch
 
     # Changes the privacy policy to be less awful.
-    ../../patches/privacy-policy.patch
+    patches/privacy-policy.patch
 
     # Import moment by importing moment-recur instead.
-    ../../patches/fix-moment-recur-import.patch
+    patches/fix-moment-recur-import.patch
 
     # Do not limit the amount of gems somebody can buy for gold.
-    ../../patches/no-limit-for-gold-to-gems.patch
+    patches/no-limit-for-gold-to-gems.patch
 
     # Remove the SESSION_SECRET* variables from the example config, because
     # we're going to generate them on first start of the service and provide
     # them via environment variables.
-    ../../patches/remove-session-secret-from-config.patch
+    patches/remove-session-secret-from-config.patch
 
     # Remove the contact form which is also transmitting user data to
     # https://contact.habitica.com/.
-    ../../patches/remove-contact-form.patch
+    patches/remove-contact-form.patch
 
     # We don't need the community guidelines for our standalone version.
-    ../../patches/remove-community-guidelines.patch
+    patches/remove-community-guidelines.patch
 
     # Remove external links, such as to Trello tickets and official guilds that
     # do not exist on our instance.
-    ../../patches/remove-external-links.patch
+    patches/remove-external-links.patch
 
     # Those staff members don't exist on our version and tiers are also not
     # very useful for self-hosted instances.
-    ../../patches/tavern-remove-staff-and-tiers.patch
+    patches/tavern-remove-staff-and-tiers.patch
 
     # Remove links to press kit, merch and group plans.
-    ../../patches/remove-presskit-merch-plans.patch
+    patches/remove-presskit-merch-plans.patch
 
     # Everything in our instance is free, so don't remove subscriptions (it
     # won't make a difference anyway though).
-    ../../patches/dont-cancel-group-subscription-on-leave.patch
+    patches/dont-cancel-group-subscription-on-leave.patch
 
     # Allows to configure whether the instance only allows to register via an
     # invitation link.
-    ../../patches/invite-only-config-option.patch
+    patches/invite-only-config-option.patch
 
     # All users get a free subscription, but by default Habitica prevents to
     # delete a user if he/she has a subscription, this patch allows it anyway.
-    ../../patches/always-allow-delete.patch
+    patches/always-allow-delete.patch
 
     # Removes maxBuffer options to child_process.exec() and fixes the paths of
     # programs needed for running the tests.
-    ../../patches/fixup-test-runners.patch
+    patches/fixup-test-runners.patch
 
     # Generate nice HTML/CSS reports for tests in addition to writing what's
     # going on to standard I/O.
-    ../../patches/html-test-reports.patch
+    patches/html-test-reports.patch
 
     # Fixes and improvements for the Nightwatch automated test system.
-    ../../patches/nightwatch.patch
+    patches/nightwatch.patch
 
     # Fix up the one and only client:e2e test.
-    ../../patches/fix-client-e2e-test.patch
+    patches/fix-client-e2e-test.patch
 
     # Remove "Promo Code" and "Subscriptions" in settings page.
-    ../../patches/remove-unneeded-settings.patch
+    patches/remove-unneeded-settings.patch
 
     # Don't censor bad words and slurs in chat messages.
-    ../../patches/no-censorship.patch
+    patches/no-censorship.patch
 
     # Remove everything about and around news.
-    ../../patches/remove-news.patch
+    patches/remove-news.patch
 
     # Do not set a timeout for the tests as we already have a timeout mechanism
     # in Nix.
-    ../../patches/mocha-no-timeout.patch
+    patches/mocha-no-timeout.patch
 
     # This inserts a substitution variable we can use for specifying the
     # migration file we want to run. The reason this is a patch is because we
     # want to get a build failure if the implementation of the runner changes.
-    ../../patches/migration-substvar.patch
+    patches/migration-substvar.patch
 
     # Adds support systemd startup notifications.
-    ../../patches/systemd-notify.patch
+    patches/systemd-notify.patch
 
     # Allow to purchase gems using gold via the gem icon in the menu.
-    ../../patches/buy-gems-via-menu.patch
+    patches/buy-gems-via-menu.patch
 
     # The connection string of some migrations is hardcoded, so let's re-use
     # the info from Mongoose.
-    ../../patches/fix-connection-info-for-migrations.patch
+    patches/fix-connection-info-for-migrations.patch
 
     # Don't handle anything from Spritely specially (which also removes all
     # references to Spritely, see the canary below).
-    ../../patches/remove-spritely.patch
+    patches/remove-spritely.patch
 
     # Make session cookie compliant with RFC 6265.
-    ../../patches/fix-invalid-session-cookie.patch
+    patches/fix-invalid-session-cookie.patch
 
     # Small E2E test to make sure our habitica-markdown override works.
-    ../../patches/test-imageproxy-in-markdown.patch
+    patches/test-imageproxy-in-markdown.patch
 
     # Use image proxy for profile photos.
-    ../../patches/profile-photo-imageproxy.patch
+    patches/profile-photo-imageproxy.patch
 
     # The chat model has been refactored in version 4.62.2 and is now residing
     # in the same source file as other messages.
-    ../../patches/fix-import-of-chat-model.patch
+    patches/fix-import-of-chat-model.patch
 
     # Get rid of artifacts (such as empty objects or other cruft) for the inbox
     # migration.
-    ../../patches/fix-inbox-migration.patch
+    patches/fix-inbox-migration.patch
 
     # Don't expect migrations to return a Promise so that older migration
     # scripts work.
-    ../../patches/migration-runner-promise-fallback.patch
+    patches/migration-runner-promise-fallback.patch
 
     # Removes the SKIP_SSL_CHECK_KEY option and its implementation.
-    ../../patches/remove-ssl-redirect-skip.patch
+    patches/remove-ssl-redirect-skip.patch
 
     # Don't use A/B tests for "welcome" emails that new users would get when
     # they register.
-    ../../patches/remove-welcome-abtest.patch
+    patches/remove-welcome-abtest.patch
 
     # Provide users with a button to generate an invitation URL.
-    ../../patches/allow-invite-by-url.patch
+    patches/allow-invite-by-url.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];

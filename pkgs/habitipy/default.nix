@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "1kmkiryyfr4r5p2qgspg5raxkivl1yahyb0v42wryn4s93hv83qf";
   };
 
-  patches = lib.singleton ../../patches/habitipy.patch;
+  patches = lib.singleton ./habitipy.patch;
 
   # Update the API documentation to the current version of the Shabitica source
   # code so that we have all available API endpoints.

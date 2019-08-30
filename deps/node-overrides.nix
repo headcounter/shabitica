@@ -9,7 +9,7 @@
   main.habitica-markdown = drv: {
     preRebuild = (drv.preRebuild or "") + ''
       patch -p1 < ${substituteAll {
-        src = ../patches/habitica-markdown-imageproxy.patch;
+        src = patches/habitica-markdown-imageproxy.patch;
         proxyUrl = "${shabiticaConfig.BASE_URL}/imageproxy/";
         baseUrl = shabiticaConfig.BASE_URL;
       }}

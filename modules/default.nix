@@ -6,11 +6,7 @@
 let
   cfg = config.shabitica;
 
-  mongodb = pkgs.mongodb.overrideAttrs (drv: {
-    patches = (drv.patches or []) ++ [ ../patches/mongodb-systemd.patch ];
-    buildInputs = (drv.buildInputs or []) ++ [ pkgs.systemd ];
-    NIX_LDFLAGS = lib.toList (drv.NIX_LDFLAGS or []) ++ [ "-lsystemd" ];
-  });
+  mongodb = pkgs.callPackage ../pkgs/mongodb {};
 
   hostIsFqdn = builtins.match ".+\\..+" cfg.hostName != null;
   isFqdnTxt = "builtins.match \".+\\\\..+\" config.shabitica.hostName != null";

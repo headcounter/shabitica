@@ -78,7 +78,7 @@ in {
       name = "mailer-test-runner";
 
       propagatedBuildInputs = let
-        habitipy = callPackage migrations/habitipy.nix {};
+        habitipy = callPackage ../pkgs/habitipy {};
       in lib.singleton habitipy;
 
       src = pkgs.runCommand "mailer-test-runner-source" {} ''
