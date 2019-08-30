@@ -11,7 +11,7 @@ let
   hostIsFqdn = builtins.match ".+\\..+" cfg.hostName != null;
   isFqdnTxt = "builtins.match \".+\\\\..+\" config.shabitica.hostName != null";
 
-  dbtools = pkgs.callPackage ../dbtools.nix {};
+  dbtools = pkgs.callPackage ../pkgs/dbtools.nix {};
 
   docInfo = import ../docinfo.nix;
 
