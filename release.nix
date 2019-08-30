@@ -46,19 +46,12 @@ let
         </book>
         XML
 
-        # XXX: NixOS 18.03 compatibility
-        ${if lib.versionOlder nixosVersion "18.09" then ''
-          xsltproc -o options-db.xml \
-            "${nixpkgs}/nixos/doc/manual/options-to-docbook.xsl" \
-            ${lib.escapeShellArg optsFile}
-        '' else ''
-          xsltproc -o intermediate.xml \
-            "${xsltPath}/options-to-docbook.xsl" \
-            ${lib.escapeShellArg optsFile}
-          xsltproc -o options-db.xml \
-            "${xsltPath}/postprocess-option-descriptions.xsl" \
-            intermediate.xml
-        ''}
+        xsltproc -o intermediate.xml \
+          "${xsltPath}/options-to-docbook.xsl" \
+          ${lib.escapeShellArg optsFile}
+        xsltproc -o options-db.xml \
+          "${xsltPath}/postprocess-option-descriptions.xsl" \
+          intermediate.xml
 
         xsltproc -o "$dest/index.html" -nonet -xinclude \
           --param section.autolabel 1 \

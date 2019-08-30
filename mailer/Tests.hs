@@ -13,10 +13,6 @@ import qualified Data.HashMap.Strict as M
 import Types
 import Render
 
--- XXX: Still needed for NixOS 18.03 which has base-4.10.1.0.
--- TODO: Bump cabal requirements to base-4.11 after NixOS 18.09 was released.
-import Data.Semigroup (Semigroup((<>)))
-
 space :: T.Text
 space = " "
 

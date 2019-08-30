@@ -127,7 +127,7 @@ in lib.mapAttrs runTests {
         serviceConfig.User = "selenium";
       };
 
-      # XXX: This is needed for NixOS 18.03 and 18.09 :-(
+      # XXX: This is needed for NixOS 18.09 :-(
       system.activationScripts = let
         inherit (config.system.nixos) release;
       in lib.mkIf (lib.versionOlder release "19.03") {

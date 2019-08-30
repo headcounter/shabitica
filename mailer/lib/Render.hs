@@ -17,10 +17,6 @@ import qualified Data.Text.Lazy as TL
 
 import Types (TxnMail(..), RenderedMail(..), Address(..))
 
--- XXX: Still needed for NixOS 18.03 which has base-4.10.1.0.
--- TODO: Bump cabal requirements to base-4.11 after NixOS 18.09 was released.
-import Data.Semigroup (Semigroup((<>)))
-
 fixNode :: Node -> Node
 fixNode (EscapedVar key) = UnescapedVar key
 fixNode node             = node

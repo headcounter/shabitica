@@ -5,10 +5,6 @@ let
 
   go-camo = pkgs.callPackage ../pkgs/go-camo {};
 
-  # XXX: This is because NixOS 18.03 is using systemd version 237, which
-  #      doesn't have the TemporaryFileSystem option.
-  supportsTmpfs = lib.versionAtLeast config.systemd.package.version "238";
-
   sandboxPaths = pkgs.runCommand "shabitica-imageproxy-sandbox-paths" {
     closureInfo = pkgs.closureInfo { rootPaths = [ go-camo.bin ]; };
   } ''
@@ -83,6 +79,7 @@ in {
           MountFlags = "private";
           RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
           PrivateDevices = true;
+          TemporaryFileSystem = "/";
 
           SystemCallErrorNumber = "EPERM";
           SystemCallFilter = [
@@ -90,12 +87,7 @@ in {
             "@network-io" "~listen" "~bind"
             "mprotect" "brk" "sched_getaffinity"
           ];
-
-        } // (if supportsTmpfs then {
-          TemporaryFileSystem = "/";
-        } else {
-          BindPaths = [ "/run/shabitica-imageproxy-chroot:/" ];
-        });
+        };
       };
     })
     (lib.mkIf (cfg.imageProxy.enable && cfg.useNginx) {
@@ -134,21 +126,6 @@ in {
           proxy_cache_valid 200 30d;
           proxy_cache_valid any 0;
         '';
-      };
-    })
-    (lib.mkIf (cfg.imageProxy.enable && !supportsTmpfs) {
-      systemd.mounts = lib.singleton {
-        description = "Tmpfs For Shabitica Image Proxy Chroot";
-
-        bindsTo = [ "shabitica-imageproxy.service" ];
-        requiredBy = [ "shabitica-imageproxy.service" ];
-        before = [ "shabitica-imageproxy.service" ];
-        after = [ "local-fs.target" ];
-
-        what = "tmpfs";
-        where = "/run/shabitica-imageproxy-chroot";
-        type = "tmpfs";
-        options = "nodev,noexec,nosuid";
       };
     })
   ];

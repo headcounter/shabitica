@@ -18,10 +18,6 @@ let
   migrations = import ../pkgs/shabitica/migrations.nix;
   latestDbVersion = lib.length migrations;
 
-  # XXX: This is because NixOS 18.03 is using systemd version 237, which
-  #      doesn't have the TemporaryFileSystem option.
-  supportsTmpfs = lib.versionAtLeast config.systemd.package.version "238";
-
   # Results in a systemd service unit for the Shabitica server which only
   # contains BindReadOnlyPaths options. The rest of the service is defined
   # later in systemd.services.shabitica and the contents here are merged
@@ -474,28 +470,10 @@ in {
           ProtectKernelModules = true;
           ProtectKernelTunables = true;
           RootDirectory = shabiticaSandboxPaths;
-        } // (if supportsTmpfs then {
           TemporaryFileSystem = "/";
-        } else {
-          BindPaths = [ "/run/shabitica-chroot:/" ];
-        });
+        };
       };
     }
-    (lib.mkIf (!supportsTmpfs) {
-      systemd.mounts = lib.singleton {
-        description = "Tmpfs For Shabitica Chroot";
-
-        bindsTo = [ "shabitica.service" ];
-        requiredBy = [ "shabitica.service" ];
-        before = [ "shabitica.service" ];
-        after = [ "local-fs.target" ];
-
-        what = "tmpfs";
-        where = "/run/shabitica-chroot";
-        type = "tmpfs";
-        options = "nodev,noexec,nosuid";
-      };
-    })
     (lib.mkIf cfg.useNginx {
       services.nginx.enable = lib.mkOverride 900 true;
       services.nginx.virtualHosts.${cfg.hostName} = {

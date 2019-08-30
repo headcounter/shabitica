@@ -16,7 +16,7 @@ library
   hs-source-dirs:      lib
   exposed-modules:     Render, Types
   build-depends:       aeson,
-                       base >= 4.9 && < 5,
+                       base >= 4.11 && < 5,
                        containers,
                        mime-mail >= 0.4.14,
                        stache,
@@ -30,7 +30,7 @@ executable shabitica-mailer
   ghc-options:         -Wall
   main-is:             Main.hs
   build-depends:       aeson,
-                       base >= 4.9 && < 5,
+                       base >= 4.11 && < 5,
                        http-types,
                        mime-mail >= 0.4.14,
                        network,
@@ -47,7 +47,7 @@ test-suite template-tests
   main-is:             Tests.hs
   type:                exitcode-stdio-1.0
   build-depends:       aeson,
-                       base >= 4.9 && < 5,
+                       base >= 4.11 && < 5,
                        hspec,
                        neat-interpolation,
                        shabitica-mailer,
