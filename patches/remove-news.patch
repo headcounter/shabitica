@@ -107,10 +107,10 @@ index 00a8a6baa4..bd557d613a 100644
          return this.showDeathModal();
        }
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index caa61badcc..e36daa819a 100644
+index 0fefae00d2..104cc29bc4 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
-@@ -76,7 +76,6 @@
+@@ -78,7 +78,6 @@
  
          hr
  
@@ -118,7 +118,7 @@ index caa61badcc..e36daa819a 100644
          button.btn.btn-primary.mr-2.mb-2(@click='openRestoreModal()', popover-trigger='mouseenter', popover-placement='right', :popover="$t('fixValPop')") {{ $t('fixVal') }}
          button.btn.btn-primary.mb-2(v-if='user.preferences.disableClasses == true', @click='changeClassForUser(false)',
            popover-trigger='mouseenter', popover-placement='right', :popover="$t('enableClassPop')") {{ $t('enableClass') }}
-@@ -392,9 +391,6 @@ export default {
+@@ -396,9 +395,6 @@ export default {
        // User.set({'flags.showTour':true});
        // Guide.goto('intro', 0, true);
      },
@@ -209,7 +209,7 @@ index c65a199049..526fa4ac9c 100644
    'achievements',
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 4239f94cf7..ceb05e5289 100644
+index 393a129d6d..7ea85bdc74 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -201,7 +201,6 @@ let schema = new Schema({

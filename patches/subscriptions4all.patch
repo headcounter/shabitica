@@ -243,7 +243,7 @@ index 0ec22f525c..97867e40b5 100644
        language: req.language,
      },
 diff --git a/website/server/libs/payments/groupPayments.js b/website/server/libs/payments/groupPayments.js
-index aef8cac2be..118b81ca1a 100644
+index e3413ed12a..cd6aeb45f4 100644
 --- a/website/server/libs/payments/groupPayments.js
 +++ b/website/server/libs/payments/groupPayments.js
 @@ -10,8 +10,6 @@ import {
@@ -304,7 +304,7 @@ index f01602701a..d0f7d9a397 100644
  
    let now = moment();
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index b3bddab948..53b20073ca 100644
+index 14ccb1fee8..1a12c34db8 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -15,7 +15,6 @@ import {

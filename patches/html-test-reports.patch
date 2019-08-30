@@ -63,10 +63,10 @@ index 0000000000..347c750ab3
 +  "mochaSimpleHtmlReporterReporterOptions": {"output": "test-report.html"}
 +}
 diff --git a/package.json b/package.json
-index b57dab9bba..eacc2e131e 100644
+index 901a58c1c3..bc509920c2 100644
 --- a/package.json
 +++ b/package.json
-@@ -110,9 +110,9 @@
+@@ -111,9 +111,9 @@
      "test:api-v3:integration:separate-server": "NODE_ENV=test gulp test:api-v3:integration:separate-server",
      "test:api-v4:integration": "gulp test:api-v4:integration",
      "test:api-v4:integration:separate-server": "NODE_ENV=test gulp test:api-v4:integration:separate-server",
@@ -79,9 +79,9 @@ index b57dab9bba..eacc2e131e 100644
      "test:nodemon": "gulp test:nodemon",
      "coverage": "COVERAGE=true mocha --require register-handlers.js --reporter html-cov > coverage.html; open coverage.html",
      "sprites": "gulp sprites:compile",
-@@ -161,6 +161,8 @@
+@@ -160,6 +160,8 @@
+     "karma-spec-reporter": "0.0.32",
      "karma-webpack": "^3.0.0",
-     "lcov-result-merger": "^3.0.0",
      "mocha": "^5.1.1",
 +    "mocha-multi-reporters": "^1.1.7",
 +    "mocha-simple-html-reporter": "^1.1.0",

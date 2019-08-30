@@ -13,7 +13,7 @@ Date:   Fri Mar 30 19:32:26 2018 +0200
     Filename: remove-contact-form.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 4cf6a7e6df..3d040479d1 100644
+index 86776fb7d9..8915ef24d8 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -101,8 +101,6 @@

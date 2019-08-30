@@ -108,7 +108,7 @@ index a175ea31b1..a84651521a 100644
        if (this.isParty) {
          this.searchId = 'party';
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 3d040479d1..83501d0374 100644
+index 8915ef24d8..bbdfb4f9ac 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -10,7 +10,6 @@
@@ -174,7 +174,7 @@ index 5737a9ed6c..c4321265cc 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index b4291c0afc..353b8e49c8 100644
+index ef00f289f8..003ca73286 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -223,7 +223,6 @@ let schema = new Schema({

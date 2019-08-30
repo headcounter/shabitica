@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.107.0";
+  version = "4.109.0";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "16y6j2qn27895kcpzjf0c31k3jzggzdhrw1hcz15vghn3qms9i6v";
+    sha256 = "17yw7ibgc1c0h94xlvgkpm9naxk7d8135cgcxwdhrza508kglvhc";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -203,9 +203,6 @@ stdenv.mkDerivation rec {
 
     # Provide users with a button to generate an invitation URL.
     patches/allow-invite-by-url.patch
-
-    # Pin bootstrap-vue to version 2.0.0-rc.18.
-    patches/pin-bootstrap-vue.patch
   ];
 
   patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
@@ -362,7 +359,7 @@ stdenv.mkDerivation rec {
     "BuyQuestWithGemOperation([^,]*,[^,)]*,"
     "BuyQuestWithGoldOperation([^,]*,[^,)]*,"
     "BuySpellOperation([^,]*,[^,)]*,"
-    "buy([^,]*,[^,)]*,"
+    "buy([^,]*,[^,]*,[^,]*,[^,)]*,"
     "buyArmoire([^,]*,[^,)]*,"
     "buyGear([^,]*,[^,)]*,"
     "buyGem([^,]*,[^,]*,[^,)]*,"
@@ -374,7 +371,7 @@ stdenv.mkDerivation rec {
     "changeClass([^,]*,[^,)]*,"
     "cron([^,]*,[^,]*,[^,]*,[^,]*,[^,]*,[^,)]*,"
     "cronOverride([^,]*,[^,]*,[^,)]*,"
-    "hourglassPurchase([^,]*,[^,)]*,"
+    "hourglassPurchase([^,]*,[^,]*,[^,)]*,"
     "openMysteryItem([^,]*,[^,)]*,"
     "purchase([^,]*,[^,]*,[^,)]*,"
     "purchaseOp([^,]*,[^{,)]*,"

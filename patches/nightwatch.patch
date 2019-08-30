@@ -16,10 +16,10 @@ Date:   Thu Apr 5 07:56:12 2018 +0200
     Filename: nightwatch.patch
 
 diff --git a/package.json b/package.json
-index eacc2e131e..1066d19d7d 100644
+index bc509920c2..e6c257d722 100644
 --- a/package.json
 +++ b/package.json
-@@ -165,6 +165,7 @@
+@@ -164,6 +164,7 @@
      "mocha-simple-html-reporter": "^1.1.0",
      "monk": "^6.0.6",
      "nightwatch": "^1.0.16",

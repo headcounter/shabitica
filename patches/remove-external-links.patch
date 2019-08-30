@@ -20,7 +20,7 @@ Date:   Sat Mar 31 00:52:13 2018 +0200
     Filename: remove-external-links.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index 83501d0374..a9a59f9bec 100644
+index bbdfb4f9ac..e37284fec1 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -101,23 +101,13 @@
@@ -34,13 +34,13 @@ index 83501d0374..a9a59f9bec 100644
            li
              a(href='', v-html="$t('glossary')")
            li
-             a(href='http://habitica.fandom.com/wiki/Habitica_Wiki', v-once) {{ $t('wiki') }}
+             a(href='http://habitica.fandom.com/wiki/Habitica_Wiki' target='_blank', v-once) {{ $t('wiki') }}
            li
-             a(href='https://oldgods.net/habitrpg/habitrpg_user_data_display.html', v-once) {{ $t('dataDisplayTool') }}
+             a(href='https://oldgods.net/habitrpg/habitrpg_user_data_display.html', target='_blank', v-once) {{ $t('dataDisplayTool') }}
 -          li
 -            router-link(to="/groups/guild/a29da26b-37de-4a71-b0c6-48e72a900dac") {{ $t('reportProblem') }}
 -          li
--            a(href='https://trello.com/c/odmhIqyW/440-read-first-table-of-contents', v-once) {{ $t('requestFeature') }}
+-            a(href='https://trello.com/c/odmhIqyW/440-read-first-table-of-contents', target='_blank', v-once) {{ $t('requestFeature') }}
 -          li
 -            a(href='', v-html="$t('communityForum')")
 -          li
@@ -49,7 +49,7 @@ index 83501d0374..a9a59f9bec 100644
        sidebar-section(:title="$t('playerTiers')")
          .row
 diff --git a/website/client/components/hall/heroes.vue b/website/client/components/hall/heroes.vue
-index f0847cb93f..70fc1797a8 100644
+index fe13b65723..376b599e99 100644
 --- a/website/client/components/hall/heroes.vue
 +++ b/website/client/components/hall/heroes.vue
 @@ -25,10 +25,6 @@
@@ -158,7 +158,7 @@ index 5866630186..7fd00b1ec7 100644
  
  <style lang='scss'>
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 570a60c8d4..75e63d258b 100644
+index 6cbaf0f342..aa6b2f4f8a 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -714,7 +714,6 @@ function _sendMessageToRemoved (group, removedUser, message, isInGroup) {
@@ -170,7 +170,7 @@ index 570a60c8d4..75e63d258b 100644
    }
  }
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 353b8e49c8..4239f94cf7 100644
+index 003ca73286..393a129d6d 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -115,7 +115,6 @@ let schema = new Schema({

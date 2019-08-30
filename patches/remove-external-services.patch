@@ -3377,10 +3377,10 @@ index dfc6dfb964..bfb5996089 100644
  </template>
  
 diff --git a/website/client/components/settings/site.vue b/website/client/components/settings/site.vue
-index 533de1ba13..caa61badcc 100644
+index 4f6d75d1f8..0fefae00d2 100644
 --- a/website/client/components/settings/site.vue
 +++ b/website/client/components/settings/site.vue
-@@ -109,12 +109,6 @@
+@@ -111,12 +111,6 @@
        h2 {{ $t('registration') }}
        .panel-body
          div
@@ -3393,7 +3393,7 @@ index 533de1ba13..caa61badcc 100644
            div(v-if='!user.auth.local.email')
              p {{ $t('addLocalAuth') }}
              .form(name='localAuth', novalidate)
-@@ -204,7 +198,6 @@
+@@ -206,7 +200,6 @@
  </style>
  
  <script>
@@ -3401,15 +3401,15 @@ index 533de1ba13..caa61badcc 100644
  import moment from 'moment';
  import axios from 'axios';
  import { mapState } from 'client/libs/store';
-@@ -212,7 +205,6 @@ import debounce from 'lodash/debounce';
+@@ -214,7 +207,6 @@ import debounce from 'lodash/debounce';
  import restoreModal from './restoreModal';
  import resetModal from './resetModal';
  import deleteModal from './deleteModal';
 -import { SUPPORTED_SOCIAL_NETWORKS } from '../../../common/script/constants';
  import changeClass from  '../../../common/script/ops/changeClass';
  import notificationsMixin from '../../mixins/notifications';
- // @TODO: this needs our window.env fix
-@@ -238,7 +230,6 @@ export default {
+ import sounds from '../../libs/sounds';
+@@ -241,7 +233,6 @@ export default {
      }
  
      return {
@@ -3417,7 +3417,7 @@ index 533de1ba13..caa61badcc 100644
        party: {},
        // Made available by the server as a script
        availableFormats: ['MM/dd/yyyy', 'dd/MM/yyyy', 'yyyy/MM/dd'],
-@@ -259,7 +250,6 @@ export default {
+@@ -262,7 +253,6 @@ export default {
      };
    },
    mounted () {
@@ -3425,10 +3425,10 @@ index 533de1ba13..caa61badcc 100644
      // @TODO: We may need to request the party here
      this.party = this.$store.state.party;
      this.newDayStart = this.user.preferences.dayStart;
-@@ -267,12 +257,6 @@ export default {
-     this.temporaryDisplayName = this.user.profile.name;
+@@ -271,12 +261,6 @@ export default {
      this.emailUpdates.newEmail = this.user.auth.local.email || null;
      this.localAuth.username = this.user.auth.local.username || null;
+     this.soundIndex = 0;
 -    hello.init({
 -      facebook: process.env.FACEBOOK_KEY, // eslint-disable-line no-process-env
 -      google: process.env.GOOGLE_CLIENT_ID, // eslint-disable-line no-process-env
@@ -3438,7 +3438,7 @@ index 533de1ba13..caa61badcc 100644
  
      const focusID = this.$route.query.focus;
      if (focusID !== undefined && focusID !== null) {
-@@ -411,19 +395,6 @@ export default {
+@@ -415,19 +399,6 @@ export default {
      showBailey () {
        this.$root.$emit('bv::show::modal', 'new-stuff');
      },
@@ -3458,7 +3458,7 @@ index 533de1ba13..caa61badcc 100644
      calculateNextCron () {
        let nextCron = moment().hours(this.newDayStart).minutes(0).seconds(0).milliseconds(0);
  
-@@ -480,19 +451,6 @@ export default {
+@@ -484,19 +455,6 @@ export default {
      openDeleteModal () {
        this.$root.$emit('bv::show::modal', 'delete');
      },
@@ -3589,7 +3589,7 @@ index 80023627c8..eea2bc36ad 100644
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index de3038cc18..7cfb092e95 100644
+index 99de909e01..d24742f50d 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -274,7 +274,6 @@
@@ -3903,10 +3903,10 @@ index 34ff15ca57..e5dd03e023 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index fbdc7a2d2e..c30032f8d8 100644
+index 006a20ebc6..16683a5d3c 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
-@@ -517,7 +517,6 @@ import moment from 'moment';
+@@ -520,7 +520,6 @@ import moment from 'moment';
  import axios from 'axios';
  import scoreTask from 'common/script/ops/scoreTask';
  import Vue from 'vue';
@@ -3914,7 +3914,7 @@ index fbdc7a2d2e..c30032f8d8 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import negativeIcon from 'assets/svg/negative.svg';
-@@ -734,7 +733,6 @@ export default {
+@@ -739,7 +738,6 @@ export default {
  
        if (task.group.approval.required) task.group.approval.requested = true;
  
@@ -4529,19 +4529,19 @@ index 0a6f7735dd..b6b81d6d23 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index 13a995060f..7d86911f17 100644
+index a8241e9a59..8ff35fec4b 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
 @@ -19,7 +19,7 @@ import {BuyQuestWithGemOperation} from './buyQuestGem';
  
  // @TODO: when we are sure buy is the only function used, let's move the buy files to a folder
  
--module.exports = function buy (user, req = {}, analytics) {
-+module.exports = function buy (user, req = {}) {
+-module.exports = function buy (user, req = {}, analytics, options = {quantity: 1, hourglass: false}) {
++module.exports = function buy (user, req = {}, options = {quantity: 1, hourglass: false}) {
    let key = get(req, 'params.key');
-   if (!key) throw new BadRequest(errorMessage('missingKeyParam'));
- 
-@@ -33,28 +33,28 @@ module.exports = function buy (user, req = {}, analytics) {
+   const hourglass = options.hourglass;
+   const quantity = options.quantity;
+@@ -35,31 +35,31 @@ module.exports = function buy (user, req = {}, analytics, options = {quantity: 1
  
    switch (type) {
      case 'armoire': {
@@ -4570,12 +4570,16 @@ index 13a995060f..7d86911f17 100644
        break;
      }
      case 'quests': {
--      const buyOp = new BuyQuestWithGemOperation(user, req, analytics);
-+      const buyOp = new BuyQuestWithGemOperation(user, req);
+       if (hourglass) {
+-        buyRes = hourglassPurchase(user, req, analytics, quantity);
++        buyRes = hourglassPurchase(user, req, quantity);
+       } else {
+-        const buyOp = new BuyQuestWithGemOperation(user, req, analytics);
++        const buyOp = new BuyQuestWithGemOperation(user, req);
  
-       buyRes = buyOp.purchase();
-       break;
-@@ -64,26 +64,26 @@ module.exports = function buy (user, req = {}, analytics) {
+         buyRes = buyOp.purchase();
+       }
+@@ -70,26 +70,26 @@ module.exports = function buy (user, req = {}, analytics, options = {quantity: 1
      case 'food':
      case 'gear':
      case 'bundles':
@@ -4794,20 +4798,20 @@ index 46e73a5d81..5397b50125 100644
  
    getItemKey () {
 diff --git a/website/common/script/ops/buy/hourglassPurchase.js b/website/common/script/ops/buy/hourglassPurchase.js
-index 44f6e1a6f4..88ff944527 100644
+index 61ae2de568..8fb20a844d 100644
 --- a/website/common/script/ops/buy/hourglassPurchase.js
 +++ b/website/common/script/ops/buy/hourglassPurchase.js
 @@ -9,7 +9,7 @@ import {
  } from '../../libs/errors';
  import errorMessage from '../../libs/errorMessage';
  
--module.exports = function purchaseHourglass (user, req = {}, analytics) {
-+module.exports = function purchaseHourglass (user, req = {}) {
+-module.exports = function purchaseHourglass (user, req = {}, analytics, quantity = 1) {
++module.exports = function purchaseHourglass (user, req = {}, quantity = 1) {
    let key = get(req, 'params.key');
    if (!key) throw new BadRequest(errorMessage('missingKeyParam'));
  
-@@ -44,17 +44,6 @@ module.exports = function purchaseHourglass (user, req = {}, analytics) {
-     if (user.markModified) user.markModified('items.mounts');
+@@ -57,17 +57,6 @@ module.exports = function purchaseHourglass (user, req = {}, analytics, quantity
+     }
    }
  
 -  if (analytics) {
@@ -4902,7 +4906,7 @@ index 49af6f481a..5704f92f81 100644
      // if invalid class is specified, throw an error.
      throw new BadRequest(i18n.t('invalidClass', req.language));
 diff --git a/website/common/script/ops/openMysteryItem.js b/website/common/script/ops/openMysteryItem.js
-index c45d63e925..149460c7b2 100644
+index b2cf4ea561..b47a5813dd 100644
 --- a/website/common/script/ops/openMysteryItem.js
 +++ b/website/common/script/ops/openMysteryItem.js
 @@ -13,7 +13,7 @@ function markNotificationAsRead (user) {
@@ -4914,7 +4918,7 @@ index c45d63e925..149460c7b2 100644
    const mysteryItems = user.purchased.plan.mysteryItems;
    let item = mysteryItems.shift();
  
-@@ -31,17 +31,6 @@ module.exports = function openMysteryItem (user, req = {}, analytics) {
+@@ -32,17 +32,6 @@ module.exports = function openMysteryItem (user, req = {}, analytics) {
      user.markModified('items.gear.owned');
    }
  
@@ -5115,7 +5119,7 @@ index 14ad3d1ddd..8714b0d356 100644
      user.items,
      message,
 diff --git a/website/common/script/ops/scoreTask.js b/website/common/script/ops/scoreTask.js
-index 58e594754d..5ab557a574 100644
+index 20a8ce20fa..48baa4a2af 100644
 --- a/website/common/script/ops/scoreTask.js
 +++ b/website/common/script/ops/scoreTask.js
 @@ -327,6 +327,6 @@ module.exports = function scoreTask (options = {}, req = {}) {
@@ -5475,7 +5479,7 @@ index 7acc406a44..8a441b55e4 100644
   *
   * @apiSuccess {Array} data Generated coupons
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index e214bda27b..7c1057e72b 100644
+index 41e1884ae5..262361ab39 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -22,10 +22,6 @@ import {
@@ -5603,7 +5607,7 @@ index e214bda27b..7c1057e72b 100644
    },
  };
 @@ -779,12 +692,7 @@ api.leaveGroup = {
-       user.guilds.splice(guildIndex, 1);
+       if (guildIndex >= 0) user.guilds.splice(guildIndex, 1);
      }
  
 -    let isMemberOfGroupPlan = await user.isMemberOfGroupPlan();
@@ -5681,7 +5685,7 @@ index 3623477205..9c59c17a43 100644
      res.respond(200, {});
    },
 diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
-index d0f96b8a80..79fc1f036e 100644
+index 4153244620..79fc1f036e 100644
 --- a/website/server/controllers/api-v3/quests.js
 +++ b/website/server/controllers/api-v3/quests.js
 @@ -1,6 +1,5 @@
@@ -5703,12 +5707,12 @@ index d0f96b8a80..79fc1f036e 100644
        'party._id': group._id,
        _id: {$ne: user._id},
      })
--      .select('auth.facebook auth.google auth.local preferences.emailNotifications profile.name pushDevices')
+-      .select('auth.facebook auth.google auth.local preferences.emailNotifications preferences.pushNotifications preferences.language profile.name pushDevices')
 +      .select('auth.local preferences.emailNotifications profile.name')
        .exec();
  
      group.markModified('quest');
-@@ -119,20 +117,6 @@ api.inviteToQuest = {
+@@ -119,19 +117,6 @@ api.inviteToQuest = {
      // send out invites
      let inviterVars = getUserInfo(user, ['name', 'email']);
      let membersToEmail = members.filter(member => {
@@ -5717,19 +5721,18 @@ index d0f96b8a80..79fc1f036e 100644
 -        sendPushNotification(
 -          member,
 -          {
--            title: res.t('questInvitationTitle'),
--            message: res.t('questInvitationInfo', {quest: quest.text(req.language)}),
+-            title: res.t('questInvitationTitle', member.preferences.language),
+-            message: res.t('questInvitationInfo', {quest: quest.text(member.preferences.language)}, member.preferences.language),
 -            identifier: 'questInvitation',
 -            category: 'questInvitation',
 -          }
--
 -        );
 -      }
 -
        return member.preferences.emailNotifications.invitedQuest !== false;
      });
      sendTxnEmail(membersToEmail, `invite-${quest.boss ? 'boss' : 'collection'}-quest`, [
-@@ -140,17 +124,6 @@ api.inviteToQuest = {
+@@ -139,17 +124,6 @@ api.inviteToQuest = {
        {name: 'INVITER', content: inviterVars.name},
        {name: 'PARTY_URL', content: '/party'},
      ]);
@@ -5747,7 +5750,7 @@ index d0f96b8a80..79fc1f036e 100644
    },
  };
  
-@@ -199,17 +172,6 @@ api.acceptQuest = {
+@@ -198,17 +172,6 @@ api.acceptQuest = {
      let savedGroup = await group.save();
  
      res.respond(200, savedGroup.quest);
@@ -5765,7 +5768,7 @@ index d0f96b8a80..79fc1f036e 100644
    },
  };
  
-@@ -259,16 +221,6 @@ api.rejectQuest = {
+@@ -258,16 +221,6 @@ api.rejectQuest = {
      let savedGroup = await group.save();
  
      res.respond(200, savedGroup.quest);
@@ -5782,7 +5785,7 @@ index d0f96b8a80..79fc1f036e 100644
    },
  };
  
-@@ -318,16 +270,6 @@ api.forceStart = {
+@@ -317,16 +270,6 @@ api.forceStart = {
      ]);
  
      res.respond(200, savedGroup.quest);
@@ -5800,7 +5803,7 @@ index d0f96b8a80..79fc1f036e 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index 1d2b7ab747..2458461fc4 100644
+index dda6a0d6a8..753f212c3b 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -23,7 +23,6 @@ import {
@@ -5863,7 +5866,7 @@ index 1d2b7ab747..2458461fc4 100644
  
      // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
      // TODO move to common code?
-@@ -671,18 +648,6 @@ api.scoreTask = {
+@@ -683,18 +660,6 @@ api.scoreTask = {
          logger.error(e);
        }
      }
@@ -5883,7 +5886,7 @@ index 1d2b7ab747..2458461fc4 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks/groups.js b/website/server/controllers/api-v3/tasks/groups.js
-index aee836dafd..8ef090df98 100644
+index d4b0e5178c..2a976c02a9 100644
 --- a/website/server/controllers/api-v3/tasks/groups.js
 +++ b/website/server/controllers/api-v3/tasks/groups.js
 @@ -60,16 +60,6 @@ api.createGroupTasks = {
@@ -5904,7 +5907,7 @@ index aee836dafd..8ef090df98 100644
  };
  
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index e3e17571f2..70754b0c9f 100644
+index c1b721650e..70cd50820c 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -24,7 +24,6 @@ import nconf from 'nconf';
@@ -6035,16 +6038,16 @@ index e3e17571f2..70754b0c9f 100644
      await user.save();
      res.respond(200, ...purchaseRes);
    },
-@@ -1000,7 +988,7 @@ api.userPurchaseHourglass = {
-   url: '/user/purchase-hourglass/:type/:key',
-   async handler (req, res) {
+@@ -1005,7 +993,7 @@ api.userPurchaseHourglass = {
      let user = res.locals.user;
--    let purchaseHourglassRes = common.ops.buy(user, req, res.analytics);
-+    let purchaseHourglassRes = common.ops.buy(user, req);
+     const quantity = req.body.quantity || 1;
+     if (quantity < 1 || !Number.isInteger(quantity)) throw new BadRequest(res.t('invalidQuantity'), req.language);
+-    let purchaseHourglassRes = common.ops.buy(user, req, res.analytics, {quantity, hourglass: true});
++    let purchaseHourglassRes = common.ops.buy(user, req, {quantity, hourglass: true});
      await user.save();
      res.respond(200, ...purchaseHourglassRes);
    },
-@@ -1094,7 +1082,7 @@ api.userOpenMysteryItem = {
+@@ -1099,7 +1087,7 @@ api.userOpenMysteryItem = {
    url: '/user/open-mystery-item',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6053,7 +6056,7 @@ index e3e17571f2..70754b0c9f 100644
      await user.save();
      res.respond(200, ...openMysteryItemRes);
    },
-@@ -1126,7 +1114,7 @@ api.userReleasePets = {
+@@ -1131,7 +1119,7 @@ api.userReleasePets = {
    url: '/user/release-pets',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6062,7 +6065,7 @@ index e3e17571f2..70754b0c9f 100644
      await user.save();
      res.respond(200, ...releasePetsRes);
    },
-@@ -1175,7 +1163,7 @@ api.userReleaseBoth = {
+@@ -1180,7 +1168,7 @@ api.userReleaseBoth = {
    url: '/user/release-both',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6071,7 +6074,7 @@ index e3e17571f2..70754b0c9f 100644
      await user.save();
      res.respond(200, ...releaseBothRes);
    },
-@@ -1211,7 +1199,7 @@ api.userReleaseMounts = {
+@@ -1216,7 +1204,7 @@ api.userReleaseMounts = {
    url: '/user/release-mounts',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6080,7 +6083,7 @@ index e3e17571f2..70754b0c9f 100644
      await user.save();
      res.respond(200, ...releaseMountsRes);
    },
-@@ -1284,7 +1272,7 @@ api.userUnlock = {
+@@ -1289,7 +1277,7 @@ api.userUnlock = {
    url: '/user/unlock',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6089,7 +6092,7 @@ index e3e17571f2..70754b0c9f 100644
      await user.save();
      res.respond(200, ...unlockRes);
    },
-@@ -1310,7 +1298,7 @@ api.userRevive = {
+@@ -1315,7 +1303,7 @@ api.userRevive = {
    url: '/user/revive',
    async handler (req, res) {
      let user = res.locals.user;
@@ -6449,7 +6452,7 @@ index 207b570fd3..e8078d83cf 100644
  
    async getAuthorVariables (message) {
 diff --git a/website/server/libs/cron.js b/website/server/libs/cron.js
-index 5106b013e2..f56fbb659b 100644
+index 09178a35f9..8e9e611da5 100644
 --- a/website/server/libs/cron.js
 +++ b/website/server/libs/cron.js
 @@ -85,12 +85,12 @@ function grantEndOfTheMonthPerks (user, now) {
@@ -6509,7 +6512,7 @@ index 5106b013e2..f56fbb659b 100644
    let _progress = {down: 0, up: 0, collectedItems: 0};
  
    // Record pre-cron values of HP and MP to show notifications later
-@@ -473,9 +447,7 @@ export function cron (options = {}) {
+@@ -486,9 +460,7 @@ export function cron (options = {}) {
      mp: user.stats.mp - beforeCronStats.mp - (oldCronNotif ? oldCronNotif.data.mp : 0),
    });
  
@@ -6545,7 +6548,7 @@ index 02e236fe60..b37c3e8a0a 100644
    }
  
 diff --git a/website/server/libs/inbox/index.js b/website/server/libs/inbox/index.js
-index dd9a4cb4b2..bb2720f56f 100644
+index 2f2e4b6575..bb2720f56f 100644
 --- a/website/server/libs/inbox/index.js
 +++ b/website/server/libs/inbox/index.js
 @@ -1,11 +1,10 @@
@@ -6569,8 +6572,8 @@ index dd9a4cb4b2..bb2720f56f 100644
 -    sendPushNotification(
 -      receiver,
 -      {
--        title: translate('newPM'),
--        message: translate('newPMInfo', {name: getUserInfo(sender, ['name']).name, message}),
+-        title: translate('newPM', receiver.preferences.language),
+-        message: translate('newPMInfo', {name: getUserInfo(sender, ['name']).name, message}, receiver.preferences.language),
 -        identifier: 'newPM',
 -        category: 'newPM',
 -        payload: {replyTo: sender._id},
@@ -6582,7 +6585,7 @@ index dd9a4cb4b2..bb2720f56f 100644
  }
  
 diff --git a/website/server/libs/invites/index.js b/website/server/libs/invites/index.js
-index d5225338ef..7616855f2a 100644
+index 2429794e68..7616855f2a 100644
 --- a/website/server/libs/invites/index.js
 +++ b/website/server/libs/invites/index.js
 @@ -1,7 +1,6 @@
@@ -6606,7 +6609,7 @@ index d5225338ef..7616855f2a 100644
 -    userToInvite,
 -    {
 -      title: group.name,
--      message: res.t(identifier),
+-      message: res.t(identifier, userToInvite.preferences.language),
 -      identifier,
 -      payload: {groupID: group._id, publicGuild},
 -    }
@@ -6717,7 +6720,7 @@ index 35d18cc706..400bf08e65 100644
    await data.user.save();
  }
 diff --git a/website/server/libs/payments/groupPayments.js b/website/server/libs/payments/groupPayments.js
-index 5da9309f1f..aef8cac2be 100644
+index ff4c9abf97..e3413ed12a 100644
 --- a/website/server/libs/payments/groupPayments.js
 +++ b/website/server/libs/payments/groupPayments.js
 @@ -1,4 +1,3 @@
@@ -7077,7 +7080,7 @@ index c0881008af..96188ece56 100644
      })
      .catch(next);
 diff --git a/website/server/middlewares/cron.js b/website/server/middlewares/cron.js
-index 15a66b02bf..315f1fa440 100644
+index 47368dc8fd..6b1115a809 100644
 --- a/website/server/middlewares/cron.js
 +++ b/website/server/middlewares/cron.js
 @@ -54,7 +54,6 @@ async function cronAsync (req, res) {
@@ -7130,7 +7133,7 @@ index adf74bcbd1..67f63b364d 100644
    '/email',
    '/qr-code',
 diff --git a/website/server/models/challenge.js b/website/server/models/challenge.js
-index 62ab8716a0..3f3444501c 100644
+index 97b37338d8..3f3444501c 100644
 --- a/website/server/models/challenge.js
 +++ b/website/server/models/challenge.js
 @@ -10,7 +10,6 @@ import {
@@ -7149,7 +7152,7 @@ index 62ab8716a0..3f3444501c 100644
 -      sendPushNotification(savedWinner,
 -        {
 -          title: challenge.name,
--          message: shared.i18n.t('wonChallenge'),
+-          message: shared.i18n.t('wonChallenge', savedWinner.preferences.language),
 -          identifier: 'wonChallenge',
 -        });
 -    }
@@ -7170,7 +7173,7 @@ index f08a8135eb..fe391c9684 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 568e8530ac..d394d13a29 100644
+index e348bcded0..d394d13a29 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {
@@ -7193,37 +7196,29 @@ index 568e8530ac..d394d13a29 100644
    await User.find({
      _id: {$in: Object.keys(this.quest.members)},
    })
--    .select('party.quest party._id items.quests auth preferences.emailNotifications preferences.pushNotifications pushDevices profile.name webhooks')
+-    .select('party.quest party._id items.quests auth preferences.emailNotifications preferences.pushNotifications preferences.language pushDevices profile.name webhooks')
 +    .select('party.quest party._id items.quests auth preferences.emailNotifications profile.name webhooks')
      .lean()
      .exec()
      .then(partyMembers => {
-@@ -685,8 +682,6 @@ schema.methods.startQuest = async function startQuest (user) {
-   await newMessage.save();
- 
-   const membersToEmail = [];
--  const pushTitle = quest.text();
--  const pushMessage = `${shared.i18n.t('questStarted')}: ${quest.text()}`;
- 
-   // send notifications and webhooks in the background without blocking
-   members.forEach(member => {
-@@ -695,15 +690,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -693,16 +690,6 @@ schema.methods.startQuest = async function startQuest (user) {
        if (member.preferences.emailNotifications.questStarted !== false) {
          membersToEmail.push(member);
        }
 -
 -      // send push notifications and filter users that disabled emails
 -      if (member.preferences.pushNotifications.questStarted !== false) {
+-        const memberLang = member.preferences.language;
 -        sendPushNotification(member, {
--          title: pushTitle,
--          message: pushMessage,
+-          title: quest.text(memberLang),
+-          message: `${shared.i18n.t('questStarted', memberLang)}: ${quest.text(memberLang)}`,
 -          identifier: 'questStarted',
 -        });
 -      }
      }
  
      // Send webhooks
-@@ -1575,7 +1561,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+@@ -1574,7 +1561,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
    return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
@@ -7232,7 +7227,7 @@ index 568e8530ac..d394d13a29 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1584,12 +1570,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1583,12 +1570,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;
@@ -7275,7 +7270,7 @@ index aaf2cbf148..383ea0c102 100644
      count: {$type: Number, default: 0},
      offset: {$type: Number, default: 0}, // when gifted subs, offset++ for each month. offset-- each new-month (cron). count doesn't ++ until offset==0
 diff --git a/website/server/models/user/methods.js b/website/server/models/user/methods.js
-index 2be8135fa1..b3bddab948 100644
+index 5a49fea5a0..14ccb1fee8 100644
 --- a/website/server/models/user/methods.js
 +++ b/website/server/models/user/methods.js
 @@ -17,9 +17,6 @@ import { model as UserNotification } from '../userNotification';
@@ -7317,7 +7312,7 @@ index 2be8135fa1..b3bddab948 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 1ae0cb89bd..832cb7e04a 100644
+index 3f8e76e4b8..1cf7f1eec3 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -2,7 +2,6 @@ import mongoose from 'mongoose';

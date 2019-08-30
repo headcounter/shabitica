@@ -40,7 +40,7 @@ index 4ae96a55b7..22b15739bc 100644
          user.stats.gp = goldPoints;
          user.purchased.plan.gemsBought = gemsBought;
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 7cfb092e95..41eab27140 100644
+index d24742f50d..b1cb648eb6 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -56,13 +56,6 @@

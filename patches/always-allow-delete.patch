@@ -10,7 +10,7 @@ Date:   Mon Apr 2 07:05:41 2018 +0200
     Filename: always-allow-delete.patch
 
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index ccf90e2dc7..0cd2e06f48 100644
+index fe65ba53dc..a43d86f415 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -251,7 +251,6 @@ api.deleteUser = {

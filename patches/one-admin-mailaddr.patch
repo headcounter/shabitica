@@ -159,7 +159,7 @@ index f90caafb0f..5fc8427ba3 100644
  });
  
 diff --git a/website/server/controllers/api-v3/groups.js b/website/server/controllers/api-v3/groups.js
-index 7c1057e72b..bfbb88e29c 100644
+index 262361ab39..96ffc6ed7e 100644
 --- a/website/server/controllers/api-v3/groups.js
 +++ b/website/server/controllers/api-v3/groups.js
 @@ -25,7 +25,7 @@ import common from '../../../common';
@@ -172,7 +172,7 @@ index 7c1057e72b..bfbb88e29c 100644
  /**
   * @apiDefine GroupBodyInvalid
 diff --git a/website/server/controllers/api-v3/user.js b/website/server/controllers/api-v3/user.js
-index 70754b0c9f..ccf90e2dc7 100644
+index 70cd50820c..fe65ba53dc 100644
 --- a/website/server/controllers/api-v3/user.js
 +++ b/website/server/controllers/api-v3/user.js
 @@ -23,7 +23,7 @@ import * as userLib from '../../libs/user';

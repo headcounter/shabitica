@@ -10,7 +10,7 @@ Date:   Sat Mar 31 01:16:24 2018 +0200
     Filename: tavern-remove-staff-and-tiers.patch
 
 diff --git a/website/client/components/groups/tavern.vue b/website/client/components/groups/tavern.vue
-index a9a59f9bec..748737bc41 100644
+index e37284fec1..522a3b4f50 100644
 --- a/website/client/components/groups/tavern.vue
 +++ b/website/client/components/groups/tavern.vue
 @@ -87,16 +87,6 @@
@@ -31,9 +31,9 @@ index a9a59f9bec..748737bc41 100644
        sidebar-section(:title="$t('helpfulLinks')")
          ul
 @@ -108,42 +98,6 @@
-             a(href='http://habitica.fandom.com/wiki/Habitica_Wiki', v-once) {{ $t('wiki') }}
+             a(href='http://habitica.fandom.com/wiki/Habitica_Wiki' target='_blank', v-once) {{ $t('wiki') }}
            li
-             a(href='https://oldgods.net/habitrpg/habitrpg_user_data_display.html', v-once) {{ $t('dataDisplayTool') }}
+             a(href='https://oldgods.net/habitrpg/habitrpg_user_data_display.html', target='_blank', v-once) {{ $t('dataDisplayTool') }}
 -
 -      sidebar-section(:title="$t('playerTiers')")
 -        .row
