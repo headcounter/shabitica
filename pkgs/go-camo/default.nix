@@ -14,9 +14,9 @@ buildGoPackage rec {
   };
 
   patches = [
-    ./imageproxy-socket-activation.patch
-    ./imageproxy-decode-session.patch
-    ./imageproxy-remove-metrics.patch
+    ./socket-activation.patch
+    ./decode-shabitica-session.patch
+    ./remove-metrics.patch
   ];
 
   extraSrcs = let
