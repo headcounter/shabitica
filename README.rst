@@ -143,12 +143,6 @@ invitation mail and get the link via ``mutt``.
 
 This should also work on other distributions running `Nix`_.
 
-Ideas
------
-
-* Allow to build the client as an Electron app, and allow to use end-to-end
-  encryption for tasks.
-
 .. _Habitica: https://habitica.com/
 .. _Hydra jobsets: https://headcounter.org/hydra/project/shabitica
 .. _Mandrill: https://www.mandrill.com/
