@@ -13,7 +13,7 @@ let
 
   dbtools = pkgs.callPackage ../pkgs/dbtools.nix {};
 
-  docInfo = import ../docinfo.nix;
+  docInfo = import ../pkgs/shabitica/docinfo.nix;
 
   migrations = import ../pkgs/shabitica/migrations.nix;
   latestDbVersion = lib.length migrations;

@@ -84,7 +84,7 @@
     '';
 
     inherit (pkgs) writeText;
-    inherit (import ../../docinfo.nix) migrationMsg;
+    inherit (import ../../pkgs/shabitica/docinfo.nix) migrationMsg;
 
     emptyArmoire = writeText "empty-armoire.js" ''
       db.users.updateOne({'auth.local.username': 'foo'},

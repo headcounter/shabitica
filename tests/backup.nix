@@ -9,7 +9,7 @@
   };
 
   testScript = let
-    inherit (import ../docinfo.nix) dbrestore;
+    inherit (import ../pkgs/shabitica/docinfo.nix) dbrestore;
 
     mkPerlStr = val: "'${lib.escape ["\\" "'"] val}'";
 

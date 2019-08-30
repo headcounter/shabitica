@@ -91,7 +91,7 @@ let
     "name" "version" "nativeBuildInputs" "buildInputs"
   ]);
 
-  inherit (import ../../docinfo.nix) migrationMsg;
+  inherit (import ./docinfo.nix) migrationMsg;
 
 in rec {
   client = mkCommonBuild {
