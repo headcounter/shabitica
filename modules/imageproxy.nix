@@ -17,9 +17,9 @@ let
     };
 
     patches = [
-      patches/imageproxy-socket-activation.patch
-      patches/imageproxy-decode-session.patch
-      patches/imageproxy-remove-metrics.patch
+      ../patches/imageproxy-socket-activation.patch
+      ../patches/imageproxy-decode-session.patch
+      ../patches/imageproxy-remove-metrics.patch
     ];
 
     extraSrcs = let
