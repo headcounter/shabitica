@@ -19,7 +19,7 @@ let
 
   docInfo = import ../docinfo.nix;
 
-  migrations = import ../migrations.nix;
+  migrations = import ../pkgs/shabitica/migrations.nix;
   latestDbVersion = lib.length migrations;
 
   # XXX: This is because NixOS 18.03 is using systemd version 237, which
@@ -185,10 +185,10 @@ in {
 
     packages = lib.mkOption {
       type = lib.types.attrsOf lib.types.package;
-      default = pkgs.callPackages ../shabitica.nix {
+      default = pkgs.callPackages ../pkgs/shabitica {
         shabiticaConfig = cfg.config;
       };
-      defaultText = "pkgs.callPackages ../shabitica.nix {"
+      defaultText = "pkgs.callPackages ../pkgs/shabitica {"
                   + " shabiticaConfig = config.shabitica.config; "
                   + "}";
       internal = true;

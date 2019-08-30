@@ -1,7 +1,7 @@
 { nixpkgs, pkgs, lib, ... }:
 
 let
-  shabitica = pkgs.callPackages ../shabitica.nix {
+  shabitica = pkgs.callPackages ../pkgs/shabitica {
     shabiticaConfig = rec {
       NODE_ENV = "test";
       SESSION_SECRET = "YOUR SECRET HERE";

@@ -107,7 +107,7 @@
       $machine->waitForUnit('shabitica.service');
     });
 
-    ${lib.concatMapStrings mkTest (import ../../migrations.nix)}
+    ${lib.concatMapStrings mkTest (import ../../pkgs/shabitica/migrations.nix)}
 
     $machine->nest('reboot machine to hopefully not run migrations', sub {
       $machine->shutdown;

@@ -15,7 +15,7 @@ COMPOSITION_FILE = os.path.join(OUTPUT_DIR, COMPOSITION_FILENAME)
 
 
 def get_source_path():
-    nixexpr = '((import <nixpkgs> {}).callPackage ./shabitica.nix {}).source'
+    nixexpr = '((import <nixpkgs> {}).callPackage pkgs/shabitica {}).source'
     cmd = ['nix-build', '--no-out-link', '-E', nixexpr]
     return subprocess.check_output(cmd, cwd=BASEDIR).decode().strip()
 

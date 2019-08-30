@@ -20,7 +20,7 @@ PATCHDIR = os.path.join(BASEDIR, 'patches')
 
 
 def get_existing_canaries():
-    nixexpr = '((import <nixpkgs> {}).callPackage ./shabitica.nix {})'
+    nixexpr = '((import <nixpkgs> {}).callPackage pkgs/shabitica {})'
     nixexpr += '.source.functionCanaries'
     cmd = ['nix-instantiate', '--eval', '--json', '-E', nixexpr]
     output = subprocess.check_output(cmd, cwd=BASEDIR).decode()

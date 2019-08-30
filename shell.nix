@@ -6,7 +6,7 @@ let
              + " like '--arg sourceTree ~/habitica'.";
   in if sourceTree == null then throw noArgErr else toString sourceTree;
 
-  shabitica = pkgs.callPackages ./shabitica.nix {
+  shabitica = pkgs.callPackages pkgs/shabitica {
     shabiticaConfig = rec {
       NODE_ENV = "development";
       SESSION_SECRET = "YOUR SECRET HERE";

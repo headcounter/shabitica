@@ -11,7 +11,7 @@ fi
 getKillFiles() {
   ( cd "$(dirname "$0")"
     nix-instantiate --eval --json -E '
-      ((import <nixpkgs> {}).callPackages ../shabitica.nix {})
+      ((import <nixpkgs> {}).callPackages ../pkgs/shabitica {})
         .source.filesToKill
     '
   )

@@ -31,7 +31,7 @@ let
     sha256 = "1r0aqcxafha13ks8586x77n77zi88db259cpaix0y1ivdh6qkkfr";
   });
 
-  nodePackages = callPackage deps/node-packages.nix {
+  nodePackages = callPackage ../../deps/node-packages.nix {
     inherit nodejs;
   };
 
@@ -91,7 +91,7 @@ let
     "name" "version" "nativeBuildInputs" "buildInputs"
   ]);
 
-  inherit (import ./docinfo.nix) migrationMsg;
+  inherit (import ../../docinfo.nix) migrationMsg;
 
 in rec {
   client = mkCommonBuild {
