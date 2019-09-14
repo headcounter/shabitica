@@ -3034,7 +3034,7 @@ index 7aa7f795c8..390ff25c3a 100644
        if (this.registering) {
          this.register();
 diff --git a/website/client/components/challenges/challengeModal.vue b/website/client/components/challenges/challengeModal.vue
-index b142f89073..a8bb57142b 100644
+index 103d9e4ca8..fdf5e83da0 100644
 --- a/website/client/components/challenges/challengeModal.vue
 +++ b/website/client/components/challenges/challengeModal.vue
 @@ -54,8 +54,6 @@
@@ -3589,7 +3589,7 @@ index 80023627c8..eea2bc36ad 100644
      getCancelSubInfo () {
        let payMethod = this.user.purchased.plan.paymentMethod || '';
 diff --git a/website/client/components/shops/buyModal.vue b/website/client/components/shops/buyModal.vue
-index 99de909e01..d24742f50d 100644
+index a54b33deab..2a230e04b3 100644
 --- a/website/client/components/shops/buyModal.vue
 +++ b/website/client/components/shops/buyModal.vue
 @@ -274,7 +274,6 @@
@@ -3600,7 +3600,7 @@ index 99de909e01..d24742f50d 100644
    import spellsMixin from 'client/mixins/spells';
    import planGemLimits from 'common/script/libs/planGemLimits';
    import numberInvalid from 'client/mixins/numberInvalid';
-@@ -420,14 +419,6 @@
+@@ -444,14 +443,6 @@
          }
        },
        purchaseGems () {
@@ -3890,7 +3890,7 @@ index a6acf92a55..0180180773 100644
    };
  </script>
 diff --git a/website/client/components/static/staticWrapper.vue b/website/client/components/static/staticWrapper.vue
-index 34ff15ca57..e5dd03e023 100644
+index 94371181fe..eefe1fe6ea 100644
 --- a/website/client/components/static/staticWrapper.vue
 +++ b/website/client/components/static/staticWrapper.vue
 @@ -90,7 +90,7 @@ div
@@ -3903,7 +3903,7 @@ index 34ff15ca57..e5dd03e023 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index 006a20ebc6..16683a5d3c 100644
+index 3d57573948..b7cc373161 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
 @@ -520,7 +520,6 @@ import moment from 'moment';
@@ -3914,7 +3914,7 @@ index 006a20ebc6..16683a5d3c 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import negativeIcon from 'assets/svg/negative.svg';
-@@ -739,7 +738,6 @@ export default {
+@@ -741,7 +740,6 @@ export default {
  
        if (task.group.approval.required) task.group.approval.requested = true;
  
@@ -4937,7 +4937,7 @@ index b2cf4ea561..b47a5813dd 100644
      item,
      i18n.t('mysteryItemOpened', req.language),
 diff --git a/website/common/script/ops/rebirth.js b/website/common/script/ops/rebirth.js
-index 86c12d7c5d..6892ec3d1b 100644
+index 02207c4ac4..0878130424 100644
 --- a/website/common/script/ops/rebirth.js
 +++ b/website/common/script/ops/rebirth.js
 @@ -11,30 +11,15 @@ import isFreeRebirth from '../libs/isFreeRebirth';
@@ -6548,12 +6548,11 @@ index 02e236fe60..b37c3e8a0a 100644
    }
  
 diff --git a/website/server/libs/inbox/index.js b/website/server/libs/inbox/index.js
-index 2f2e4b6575..bb2720f56f 100644
+index c51fa9e67e..094632ea5b 100644
 --- a/website/server/libs/inbox/index.js
 +++ b/website/server/libs/inbox/index.js
-@@ -1,11 +1,10 @@
+@@ -1,10 +1,9 @@
  import {mapInboxMessage, inboxModel as Inbox} from '../../models/message';
- import orderBy from 'lodash/orderBy';
  import {getUserInfo, sendTxn as sendTxnEmail} from '../email';
 -import {sendNotification as sendPushNotification} from '../pushNotifications';
  
@@ -6564,7 +6563,7 @@ index 2f2e4b6575..bb2720f56f 100644
    const messageSent = await sender.sendMessage(receiver, { receiverMsg: message });
  
    if (receiver.preferences.emailNotifications.newPM !== false) {
-@@ -14,19 +13,6 @@ export async function sentMessage (sender, receiver, message, translate) {
+@@ -13,19 +12,6 @@ export async function sentMessage (sender, receiver, message, translate) {
      ]);
    }
  

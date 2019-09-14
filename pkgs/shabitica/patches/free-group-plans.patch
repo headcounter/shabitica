@@ -260,7 +260,7 @@ index 82a20d244d..9a5e64926f 100644
    .col-12
      router-view
 diff --git a/website/client/components/group-plans/taskInformation.vue b/website/client/components/group-plans/taskInformation.vue
-index fbe4516d4f..4e90b2385d 100644
+index 201d67d71b..8c27a6afc7 100644
 --- a/website/client/components/group-plans/taskInformation.vue
 +++ b/website/client/components/group-plans/taskInformation.vue
 @@ -1,6 +1,5 @@
@@ -270,7 +270,7 @@ index fbe4516d4f..4e90b2385d 100644
    task-modal(
      :task="workingTask",
      :purpose="taskFormPurpose",
-@@ -69,7 +68,6 @@
+@@ -70,7 +69,6 @@
  import taskDefaults from 'common/script/libs/taskDefaults';
  import TaskColumn from '../tasks/column';
  import TaskModal from '../tasks/taskModal';
@@ -278,7 +278,7 @@ index fbe4516d4f..4e90b2385d 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import filterIcon from 'assets/svg/filter.svg';
-@@ -90,7 +88,6 @@ export default {
+@@ -91,7 +89,6 @@ export default {
    components: {
      TaskColumn,
      TaskModal,
@@ -286,7 +286,7 @@ index fbe4516d4f..4e90b2385d 100644
    },
    data () {
      return {
-@@ -136,10 +133,6 @@ export default {
+@@ -137,10 +134,6 @@ export default {
    mounted () {
      if (!this.searchId) this.searchId = this.groupId;
      this.load();

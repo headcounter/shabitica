@@ -129,7 +129,7 @@ index 0fefae00d2..104cc29bc4 100644
        let nextCron = moment().hours(this.newDayStart).minutes(0).seconds(0).milliseconds(0);
  
 diff --git a/website/client/components/static/staticWrapper.vue b/website/client/components/static/staticWrapper.vue
-index e5dd03e023..a878ec5b70 100644
+index eefe1fe6ea..dee1f5a586 100644
 --- a/website/client/components/static/staticWrapper.vue
 +++ b/website/client/components/static/staticWrapper.vue
 @@ -1,14 +1,14 @@
