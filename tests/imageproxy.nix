@@ -81,20 +81,11 @@
       imports = [ (mkNetwork 5) useResolver ];
       networking.firewall.enable = false;
       services.nginx.enable = true;
-      services.nginx.virtualHosts."sslhost.org" = let
-        keypair = pkgs.runCommand "snakeoil-keys" {
-          nativeBuildInputs = [ pkgs.openssl ];
-        } ''
-          mkdir "$out"
-          openssl req -nodes -x509 -newkey rsa:2048 -days 65535 \
-            -subj '/CN=sslhost.org' \
-            -keyout "$out/key.pem" -out "$out/cert.pem"
-        '';
-      in {
+      services.nginx.virtualHosts."sslhost.org" = {
         onlySSL = true;
         enableACME = false;
-        sslCertificate = "${keypair}/cert.pem";
-        sslCertificateKey = "${keypair}/key.pem";
+        sslCertificate = ssl/snakeoil.cert;
+        sslCertificateKey = ssl/snakeoil.key;
 
         root = pkgs.runCommand "docroot-ssl" {
           nativeBuildInputs = [ pkgs.imagemagick ];
