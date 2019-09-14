@@ -79,7 +79,6 @@ in lib.mapAttrs runTests {
     drv = shabitica.mkCommonBuild {
       name = "test-client-e2e";
       nativeBuildInputs = lib.attrValues shabitica.nodePackages.dev;
-      createHydraTestFailure = true;
       buildProg = "npm run";
       buildTarget = "client:e2e";
       installPhase = ''
