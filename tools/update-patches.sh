@@ -3,7 +3,7 @@
 
 set -e
 
-patchdir="$(dirname "$(dirname "$0")")/patches"
+patchdir="$(dirname "$(dirname "$0")")/pkgs/shabitica/patches"
 
 if ! grep -q 'name.*habitica' package.json 2> /dev/null; then
   echo "You need to run this from within a Habitica git clone." >&2
