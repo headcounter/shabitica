@@ -10,7 +10,7 @@ let
   python = import deps/requirements.nix { inherit pkgs; };
 
   # XXX: NixOS 18.09 doesn't have ip2unix, so provide a minimal build.
-  ip2unix = pkgs.ip2unix or pkgs.stdenv.mkDerivation rec {
+  ip2unix = pkgs.ip2unix or (pkgs.stdenv.mkDerivation rec {
     name = "ip2unix-${version}";
     version = "2.1.0";
     src = pkgs.fetchFromGitHub {
@@ -21,7 +21,7 @@ let
     };
     nativeBuildInputs = [ pkgs.meson pkgs.ninja pkgs.pkgconfig ];
     buildInputs = [ pkgs.libyamlcpp ];
-  };
+  });
 
   buildVM = let
     buildVMsFun = import "${nixpkgs}/nixos/lib/build-vms.nix";
