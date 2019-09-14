@@ -135,12 +135,6 @@ stdenv.mkDerivation rec {
     # going on to standard I/O.
     patches/html-test-reports.patch
 
-    # Fixes and improvements for the Nightwatch automated test system.
-    patches/nightwatch.patch
-
-    # Fix up the one and only client:e2e test.
-    patches/fix-client-e2e-test.patch
-
     # Remove "Promo Code" and "Subscriptions" in settings page.
     patches/remove-unneeded-settings.patch
 
@@ -175,9 +169,6 @@ stdenv.mkDerivation rec {
 
     # Make session cookie compliant with RFC 6265.
     patches/fix-invalid-session-cookie.patch
-
-    # Small E2E test to make sure our habitica-markdown override works.
-    patches/test-imageproxy-in-markdown.patch
 
     # Use image proxy for profile photos.
     patches/profile-photo-imageproxy.patch

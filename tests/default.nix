@@ -39,6 +39,7 @@ in {
 
   allow-register-first = callTest ./allow-register-first.nix;
   backup = callTest ./backup.nix;
+  e2e = import ./e2e (args // { reruns = 2; });
   imageproxy = callTest ./imageproxy.nix;
   mailer = callTest ./mailer.nix;
   migrations = callTest ./migrations;
