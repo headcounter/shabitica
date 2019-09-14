@@ -39,6 +39,7 @@ let
     networking.hostName = "server";
     shabitica.hostName = "shabitica.example.org";
     shabitica.useSSL = false;
+    shabitica.config.INVITE_ONLY = 0;
     nix.readOnlyStore = true;
     virtualisation.diskSize = 16384;
     virtualisation.memorySize = 2048;
