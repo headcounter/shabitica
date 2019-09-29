@@ -27,7 +27,7 @@ index dc35d5db83..6cbaf0f342 100644
  
      let savedGroup = await group.save();
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 8da0c7100e..66d97302e4 100644
+index 8b9133d85e..2fd7b7a8e6 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -22,7 +22,6 @@ import {

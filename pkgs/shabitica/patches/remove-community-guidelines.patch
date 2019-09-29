@@ -11,7 +11,7 @@ Date:   Fri Mar 30 20:29:49 2018 +0200
     Filename: remove-community-guidelines.patch
 
 diff --git a/website/client/components/chat/chatCard.vue b/website/client/components/chat/chatCard.vue
-index 4327accc92..949deb55ae 100644
+index 1fbc5220ac..9b277a4807 100644
 --- a/website/client/components/chat/chatCard.vue
 +++ b/website/client/components/chat/chatCard.vue
 @@ -19,7 +19,7 @@ div
@@ -94,10 +94,10 @@ index 424fc71e33..f6e76095ad 100644
        margin-left: 0;
        margin-right: 0;
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index a175ea31b1..a84651521a 100644
+index 2695b6fac5..d4f43348e0 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
-@@ -394,9 +394,6 @@ export default {
+@@ -375,9 +375,6 @@ export default {
      },
    },
    methods: {
@@ -174,10 +174,10 @@ index 5737a9ed6c..c4321265cc 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index ef00f289f8..003ca73286 100644
+index 5034bdb15e..5d5ad0d6b3 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
-@@ -223,7 +223,6 @@ let schema = new Schema({
+@@ -226,7 +226,6 @@ let schema = new Schema({
      // Used to enable weekly recap emails as users login
      lastWeeklyRecapDiscriminator: Boolean,
      onboardingEmailsPhase: String, // Keep track of the latest onboarding email sent

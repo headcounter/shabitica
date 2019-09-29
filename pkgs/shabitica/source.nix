@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   name = "shabitica-source-${version}";
   # NOTE: If appropriate, run update-deps.py after changing this!
   #       Also, don't forget to run ./find-canaries.py after rebasing patches.
-  version = "4.112.1";
+  version = "4.115.1";
 
   src = fetchFromGitHub {
     name = "habitica-source-${version}";
     owner = "HabitRPG";
     repo = "habitica";
     rev = "v${version}";
-    sha256 = "1kxvfwg14c70m3h37lyr3d7vmkiarv09mzx6i0k58n86ynqhq03r";
+    sha256 = "0m008vvk15d2ljhjk1rhaj2q6fpb88gl6zvbj2lsbyx4qwj90pli";
   };
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
@@ -346,6 +346,7 @@ stdenv.mkDerivation rec {
     "BuyArmoireOperation([^,]*,[^,)]*,"
     "BuyGemOperation([^,]*,[^,)]*,"
     "BuyHealthPotionOperation([^,]*,[^,)]*,"
+    "BuyHourglassMountOperation([^,]*,[^,)]*,"
     "BuyMarketGearOperation([^,]*,[^,)]*,"
     "BuyQuestWithGemOperation([^,]*,[^,)]*,"
     "BuyQuestWithGoldOperation([^,]*,[^,)]*,"
@@ -389,6 +390,7 @@ stdenv.mkDerivation rec {
     "*.mp3"
     "*.ogg"
     "*.png"
+    "README.md"
     "migrations"
     "test"
     "website/common/locales" # TODO: Remove me!

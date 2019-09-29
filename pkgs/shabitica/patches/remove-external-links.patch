@@ -64,7 +64,7 @@ index fe13b65723..376b599e99 100644
              label Contributions
              textarea.form-control(cols=5, v-model='hero.contributor.contributions')
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 705f54eee4..bca8c78e4f 100644
+index 2d527de6bf..b1b40d1033 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -64,9 +64,6 @@ div
@@ -170,10 +170,10 @@ index 6cbaf0f342..aa6b2f4f8a 100644
    }
  }
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 003ca73286..393a129d6d 100644
+index 5d5ad0d6b3..613e4d46e5 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
-@@ -115,7 +115,6 @@ let schema = new Schema({
+@@ -118,7 +118,6 @@ let schema = new Schema({
    },
  
    contributor: {

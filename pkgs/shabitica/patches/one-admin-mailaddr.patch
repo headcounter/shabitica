@@ -226,7 +226,7 @@ index e8078d83cf..9ce229cfca 100644
  });
  
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
-index 96188ece56..4ce5175d55 100644
+index 0908dd42d7..8cfe379ab7 100644
 --- a/website/server/middlewares/auth.js
 +++ b/website/server/middlewares/auth.js
 @@ -7,7 +7,7 @@ import {

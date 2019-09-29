@@ -10,10 +10,10 @@ Date:   Thu May 3 06:29:02 2018 +0200
     Filename: systemd-notify.patch
 
 diff --git a/package.json b/package.json
-index d13f617e66..d18a76f9c9 100644
+index 5f13b00541..898859f1f1 100644
 --- a/package.json
 +++ b/package.json
-@@ -69,6 +69,7 @@
+@@ -70,6 +70,7 @@
      "regenerator-runtime": "^0.13.3",
      "rimraf": "^2.4.3",
      "sass-loader": "^7.0.3",

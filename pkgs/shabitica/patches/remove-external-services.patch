@@ -2291,14 +2291,18 @@ index 02d0bda6a4..6db2b7b509 100644
    });
  });
 diff --git a/test/common/ops/buy/hourglassPurchase.js b/test/common/ops/buy/hourglassPurchase.js
-index d1631fb277..ceb0cb7d29 100644
+index 6f9bf50808..d1c660aeb1 100644
 --- a/test/common/ops/buy/hourglassPurchase.js
 +++ b/test/common/ops/buy/hourglassPurchase.js
-@@ -12,15 +12,9 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
+@@ -13,7 +13,6 @@ import {BuyHourglassMountOperation} from '../../../../website/common/script/ops/
  
  describe('common.ops.hourglassPurchase', () => {
    let user;
 -  let analytics = {track () {}};
+ 
+   function buyMount (_user, _req, _analytics) {
+     const buyOp = new BuyHourglassMountOperation(_user, _req, _analytics);
+@@ -23,11 +22,6 @@ describe('common.ops.hourglassPurchase', () => {
  
    beforeEach(() => {
      user = generateUser();
@@ -2310,7 +2314,7 @@ index d1631fb277..ceb0cb7d29 100644
    });
  
    context('failure conditions', () => {
-@@ -133,12 +127,11 @@ describe('common.ops.hourglassPurchase', () => {
+@@ -140,12 +134,11 @@ describe('common.ops.hourglassPurchase', () => {
      it('buys a pet', () => {
        user.purchased.plan.consecutive.trinkets = 2;
  
@@ -2449,7 +2453,7 @@ index 7b89084678..1609e92969 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 09e3706195..1363bc2ba2 100644
+index 3ca879f043..eb896cfc48 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,8 +10,6 @@ div
@@ -2550,9 +2554,9 @@ index 09e3706195..1363bc2ba2 100644
      itemSelected (item) {
        this.selectedItemToBuy = item;
      },
-@@ -658,4 +623,3 @@ export default {
- <style src="assets/css/sprites/spritesmith-main-24.css"></style>
+@@ -659,4 +624,3 @@ export default {
  <style src="assets/css/sprites/spritesmith-main-25.css"></style>
+ <style src="assets/css/sprites/spritesmith-main-26.css"></style>
  <style src="assets/css/sprites.css"></style>
 -<style src="smartbanner.js/dist/smartbanner.min.css"></style>
 diff --git a/website/client/assets/scss/index.scss b/website/client/assets/scss/index.scss
@@ -3071,7 +3075,7 @@ index 6e0ea2956a..21a5a75ef4 100644
          this.$router.push('/party');
        },
 diff --git a/website/client/components/groups/group.vue b/website/client/components/groups/group.vue
-index 8ff4d05b69..a175ea31b1 100644
+index 9416b5f3cd..2695b6fac5 100644
 --- a/website/client/components/groups/group.vue
 +++ b/website/client/components/groups/group.vue
 @@ -262,7 +262,6 @@ import extend from 'lodash/extend';
@@ -3082,7 +3086,7 @@ index 8ff4d05b69..a175ea31b1 100644
  import membersModal from './membersModal';
  import startQuestModal from './startQuestModal';
  import questDetailsModal from './questDetailsModal';
-@@ -503,13 +502,6 @@ export default {
+@@ -484,13 +483,6 @@ export default {
        await this.$store.dispatch('guilds:join', {groupId: this.group._id, type: 'guild'});
      },
      clickLeave () {
@@ -3096,7 +3100,7 @@ index 8ff4d05b69..a175ea31b1 100644
        // @TODO: Get challenges and ask to keep or remove
        if (!confirm('Are you sure you want to leave?')) return;
        let keep = true;
-@@ -526,7 +518,6 @@ export default {
+@@ -507,7 +499,6 @@ export default {
  
        if (this.isParty) {
          data.type = 'party';
@@ -3250,7 +3254,7 @@ index 9d13f2d0b3..97d18ff8f6 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 8b2c37354d..da4d72caf9 100644
+index 7b77ed7c42..4038859932 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -4,7 +4,6 @@ div
@@ -3301,7 +3305,7 @@ index 8b2c37354d..da4d72caf9 100644
      },
      dropdownDesktop (hover) {
 diff --git a/website/client/components/header/userDropdown.vue b/website/client/components/header/userDropdown.vue
-index e2a25d9951..f68ebd8508 100644
+index 6fe67f63f9..72019f8ddf 100644
 --- a/website/client/components/header/userDropdown.vue
 +++ b/website/client/components/header/userDropdown.vue
 @@ -67,7 +67,6 @@ menu-dropdown.item-user(:right="true")
@@ -3903,10 +3907,10 @@ index 94371181fe..eefe1fe6ea 100644
        color: #bda8ff;
  
 diff --git a/website/client/components/tasks/task.vue b/website/client/components/tasks/task.vue
-index 3d57573948..b7cc373161 100644
+index 0a1b15ddf9..46cb1da302 100644
 --- a/website/client/components/tasks/task.vue
 +++ b/website/client/components/tasks/task.vue
-@@ -520,7 +520,6 @@ import moment from 'moment';
+@@ -552,7 +552,6 @@ import moment from 'moment';
  import axios from 'axios';
  import scoreTask from 'common/script/ops/scoreTask';
  import Vue from 'vue';
@@ -3914,10 +3918,11 @@ index 3d57573948..b7cc373161 100644
  
  import positiveIcon from 'assets/svg/positive.svg';
  import negativeIcon from 'assets/svg/negative.svg';
-@@ -741,7 +740,6 @@ export default {
+@@ -783,8 +782,6 @@ export default {
+           break;
+       }
  
-       if (task.group.approval.required) task.group.approval.requested = true;
- 
+-
 -      Analytics.updateUser();
        const response = await axios.post(`/api/v4/tasks/${task._id}/score/${direction}`);
        const tmp = response.data.data._tmp || {}; // used to notify drops, critical hits and other bonuses
@@ -4416,7 +4421,7 @@ index b636c94bc2..5775880362 100644
    PARTY_LIMIT_MEMBERS,
    CHAT_FLAG_LIMIT_FOR_HIDING,
 diff --git a/website/common/script/ops/buy/abstractBuyOperation.js b/website/common/script/ops/buy/abstractBuyOperation.js
-index 0a6f7735dd..b6b81d6d23 100644
+index 3f87f08694..79533d4c20 100644
 --- a/website/common/script/ops/buy/abstractBuyOperation.js
 +++ b/website/common/script/ops/buy/abstractBuyOperation.js
 @@ -4,19 +4,16 @@ import {
@@ -4514,7 +4519,7 @@ index 0a6f7735dd..b6b81d6d23 100644
    }
  
    canUserPurchase (user, item) {
-@@ -184,13 +144,4 @@ export class AbstractGemItemOperation extends AbstractBuyOperation {
+@@ -184,20 +144,11 @@ export class AbstractGemItemOperation extends AbstractBuyOperation {
  
      user.balance -= itemValue * this.quantity;
    }
@@ -4528,11 +4533,32 @@ index 0a6f7735dd..b6b81d6d23 100644
 -    };
 -  }
  }
+ 
+ export class AbstractHourglassItemOperation extends AbstractBuyOperation {
+-  constructor (user, req, analytics) {
+-    super(user, req, analytics);
++  constructor (user, req) {
++    super(user, req);
+   }
+ 
+   canUserPurchase (user, item) {
+@@ -211,11 +162,4 @@ export class AbstractHourglassItemOperation extends AbstractBuyOperation {
+   subtractCurrency (user) {
+     user.purchased.plan.consecutive.trinkets--;
+   }
+-
+-  analyticsData () {
+-    return {
+-      itemKey: this.item.key,
+-      acquireMethod: 'Hourglass',
+-    };
+-  }
+ }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index a8241e9a59..8ff35fec4b 100644
+index 76bec34b6e..abd8876085 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
-@@ -19,7 +19,7 @@ import {BuyQuestWithGemOperation} from './buyQuestGem';
+@@ -20,7 +20,7 @@ import {BuyHourglassMountOperation} from './buyMount';
  
  // @TODO: when we are sure buy is the only function used, let's move the buy files to a folder
  
@@ -4541,7 +4567,7 @@ index a8241e9a59..8ff35fec4b 100644
    let key = get(req, 'params.key');
    const hourglass = options.hourglass;
    const quantity = options.quantity;
-@@ -35,31 +35,31 @@ module.exports = function buy (user, req = {}, analytics, options = {quantity: 1
+@@ -36,31 +36,31 @@ module.exports = function buy (user, req = {}, analytics, options = {quantity: 1
  
    switch (type) {
      case 'armoire': {
@@ -4579,15 +4605,21 @@ index a8241e9a59..8ff35fec4b 100644
  
          buyRes = buyOp.purchase();
        }
-@@ -70,26 +70,26 @@ module.exports = function buy (user, req = {}, analytics, options = {quantity: 1
+@@ -71,31 +71,31 @@ module.exports = function buy (user, req = {}, analytics, options = {quantity: 1
      case 'food':
      case 'gear':
      case 'bundles':
 -      buyRes = purchaseOp(user, req, analytics);
 +      buyRes = purchaseOp(user, req);
        break;
+     case 'mounts': {
+-      const buyOp = new BuyHourglassMountOperation(user, req, analytics);
++      const buyOp = new BuyHourglassMountOperation(user, req);
+ 
+       buyRes = buyOp.purchase();
+       break;
+     }
      case 'pets':
-     case 'mounts':
 -      buyRes = hourglassPurchase(user, req, analytics);
 +      buyRes = hourglassPurchase(user, req);
        break;
@@ -4722,6 +4754,32 @@ index 5f8728bf53..7660de1c46 100644
    }
  
    multiplePurchaseAllowed () {
+diff --git a/website/common/script/ops/buy/buyMount.js b/website/common/script/ops/buy/buyMount.js
+index ced5cddfc8..81cf05f16f 100644
+--- a/website/common/script/ops/buy/buyMount.js
++++ b/website/common/script/ops/buy/buyMount.js
+@@ -10,8 +10,8 @@ import includes from 'lodash/includes';
+ import keys from 'lodash/keys';
+ 
+ export class BuyHourglassMountOperation extends AbstractHourglassItemOperation {
+-  constructor (user, req, analytics) {
+-    super(user, req, analytics);
++  constructor (user, req) {
++    super(user, req);
+   }
+ 
+   multiplePurchaseAllowed () {
+@@ -50,10 +50,4 @@ export class BuyHourglassMountOperation extends AbstractHourglassItemOperation {
+       message,
+     ];
+   }
+-
+-  analyticsData () {
+-    let data = super.analyticsData();
+-    data.itemType = 'mounts';
+-    return data;
+-  }
+ }
 diff --git a/website/common/script/ops/buy/buyMysterySet.js b/website/common/script/ops/buy/buyMysterySet.js
 index db9ca557f2..e8098e7b23 100644
 --- a/website/common/script/ops/buy/buyMysterySet.js
@@ -5119,13 +5177,14 @@ index 14ad3d1ddd..8714b0d356 100644
      user.items,
      message,
 diff --git a/website/common/script/ops/scoreTask.js b/website/common/script/ops/scoreTask.js
-index 20a8ce20fa..48baa4a2af 100644
+index abe6ccf0fc..48baa4a2af 100644
 --- a/website/common/script/ops/scoreTask.js
 +++ b/website/common/script/ops/scoreTask.js
-@@ -327,6 +327,6 @@ module.exports = function scoreTask (options = {}, req = {}) {
+@@ -327,7 +327,6 @@ module.exports = function scoreTask (options = {}, req = {}) {
      }
    }
  
+-  req.yesterDailyScored = task.yesterDailyScored;
 -  updateStats(user, stats, req);
 +  updateStats(user, stats);
    return [delta];
@@ -5803,7 +5862,7 @@ index 4153244620..79fc1f036e 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks.js b/website/server/controllers/api-v3/tasks.js
-index dda6a0d6a8..753f212c3b 100644
+index 0eb220767f..c780161563 100644
 --- a/website/server/controllers/api-v3/tasks.js
 +++ b/website/server/controllers/api-v3/tasks.js
 @@ -23,7 +23,6 @@ import {
@@ -5849,15 +5908,15 @@ index dda6a0d6a8..753f212c3b 100644
    },
  };
  
-@@ -577,7 +555,6 @@ api.scoreTask = {
-       let fields = requiredGroupFields.concat(' managers');
-       let group = await Group.getGroup({user, groupId: task.group.id, fields});
+@@ -587,7 +565,6 @@ api.scoreTask = {
  
--      // @TODO: we can use the User.pushNotification function because we need to ensure notifications are translated
-       let managerIds = Object.keys(group.managers);
-       managerIds.push(group.leader);
-       let managers = await User.find({_id: managerIds}, 'notifications preferences').exec(); // Use this method so we can get access to notifications
-@@ -608,7 +585,7 @@ api.scoreTask = {
+         let managers = await User.find({_id: managerIds}, 'notifications preferences').exec(); // Use this method so we can get access to notifications
+ 
+-        // @TODO: we can use the User.pushNotification function because we need to ensure notifications are translated
+         let managerPromises = [];
+         managers.forEach((manager) => {
+           manager.addNotification('GROUP_TASK_APPROVAL', {
+@@ -615,7 +592,7 @@ api.scoreTask = {
  
      let [delta] = common.ops.scoreTask({task, user, direction}, req);
      // Drop system (don't run on the client, as it would only be discarded since ops are sent to the API, not the results)
@@ -5866,7 +5925,7 @@ index dda6a0d6a8..753f212c3b 100644
  
      // If a todo was completed or uncompleted move it in or out of the user.tasksOrder.todos list
      // TODO move to common code?
-@@ -683,18 +660,6 @@ api.scoreTask = {
+@@ -690,18 +667,6 @@ api.scoreTask = {
          logger.error(e);
        }
      }
@@ -5886,7 +5945,7 @@ index dda6a0d6a8..753f212c3b 100644
  };
  
 diff --git a/website/server/controllers/api-v3/tasks/groups.js b/website/server/controllers/api-v3/tasks/groups.js
-index d4b0e5178c..2a976c02a9 100644
+index 27fcc62db4..05164b41aa 100644
 --- a/website/server/controllers/api-v3/tasks/groups.js
 +++ b/website/server/controllers/api-v3/tasks/groups.js
 @@ -60,16 +60,6 @@ api.createGroupTasks = {
@@ -6452,7 +6511,7 @@ index 207b570fd3..e8078d83cf 100644
  
    async getAuthorVariables (message) {
 diff --git a/website/server/libs/cron.js b/website/server/libs/cron.js
-index 09178a35f9..8e9e611da5 100644
+index 2e01b1a917..80642b16ab 100644
 --- a/website/server/libs/cron.js
 +++ b/website/server/libs/cron.js
 @@ -85,12 +85,12 @@ function grantEndOfTheMonthPerks (user, now) {
@@ -6512,7 +6571,7 @@ index 09178a35f9..8e9e611da5 100644
    let _progress = {down: 0, up: 0, collectedItems: 0};
  
    // Record pre-cron values of HP and MP to show notifications later
-@@ -486,9 +460,7 @@ export function cron (options = {}) {
+@@ -488,9 +462,7 @@ export function cron (options = {}) {
      mp: user.stats.mp - beforeCronStats.mp - (oldCronNotif ? oldCronNotif.data.mp : 0),
    });
  
@@ -7037,7 +7096,7 @@ index 5819c7231d..ce018e7718 100644
  
  const topLevelRouter = express.Router(); // eslint-disable-line new-cap
 diff --git a/website/server/middlewares/auth.js b/website/server/middlewares/auth.js
-index c0881008af..96188ece56 100644
+index 402cb93c27..0908dd42d7 100644
 --- a/website/server/middlewares/auth.js
 +++ b/website/server/middlewares/auth.js
 @@ -6,7 +6,6 @@ import {
@@ -7067,7 +7126,7 @@ index c0881008af..96188ece56 100644
          res.locals.user = user;
          req.session.userId = user._id;
 -        stackdriverTraceUserId(user._id);
- 
+         user.auth.timestamps.updated = new Date();
          return next();
        })
 @@ -107,7 +98,6 @@ export function authWithSession (req, res, next) {
@@ -7075,9 +7134,9 @@ index c0881008af..96188ece56 100644
  
        res.locals.user = user;
 -      stackdriverTraceUserId(user._id);
+       user.auth.timestamps.updated = new Date();
        return next();
      })
-     .catch(next);
 diff --git a/website/server/middlewares/cron.js b/website/server/middlewares/cron.js
 index 47368dc8fd..6b1115a809 100644
 --- a/website/server/middlewares/cron.js
@@ -7172,7 +7231,7 @@ index f08a8135eb..fe391c9684 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index e348bcded0..d394d13a29 100644
+index 9b840fc895..489aba6938 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
 @@ -28,15 +28,12 @@ import {
@@ -7217,7 +7276,7 @@ index e348bcded0..d394d13a29 100644
      }
  
      // Send webhooks
-@@ -1574,7 +1561,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+@@ -1575,7 +1562,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
    return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
@@ -7226,7 +7285,7 @@ index e348bcded0..d394d13a29 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1583,12 +1570,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1584,12 +1571,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;
@@ -7311,7 +7370,7 @@ index 5a49fea5a0..14ccb1fee8 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 3f8e76e4b8..1cf7f1eec3 100644
+index ccf2c3e966..46ec7bf165 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -2,7 +2,6 @@ import mongoose from 'mongoose';
@@ -7335,7 +7394,7 @@ index 3f8e76e4b8..1cf7f1eec3 100644
      local: {
        email: {
          $type: String,
-@@ -489,18 +482,6 @@ let schema = new Schema({
+@@ -492,18 +485,6 @@ let schema = new Schema({
        majorUpdates: {$type: Boolean, default: true},
        subscriptionReminders: {$type: Boolean, default: true},
      },
@@ -7354,7 +7413,7 @@ index 3f8e76e4b8..1cf7f1eec3 100644
      suppressModals: {
        levelUp: {$type: Boolean, default: false},
        hatchPet: {$type: Boolean, default: false},
-@@ -581,7 +562,6 @@ let schema = new Schema({
+@@ -584,7 +565,6 @@ let schema = new Schema({
    extra: {$type: Schema.Types.Mixed, default: () => {
      return {};
    }},
