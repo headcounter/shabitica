@@ -16,7 +16,7 @@ FUNCALL = re.compile(r'([a-zA-Z0-9_]+)\s*\((.*?)\)(?!.*{)')
 RESERVED = ["if", "while", "for"]
 
 BASEDIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
-PATCHDIR = os.path.join(BASEDIR, 'patches')
+PATCHDIR = os.path.join(BASEDIR, 'pkgs', 'shabitica', 'patches')
 
 
 def get_existing_canaries():
