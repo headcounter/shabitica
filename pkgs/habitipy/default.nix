@@ -1,5 +1,5 @@
 { buildPythonPackage, lib, fetchFromGitHub
-, plumbum, requests, aiohttp, responses, hypothesis
+, plumbum, requests, setuptools, aiohttp, responses, hypothesis
 
 , shabiticaSource ? null
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
       > habitipy/apidoc.txt
   '';
 
-  propagatedBuildInputs = [ plumbum requests ];
+  propagatedBuildInputs = [ plumbum requests setuptools ];
 
   doCheck = lib.versionAtLeast (lib.getVersion responses) "0.5.0";
   preCheck = "export HOME=\"$PWD\"";
