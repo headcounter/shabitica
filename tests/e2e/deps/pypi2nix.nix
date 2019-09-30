@@ -2,23 +2,12 @@
 
 let
   pypi2nixSrc = pkgs.fetchFromGitHub {
-    owner = "garbas";
+    owner = "nix-community";
     repo = "pypi2nix";
-    rev = "628bc2b021dc9c445605904ddba8525ae4efa1e6";
-    sha256 = "1vxp2brl1d36y2xrk21ifwc77hcishpq0m96jpcaq24n6j10gh90";
+    rev = "ea40bcf4afca0b4087a3f827d40c509df81f9592";
+    sha256 = "0bnkb0h2hakgg08xvdfznpcfli61x2g5d40k7bnlmf2578n6jr7z";
   };
 
-  pypi2nix = (pkgs.callPackage pypi2nixSrc {
-    inherit pkgs;
-  }).overrideAttrs (drv: {
-    patchPhase = (drv.patchPhase or "") + ''
-      # This is to make sure that we don't have *any* of the dependencies that
-      # are required during the actual update ending up *globally* in *all* of
-      # the resulting python packages.
-      sed -i -e '/pypi2nix\.stage3\.main/,/^ *)/ {
-        s/\(extra_build_inputs=\)[^,]*/\1[]/g
-      }' src/pypi2nix/cli.py
-    '';
-  });
+  pypi2nix = pkgs.callPackage pypi2nixSrc { inherit pkgs; };
 
 in pkgs.mkShell { nativeBuildInputs = [ pypi2nix pkgs.bash pkgs.coreutils ]; }
