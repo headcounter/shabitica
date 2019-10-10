@@ -11,7 +11,7 @@ Date:   Fri Mar 30 20:29:49 2018 +0200
     Filename: remove-community-guidelines.patch
 
 diff --git a/website/client/components/chat/chatCard.vue b/website/client/components/chat/chatCard.vue
-index 1fbc5220ac..9b277a4807 100644
+index b4daaf2ef7..8da4868b57 100644
 --- a/website/client/components/chat/chatCard.vue
 +++ b/website/client/components/chat/chatCard.vue
 @@ -19,7 +19,7 @@ div
@@ -174,10 +174,10 @@ index 5737a9ed6c..c4321265cc 100644
    'flags.cardReceived',
    'flags.warnedLowHealth',
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index 5034bdb15e..5d5ad0d6b3 100644
+index 75efb7f937..4e8c3db98e 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
-@@ -226,7 +226,6 @@ let schema = new Schema({
+@@ -227,7 +227,6 @@ let schema = new Schema({
      // Used to enable weekly recap emails as users login
      lastWeeklyRecapDiscriminator: Boolean,
      onboardingEmailsPhase: String, // Keep track of the latest onboarding email sent

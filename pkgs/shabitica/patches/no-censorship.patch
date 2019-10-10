@@ -487,7 +487,7 @@ index c17b789a41..041a418207 100644
  
      it('errors if username has incorrect length', async () => {
 diff --git a/website/client/app.vue b/website/client/app.vue
-index eb896cfc48..b1a71a078d 100644
+index f48245c494..2f19b15e08 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -9,7 +9,6 @@ div
@@ -550,7 +550,7 @@ index eb896cfc48..b1a71a078d 100644
        // Manage modals
        this.$root.$on('bv::show::modal', (modalId, data = {}) => {
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 5fc8427ba3..7bdb5542e4 100644
+index 0bac414b58..7aa6a2f15e 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -4,7 +4,6 @@ import { model as User } from '../../models/user';
@@ -562,8 +562,8 @@ index 5fc8427ba3..7bdb5542e4 100644
    NotAuthorized,
  } from '../../libs/errors';
 @@ -13,10 +12,6 @@ import { getUserInfo, getGroupUrl, sendTxn } from '../../libs/email';
- import { getAuthorEmailFromMessage } from '../../libs/chat';
  import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
+ import { getAuthorEmailFromMessage} from '../../libs/chat';
  import nconf from 'nconf';
 -import bannedWords from '../../libs/bannedWords';
 -import guildsAllowingBannedWords from '../../libs/guildsAllowingBannedWords';

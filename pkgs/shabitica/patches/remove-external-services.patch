@@ -2150,10 +2150,40 @@ index dca60d7489..9ef720f70c 100644
        });
      });
    });
-diff --git a/test/common/ops/buy/buyQuest.js b/test/common/ops/buy/buyQuest.js
-index 4554b9832a..06d5bf80d7 100644
---- a/test/common/ops/buy/buyQuest.js
-+++ b/test/common/ops/buy/buyQuest.js
+diff --git a/test/common/ops/buy/buyQuestGems.js b/test/common/ops/buy/buyQuestGems.js
+index 8e98e1b94d..050f74f152 100644
+--- a/test/common/ops/buy/buyQuestGems.js
++++ b/test/common/ops/buy/buyQuestGems.js
+@@ -11,10 +11,9 @@ import {BuyQuestWithGemOperation} from '../../../../website/common/script/ops/bu
+ describe('shared.ops.buyQuestGems', () => {
+   let user;
+   let goldPoints = 40;
+-  let analytics = {track () {}};
+ 
+-  function buyQuest (_user, _req, _analytics) {
+-    const buyOp = new BuyQuestWithGemOperation(_user, _req, _analytics);
++  function buyQuest (_user, _req) {
++    const buyOp = new BuyQuestWithGemOperation(_user, _req);
+ 
+     return buyOp.purchase();
+   }
+@@ -24,12 +23,10 @@ describe('shared.ops.buyQuestGems', () => {
+   });
+ 
+   beforeEach(() => {
+-    sinon.stub(analytics, 'track');
+     sinon.spy(pinnedGearUtils, 'removeItemByPath');
+   });
+ 
+   afterEach(() => {
+-    analytics.track.restore();
+     pinnedGearUtils.removeItemByPath.restore();
+   });
+ 
+diff --git a/test/common/ops/buy/buyQuestGold.js b/test/common/ops/buy/buyQuestGold.js
+index dec213aa54..a992b496e5 100644
+--- a/test/common/ops/buy/buyQuestGold.js
++++ b/test/common/ops/buy/buyQuestGold.js
 @@ -12,21 +12,15 @@ import errorMessage from '../../../../website/common/script/libs/errorMessage';
  
  describe('shared.ops.buyQuest', () => {
@@ -2191,8 +2221,20 @@ index 4554b9832a..06d5bf80d7 100644
 -    expect(analytics.track).to.be.calledOnce;
    });
  
+   it('if a user\'s count of a quest scroll is negative, it will be reset to 0 before incrementing when they buy a new one.', () => {
+@@ -49,10 +42,9 @@ describe('shared.ops.buyQuest', () => {
+     user.items.quests[key] = -1;
+     buyQuest(user, {
+       params: {key},
+-    }, analytics);
++    });
+     expect(user.items.quests[key]).to.equal(1);
+     expect(user.stats.gp).to.equal(5);
+-    expect(analytics.track).to.be.calledOnce;
+   });
+ 
    it('buys a Quest scroll with the right quantity if a string is passed for quantity', () => {
-@@ -49,13 +42,13 @@ describe('shared.ops.buyQuest', () => {
+@@ -61,13 +53,13 @@ describe('shared.ops.buyQuest', () => {
        params: {
          key: 'dilatoryDistress1',
        },
@@ -2208,7 +2250,7 @@ index 4554b9832a..06d5bf80d7 100644
  
      expect(user.items.quests).to.eql({
        dilatoryDistress1: 4,
-@@ -70,7 +63,7 @@ describe('shared.ops.buyQuest', () => {
+@@ -82,7 +74,7 @@ describe('shared.ops.buyQuest', () => {
            key: 'dilatoryDistress1',
          },
          quantity: 'a',
@@ -2217,36 +2259,6 @@ index 4554b9832a..06d5bf80d7 100644
      } catch (err) {
        expect(err).to.be.an.instanceof(BadRequest);
        expect(err.message).to.equal(i18n.t('invalidQuantity'));
-diff --git a/test/common/ops/buy/buyQuestGems.js b/test/common/ops/buy/buyQuestGems.js
-index 3bb19841e4..067cb39f53 100644
---- a/test/common/ops/buy/buyQuestGems.js
-+++ b/test/common/ops/buy/buyQuestGems.js
-@@ -11,10 +11,9 @@ import {BuyQuestWithGemOperation} from '../../../../website/common/script/ops/bu
- describe('shared.ops.buyQuestGems', () => {
-   let user;
-   let goldPoints = 40;
--  let analytics = {track () {}};
- 
--  function buyQuest (_user, _req, _analytics) {
--    const buyOp = new BuyQuestWithGemOperation(_user, _req, _analytics);
-+  function buyQuest (_user, _req) {
-+    const buyOp = new BuyQuestWithGemOperation(_user, _req);
- 
-     return buyOp.purchase();
-   }
-@@ -24,12 +23,10 @@ describe('shared.ops.buyQuestGems', () => {
-   });
- 
-   beforeEach(() => {
--    sinon.stub(analytics, 'track');
-     sinon.spy(pinnedGearUtils, 'removeItemByPath');
-   });
- 
-   afterEach(() => {
--    analytics.track.restore();
-     pinnedGearUtils.removeItemByPath.restore();
-   });
- 
 diff --git a/test/common/ops/buy/buySpell.js b/test/common/ops/buy/buySpell.js
 index 02d0bda6a4..6db2b7b509 100644
 --- a/test/common/ops/buy/buySpell.js
@@ -2453,7 +2465,7 @@ index 7b89084678..1609e92969 100644
    .forEach(key => {
      env[key] = `"${nconf.get(key)}"`;
 diff --git a/website/client/app.vue b/website/client/app.vue
-index 3ca879f043..eb896cfc48 100644
+index 7a2e7c7397..f48245c494 100644
 --- a/website/client/app.vue
 +++ b/website/client/app.vue
 @@ -10,8 +10,6 @@ div
@@ -3254,7 +3266,7 @@ index 9d13f2d0b3..97d18ff8f6 100644
  
        const key = this.selectedQuest;
 diff --git a/website/client/components/header/menu.vue b/website/client/components/header/menu.vue
-index 7b77ed7c42..4038859932 100644
+index a6c2e33a72..fcb6aba088 100644
 --- a/website/client/components/header/menu.vue
 +++ b/website/client/components/header/menu.vue
 @@ -4,7 +4,6 @@ div
@@ -3265,7 +3277,7 @@ index 7b77ed7c42..4038859932 100644
    b-navbar.topbar.navbar-inverse.static-top(toggleable="lg", type="dark", :class="navbarZIndexClass")
      b-navbar-brand.brand(aria-label="Habitica")
        .logo.svg-icon.d-none.d-xl-block(v-html="icons.logo")
-@@ -394,7 +393,6 @@ div
+@@ -393,7 +392,6 @@ div
  
  <script>
  import { mapState, mapGetters } from 'client/libs/store';
@@ -3273,7 +3285,7 @@ index 7b77ed7c42..4038859932 100644
  import { goToModForm } from 'client/libs/modform';
  
  import gemIcon from 'assets/svg/gem.svg';
-@@ -409,7 +407,6 @@ import InboxModal from '../userMenu/inbox.vue';
+@@ -408,7 +406,6 @@ import InboxModal from '../userMenu/inbox.vue';
  import notificationMenu from './notificationsDropdown';
  import profileModal from '../userMenu/profileModal';
  import reportFlagModal from '../chat/reportFlagModal';
@@ -3281,7 +3293,7 @@ index 7b77ed7c42..4038859932 100644
  import sync from 'client/mixins/sync';
  import userDropdown from './userDropdown';
  
-@@ -421,7 +418,6 @@ export default {
+@@ -420,7 +417,6 @@ export default {
      notificationMenu,
      profileModal,
      reportFlagModal,
@@ -3289,7 +3301,7 @@ index 7b77ed7c42..4038859932 100644
      userDropdown,
    },
    mixins: [sync],
-@@ -481,14 +477,6 @@ export default {
+@@ -480,14 +476,6 @@ export default {
      },
      showBuyGemsModal (startingPage) {
        this.$store.state.gemModalOptions.startingPage = startingPage;
@@ -4555,7 +4567,7 @@ index 3f87f08694..79533d4c20 100644
 -  }
  }
 diff --git a/website/common/script/ops/buy/buy.js b/website/common/script/ops/buy/buy.js
-index 76bec34b6e..abd8876085 100644
+index b0cc98c053..e3160b2561 100644
 --- a/website/common/script/ops/buy/buy.js
 +++ b/website/common/script/ops/buy/buy.js
 @@ -20,7 +20,7 @@ import {BuyHourglassMountOperation} from './buyMount';
@@ -4810,14 +4822,14 @@ index db9ca557f2..e8098e7b23 100644
    });
  
    if (user.markModified) user.markModified('items.gear.owned');
-diff --git a/website/common/script/ops/buy/buyQuest.js b/website/common/script/ops/buy/buyQuest.js
-index 09f04dcb59..68c47fcbfa 100644
---- a/website/common/script/ops/buy/buyQuest.js
-+++ b/website/common/script/ops/buy/buyQuest.js
-@@ -10,8 +10,8 @@ import {AbstractGoldItemOperation} from './abstractBuyOperation';
- import errorMessage from '../../libs/errorMessage';
+diff --git a/website/common/script/ops/buy/buyQuestGem.js b/website/common/script/ops/buy/buyQuestGem.js
+index 63ba528ce3..c772e979ca 100644
+--- a/website/common/script/ops/buy/buyQuestGem.js
++++ b/website/common/script/ops/buy/buyQuestGem.js
+@@ -10,8 +10,8 @@ import errorMessage from '../../libs/errorMessage';
+ import {AbstractGemItemOperation} from './abstractBuyOperation';
  
- export class BuyQuestWithGoldOperation extends AbstractGoldItemOperation {
+ export class BuyQuestWithGemOperation extends AbstractGemItemOperation {
 -  constructor (user, req, analytics) {
 -    super(user, req, analytics);
 +  constructor (user, req) {
@@ -4825,14 +4837,14 @@ index 09f04dcb59..68c47fcbfa 100644
    }
  
    multiplePurchaseAllowed () {
-diff --git a/website/common/script/ops/buy/buyQuestGem.js b/website/common/script/ops/buy/buyQuestGem.js
-index 1a1a24d90a..449de84fbf 100644
---- a/website/common/script/ops/buy/buyQuestGem.js
-+++ b/website/common/script/ops/buy/buyQuestGem.js
-@@ -10,8 +10,8 @@ import errorMessage from '../../libs/errorMessage';
- import {AbstractGemItemOperation} from './abstractBuyOperation';
+diff --git a/website/common/script/ops/buy/buyQuestGold.js b/website/common/script/ops/buy/buyQuestGold.js
+index 09f04dcb59..68c47fcbfa 100644
+--- a/website/common/script/ops/buy/buyQuestGold.js
++++ b/website/common/script/ops/buy/buyQuestGold.js
+@@ -10,8 +10,8 @@ import {AbstractGoldItemOperation} from './abstractBuyOperation';
+ import errorMessage from '../../libs/errorMessage';
  
- export class BuyQuestWithGemOperation extends AbstractGemItemOperation {
+ export class BuyQuestWithGoldOperation extends AbstractGoldItemOperation {
 -  constructor (user, req, analytics) {
 -    super(user, req, analytics);
 +  constructor (user, req) {
@@ -5446,7 +5458,7 @@ index f0a60396a9..00b4ebd310 100644
    },
  };
 diff --git a/website/server/controllers/api-v3/chat.js b/website/server/controllers/api-v3/chat.js
-index 29d75b4e41..f90caafb0f 100644
+index e56337e76d..4534e45f39 100644
 --- a/website/server/controllers/api-v3/chat.js
 +++ b/website/server/controllers/api-v3/chat.js
 @@ -10,7 +10,6 @@ import {
@@ -5454,8 +5466,8 @@ index 29d75b4e41..f90caafb0f 100644
  import { removeFromArray } from '../../libs/collectionManipulators';
  import { getUserInfo, getGroupUrl, sendTxn } from '../../libs/email';
 -import slack from '../../libs/slack';
- import { getAuthorEmailFromMessage } from '../../libs/chat';
  import { chatReporterFactory } from '../../libs/chatReporting/chatReporterFactory';
+ import { getAuthorEmailFromMessage} from '../../libs/chat';
  import nconf from 'nconf';
 @@ -89,8 +88,6 @@ function getBannedWordsFromText (message) {
    return getMatchesByWordArray(message, bannedWords);
@@ -5495,7 +5507,7 @@ index 29d75b4e41..f90caafb0f 100644
 -      });
      }
  
-     const newChatMessage = group.sendChat({message: req.body.message, user, flagCount, metaData: null, client});
+     const newChatMessage = group.sendChat({message: req.body.message, user, flagCount, metaData: null, client, translate: res.t});
 @@ -233,27 +214,6 @@ api.postChat = {
  
      await Promise.all(toSave);
@@ -5744,7 +5756,7 @@ index 3623477205..9c59c17a43 100644
      res.respond(200, {});
    },
 diff --git a/website/server/controllers/api-v3/quests.js b/website/server/controllers/api-v3/quests.js
-index 4153244620..79fc1f036e 100644
+index f43b5f7f6b..79fc1f036e 100644
 --- a/website/server/controllers/api-v3/quests.js
 +++ b/website/server/controllers/api-v3/quests.js
 @@ -1,6 +1,5 @@
@@ -5780,8 +5792,8 @@ index 4153244620..79fc1f036e 100644
 -        sendPushNotification(
 -          member,
 -          {
--            title: res.t('questInvitationTitle', member.preferences.language),
--            message: res.t('questInvitationInfo', {quest: quest.text(member.preferences.language)}, member.preferences.language),
+-            title: quest.text(member.preferences.language),
+-            message: res.t('questInvitationNotificationInfo', member.preferences.language),
 -            identifier: 'questInvitation',
 -            category: 'questInvitation',
 -          }
@@ -6432,6 +6444,45 @@ index 588c596037..8e9265be22 100644
 -  generateUsername,
    loginRes,
  };
+diff --git a/website/server/libs/chat.js b/website/server/libs/chat.js
+index a19e9b260c..3554bc90ee 100644
+--- a/website/server/libs/chat.js
++++ b/website/server/libs/chat.js
+@@ -1,6 +1,5 @@
+ import { model as User } from '../models/user';
+ import { getUserInfo } from './email';
+-import {sendNotification as sendPushNotification} from './pushNotifications';
+ 
+ export async function getAuthorEmailFromMessage (message) {
+   let authorId = message.uuid;
+@@ -17,26 +16,3 @@ export async function getAuthorEmailFromMessage (message) {
+     return 'Author Account Deleted';
+   }
+ }
+-
+-export async function sendChatPushNotifications (user, group, message, translate) {
+-  let members = await User.find({
+-    'party._id': group._id,
+-    _id: {$ne: user._id},
+-  })
+-    .select('preferences.pushNotifications preferences.language profile.name pushDevices')
+-    .exec();
+-  members.forEach(member => {
+-    if (member.preferences.pushNotifications.partyActivity !== false) {
+-      sendPushNotification(
+-        member,
+-        {
+-          title: translate('groupActivityNotificationTitle', {user: message.user, group: group.name}, member.preferences.language),
+-          message: message.text,
+-          identifier: 'groupActivity',
+-          category: 'groupActivity',
+-          payload: {groupID: group._id, type: group.type, groupName: group.name, message: message.text, timestamp: message.timestamp, senderName: message.user},
+-        }
+-      );
+-    }
+-  });
+-}
+\ No newline at end of file
 diff --git a/website/server/libs/chatReporting/groupChatReporter.js b/website/server/libs/chatReporting/groupChatReporter.js
 index b41f142579..806358dbd7 100644
 --- a/website/server/libs/chatReporting/groupChatReporter.js
@@ -6607,7 +6658,7 @@ index 02e236fe60..b37c3e8a0a 100644
    }
  
 diff --git a/website/server/libs/inbox/index.js b/website/server/libs/inbox/index.js
-index c51fa9e67e..094632ea5b 100644
+index 9cb610cc5e..b4c0649328 100644
 --- a/website/server/libs/inbox/index.js
 +++ b/website/server/libs/inbox/index.js
 @@ -1,10 +1,9 @@
@@ -6620,9 +6671,9 @@ index c51fa9e67e..094632ea5b 100644
 -export async function sentMessage (sender, receiver, message, translate) {
 +export async function sentMessage (sender, receiver, message) {
    const messageSent = await sender.sendMessage(receiver, { receiverMsg: message });
+   const senderName = getUserInfo(sender, ['name']).name;
  
-   if (receiver.preferences.emailNotifications.newPM !== false) {
-@@ -13,19 +12,6 @@ export async function sentMessage (sender, receiver, message, translate) {
+@@ -14,19 +13,6 @@ export async function sentMessage (sender, receiver, message, translate) {
      ]);
    }
  
@@ -6630,11 +6681,11 @@ index c51fa9e67e..094632ea5b 100644
 -    sendPushNotification(
 -      receiver,
 -      {
--        title: translate('newPM', receiver.preferences.language),
--        message: translate('newPMInfo', {name: getUserInfo(sender, ['name']).name, message}, receiver.preferences.language),
+-        title: translate('newPMNotificationTitle', {name: getUserInfo(sender, ['name']).name}, receiver.preferences.language),
+-        message,
 -        identifier: 'newPM',
 -        category: 'newPM',
--        payload: {replyTo: sender._id},
+-        payload: {replyTo: sender._id, senderName, message},
 -      }
 -    );
 -  }
@@ -7231,10 +7282,10 @@ index f08a8135eb..fe391c9684 100644
  }, {
    strict: true,
 diff --git a/website/server/models/group.js b/website/server/models/group.js
-index 9b840fc895..489aba6938 100644
+index f7325bc636..489aba6938 100644
 --- a/website/server/models/group.js
 +++ b/website/server/models/group.js
-@@ -28,15 +28,12 @@ import {
+@@ -28,18 +28,14 @@ import {
  import baseModel from '../libs/baseModel';
  import { sendTxn as sendTxnEmail } from '../libs/email';
  import nconf from 'nconf';
@@ -7249,8 +7300,31 @@ index 9b840fc895..489aba6938 100644
 -import stripePayments from '../libs/payments/stripe';
  import { getGroupChat, translateMessage } from '../libs/chat/group-chat';
  import { model as UserNotification } from './userNotification';
+-import { sendChatPushNotifications } from '../libs/chat';
  
-@@ -617,7 +614,7 @@ schema.methods.startQuest = async function startQuest (user) {
+ const questScrolls = shared.content.quests;
+ const questSeriesAchievements = shared.content.questSeriesAchievements;
+@@ -513,7 +509,7 @@ schema.methods.getMemberCount = async function getMemberCount () {
+ };
+ 
+ schema.methods.sendChat = function sendChat (options = {}) {
+-  const {message, user, metaData, client, flagCount = 0, info = {}, translate} = options;
++  const {message, user, metaData, client, flagCount = 0, info = {}} = options;
+   let newMessage = messageDefaults(message, user, client, flagCount, info);
+   let newChatMessage = new Chat();
+   newChatMessage = Object.assign(newChatMessage, newMessage);
+@@ -575,10 +571,6 @@ schema.methods.sendChat = function sendChat (options = {}) {
+     User.update(query, lastSeenUpdateAddNew, {multi: true}).exec();
+   });
+ 
+-  if (this.type === 'party' && user) {
+-    sendChatPushNotifications(user, this, newChatMessage, translate);
+-  }
+-
+   return newChatMessage;
+ };
+ 
+@@ -622,7 +614,7 @@ schema.methods.startQuest = async function startQuest (user) {
    await User.find({
      _id: {$in: Object.keys(this.quest.members)},
    })
@@ -7259,7 +7333,7 @@ index 9b840fc895..489aba6938 100644
      .lean()
      .exec()
      .then(partyMembers => {
-@@ -693,16 +690,6 @@ schema.methods.startQuest = async function startQuest (user) {
+@@ -698,16 +690,6 @@ schema.methods.startQuest = async function startQuest (user) {
        if (member.preferences.emailNotifications.questStarted !== false) {
          membersToEmail.push(member);
        }
@@ -7269,14 +7343,14 @@ index 9b840fc895..489aba6938 100644
 -        const memberLang = member.preferences.language;
 -        sendPushNotification(member, {
 -          title: quest.text(memberLang),
--          message: `${shared.i18n.t('questStarted', memberLang)}: ${quest.text(memberLang)}`,
+-          message: shared.i18n.t('questStarted', memberLang),
 -          identifier: 'questStarted',
 -        });
 -      }
      }
  
      // Send webhooks
-@@ -1575,7 +1562,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
+@@ -1580,7 +1562,7 @@ schema.methods.hasCancelled = function hasNotCancelled () {
    return Boolean(this.isSubscribed() && plan.dateTerminated);
  };
  
@@ -7285,7 +7359,7 @@ index 9b840fc895..489aba6938 100644
    // Recheck the group plan count
    let members;
    if (this.type === 'guild') {
-@@ -1584,12 +1571,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
+@@ -1589,12 +1571,6 @@ schema.methods.updateGroupPlan = async function updateGroupPlan (removingMember)
      members = await User.find({'party._id': this._id}).select('_id').exec();
    }
    this.memberCount = members.length;
@@ -7370,7 +7444,7 @@ index 5a49fea5a0..14ccb1fee8 100644
  };
  
 diff --git a/website/server/models/user/schema.js b/website/server/models/user/schema.js
-index ccf2c3e966..46ec7bf165 100644
+index af67e08522..621f66e92c 100644
 --- a/website/server/models/user/schema.js
 +++ b/website/server/models/user/schema.js
 @@ -2,7 +2,6 @@ import mongoose from 'mongoose';
@@ -7394,7 +7468,7 @@ index ccf2c3e966..46ec7bf165 100644
      local: {
        email: {
          $type: String,
-@@ -492,18 +485,6 @@ let schema = new Schema({
+@@ -493,22 +486,6 @@ let schema = new Schema({
        majorUpdates: {$type: Boolean, default: true},
        subscriptionReminders: {$type: Boolean, default: true},
      },
@@ -7409,11 +7483,15 @@ index ccf2c3e966..46ec7bf165 100644
 -      questStarted: {$type: Boolean, default: true},
 -      invitedQuest: {$type: Boolean, default: true},
 -      majorUpdates: {$type: Boolean, default: true},
+-      mentionParty: {$type: Boolean, default: true},
+-      mentionJoinedGuild: {$type: Boolean, default: true},
+-      mentionUnjoinedGuild: {$type: Boolean, default: true},
+-      partyActivity: {$type: Boolean, default: true},
 -    },
      suppressModals: {
        levelUp: {$type: Boolean, default: false},
        hatchPet: {$type: Boolean, default: false},
-@@ -584,7 +565,6 @@ let schema = new Schema({
+@@ -589,7 +566,6 @@ let schema = new Schema({
    extra: {$type: Schema.Types.Mixed, default: () => {
      return {};
    }},
