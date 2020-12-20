@@ -85,7 +85,7 @@ in {
           SystemCallErrorNumber = "EPERM";
           SystemCallFilter = [
             "@basic-io" "@io-event" "@signal" "@file-system" "@process"
-            "@network-io" "~listen" "~bind"
+            "@network-io" "~listen" "~bind" "uname"
             "mprotect" "brk" "sched_getaffinity"
           ];
         };
