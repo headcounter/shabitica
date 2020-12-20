@@ -4,9 +4,10 @@ let
   cfg = config.shabitica;
 
   go-camo = pkgs.callPackage ../pkgs/go-camo {};
+  go-camo-bin = lib.getBin go-camo;
 
   sandboxPaths = pkgs.runCommand "shabitica-imageproxy-sandbox-paths" {
-    closureInfo = pkgs.closureInfo { rootPaths = [ go-camo.bin ]; };
+    closureInfo = pkgs.closureInfo { rootPaths = [ go-camo-bin ]; };
   } ''
     mkdir -p "$out/lib/systemd/system"
     serviceFile="$out/lib/systemd/system/shabitica-imageproxy.service"
@@ -59,7 +60,7 @@ in {
       systemd.services.shabitica-imageproxy = {
         description = "Shabitica Image Proxy";
         serviceConfig = {
-          ExecStart = "@${go-camo.bin}/bin/go-camo shabitica-imageproxy";
+          ExecStart = "@${go-camo-bin}/bin/go-camo shabitica-imageproxy";
           User = "shabitica-imageproxy";
           Group = "shabitica-imageproxy";
 
