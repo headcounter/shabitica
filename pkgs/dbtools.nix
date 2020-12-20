@@ -30,5 +30,5 @@ in runCommand "shabitica-db-tools" {
   done
 
   makeWrapper "${mongodb}/bin/mongo" "$out/bin/shabitica-db-shell" \
-    --add-flags "mongodb://$socketPath/admin"
+    --add-flags "--host '$socketPath' admin"
 ''
