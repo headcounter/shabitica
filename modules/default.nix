@@ -394,7 +394,13 @@ in {
         environment.SENDMAIL_PATH = "${config.security.wrapperDir}/sendmail";
 
         serviceConfig.ExecStart = let
-          mailer = pkgs.haskellPackages.callPackage ../mailer {};
+          mailer = let
+            # FIXME: Remove this hack once we've turned this project into a
+            #        proper Nix Flake.
+            packages = pkgs.haskell.packages.ghc884 or pkgs.haskellPackages;
+          in packages.callPackage ../mailer {
+            systemd = packages.systemd_2_2_0 or packages.systemd;
+          };
         in "${mailer}/bin/shabitica-mailer";
         serviceConfig.User = "shabitica-mailer";
         serviceConfig.Group = "shabitica-mailer";

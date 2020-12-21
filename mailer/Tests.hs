@@ -44,8 +44,11 @@ resetPassword = commonTxnMail
         ]
     }
 
+addNewline :: TL.Text -> TL.Text
+addNewline = flip TL.snoc '\n' . TL.strip
+
 resetPasswordBody :: TL.Text
-resetPasswordBody = TL.fromStrict [text|
+resetPasswordBody = addNewline $ TL.fromStrict [text|
     Hello lostone,
 
     If you requested a password reset for Shabitica, head to
@@ -68,7 +71,7 @@ welcome = commonTxnMail
     }
 
 welcomeBody :: TL.Text
-welcomeBody = TL.fromStrict [text|
+welcomeBody = addNewline $ TL.fromStrict [text|
     Hello stranger,
 
     Welcome to the self-hosted Habitica instance at
@@ -96,7 +99,7 @@ inviteFriend = commonTxnMail
     }
 
 inviteFriendBody :: TL.Text
-inviteFriendBody = TL.fromStrict [text|
+inviteFriendBody = addNewline $ TL.fromStrict [text|
     Hello bar,
 
     foo has invited you to the self-hosted Habitica instance at
@@ -127,7 +130,7 @@ inviteCollectionQuest = commonTxnMail
     }
 
 inviteCollectionQuestBody :: TL.Text
-inviteCollectionQuestBody = TL.fromStrict [text|
+inviteCollectionQuestBody = addNewline $ TL.fromStrict [text|
     Hello bar,
 
     You were invited to the Collection Quest Attack of the Mundane, Part 1:
@@ -157,7 +160,7 @@ inviteBossQuest = commonTxnMail
     }
 
 inviteBossQuestBody :: TL.Text
-inviteBossQuestBody = TL.fromStrict [text|
+inviteBossQuestBody = addNewline $ TL.fromStrict [text|
     Hello bar,
 
     You were invited to the Boss Quest The Basi-List
@@ -184,7 +187,7 @@ questStarted = commonTxnMail
     }
 
 questStartedBody :: TL.Text
-questStartedBody = TL.fromStrict [text|
+questStartedBody = addNewline $ TL.fromStrict [text|
     Hello bar,
 
     The quest you have joined has just started. Please head over to your
@@ -210,7 +213,7 @@ newPm = commonTxnMail
     }
 
 newPmBody :: TL.Text
-newPmBody = TL.fromStrict [text|
+newPmBody = addNewline $ TL.fromStrict [text|
     Hello bar,
 
     You got a new private message from foo.

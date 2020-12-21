@@ -2,7 +2,7 @@
 module Main where
 
 import Control.Arrow (first, second)
-import Control.Monad (liftM2)
+import Control.Monad (liftM2, forM_)
 import Data.Maybe (fromMaybe)
 import System.Posix.Internals (setNonBlockingFD)
 import System.Environment (lookupEnv)
@@ -10,7 +10,7 @@ import System.IO (hPrint, stderr)
 import Network.Mail.Mime (simpleMail', renderSendMailCustom, Mail)
 import Network.Wai (Application)
 import System.Systemd.Daemon (getActivatedSockets)
-import Network.Socket (fdSocket)
+import Network.Socket (withFdSocket)
 
 import qualified Data.Aeson as J
 import qualified Data.Text as T
@@ -90,6 +90,6 @@ main = do
     socks <- getActivatedSockets
     case socks of
          Just allsocks@(s:_) -> do
-             mapM_ (flip setNonBlockingFD True . fdSocket) allsocks
+             return . forM_ allsocks withFdSocket $ flip setNonBlockingFD True
              Warp.runSettingsSocket warpSettings s (handler settings)
          _ -> Warp.runSettings warpSettings (handler settings)
