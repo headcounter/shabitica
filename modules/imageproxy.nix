@@ -68,8 +68,10 @@ in {
           SystemCallErrorNumber = "EPERM";
           SystemCallFilter = [
             "@basic-io" "@io-event" "@signal" "@file-system" "@process"
-            "@network-io" "~listen" "~bind" "uname"
+            "@network-io" "~listen" "~bind"
             "mprotect" "brk" "sched_getaffinity"
+            # XXX: Apparently needed for some Go versions, figure out why!
+            "uname" "pipe" "pipe2" "ioctl" "getrandom"
           ];
         };
       };
