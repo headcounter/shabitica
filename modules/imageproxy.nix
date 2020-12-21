@@ -6,21 +6,6 @@ let
   go-camo = pkgs.callPackage ../pkgs/go-camo {};
   go-camo-bin = lib.getBin go-camo;
 
-  sandboxPaths = pkgs.runCommand "shabitica-imageproxy-sandbox-paths" {
-    closureInfo = pkgs.closureInfo { rootPaths = [ go-camo-bin ]; };
-  } ''
-    mkdir -p "$out/lib/systemd/system"
-    serviceFile="$out/lib/systemd/system/shabitica-imageproxy.service"
-
-    echo '[Service]' > "$serviceFile"
-
-    while read storePath; do
-      if [ ! -L "$storePath" ]; then
-        echo "BindReadOnlyPaths=$storePath:$storePath:rbind"
-      fi
-    done < "$closureInfo/store-paths" >> "$serviceFile"
-  '';
-
 in {
   options.shabitica.imageProxy = {
     enable = lib.mkOption {
@@ -55,10 +40,13 @@ in {
         socketConfig.SocketGroup = config.services.nginx.group;
       };
 
-      systemd.packages = [ sandboxPaths ];
-
       systemd.services.shabitica-imageproxy = {
         description = "Shabitica Image Proxy";
+
+        confinement.enable = true;
+        confinement.binSh = null;
+        confinement.mode = "chroot-only";
+
         serviceConfig = {
           ExecStart = "@${go-camo-bin}/bin/go-camo shabitica-imageproxy";
           User = "shabitica-imageproxy";
@@ -75,12 +63,7 @@ in {
 
           # Needed so that the proxy can validate sessions.
           EnvironmentFile = "/var/lib/shabitica/secrets.env";
-
-          RootDirectory = sandboxPaths;
-          MountFlags = "private";
           RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-          PrivateDevices = true;
-          TemporaryFileSystem = "/";
 
           SystemCallErrorNumber = "EPERM";
           SystemCallFilter = [

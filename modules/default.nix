@@ -18,27 +18,6 @@ let
   migrations = import ../pkgs/shabitica/migrations.nix;
   latestDbVersion = lib.length migrations;
 
-  # Results in a systemd service unit for the Shabitica server which only
-  # contains BindReadOnlyPaths options. The rest of the service is defined
-  # later in systemd.services.shabitica and the contents here are merged
-  # accordingly.
-  shabiticaSandboxPaths = pkgs.runCommand "shabitica-sandbox-paths" {
-    closureInfo = pkgs.closureInfo {
-      rootPaths = [ cfg.packages.server pkgs.coreutils ];
-    };
-  } ''
-    mkdir -p "$out/lib/systemd/system"
-    serviceFile="$out/lib/systemd/system/shabitica.service"
-
-    echo '[Service]' > "$serviceFile"
-
-    while read storePath; do
-      if [ ! -L "$storePath" ]; then
-        echo "BindReadOnlyPaths=$storePath:$storePath:rbind"
-      fi
-    done < "$closureInfo/store-paths" >> "$serviceFile"
-  '';
-
 in {
   imports = [ ./imageproxy.nix ];
 
@@ -237,8 +216,6 @@ in {
       users.groups.shabitica-mailer = {};
 
       environment.systemPackages = [ dbtools ];
-
-      systemd.packages = [ shabiticaSandboxPaths ];
 
       systemd.services.shabitica-statedir-init = {
         description = "Initialize Shabitica";
@@ -443,6 +420,9 @@ in {
           "shabitica-mailer.service"
         ];
 
+        confinement.enable = true;
+        confinement.binSh = null;
+
         serviceConfig = {
           Type = "notify";
           TimeoutStartSec = "10min";
@@ -451,26 +431,12 @@ in {
           User = "shabitica";
           Group = "shabitica";
           EnvironmentFile = "/var/lib/shabitica/secrets.env";
-
-          # Everything related to restricting file system access.
-          # More BindReadOnlyPaths options are brought in via the
-          # shabiticaSandboxPaths derivation defined earlier.
           BindReadOnlyPaths = [
             "/run/shabitica/db.sock"
             "/run/shabitica-mailer.sock"
             "/run/systemd/notify"
           ];
-          MountAPIVFS = true;
-          MountFlags = "private";
-          PrivateDevices = true;
           PrivateNetwork = true;
-          PrivateTmp = true;
-          PrivateUsers = true;
-          ProtectControlGroups = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          RootDirectory = shabiticaSandboxPaths;
-          TemporaryFileSystem = "/";
         };
       };
     }
