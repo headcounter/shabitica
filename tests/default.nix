@@ -19,7 +19,7 @@ let
 
       registerUser = username: hostname: let
         inherit (args) lib;
-        mkPerlString = val: "'${lib.escape ["\\" "'"] val}'";
+        mkPythonString = val: "'${lib.escape ["\\" "'"] val}'";
         listToCommand = lib.concatMapStringsSep " " lib.escapeShellArg;
         data = builtins.toJSON {
           inherit username;
@@ -28,11 +28,11 @@ let
           confirmPassword = "test";
         };
         url = "http://${hostname}/api/v3/user/auth/local/register";
-      in mkPerlString (listToCommand [
+      in mkPythonString (listToCommand [
         "curl" "-f" "-H" "Content-Type: application/json" "-d" data url
       ]);
     });
-  in import "${nixpkgs}/nixos/tests/make-test.nix" testFun {};
+  in import "${nixpkgs}/nixos/tests/make-test-python.nix" testFun {};
 
 in {
   upstream = import ./upstream.nix args;

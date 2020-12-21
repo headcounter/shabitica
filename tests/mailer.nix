@@ -102,7 +102,8 @@ in {
   };
 
   testScript = ''
-    $machine->waitForUnit('shabitica.service');
-    $machine->succeed('mailer-test-runner >&2');
+    # fmt: off
+    machine.wait_for_unit('shabitica.service')
+    machine.succeed('mailer-test-runner >&2')
   '';
 }

@@ -11,7 +11,7 @@
   testScript = let
     inherit (import ../pkgs/shabitica/docinfo.nix) dbrestore;
 
-    mkPerlStr = val: "'${lib.escape ["\\" "'"] val}'";
+    mkPythonStr = val: "'${lib.escape ["\\" "'"] val}'";
 
     mkJQ = expr: "${pkgs.jq}/bin/jq -r ${lib.escapeShellArg expr}";
 
@@ -26,69 +26,51 @@
       extra = lib.optionalString (data != {}) " --data-raw ${shellData}";
       contentType = "-H 'Content-Type: application/json'";
       cmd = "curl -f ${contentType} -X ${method}${extra} ";
-      # This is so we can use Perl variables in path.
-      pathArg = "\" http://localhost/api/v3/${path}\"";
-    in "\$machine->succeed(${mkPerlStr cmd}.$curlAuthArgs.${pathArg})";
+      # This is so we can use Python variables in path.
+      pathArg = "f\" http://localhost/api/v3/${path}\"";
+    in "machine.succeed(${mkPythonStr cmd} + curl_auth_args + ${pathArg})";
 
   in ''
-    use IPC::Open2;
+    # fmt: off
+    from subprocess import check_output
 
-    sub pipeReadLine {
-      my ($data, $cmd) = @_;
-      my ($dataOut, $dataIn);
-      open2 $dataOut, $dataIn, $cmd;
-      print $dataIn $data;
-      close $dataIn;
-      my $result = <$dataOut>;
-      close $dataOut;
-      chomp $result;
-      return $result;
-    }
+    def pipe_read_line(data: str, cmd: str) -> str:
+      result = check_output(cmd, shell=True, input=data.encode())
+      return result.rstrip().decode()
 
-    $machine->waitForUnit('shabitica.service');
+    machine.wait_for_unit('shabitica.service')
 
-    my $curlAuthArgs;
+    with machine.nested("add first user and get API token"):
+      data = machine.succeed(${registerUser "foo" "localhost"})
+      curl_auth_args = pipe_read_line(data, ${mkPythonStr getCurlAuthArgs})
 
-    $machine->nest("add first user and get API token", sub {
-      my $data = $machine->succeed(${registerUser "foo" "localhost"});
-      $curlAuthArgs = pipeReadLine $data, ${mkPerlStr getCurlAuthArgs};
-    });
-
-    my $taskId;
-
-    $machine->nest("create a new todo", sub {
-      my $taskdata = ${callApi "tasks/user" "POST" {
+    with machine.nested("create a new todo"):
+      taskdata = ${callApi "tasks/user" "POST" {
         text = "first task";
         type = "todo";
-      }};
-      $taskId = pipeReadLine $taskdata, ${mkPerlStr (mkJQ ".data.id")};
-    });
+      }}
+      task_id = pipe_read_line(taskdata, ${mkPythonStr (mkJQ ".data.id")})
 
-    $machine->nest("trigger backup", sub {
-      $machine->succeed('systemctl start shabitica-db-backup.service');
-    });
+    with machine.nested("trigger backup"):
+      machine.start_job('shabitica-db-backup.service')
 
-    $machine->nest("change todo text", sub {
-      ${callApi "tasks/$taskId" "PUT" {
+    with machine.nested("change todo text"):
+      ${callApi "tasks/{task_id}" "PUT" {
         text = "changed task";
-      }};
-    });
+      }}
 
-    $machine->nest("verify changed todo text", sub {
-      my $taskdata = ${callApi "tasks/$taskId" "GET" {}};
-      my $taskText = pipeReadLine $taskdata, ${mkPerlStr (mkJQ ".data.text")};
-      die "invalid task text $taskText" unless $taskText eq "changed task";
-    });
+    with machine.nested("verify changed todo text"):
+      taskdata = ${callApi "tasks/{task_id}" "GET" {}}
+      tasktext = pipe_read_line(taskdata, ${mkPythonStr (mkJQ ".data.text")})
+      assert tasktext == 'changed task', f"invalid task text {tasktext!r}"
 
-    $machine->nest("restore database", sub {
-      $machine->succeed('${dbrestore}"/var/backup/shabitica/'
-                       .'$(ls -1 /var/backup/shabitica | tail -n 1)"');
-    });
+    with machine.nested("restore database"):
+      machine.succeed('${dbrestore}"/var/backup/shabitica/'
+                      '$(ls -1 /var/backup/shabitica | tail -n 1)"')
 
-    $machine->nest("check whether task has old text", sub {
-      my $taskdata = ${callApi "tasks/$taskId" "GET" {}};
-      my $taskText = pipeReadLine $taskdata, ${mkPerlStr (mkJQ ".data.text")};
-      die "invalid task text $taskText" unless $taskText eq "first task";
-    });
+    with machine.nested("check whether task has old text"):
+      taskdata = ${callApi "tasks/{task_id}" "GET" {}}
+      tasktext = pipe_read_line(taskdata, ${mkPythonStr (mkJQ ".data.text")})
+      assert tasktext == 'first task', f"invalid task text {tasktext!r}"
   '';
 }

@@ -105,78 +105,72 @@
       inherit (nodes.sslhost.config.services.nginx) virtualHosts;
     in "${virtualHosts."sslhost.org".root}/test.png";
   in ''
-    use Digest::SHA qw(hmac_sha1);
-    use MIME::Base64 qw(encode_base64 encode_base64url);
+    # fmt: off
+    import hashlib, hmac
+    from base64 import urlsafe_b64encode, b64encode
 
-    startAll;
-    $resolver->waitForUnit('bind.service');
-    $unrelated->waitForOpenPort(80);
-    $client->waitForUnit('multi-user.target');
-    $shabitica->waitForUnit('shabitica.service');
+    start_all()
+    resolver.wait_for_unit('bind.service')
+    unrelated.wait_for_open_port(80)
+    client.wait_for_unit('multi-user.target')
+    shabitica.wait_for_unit('shabitica.service')
 
-    my $baseUrl = 'http://shabitica.example.org';
-    my $validUrl = 'http://unrelated.org/test.png';
-    my $validSslUrl = 'https://sslhost.org/test.png';
-    my $secret;
+    base_url = 'http://shabitica.example.org'
+    valid_url = 'http://unrelated.org/test.png'
+    valid_ssl_url = 'https://sslhost.org/test.png'
 
-    $shabitica->nest('check whether DNS resolver works', sub {
-      $shabitica->succeed('host unrelated.org');
-    });
+    with shabitica.nested('check whether DNS resolver works'):
+      shabitica.succeed('host unrelated.org')
 
-    $shabitica->nest('getting session secret', sub {
-      $secret = $shabitica->succeed(
+    with shabitica.nested('getting session secret'):
+      secret = shabitica.succeed(
         'source /var/lib/shabitica/secrets.env && echo -n "$SESSION_SECRET"'
-      );
-    });
+      ).encode()
 
-    sub mkRequest ($) {
-      my $url = $baseUrl.'/imageproxy/'.encode_base64url($_[0]);
-      my $sessraw = '{"userId":"56756b7c-f0a8-4553-92c7-b1c553742828"}';
-      my $sess = encode_base64($sessraw, "");
-      my $sigraw = hmac_sha1('session='.$sess, $secret);
-      my $sig = encode_base64url($sigraw);
-      return "-b 'session=$sess; session.sig=$sig' '$url'";
-    }
+    def mkrequest(url: str) -> str:
+      encoded_url = urlsafe_b64encode(url.encode()).decode()
+      proxy_url = f'{base_url}/imageproxy/{encoded_url.rstrip("=")}'
+      sessraw = b'{"userId":"56756b7c-f0a8-4553-92c7-b1c553742828"}'
+      sess = b64encode(sessraw).decode()
+      hmac_msg = f'session={sess}'.encode()
+      sigraw = hmac.new(secret, hmac_msg, hashlib.sha1).digest()
+      sig = urlsafe_b64encode(sigraw).decode().rstrip('=')
+      return f"-b 'session={sess}; session.sig={sig}' '{proxy_url}'"
 
-    sub curl ($) {
-      my $headers = "-H 'Pragma: no-cache' -H 'Cache-Control: no-cache'";
-      return "curl -f $headers $_[0]";
-    }
+    def curl(args: str) -> str:
+      headers = "-H 'Pragma: no-cache' -H 'Cache-Control: no-cache'"
+      return f"curl -f {headers} {args}"
 
-    subtest "images can be fetched directly", sub {
-      $client->succeed(curl($validUrl).' > direct.png');
-      $client->succeed('cmp direct.png ${green}');
-      $client->succeed(curl($validSslUrl).' > direct-ssl.png');
-      $client->succeed('cmp direct-ssl.png ${blue}');
-    };
+    with subtest("images can be fetched directly"):
+      client.succeed(curl(valid_url) + ' > direct.png')
+      client.succeed('cmp direct.png ${green}')
+      client.succeed(curl(valid_ssl_url) + ' > direct-ssl.png')
+      client.succeed('cmp direct-ssl.png ${blue}')
 
-    subtest "refuses invalid session", sub {
-      my $invalidSess = 'dGhpcyBpcyBpbnZhbGlkCg==';
-      my $invalidSig = '0D1XbRNCLlS3Rk3-EP_zWjT_IA0';
-      my $invalidCookies = "session=$invalidSess; session.sig=$invalidSig";
-      my $url = $baseUrl.'/imageproxy/'.encode_base64url($validUrl);
-      $client->fail(curl("-b '$invalidCookies' '$url'"));
-      $client->fail(curl("'$url'"));
-    };
+    with subtest("refuses invalid session"):
+      invalid_sess = 'dGhpcyBpcyBpbnZhbGlkCg=='
+      invalid_sig = '0D1XbRNCLlS3Rk3-EP_zWjT_IA0'
+      invalid_cookies = f'session={invalid_sess}; session.sig={invalid_sig}'
+      encoded_url = urlsafe_b64encode(valid_url.encode()).decode()
+      url = f'{base_url}/imageproxy/{encoded_url}'
+      client.fail(curl(f"-b '{invalid_cookies}' '{url}'"))
+      client.fail(curl(f"'{url}'"))
 
-    subtest "works with valid session", sub {
-      $client->execute(curl(mkRequest($validUrl)).' > /dev/null');
-      $client->execute(curl(mkRequest($validSslUrl)).' > /dev/null');
-    };
+    with subtest("works with valid session"):
+      client.execute(curl(mkrequest(valid_url)) + ' > /dev/null')
+      client.execute(curl(mkrequest(valid_ssl_url)) + ' > /dev/null')
 
-    subtest "emits the right image", sub {
-      $client->succeed(curl(mkRequest($validUrl)).' > image.png');
-      $client->succeed('cmp image.png ${green}');
-      $client->succeed(curl(mkRequest($validSslUrl)).' > image-ssl.png');
-      $client->succeed('cmp image-ssl.png ${blue}');
-    };
+    with subtest("emits the right image"):
+      client.succeed(curl(mkrequest(valid_url)) + ' > image.png')
+      client.succeed('cmp image.png ${green}')
+      client.succeed(curl(mkrequest(valid_ssl_url)) + ' > image-ssl.png')
+      client.succeed('cmp image-ssl.png ${blue}')
 
-    subtest "caching works", sub {
-      $unrelated->shutdown;
-      $client->succeed(curl(mkRequest($validUrl)).' > cached.png');
-      $client->succeed('cmp cached.png ${green}');
-      $client->succeed(curl(mkRequest($validSslUrl)).' > cached-ssl.png');
-      $client->succeed('cmp cached-ssl.png ${blue}');
-    };
+    with subtest("caching works"):
+      unrelated.shutdown()
+      client.succeed(curl(mkrequest(valid_url)) + ' > cached.png')
+      client.succeed('cmp cached.png ${green}')
+      client.succeed(curl(mkrequest(valid_ssl_url)) + ' > cached-ssl.png')
+      client.succeed('cmp cached-ssl.png ${blue}')
   '';
 }

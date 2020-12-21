@@ -75,12 +75,11 @@
     mkCmd = lib.concatMapStringsSep " " lib.escapeShellArg;
 
     mkTest = { file, testScript, ... }: let
-      mkPerlStr = str: "'${lib.escape ["\\" "'"] str}'";
+      mkPythonStr = str: "'${lib.escape ["\\" "'"] str}'";
       testFile = pkgs.writeText "test-script.py" testScript;
     in ''
-      $machine->nest(${mkPerlStr "testing migration ${file}"}, sub {
-        $machine->succeed('migration-test-runner ${testFile}');
-      });
+      with machine.nested(${mkPythonStr "testing migration ${file}"}):
+        machine.succeed('migration-test-runner ${testFile}')
     '';
 
     inherit (pkgs) writeText;
@@ -93,60 +92,57 @@
     '';
 
   in ''
-    $machine->waitForUnit('shabitica.service');
+    # fmt: off
+    machine.wait_for_unit('shabitica.service')
 
-    $machine->nest('populate database with old version', sub {
-      $machine->stopJob('shabitica.service');
-      $machine->succeed('shabitica-db-shell --eval "db.dropDatabase()"');
-      $machine->succeed('shabitica-db-restore --db admin ${./fixture}');
-      $machine->succeed('rm /var/lib/shabitica/db-version');
-    });
+    with machine.nested('populate database with old version'):
+      machine.stop_job('shabitica.service')
+      machine.succeed('shabitica-db-shell --eval "db.dropDatabase()"')
+      machine.succeed('shabitica-db-restore --db admin ${./fixture}')
+      machine.succeed('rm /var/lib/shabitica/db-version')
 
-    $machine->nest('reboot to run migrations', sub {
-      $machine->shutdown;
-      $machine->waitForUnit('shabitica.service');
-    });
+    with machine.nested('reboot to run migrations'):
+      machine.shutdown()
+      machine.wait_for_unit('shabitica.service')
 
     ${lib.concatMapStrings mkTest (import ../../pkgs/shabitica/migrations.nix)}
 
-    $machine->nest('reboot machine to hopefully not run migrations', sub {
-      $machine->shutdown;
-      $machine->waitForUnit('shabitica.service');
-    });
+    with machine.nested('reboot machine to hopefully not run migrations'):
+      machine.shutdown()
+      machine.wait_for_unit('shabitica.service')
 
-    $machine->nest('verify that migrations were not applied again', sub {
-      # Note that we do not use $machine->fail, because this won't fail our
+    with machine.nested('verify that migrations were not applied again'):
+      # Note that we do not use machine.fail(), because this won't fail our
       # whole test if there is an unrelated error. So instead we use positive
       # matching with grep and use "wc -l" to check if the amount of matching
       # lines is indeed zero.
-      $machine->succeed(
-        'test "$(journalctl -b -u shabitica-db-update.service'.
+      machine.succeed(
+        'test "$(journalctl -b -u shabitica-db-update.service'
         ' | grep -F "${migrationMsg}" | wc -l)" -eq 0'
-      );
-    });
+      )
 
-    $machine->nest('check whether Armoire is correctly restocked', sub {
-      $machine->succeed('shabitica-db-shell < ${emptyArmoire}');
-      $machine->succeed('echo foo | sha256sum | cut -d" " -f1 '.
-                        '> /var/lib/shabitica/armoire.sha256');
-      $machine->nest('reboot to run migrations', sub {
-        $machine->shutdown;
-        $machine->waitForUnit('shabitica.service');
-      });
-      $machine->succeed('shabitica-db-shell < ${writeText "check-armoire.js" ''
+    with machine.nested('check whether Armoire is correctly restocked'):
+      machine.succeed('shabitica-db-shell < ${emptyArmoire}')
+      machine.succeed('echo foo | sha256sum | cut -d" " -f1 '
+                      '> /var/lib/shabitica/armoire.sha256')
+
+      with machine.nested('reboot to run migrations'):
+        machine.shutdown()
+        machine.wait_for_unit('shabitica.service')
+
+      machine.succeed('shabitica-db-shell < ${writeText "check-armoire.js" ''
         quit(db.users.count({'flags.armoireEmpty': true}));
-      ''}');
-    });
+      ''}')
 
-    $machine->nest('ensure that Armoire is not unnecessarily restocked', sub {
-      $machine->succeed('shabitica-db-shell < ${emptyArmoire}');
-      $machine->nest('reboot to run migrations', sub {
-        $machine->shutdown;
-        $machine->waitForUnit('shabitica.service');
-      });
-      $machine->succeed('shabitica-db-shell < ${writeText "check-armoire.js" ''
+    with machine.nested('ensure that Armoire is not unnecessarily restocked'):
+      machine.succeed('shabitica-db-shell < ${emptyArmoire}')
+
+      with machine.nested('reboot to run migrations'):
+        machine.shutdown()
+        machine.wait_for_unit('shabitica.service')
+
+      machine.succeed('shabitica-db-shell < ${writeText "check-armoire.js" ''
         quit(db.users.count({'flags.armoireEmpty': true}) == 1 ? 0 : 1);
-      ''}');
-    });
+      ''}')
   '';
 }

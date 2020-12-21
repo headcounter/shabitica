@@ -7,15 +7,15 @@
   nodes.client = {};
 
   testScript = ''
-    startAll;
+    # fmt: off
+    start_all()
 
-    $shabitica->waitForUnit('shabitica.service');
-    $shabitica->waitForOpenPort(80);
-    $client->waitForUnit('multi-user.target');
+    shabitica.wait_for_unit('shabitica.service')
+    shabitica.wait_for_open_port(80)
+    client.wait_for_unit('multi-user.target')
 
-    subtest "check if service only allows first user to register", sub {
-      $client->succeed(${registerUser "foo" "shabitica"});
-      $client->fail(${registerUser "bar" "shabitica"});
-    };
+    with subtest("check if service only allows first user to register"):
+      client.succeed(${registerUser "foo" "shabitica"})
+      client.fail(${registerUser "bar" "shabitica"})
   '';
 }
