@@ -112,6 +112,10 @@ in {
         '';
       };
 
+      systemd.services.nginx.serviceConfig.ReadWritePaths = [
+        "/var/cache/shabitica-imageproxy"
+      ];
+
       services.nginx.commonHttpConfig = ''
         proxy_cache_path /var/cache/shabitica-imageproxy
           keys_zone=imageproxy:1m levels=1:2 inactive=30d max_size=1G;
