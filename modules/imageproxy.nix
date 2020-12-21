@@ -107,7 +107,7 @@ in {
 
         script = ''
           mkdir -p /var/cache/shabitica-imageproxy
-          chmod 0710 /var/cache/shabitica-imageproxy
+          chmod 0770 /var/cache/shabitica-imageproxy
           chown root:nginx /var/cache/shabitica-imageproxy
         '';
       };
