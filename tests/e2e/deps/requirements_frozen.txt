@@ -9,7 +9,7 @@ importlib-metadata==0.23
 more-itertools==7.2.0
 packaging==19.2
 pluggy==0.13.0
-py==1.8.0
+py==1.10.0
 pyparsing==2.4.2
 pytest==5.2.0
 pytest-base-url==1.4.1
