@@ -28,7 +28,8 @@
       cmd = "curl -f ${contentType} -X ${method}${extra} ";
       # This is so we can use Python variables in path.
       pathArg = "f\" http://localhost/api/v3/${path}\"";
-    in "machine.succeed(${mkPythonStr cmd} + curl_auth_args + ${pathArg})";
+      args = "${mkPythonStr cmd} + curl_auth_args + ${pathArg}";
+    in "machine.succeed(${args}) # noqa";
 
   in ''
     # fmt: off
