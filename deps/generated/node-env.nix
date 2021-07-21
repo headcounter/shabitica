@@ -1,6 +1,6 @@
 # This file originates from node2nix
 
-{stdenv, lib, nodejs, python2, utillinux, libtool, runCommand, writeTextFile}:
+{stdenv, lib, nodejs, python2, util-linux, libtool, runCommand, writeTextFile}:
 
 let
   python = if nodejs ? python then nodejs.python else python2;
@@ -396,7 +396,7 @@ let
     stdenv.mkDerivation ({
       name = "node_${name}-${version}";
       buildInputs = [ tarWrapper python nodejs ]
-        ++ lib.optional (stdenv.isLinux) utillinux
+        ++ lib.optional (stdenv.isLinux) util-linux
         ++ lib.optional (stdenv.isDarwin) libtool
         ++ buildInputs;
 
@@ -468,7 +468,7 @@ let
         name = "node-dependencies-${name}-${version}";
 
         buildInputs = [ tarWrapper python nodejs ]
-          ++ lib.optional (stdenv.isLinux) utillinux
+          ++ lib.optional (stdenv.isLinux) util-linux
           ++ lib.optional (stdenv.isDarwin) libtool
           ++ buildInputs;
 
@@ -514,7 +514,7 @@ let
     stdenv.mkDerivation {
       name = "node-shell-${name}-${version}";
 
-      buildInputs = [ python nodejs ] ++ lib.optional (stdenv.isLinux) utillinux ++ buildInputs;
+      buildInputs = [ python nodejs ] ++ lib.optional (stdenv.isLinux) util-linux ++ buildInputs;
       buildCommand = ''
         mkdir -p $out/bin
         cat > $out/bin/shell <<EOF
