@@ -37,6 +37,7 @@
       services.bind.forwarders = lib.mkForce [];
       services.bind.zones = lib.singleton {
         name = ".";
+        master = true;
         file = let
           mkAddrRRs = fqdn: node: let
             inherit (node.config.networking.interfaces.eth1) ipv4 ipv6;
