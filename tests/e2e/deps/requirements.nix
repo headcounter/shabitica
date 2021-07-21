@@ -12,7 +12,7 @@
 let
 
   inherit (pkgs) makeWrapper;
-  inherit (pkgs.stdenv.lib) fix' extends inNixShell;
+  inherit (pkgs.lib) fix' extends inNixShell;
 
   pythonPackages =
   import "${toString pkgs.path}/pkgs/top-level/python-packages.nix" {
@@ -85,7 +85,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pytest-dev/apipkg";
         license = licenses.mit;
         description = "apipkg: namespace control and lazy-import mechanism";
@@ -101,7 +101,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/untitaker/python-atomicwrites";
         license = licenses.mit;
         description = "Atomic file writes.";
@@ -117,7 +117,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://www.attrs.org/";
         license = licenses.mit;
         description = "Classes Without Boilerplate";
@@ -133,7 +133,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://certifi.io/";
         license = licenses.mpl20;
         description = "Python package for providing Mozilla's CA Bundle.";
@@ -149,7 +149,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/chardet/chardet";
         license = licenses.lgpl3;
         description = "Universal encoding detector for Python 2 and 3";
@@ -167,7 +167,7 @@ let
       propagatedBuildInputs = [
         self."apipkg"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://execnet.readthedocs.io/en/latest/";
         license = licenses.mit;
         description = "execnet: rapid multi-Python deployment";
@@ -183,7 +183,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/kjd/idna";
         license = licenses.bsdOriginal;
         description = "Internationalized Domain Names in Applications (IDNA)";
@@ -203,7 +203,7 @@ let
       propagatedBuildInputs = [
         self."zipp"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "http://importlib-metadata.readthedocs.io/";
         license = "Apache Software License";
         description = "Read metadata from Python packages";
@@ -219,7 +219,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/erikrose/more-itertools";
         license = licenses.mit;
         description = "More routines for operating on iterables, beyond itertools";
@@ -238,7 +238,7 @@ let
         self."pyparsing"
         self."six"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pypa/packaging";
         license = licenses.bsdOriginal;
         description = "Core utilities for Python packages";
@@ -258,7 +258,7 @@ let
       propagatedBuildInputs = [
         self."importlib-metadata"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pytest-dev/pluggy";
         license = licenses.mit;
         description = "plugin and hook calling mechanisms for python";
@@ -274,7 +274,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "http://py.readthedocs.io/";
         license = licenses.mit;
         description = "library with cross-python path, ini-parsing, io, code, log facilities";
@@ -290,7 +290,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pyparsing/pyparsing/";
         license = licenses.mit;
         description = "Python parsing module";
@@ -317,7 +317,7 @@ let
         self."py"
         self."wcwidth"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://docs.pytest.org/en/latest/";
         license = licenses.mit;
         description = "pytest: simple powerful testing with Python";
@@ -336,7 +336,7 @@ let
         self."pytest"
         self."requests"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pytest-dev/pytest-base-url";
         license = "Mozilla Public License 2.0 (MPL 2.0)";
         description = "pytest plugin for URL based testing";
@@ -354,7 +354,7 @@ let
       propagatedBuildInputs = [
         self."pytest"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pytest-dev/pytest-forked";
         license = licenses.mit;
         description = "run tests in isolated forked subprocesses";
@@ -373,7 +373,7 @@ let
         self."pytest"
         self."pytest-metadata"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pytest-dev/pytest-html";
         license = "Mozilla Public License 2.0 (MPL 2.0)";
         description = "pytest plugin for generating HTML reports";
@@ -391,7 +391,7 @@ let
       propagatedBuildInputs = [
         self."pytest"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pytest-dev/pytest-metadata";
         license = "Mozilla Public License 2.0 (MPL 2.0)";
         description = "pytest plugin for test session metadata";
@@ -409,7 +409,7 @@ let
       propagatedBuildInputs = [
         self."pytest"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pytest-dev/pytest-rerunfailures";
         license = "Mozilla Public License 2.0 (MPL 2.0)";
         description = "pytest plugin to re-run tests to eliminate flaky failures";
@@ -432,7 +432,7 @@ let
         self."requests"
         self."selenium"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pytest-dev/pytest-selenium";
         license = "Mozilla Public License 2.0 (MPL 2.0)";
         description = "pytest plugin for Selenium";
@@ -450,7 +450,7 @@ let
       propagatedBuildInputs = [
         self."pytest"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pytest-dev/pytest-variables";
         license = "Mozilla Public License 2.0 (MPL 2.0)";
         description = "pytest plugin for providing variables to tests/fixtures";
@@ -471,7 +471,7 @@ let
         self."pytest-forked"
         self."six"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pytest-dev/pytest-xdist";
         license = licenses.mit;
         description = "pytest xdist plugin for distributed testing and loop-on-failing modes";
@@ -492,7 +492,7 @@ let
         self."idna"
         self."urllib3"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "http://python-requests.org";
         license = licenses.asl20;
         description = "Python HTTP for Humans.";
@@ -510,7 +510,7 @@ let
       propagatedBuildInputs = [
         self."urllib3"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/SeleniumHQ/selenium/";
         license = licenses.asl20;
         description = "Python bindings for Selenium";
@@ -526,7 +526,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/pypa/setuptools_scm/";
         license = licenses.mit;
         description = "the blessed package to manage your versions by scm tags";
@@ -542,7 +542,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/benjaminp/six";
         license = licenses.mit;
         description = "Python 2 and 3 compatibility utilities";
@@ -558,7 +558,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://urllib3.readthedocs.io/";
         license = licenses.mit;
         description = "HTTP library with thread-safe connection pooling, file post, and more.";
@@ -574,7 +574,7 @@ let
       doCheck = commonDoCheck;
       buildInputs = commonBuildInputs ++ [ ];
       propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/jquast/wcwidth";
         license = licenses.mit;
         description = "Measures number of Terminal column cells of wide-character codes";
@@ -594,7 +594,7 @@ let
       propagatedBuildInputs = [
         self."more-itertools"
       ];
-      meta = with pkgs.stdenv.lib; {
+      meta = with pkgs.lib; {
         homepage = "https://github.com/jaraco/zipp";
         license = "UNKNOWN";
         description = "Backport of pathlib-compatible object wrapper for zip files";

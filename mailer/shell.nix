@@ -4,8 +4,8 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { mkDerivation, aeson, base, containers, hspec, http-types
-      , mime-mail, neat-interpolation, network, stache, stdenv, systemd
+  f = { lib, mkDerivation, aeson, base, containers, hspec, http-types
+      , mime-mail, neat-interpolation, network, stache, systemd
       , text, unordered-containers, vector, wai, warp, word-wrap
       }:
       mkDerivation {
@@ -20,7 +20,7 @@ let
         ];
         testHaskellDepends = [ hspec neat-interpolation ];
         description = "Habitica email helper";
-        license = stdenv.lib.licenses.gpl3;
+        license = lib.licenses.gpl3;
       };
 
   haskellPackages = if compiler == "default"

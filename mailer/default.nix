@@ -1,5 +1,5 @@
-{ mkDerivation, aeson, base, containers, hspec, http-types
-, mime-mail, neat-interpolation, network, stache, stdenv, systemd
+{ lib, mkDerivation, aeson, base, containers, hspec, http-types
+, mime-mail, neat-interpolation, network, stache, systemd
 , text, unordered-containers, vector, wai, warp, word-wrap
 }:
 mkDerivation {
@@ -14,5 +14,5 @@ mkDerivation {
   ];
   testHaskellDepends = [ hspec neat-interpolation ];
   description = "Shabitica email helper";
-  license = stdenv.lib.licenses.gpl3;
+  license = lib.licenses.gpl3;
 }
