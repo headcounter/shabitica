@@ -28,8 +28,7 @@
       cmd = "curl -f ${contentType} -X ${method}${extra} ";
       # This is so we can use Python variables in path.
       pathArg = "f\" http://localhost/api/v3/${path}\"";
-      args = "${mkPythonStr cmd} + curl_auth_args + ${pathArg}";
-    in "machine.succeed(${args}) # noqa";
+    in "machine.succeed(${mkPythonStr cmd} + curl_auth_args + ${pathArg})";
 
   in ''
     # fmt: off
@@ -46,7 +45,7 @@
       curl_auth_args = pipe_read_line(data, ${mkPythonStr getCurlAuthArgs})
 
     with machine.nested("create a new todo"):
-      taskdata = ${callApi "tasks/user" "POST" {
+      taskdata = ${callApi "tasks/user{''}" "POST" {
         text = "first task";
         type = "todo";
       }}
