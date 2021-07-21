@@ -199,16 +199,19 @@ in {
 
       users.users.shabitica-db = {
         description = "Shabitica Database User";
+        isSystemUser = true;
         group = "shabitica";
       };
 
       users.users.shabitica-mailer = {
         description = "Shabitica Mailer Daemon User";
+        isSystemUser = true;
         group = "shabitica-mailer";
       };
 
       users.users.shabitica = {
         description = "Shabitica User";
+        isSystemUser = true;
         group = "shabitica";
       };
 

@@ -25,6 +25,7 @@ in {
     (lib.mkIf cfg.imageProxy.enable {
       users.users.shabitica-imageproxy = {
         description = "Shabitica Image Proxy User";
+        isSystemUser = true;
         group = "shabitica-imageproxy";
       };
 
