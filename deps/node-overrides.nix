@@ -1,5 +1,5 @@
 { super, lib, pkgs, fetchFromGitHub, substituteAll, runCommand
-, libsass, libjpeg, optipng, gifsicle, pkgconfig, phantomjs2, systemd
+, libsass, libjpeg, optipng, gifsicle, pkg-config, phantomjs2, systemd
 , chromedriver, chromium
 
 , shabiticaConfig
@@ -64,7 +64,7 @@
     isOutdated = lib.versionOlder libsass.version newerSass.version;
   in {
     LIBSASS_EXT = "auto";
-    nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ pkgconfig ];
+    nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ pkg-config ];
     buildInputs = (drv.buildInputs or []) ++ [
       (if isOutdated then newerSass else libsass)
     ];

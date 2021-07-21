@@ -119,7 +119,7 @@ let
     name = "shabitica-dev-sandbox";
     src = "${vuizvuiSrc}/pkgs/build-support/build-sandbox/src";
 
-    nativeBuildInputs = [ pkgs.pkgconfig ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.nix ];
     makeFlags = [ "BINDIR=${shellHook}/bin" ];
 

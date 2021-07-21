@@ -19,7 +19,7 @@ let
       rev = "v${version}";
       sha256 = "1hbc7csicgza1w43aq1q189w8gzwkc2v5mxpnhaiwggwsa5vvkl0";
     };
-    nativeBuildInputs = [ pkgs.meson pkgs.ninja pkgs.pkgconfig ];
+    nativeBuildInputs = [ pkgs.meson pkgs.ninja pkgs.pkg-config ];
     buildInputs = [ pkgs.libyamlcpp ];
   });
 
