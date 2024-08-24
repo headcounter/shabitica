@@ -20667,7 +20667,7 @@ in
     packageName = "vuejs-datepicker";
     version = "0.9.21";
     src = fetchgit {
-      url = "git://github.com/habitrpg/vuejs-datepicker.git";
+      url = "https://github.com/habitrpg/vuejs-datepicker.git";
       rev = "5d237615463a84a23dd6f3f77c6ab577d68593ec";
       sha256 = "26ab3d799bb9b3c3eab22b2de43378cf1039191b5dd3a58fac5fb6e95f31d5f8";
     };
