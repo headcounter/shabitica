@@ -32,7 +32,7 @@ in {
     };
 
 
-    options.shabitica.pinnedPkgs = lib.mkOption {
+    pinnedPkgs = lib.mkOption {
       # TODO i don't know the type of pkgs, 
       type = lib.types.anything;
       description = "Version of nixpkgs used by the Shabitica modules";
