@@ -1,25 +1,20 @@
 {
   description = "shabitica flake";
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/21.05";
-    flake-utils.url = "github:numtide/flake-utils";
-  };
-  outputs =
-    { self, flake-utils, ... }@inputs:
-     flake-utils.lib.eachDefaultSystem (system:{
-      nixosModules.default = (
-        {
-          config,
-          lib,
-          pkgs,
-          ...
-        }:
-        {
-          imports = [
-            (import ./default.nix { pkgs = (import inputs.nixpkgs { system = system; }); inherit lib config;})
-          ];
-        }
-      );
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/21.05";
 
-    });
+  outputs = { self, nixpkgs, ... }@inputs: {
+    nixosModules = builtins.mapAttrs
+      (system: pkgs: {
+        default =
+          { lib, config, ... }: {
+            imports = [
+              (import ./default.nix {
+                inherit lib config;
+                pkgs = import nixpkgs { inherit system; };
+              })
+            ];
+          };
+      })
+      nixpkgs.legacyPackages;
+  };
 }
