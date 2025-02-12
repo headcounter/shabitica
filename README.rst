@@ -87,7 +87,7 @@ Add this repo as a flake input. Now you can import the module with:
 .. code-block:: nix
 
   { inputs, ... }: {
-    imports = [inputs.shabitica.nixosModules."x86_64-linux".default]; # change "x86_64-linux" to your actual system
+    imports = [ inputs.shabitica.nixosModules.default ];
     #... add your configuration
   }
 

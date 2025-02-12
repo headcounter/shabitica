@@ -19,7 +19,7 @@ let
   latestDbVersion = lib.length migrations;
 
 in {
-  imports = [ ./imageproxy.nix ];
+  imports = [ (import ./imageproxy.nix { inherit config pkgs lib; }) ];
 
   options.shabitica = {
     hostName = lib.mkOption {
