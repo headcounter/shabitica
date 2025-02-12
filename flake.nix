@@ -4,14 +4,11 @@
 
   outputs = { nixpkgs, ... }: {
     nixosModules.default = { lib, config, ... }: {
-      imports = [
-        (import ./default.nix {
-          inherit lib config;
-          pkgs = import nixpkgs {
-            inherit (config.nixpkgs.localSystem) system;
-          };
-        })
-      ];
+      imports = [ ./modules ];
+
+      shabitica.pinnedPkgs = import nixpkgs {
+        inherit (config.nixpkgs.localSystem) system;
+      };
     };
   };
 }

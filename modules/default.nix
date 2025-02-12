@@ -1,10 +1,12 @@
 # NOTE: When adding another module argument here, do not forget to provide
 #       defaults in ../default.nix, so that it will cope well with
 #       "nix-env -q".
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.shabitica;
+
+  pkgs = cfg.pinnedPkgs;
 
   mongodb = pkgs.callPackage ../pkgs/mongodb {};
 
@@ -19,7 +21,7 @@ let
   latestDbVersion = lib.length migrations;
 
 in {
-  imports = [ (import ./imageproxy.nix { inherit config pkgs lib; }) ];
+  imports = [ ./imageproxy.nix ];
 
   options.shabitica = {
     hostName = lib.mkOption {
@@ -28,6 +30,14 @@ in {
       example = "shabitica.example.org";
       description = "The host name to use for Shabitica.";
     };
+
+
+    options.shabitica.pinnedPkgs = lib.mkOption {
+      # TODO i don't know the type of pkgs, 
+      type = lib.types.anything;
+      description = "Version of nixpkgs used by the Shabitica modules";
+    };
+
 
     adminMailAddress = lib.mkOption {
       type = lib.types.str;
