@@ -6,7 +6,7 @@
 let
   cfg = config.shabitica;
 
-  pkgs = cfg.pinnedPkgs;
+  pkgs = cfg.pinnedPkgs {};
 
   mongodb = pkgs.callPackage ../pkgs/mongodb {};
 
