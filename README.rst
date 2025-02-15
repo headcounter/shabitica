@@ -79,6 +79,21 @@ make the browser client less painful on mobile phones.
 Getting started on NixOS
 ------------------------
 
+Using Flakes
+````````````
+
+Add this repo as a flake input. Now you can import the module with:
+
+.. code-block:: nix
+
+  { inputs, ... }: {
+    imports = [ inputs.shabitica.nixosModules.default ];
+    #... add your configuration
+  }
+
+Using Channels
+``````````````
+
 Simply adding the path of the source to the ``imports`` list of your `NixOS
 configuration`_ (typically ``/etc/nixos/configuration.nix``) will start a local
 instance.

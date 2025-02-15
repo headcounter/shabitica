@@ -1,7 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.shabitica;
+  pkgs = cfg.pinnedPkgs {};
 
   go-camo = pkgs.callPackage ../pkgs/go-camo {};
   go-camo-bin = lib.getBin go-camo;
